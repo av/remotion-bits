@@ -1,5 +1,10 @@
 import React from "react";
-import { Extrapolate, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  Extrapolate,
+  interpolate,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 
 export type TextTransitionProps = {
   texts: string[];
@@ -25,7 +30,10 @@ export const TextTransition: React.FC<TextTransitionProps> = ({
   const duration = itemDurationInFrames ?? Math.round(fps * 1.5);
 
   const relativeFrame = Math.max(0, frame - startAt);
-  const index = Math.min(Math.floor(relativeFrame / duration), texts.length - 1);
+  const index = Math.min(
+    Math.floor(relativeFrame / duration),
+    texts.length - 1,
+  );
   const localFrame = relativeFrame - index * duration;
 
   const opacity = interpolate(
@@ -35,7 +43,7 @@ export const TextTransition: React.FC<TextTransitionProps> = ({
     {
       extrapolateLeft: Extrapolate.CLAMP,
       extrapolateRight: Extrapolate.CLAMP,
-    }
+    },
   );
 
   const travel = interpolate(localFrame, [0, duration * 0.2], [offset, 0], {
@@ -46,10 +54,10 @@ export const TextTransition: React.FC<TextTransitionProps> = ({
     direction === "up"
       ? `translateY(${travel}px)`
       : direction === "down"
-      ? `translateY(${-travel}px)`
-      : direction === "left"
-      ? `translateX(${travel}px)`
-      : `translateX(${-travel}px)`;
+        ? `translateY(${-travel}px)`
+        : direction === "left"
+          ? `translateX(${travel}px)`
+          : `translateX(${-travel}px)`;
 
   const text = texts[index] ?? "";
 

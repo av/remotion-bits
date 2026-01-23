@@ -1,10 +1,10 @@
 # Remotion Bits
 
-Remotion component bits with a shadcn-like installer. Use the CLI to copy ready-made components into your project, or import them directly as a library.
+Remotion component bits distributed as a jsrepo registry. Add ready-made components to your project with jsrepo, or import them directly as a library.
 
 ## Overview
 
-Remotion Bits provides small, composable Remotion/React components you can install into your codebase. The CLI copies component templates into your project so you can customize them, and generates an index file for simple imports.
+Remotion Bits provides small, composable Remotion/React components you can install into your codebase. jsrepo copies component templates into your project so you can customize them, and manages updates over time. This package no longer ships a custom installer—use jsrepo for installs and updates.
 
 ## Installation
 
@@ -32,38 +32,59 @@ yarn add remotion-bits
 bun add remotion-bits
 ```
 
-## CLI usage
+## Install with jsrepo (recommended)
 
-The CLI binary is `remotionbits`.
+The registry is published as a jsrepo registry at:
 
-### List available components
+```
+https://unpkg.com/remotion-bits/registry.json
+```
+
+### Initialize the registry
 
 ```bash
-npx remotion-bits@latest list
+npx jsrepo init https://unpkg.com/remotion-bits/registry.json
+```
+
+### Add components
+
+```bash
+npx jsrepo add text-transition hero-title
+```
+
+### One-off add without init
+
+```bash
+npx jsrepo add --registry https://unpkg.com/remotion-bits/registry.json backgrounds
+```
+
+## Local registry usage (this repo)
+
+When testing against a local checkout, build the registry and use the `fs` provider. A plain filesystem path like `/home/everlier/code/remotion-bits/registry.json` will fail with “A provider for this registry was not found.”
+
+```bash
+npm run registry:build
+```
+
+Add the `fs` provider in your project’s jsrepo config:
+
+```ts
+import { defineConfig } from "jsrepo";
+import { fs } from "jsrepo/providers";
+
+export default defineConfig({
+  providers: [fs()],
+});
+```
+
+Then initialize jsrepo with the `fs://` registry path:
+
+```bash
+npx jsrepo init fs:///home/everlier/code/remotion-bits/registry.json
 ```
 
 ```bash
-bunx remotion-bits@latest list
-```
-
-### Install components
-
-```bash
-npx remotion-bits@latest install text-transition hero-title
-```
-
-```bash
-bunx remotion-bits@latest install all
-```
-
-## npx/bunx examples
-
-```bash
-npx remotion-bits@latest install backgrounds --dir src/remotionbits
-```
-
-```bash
-bunx remotion-bits@latest install all --dir src/remotionbits --overwrite
+npx jsrepo add text-transition
 ```
 
 ## Available components
@@ -72,10 +93,9 @@ bunx remotion-bits@latest install all --dir src/remotionbits --overwrite
 - `backgrounds`
 - `hero-title`
 
-## Install options
+## Default install path
 
-- `--dir <path>` or `-d <path>`: Target directory for installed components. Defaults to `src/remotionbits` in your project.
-- `--overwrite`: Overwrite existing component files in the target directory.
+By default, components are added to `src/remotionbits`. You can change this in your project’s jsrepo config by setting the `paths.component` value.
 
 ## Library usage example import
 
@@ -83,7 +103,7 @@ bunx remotion-bits@latest install all --dir src/remotionbits --overwrite
 import { TextTransition, Backgrounds, HeroTitle } from "remotion-bits";
 ```
 
-If you installed components into your project via the CLI, you can import from the generated local index file, for example:
+If you installed components into your project via jsrepo, you can import from your local files, for example:
 
 ```ts
 import { TextTransition, Backgrounds, HeroTitle } from "./remotionbits";
@@ -99,7 +119,15 @@ src/
 		Backgrounds.tsx
 		HeroTitle.tsx
 		TextTransition.tsx
-		index.ts
+
+```
+
+## Registry build output (maintainers)
+
+The registry JSON is generated via the repository output and published at the root as registry.json. Build it before publishing:
+
+```bash
+npm run registry:build
 ```
 
 ## Contributing
