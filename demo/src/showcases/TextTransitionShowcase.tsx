@@ -4,7 +4,7 @@ import { TextTransition } from "../../../src/components";
 import { Center } from "./Center";
 
 const baseStyle = {
-  fontSize: "4rem",
+  fontSize: "12rem",
   fontWeight: 700,
   color: "#ffffff",
   fontFamily: "Inter, ui-sans-serif, system-ui",

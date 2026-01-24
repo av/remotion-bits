@@ -242,6 +242,7 @@ export const TextTransition: React.FC<TextTransitionProps> = ({
     // Build style object
     const unitStyle: React.CSSProperties = {
       display: "inline-block",
+      whiteSpace: "pre",
     };
 
     if (transforms.length > 0) {
