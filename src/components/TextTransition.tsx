@@ -1,16 +1,16 @@
 import React from "react";
 import {
-  interpolate,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { resolveInterpolateValue, type InterpolateValue } from "../utils";
 
 export type TextTransitionProps = {
   texts: string[];
   itemDurationInFrames?: number;
   startAt?: number;
   direction?: "up" | "down" | "left" | "right";
-  offset?: number;
+  offset?: InterpolateValue;
   className?: string;
   style?: React.CSSProperties;
 };
@@ -35,19 +35,21 @@ export const TextTransition: React.FC<TextTransitionProps> = ({
   );
   const localFrame = relativeFrame - index * duration;
 
-  const opacity = interpolate(
-    localFrame,
-    [0, duration * 0.2, duration * 0.8, duration],
-    [0, 1, 1, 0],
-    {
+  const opacity = resolveInterpolateValue(
+    [[0, duration * 0.2, duration * 0.8, duration], [0, 1, 1, 0], {
       extrapolateLeft: "clamp",
       extrapolateRight: "clamp",
-    },
+    }],
+    localFrame
   );
 
-  const travel = interpolate(localFrame, [0, duration * 0.2], [offset, 0], {
-    extrapolateRight: "clamp",
-  });
+  const resolvedOffset = resolveInterpolateValue(offset, frame);
+  const travel = resolveInterpolateValue(
+    [[0, duration * 0.2], [resolvedOffset, 0], {
+      extrapolateRight: "clamp",
+    }],
+    localFrame
+  );
 
   const translate =
     direction === "up"

@@ -7,8 +7,7 @@
     "remotionbits": "src/cli.js"
   },
   "files": [
-    "src",
-    "templates"
+    "src"
   ],
   "keywords": [
     "remotion",

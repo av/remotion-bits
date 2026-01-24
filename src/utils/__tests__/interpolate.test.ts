@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { interpolate, Easing } from "../interpolate";
+import { interpolate, Easing, resolveInterpolateValue } from "../interpolate";
 
 describe("interpolate", () => {
   it("should perform basic linear interpolation", () => {
@@ -89,5 +89,51 @@ describe("Easing", () => {
   it("should have easeInOut", () => {
     expect(Easing.easeInOut(0.25)).toBe(0.125);
     expect(Easing.easeInOut(0.75)).toBe(0.875);
+  });
+});
+
+describe("resolveInterpolateValue", () => {
+  it("should return static number values as-is", () => {
+    expect(resolveInterpolateValue(42, 10)).toBe(42);
+    expect(resolveInterpolateValue(0, 100)).toBe(0);
+    expect(resolveInterpolateValue(-5, 50)).toBe(-5);
+  });
+
+  it("should interpolate array values at the given frame", () => {
+    const value: [number[], number[]] = [[0, 10], [0, 100]];
+    expect(resolveInterpolateValue(value, 5)).toBe(50);
+    expect(resolveInterpolateValue(value, 0)).toBe(0);
+    expect(resolveInterpolateValue(value, 10)).toBe(100);
+  });
+
+  it("should support interpolate array with options", () => {
+    const value: [number[], number[], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }] = [
+      [0, 10],
+      [0, 100],
+      { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+    ];
+    expect(resolveInterpolateValue(value, -5)).toBe(0);
+    expect(resolveInterpolateValue(value, 15)).toBe(100);
+  });
+
+  it("should support easing in interpolate arrays", () => {
+    const value: [number[], number[], { easing: "easeInQuad" }] = [
+      [0, 10],
+      [0, 100],
+      { easing: "easeInQuad" }
+    ];
+    expect(resolveInterpolateValue(value, 5)).toBe(25);
+  });
+
+  it("should handle complex animation ranges", () => {
+    const fadeInOut: [number[], number[]] = [
+      [0, 20, 80, 100],
+      [0, 1, 1, 0]
+    ];
+    expect(resolveInterpolateValue(fadeInOut, 0)).toBe(0);
+    expect(resolveInterpolateValue(fadeInOut, 20)).toBe(1);
+    expect(resolveInterpolateValue(fadeInOut, 50)).toBe(1);
+    expect(resolveInterpolateValue(fadeInOut, 80)).toBe(1);
+    expect(resolveInterpolateValue(fadeInOut, 100)).toBe(0);
   });
 });

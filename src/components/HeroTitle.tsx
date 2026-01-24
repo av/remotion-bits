@@ -1,5 +1,6 @@
 import React from "react";
-import { interpolate, useCurrentFrame } from "remotion";
+import { useCurrentFrame } from "remotion";
+import { resolveInterpolateValue, type InterpolateValue } from "../utils";
 
 export type HeroTitleProps = {
   title: string;
@@ -8,6 +9,8 @@ export type HeroTitleProps = {
   align?: "left" | "center" | "right";
   className?: string;
   style?: React.CSSProperties;
+  opacity?: InterpolateValue;
+  translateY?: InterpolateValue;
 };
 
 export const HeroTitle: React.FC<HeroTitleProps> = ({
@@ -17,10 +20,12 @@ export const HeroTitle: React.FC<HeroTitleProps> = ({
   align = "center",
   className,
   style,
+  opacity = [[0, 20], [0, 1]],
+  translateY = [[0, 20], [16, 0]],
 }) => {
   const frame = useCurrentFrame();
-  const opacity = interpolate(frame, [0, 20], [0, 1]);
-  const translate = interpolate(frame, [0, 20], [16, 0]);
+  const resolvedOpacity = resolveInterpolateValue(opacity, frame);
+  const resolvedTranslate = resolveInterpolateValue(translateY, frame);
 
   return (
     <div
@@ -38,8 +43,8 @@ export const HeroTitle: React.FC<HeroTitleProps> = ({
           fontSize: "clamp(2.5rem, 6vw, 5rem)",
           fontWeight: 700,
           lineHeight: 1.05,
-          opacity,
-          transform: `translateY(${translate}px)`,
+          opacity: resolvedOpacity,
+          transform: `translateY(${resolvedTranslate}px)`,
         }}
       >
         {title}

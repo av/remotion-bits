@@ -132,3 +132,34 @@ export function interpolate(
   // Linear interpolation
   return outputStart + (outputEnd - outputStart) * progress;
 }
+
+/**
+ * Type for a value that can be either static or interpolated based on frame
+ */
+export type InterpolateValue =
+  | number
+  | [
+      inputRange: number[],
+      outputRange: number[],
+      options?: {
+        extrapolateLeft?: 'clamp' | 'extend' | 'identity';
+        extrapolateRight?: 'clamp' | 'extend' | 'identity';
+        easing?: EasingFunction | EasingName;
+      }
+    ];
+
+/**
+ * Resolves an InterpolateValue to a number.
+ * If the value is a number, returns it as-is.
+ * If it's an interpolate array, evaluates it at the given frame.
+ */
+export function resolveInterpolateValue(
+  value: InterpolateValue,
+  frame: number
+): number {
+  if (typeof value === 'number') {
+    return value;
+  }
+  const [inputRange, outputRange, options] = value;
+  return interpolate(frame, inputRange, outputRange, options);
+}

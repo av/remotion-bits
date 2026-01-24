@@ -1,12 +1,13 @@
 import React from "react";
-import { interpolate, useCurrentFrame } from "remotion";
+import { useCurrentFrame } from "remotion";
+import { resolveInterpolateValue, type InterpolateValue } from "../utils";
 
 export type BackgroundsProps = {
   variant?: "gradient" | "radial" | "solid";
   colors?: string[];
   className?: string;
   style?: React.CSSProperties;
-  blur?: number;
+  blur?: InterpolateValue;
 };
 
 export const Backgrounds: React.FC<BackgroundsProps> = ({
@@ -17,7 +18,8 @@ export const Backgrounds: React.FC<BackgroundsProps> = ({
   blur = 0,
 }) => {
   const frame = useCurrentFrame();
-  const drift = interpolate(frame, [0, 120], [0, 1]);
+  const drift = resolveInterpolateValue([[0, 120], [0, 1]], frame);
+  const resolvedBlur = resolveInterpolateValue(blur, frame);
 
   const backgroundImage = (() => {
     if (variant === "solid") {
@@ -39,7 +41,7 @@ export const Backgrounds: React.FC<BackgroundsProps> = ({
         inset: 0,
         backgroundColor: colors[0],
         backgroundImage,
-        filter: blur ? `blur(${blur}px)` : undefined,
+        filter: resolvedBlur ? `blur(${resolvedBlur}px)` : undefined,
         transform: variant === "solid" ? undefined : `scale(1.05)`,
         ...style,
       }}
