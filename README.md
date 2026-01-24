@@ -93,6 +93,26 @@ npx jsrepo add text-transition
 - `backgrounds`
 - `hero-title`
 
+## Demo Playground
+
+An interactive playground is available to preview and test all components with real-time property tweaking.
+
+### Run the demo
+
+```bash
+cd demo
+npm install
+npm start
+```
+
+This opens Remotion Studio where you can:
+- Preview all three components in action
+- Adjust component properties using the controls panel
+- See changes instantly without reloading
+- Render the demo video
+
+See [demo/README.md](demo/README.md) for more details on available properties and customization options.
+
 ## Default install path
 
 By default, components are added to `src/remotionbits`. You can change this in your project’s jsrepo config by setting the `paths.component` value.

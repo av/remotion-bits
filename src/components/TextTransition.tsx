@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Extrapolate,
   interpolate,
   useCurrentFrame,
   useVideoConfig,
@@ -41,13 +40,13 @@ export const TextTransition: React.FC<TextTransitionProps> = ({
     [0, duration * 0.2, duration * 0.8, duration],
     [0, 1, 1, 0],
     {
-      extrapolateLeft: Extrapolate.CLAMP,
-      extrapolateRight: Extrapolate.CLAMP,
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
     },
   );
 
   const travel = interpolate(localFrame, [0, duration * 0.2], [offset, 0], {
-    extrapolateRight: Extrapolate.CLAMP,
+    extrapolateRight: "clamp",
   });
 
   const translate =
