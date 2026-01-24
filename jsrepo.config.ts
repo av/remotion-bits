@@ -8,6 +8,7 @@ export default defineConfig({
     excludeDeps: ["react", "react-dom", "remotion"],
     defaultPaths: {
       component: "src/remotionbits",
+      util: "src/remotionbits/utils",
     },
     items: [
       {
@@ -42,6 +43,18 @@ export default defineConfig({
         files: [
           {
             path: "templates/components/HeroTitle.tsx",
+          },
+        ],
+      },
+      {
+        name: "interpolate",
+        title: "Interpolate",
+        description:
+          "Custom interpolate function with easing support and non-monotonic input ranges.",
+        type: "util",
+        files: [
+          {
+            path: "templates/utils/interpolate.ts",
           },
         ],
       },
