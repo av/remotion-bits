@@ -11,7 +11,7 @@ const baseStyle = {
   textAlign: "center" as const,
 };
 
-const Bg = ({ children }: { children: React.ReactNode }) => (
+export const Bg = ({ children }: { children: React.ReactNode }) => (
   <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
     <Center style={{ padding: '4rem', ...baseStyle }}>
       {children}
@@ -19,7 +19,6 @@ const Bg = ({ children }: { children: React.ReactNode }) => (
   </AbsoluteFill>
 );
 
-// Example 1: Simple Fade In
 export const FadeInShowcase: React.FC = () => (
   <Bg>
     <TextTransition transition={{ opacity: [0, 1] }}>
@@ -28,7 +27,6 @@ export const FadeInShowcase: React.FC = () => (
   </Bg>
 );
 
-// Example 2: Slide from Left
 export const SlideFromLeftShowcase: React.FC = () => (
   <Bg>
     <TextTransition
@@ -43,7 +41,6 @@ export const SlideFromLeftShowcase: React.FC = () => (
   </Bg>
 );
 
-// Example 3: Word-by-Word Reveal
 export const WordByWordShowcase: React.FC = () => (
   <Bg>
     <TextTransition
@@ -60,7 +57,6 @@ export const WordByWordShowcase: React.FC = () => (
   </Bg>
 );
 
-// Example 4: Character Color Transition
 export const CharacterColorShowcase: React.FC = () => (
   <Bg>
     <TextTransition
@@ -77,7 +73,6 @@ export const CharacterColorShowcase: React.FC = () => (
   </Bg>
 );
 
-// Example 5: Complex Animation
 export const ComplexAnimationShowcase: React.FC = () => (
   <Bg>
     <TextTransition
@@ -98,7 +93,6 @@ export const ComplexAnimationShowcase: React.FC = () => (
   </Bg>
 );
 
-// Example 6: Cycling Text
 export const CyclingTextShowcase: React.FC = () => (
   <Bg>
     <TextTransition
@@ -114,7 +108,6 @@ export const CyclingTextShowcase: React.FC = () => (
   </Bg>
 );
 
-// Example 7: Custom Easing
 export const CustomEasingShowcase: React.FC = () => (
   <Bg>
     <TextTransition
@@ -131,7 +124,6 @@ export const CustomEasingShowcase: React.FC = () => (
   </Bg>
 );
 
-// Example 8: Line-by-Line Reveal
 export const LineByLineShowcase: React.FC = () => (
   <Bg>
     <TextTransition
