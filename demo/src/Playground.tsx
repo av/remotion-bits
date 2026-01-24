@@ -17,7 +17,6 @@ export type PlaygroundProps = {
   // TextTransition props
   texts: string[];
   transitionDuration: number;
-  transitionDirection: "up" | "down" | "left" | "right";
   transitionOffset: number;
 };
 
@@ -31,7 +30,6 @@ export const Playground: React.FC<PlaygroundProps> = ({
   titleAlign,
   texts,
   transitionDuration,
-  transitionDirection,
   transitionOffset,
 }) => {
   const frame = useCurrentFrame();
@@ -86,11 +84,15 @@ export const Playground: React.FC<PlaygroundProps> = ({
           }}
         >
           <TextTransition
-            texts={texts}
-            itemDurationInFrames={transitionDuration}
-            startAt={60}
-            direction={transitionDirection}
-            offset={transitionOffset}
+            transition={{
+              opacity: [0, 1],
+              y: [transitionOffset, 0],
+              cycle: {
+                texts: texts,
+                itemDuration: transitionDuration,
+              },
+              delay: 60,
+            }}
           />
         </div>
 

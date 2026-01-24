@@ -5,10 +5,19 @@ import {
   HeroTitleShowcase,
   heroTitleSchema,
   TextTransitionShowcase,
-  textTransitionSchema,
   BackgroundsShowcase,
   backgroundsSchema,
 } from "./showcases";
+import {
+  FadeInShowcase,
+  SlideFromLeftShowcase,
+  WordByWordShowcase,
+  CharacterColorShowcase,
+  ComplexAnimationShowcase,
+  CyclingTextShowcase,
+  CustomEasingShowcase,
+  LineByLineShowcase,
+} from "./showcases/TextTransitionShowcaseItem";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -36,7 +45,6 @@ export const RemotionRoot: React.FC = () => {
           // TextTransition props
           texts: ["Create", "Animate", "Export", "Share"],
           transitionDuration: 45,
-          transitionDirection: "up" as const,
           transitionOffset: 24,
         }}
       />
@@ -65,21 +73,10 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="TextTransition"
         component={TextTransitionShowcase}
-        durationInFrames={200}
+        durationInFrames={900}
         fps={30}
         width={1920}
         height={1080}
-        schema={textTransitionSchema}
-        defaultProps={{
-          texts: "Create,Animate,Export,Share",
-          itemDurationInFrames: 45,
-          startAt: 0,
-          direction: "up",
-          staticOffset: 24,
-          fontSize: "4rem",
-          fontWeight: 700,
-          color: "#ffffff",
-        }}
       />
 
       <Composition
@@ -99,6 +96,79 @@ export const RemotionRoot: React.FC = () => {
           useAnimatedBlur: false,
           showContent: true,
         }}
+      />
+
+      {/* Individual TextTransition Examples */}
+      <Composition
+        id="TextTransition-FadeIn"
+        component={FadeInShowcase}
+        durationInFrames={60}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="TextTransition-SlideFromLeft"
+        component={SlideFromLeftShowcase}
+        durationInFrames={60}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="TextTransition-WordByWord"
+        component={WordByWordShowcase}
+        durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="TextTransition-CharacterColor"
+        component={CharacterColorShowcase}
+        durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="TextTransition-ComplexAnimation"
+        component={ComplexAnimationShowcase}
+        durationInFrames={120}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="TextTransition-CyclingText"
+        component={CyclingTextShowcase}
+        durationInFrames={180}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="TextTransition-CustomEasing"
+        component={CustomEasingShowcase}
+        durationInFrames={60}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="TextTransition-LineByLine"
+        component={LineByLineShowcase}
+        durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
       />
     </>
   );

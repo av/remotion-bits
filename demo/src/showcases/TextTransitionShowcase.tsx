@@ -1,56 +1,158 @@
 import React from "react";
 import { AbsoluteFill, Sequence } from "remotion";
-import { z } from "zod";
 import { TextTransition } from "../../../src/components";
 import { Center } from "./Center";
 
-export const textTransitionSchema = z.object({
-  texts: z
-    .string()
-    .default("Create,Animate,Export,Share")
-    .describe("Comma-separated text items"),
-  itemDurationInFrames: z.number().min(10).max(120).default(45),
-  startAt: z.number().min(0).max(300).default(0),
-  direction: z.enum(["up", "down", "left", "right"]).default("up"),
-  staticOffset: z.number().min(0).max(100).default(24),
-  fontSize: z.string().default("4rem"),
-  fontWeight: z.number().min(100).max(900).step(100).default(700),
-  color: z.string().default("#ffffff"),
-});
+const baseStyle = {
+  fontSize: "4rem",
+  fontWeight: 700,
+  color: "#ffffff",
+  fontFamily: "Inter, ui-sans-serif, system-ui",
+};
 
-export type TextTransitionShowcaseProps = z.infer<typeof textTransitionSchema>;
-
-export const TextTransitionShowcase: React.FC<TextTransitionShowcaseProps> = ({
-  texts,
-  itemDurationInFrames,
-  startAt,
-  direction,
-  staticOffset,
-  fontSize,
-  fontWeight,
-  color,
-}) => {
-  const textArray = texts.split(",").map((t) => t.trim());
-
+export const TextTransitionShowcase: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
-      <Sequence from={0}>
+      {/* Example 1: Simple Fade In */}
+      <Sequence from={0} durationInFrames={90}>
         <Center>
-          <div
-            style={{
-              fontSize,
-              fontWeight,
-              color,
-              fontFamily: "Inter, ui-sans-serif, system-ui",
-            }}
-          >
+          <div style={baseStyle}>
+            <TextTransition transition={{ opacity: [0, 1] }}>
+              Hello World
+            </TextTransition>
+          </div>
+        </Center>
+      </Sequence>
+
+      {/* Example 2: Slide from Left */}
+      <Sequence from={90} durationInFrames={90}>
+        <Center>
+          <div style={baseStyle}>
             <TextTransition
-              texts={textArray}
-              itemDurationInFrames={itemDurationInFrames}
-              startAt={startAt}
-              direction={direction}
-              offset={staticOffset}
+              transition={{
+                opacity: [0, 1],
+                x: [-400, 0],
+                easing: "easeInOut",
+              }}
+            >
+              Sliding Text
+            </TextTransition>
+          </div>
+        </Center>
+      </Sequence>
+
+      {/* Example 3: Word-by-Word Reveal */}
+      <Sequence from={180} durationInFrames={120}>
+        <Center>
+          <div style={baseStyle}>
+            <TextTransition
+              transition={{
+                scale: [0, 1.2, 1],
+                opacity: [0, 1],
+                split: "word",
+                splitStagger: 3,
+                easing: "easeOutCubic",
+              }}
+            >
+              This appears word by word
+            </TextTransition>
+          </div>
+        </Center>
+      </Sequence>
+
+      {/* Example 4: Character Color Transition */}
+      <Sequence from={300} durationInFrames={90}>
+        <Center>
+          <div style={baseStyle}>
+            <TextTransition
+              transition={{
+                color: ["#ffffff", "#fbbf24", "#f97316"],
+                split: "character",
+                splitStagger: 2,
+                frames: [0, 60],
+              }}
+            >
+              RAINBOW TEXT
+            </TextTransition>
+          </div>
+        </Center>
+      </Sequence>
+
+      {/* Example 5: Complex Animation */}
+      <Sequence from={390} durationInFrames={120}>
+        <Center>
+          <div style={baseStyle}>
+            <TextTransition
+              transition={{
+                x: [-200, 0],
+                y: [50, 0],
+                scale: [0.5, 1],
+                rotate: [90, 0],
+                opacity: [0, 1],
+                easing: "easeOutCubic",
+                split: "word",
+                splitStagger: 5,
+                frames: [10, 80],
+              }}
+            >
+              Complex Animation
+            </TextTransition>
+          </div>
+        </Center>
+      </Sequence>
+
+      {/* Example 6: Cycling Text */}
+      <Sequence from={510} durationInFrames={180}>
+        <Center>
+          <div style={baseStyle}>
+            <TextTransition
+              transition={{
+                opacity: [0, 1],
+                y: [24, 0],
+                cycle: {
+                  texts: ["Create", "Animate", "Export"],
+                  itemDuration: 45,
+                },
+              }}
             />
+          </div>
+        </Center>
+      </Sequence>
+
+      {/* Example 7: Custom Easing */}
+      <Sequence from={690} durationInFrames={90}>
+        <Center>
+          <div style={baseStyle}>
+            <TextTransition
+              transition={{
+                x: [-100, 0],
+                opacity: [0, 1],
+                easing: (t) => t * t * t,
+                split: "character",
+                splitStagger: 1,
+              }}
+            >
+              Custom Easing
+            </TextTransition>
+          </div>
+        </Center>
+      </Sequence>
+
+      {/* Example 8: Line-by-Line Reveal */}
+      <Sequence from={780} durationInFrames={120}>
+        <Center>
+          <div style={{ ...baseStyle, fontSize: "2rem", textAlign: "center" }}>
+            <TextTransition
+              transition={{
+                x: [-50, 0],
+                opacity: [0, 1],
+                split: "line",
+                splitStagger: 10,
+                easing: "easeOutQuad",
+              }}
+            >
+              {`First line\nSecond line\nThird line`}
+            </TextTransition>
           </div>
         </Center>
       </Sequence>

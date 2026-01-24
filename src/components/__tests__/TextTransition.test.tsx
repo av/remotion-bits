@@ -14,17 +14,82 @@ vi.mock("remotion", () => ({
 }));
 
 describe("TextTransition", () => {
-  it("renders the first text at the start", () => {
+  it("renders text from children", () => {
     currentFrame = 0;
-    render(<TextTransition texts={["One", "Two"]} itemDurationInFrames={30} />);
+    render(
+      <TextTransition transition={{ opacity: [0, 1] }}>
+        Hello World
+      </TextTransition>
+    );
+
+    expect(screen.getByText("Hello World")).toBeInTheDocument();
+  });
+
+  it("renders cycling text at the start", () => {
+    currentFrame = 0;
+    render(
+      <TextTransition
+        transition={{
+          opacity: [0, 1],
+          cycle: {
+            texts: ["One", "Two"],
+            itemDuration: 30,
+          },
+        }}
+      />
+    );
 
     expect(screen.getByText("One")).toBeInTheDocument();
   });
 
-  it("renders the next text after one item duration", () => {
+  it("renders next cycling text after item duration", () => {
     currentFrame = 31;
-    render(<TextTransition texts={["One", "Two"]} itemDurationInFrames={30} />);
+    render(
+      <TextTransition
+        transition={{
+          opacity: [0, 1],
+          cycle: {
+            texts: ["One", "Two"],
+            itemDuration: 30,
+          },
+        }}
+      />
+    );
 
     expect(screen.getByText("Two")).toBeInTheDocument();
+  });
+
+  it("splits text by words", () => {
+    currentFrame = 0;
+    const { container } = render(
+      <TextTransition
+        transition={{
+          opacity: [0, 1],
+          split: "word",
+        }}
+      >
+        Hello World
+      </TextTransition>
+    );
+
+    const spans = container.querySelectorAll("span span");
+    expect(spans.length).toBeGreaterThan(1);
+  });
+
+  it("splits text by characters", () => {
+    currentFrame = 0;
+    const { container } = render(
+      <TextTransition
+        transition={{
+          opacity: [0, 1],
+          split: "character",
+        }}
+      >
+        Hi
+      </TextTransition>
+    );
+
+    const spans = container.querySelectorAll("span span");
+    expect(spans.length).toBe(2);
   });
 });
