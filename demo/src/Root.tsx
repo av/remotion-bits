@@ -33,6 +33,7 @@ import {
   CustomComponentShowcase,
   ComplexMotionShowcase,
   NestedElementsShowcase,
+  RandomGridShowcase,
 } from "./showcases/MotionTransitionShowcase";
 
 export const RemotionRoot: React.FC = () => {
@@ -235,6 +236,15 @@ export const RemotionRoot: React.FC = () => {
         id="MotionTransition-CenterStagger"
         component={CenterStaggerShowcase}
         durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="MotionTransition-RandomGrid"
+        component={RandomGridShowcase}
+        durationInFrames={120}
         fps={30}
         width={1920}
         height={1080}

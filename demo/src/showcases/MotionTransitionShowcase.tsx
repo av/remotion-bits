@@ -2,7 +2,6 @@ import React from "react";
 import { AbsoluteFill, Sequence } from "remotion";
 import { MotionTransition } from "../../../src/components/MotionTransition";
 import { Center } from "./Center";
-import { RandomGridShowcase } from "./RandomGridShowcase";
 
 const Bg = ({ children }: { children: React.ReactNode }) => (
   <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
@@ -241,6 +240,48 @@ export const NestedElementsShowcase: React.FC = () => {
           <Cross color="#8b5cf6" />
         </MotionTransition>
       </div>
+    </Bg>
+  );
+};
+
+export const RandomGridShowcase: React.FC = () => {
+  // Create 24 grid items using the shape components (4 rows x 6 columns)
+  const shapes = [Circle, Triangle, RoundedSquare, Star, Cross];
+  const colors = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6"];
+
+  const gridItems = Array.from({ length: 48 }, (_, i) => {
+    const ShapeComponent = shapes[i % shapes.length];
+    const color = colors[i % colors.length];
+    return <ShapeComponent key={i} color={color} />;
+  });
+
+  return (
+    <Bg>
+      <MotionTransition
+        transition={{
+          y: [200, -200],
+          duration: 120,
+        }}
+      >
+
+        <MotionTransition
+          transition={{
+            opacity: [0, 1],
+            scale: [0.5, 1],
+            duration: 10,
+            stagger: 1,
+            staggerDirection: "random",
+            easing: "easeOutCubic",
+          }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(6, 1fr)",
+            gap: "1rem",
+          }}
+        >
+          {gridItems}
+        </MotionTransition>
+      </MotionTransition>
     </Bg>
   );
 };

@@ -6,6 +6,12 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
+    base: '/docs',
+    vite: {
+        ssr: {
+            noExternal: ['remotion', '@remotion/player'],
+        },
+    },
     integrations: [
         react(),
         starlight({
