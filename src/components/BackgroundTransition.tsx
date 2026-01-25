@@ -15,7 +15,7 @@ export type BackgroundTransitionProps = {
   /**
    * Array of CSS gradient strings to transition between
    * Supports linear-gradient, radial-gradient, and conic-gradient
-   * 
+   *
    * @example
    * gradient={[
    *   "linear-gradient(90deg, red, blue)",
@@ -80,19 +80,19 @@ function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction
 
 /**
  * BackgroundTransition - Smooth gradient transitions for Remotion compositions
- * 
+ *
  * Intelligently interpolates between CSS gradients using:
  * - Perceptually uniform Oklch color interpolation (via culori)
  * - Granim.js-inspired angle/position interpolation
  * - Frame-based rendering for deterministic Remotion video export
- * 
+ *
  * Features:
  * - Supports linear-gradient, radial-gradient, conic-gradient
  * - Handles gradients with varying color stop counts
  * - Auto-distributes missing color stop positions
  * - Shortest-path angle interpolation (350° → 10° goes through 0°)
  * - Seamless transitions between different gradient types
- * 
+ *
  * @example
  * // Simple linear gradient transition
  * <BackgroundTransition
@@ -102,7 +102,7 @@ function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction
  *   ]}
  *   duration={60}
  * />
- * 
+ *
  * @example
  * // Radial to linear transition
  * <BackgroundTransition
@@ -112,7 +112,7 @@ function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction
  *   ]}
  *   easing="easeInOut"
  * />
- * 
+ *
  * @example
  * // Multi-keyframe with conic gradients
  * <BackgroundTransition

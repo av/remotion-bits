@@ -27,7 +27,7 @@ export interface ParsedGradient {
 /**
  * Parse CSS gradient string into structured format
  * Supports: linear-gradient, radial-gradient, conic-gradient
- * 
+ *
  * @example
  * parseGradient("linear-gradient(90deg, red, blue 50%, green)")
  * parseGradient("radial-gradient(circle at center, red, blue)")
@@ -378,7 +378,7 @@ export function normalizeColorStops(stops: ColorStop[]): ColorStop[] {
 /**
  * Interpolate angle with wraparound (shortest path)
  * Granim.js uses modulo arithmetic to avoid spinning through 359 degrees
- * 
+ *
  * @example
  * interpolateAngle(350, 10, 0.5) // => 0 (via 360, not 180)
  * interpolateAngle(10, 350, 0.5) // => 0 (via 360, not 180)
