@@ -24,24 +24,7 @@ This will open the Remotion Studio where you can:
 
 ## Available Components
 
-### 1. Backgrounds
-Animated gradient, radial, or solid backgrounds with optional blur.
-
-**Tweakable Props:**
-- `backgroundVariant`: "gradient" | "radial" | "solid"
-- `backgroundColors`: Array of color strings (e.g., ["#0f172a", "#1e293b", "#6366f1"])
-- `backgroundBlur`: Number (blur radius in pixels)
-
-### 2. HeroTitle
-Animated hero title with optional accent text and subtitle.
-
-**Tweakable Props:**
-- `title`: Main title text
-- `subtitle`: Optional subtitle text
-- `accent`: Optional accent text (displays with gradient)
-- `titleAlign`: "left" | "center" | "right"
-
-### 3. TextTransition
+### TextTransition
 Animated text that cycles through multiple strings with smooth transitions.
 
 **Tweakable Props:**

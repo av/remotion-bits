@@ -31,54 +31,6 @@
       ]
     },
     {
-      "name": "backgrounds",
-      "title": "Backgrounds",
-      "description": "Gradient and solid background layers for Remotion scenes.",
-      "type": "component",
-      "add": "when-added",
-      "registryDependencies": [
-        "interpolate"
-      ],
-      "dependencies": [],
-      "devDependencies": [],
-      "files": [
-        {
-          "type": "component",
-          "role": "file",
-          "path": "Backgrounds.tsx",
-          "relativePath": "src/components/Backgrounds.tsx",
-          "_imports_": [],
-          "registryDependencies": [],
-          "dependencies": [],
-          "devDependencies": []
-        }
-      ]
-    },
-    {
-      "name": "hero-title",
-      "title": "Hero Title",
-      "description": "Hero-style heading with animated entrance and accent line.",
-      "type": "component",
-      "add": "when-added",
-      "registryDependencies": [
-        "interpolate"
-      ],
-      "dependencies": [],
-      "devDependencies": [],
-      "files": [
-        {
-          "type": "component",
-          "role": "file",
-          "path": "HeroTitle.tsx",
-          "relativePath": "src/components/HeroTitle.tsx",
-          "_imports_": [],
-          "registryDependencies": [],
-          "dependencies": [],
-          "devDependencies": []
-        }
-      ]
-    },
-    {
       "name": "interpolate",
       "title": "Interpolate",
       "description": "Custom interpolate function with easing support and non-monotonic input ranges.",

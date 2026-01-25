@@ -49,13 +49,13 @@ npx jsrepo init https://unpkg.com/remotion-bits/registry.json
 ### Add components
 
 ```bash
-npx jsrepo add text-transition hero-title
+npx jsrepo add text-transition
 ```
 
 ### One-off add without init
 
 ```bash
-npx jsrepo add --registry https://unpkg.com/remotion-bits/registry.json backgrounds
+npx jsrepo add --registry https://unpkg.com/remotion-bits/registry.json text-transition
 ```
 
 ## Local registry usage (this repo)
@@ -90,8 +90,6 @@ npx jsrepo add text-transition
 ## Available components
 
 - `text-transition`
-- `backgrounds`
-- `hero-title`
 
 ## Demo Playground
 
@@ -120,13 +118,13 @@ By default, components are added to `src/remotionbits`. You can change this in y
 ## Library usage example import
 
 ```ts
-import { TextTransition, Backgrounds, HeroTitle } from "remotion-bits";
+import { TextTransition } from "remotion-bits";
 ```
 
 If you installed components into your project via jsrepo, you can import from your local files, for example:
 
 ```ts
-import { TextTransition, Backgrounds, HeroTitle } from "./remotionbits";
+import { TextTransition } from "./remotionbits";
 ```
 
 ## Directory structure
@@ -136,10 +134,7 @@ After installing components into your project, you will typically have:
 ```
 src/
 	remotionbits/
-		Backgrounds.tsx
-		HeroTitle.tsx
 		TextTransition.tsx
-
 ```
 
 ## Registry build output (maintainers)

@@ -69,36 +69,6 @@ export default defineConfig({
         ],
       },
       {
-        name: "backgrounds",
-        title: "Backgrounds",
-        description:
-          "Gradient and solid background layers for Remotion scenes.",
-        type: "component",
-        add: "when-added",
-        dependencyResolution: "manual",
-        registryDependencies: ["interpolate"],
-        files: [
-          {
-            path: "src/components/Backgrounds.tsx",
-          },
-        ],
-      },
-      {
-        name: "hero-title",
-        title: "Hero Title",
-        description:
-          "Hero-style heading with animated entrance and accent line.",
-        type: "component",
-        add: "when-added",
-        dependencyResolution: "manual",
-        registryDependencies: ["interpolate"],
-        files: [
-          {
-            path: "src/components/HeroTitle.tsx",
-          },
-        ],
-      },
-      {
         name: "interpolate",
         title: "Interpolate",
         description:

@@ -75,9 +75,7 @@ export type InterpolateValue =
 - Supports custom interpolate implementation (non-monotonic ranges, easing, etc.)
 
 **Applied to:**
-- `HeroTitle`: `opacity`, `translateY`
 - `TextTransition`: `offset` (can now animate over time)
-- `Backgrounds`: `blur` (can now animate over time)
 
 **Testing Strategy:**
 - Test both static and array forms
@@ -180,7 +178,6 @@ export function interpolateColorKeyframes(
 
 **Future Considerations:**
 - Could expose hue interpolation direction (shorter/longer/increasing/decreasing) for rainbow effects
-- Other components (Backgrounds, HeroTitle) could adopt color arrays for animated color transitions
 - Could add LAB mode as alternative for backward compatibility with older tools
 
 ---
@@ -223,7 +220,7 @@ export type ComponentShowcaseProps = z.infer<typeof componentSchema>;
 
 **Implementation:**
 - Created `/demo/src/showcases/` directory
-- Individual showcases: `HeroTitleShowcase`, `TextTransitionShowcase`, `BackgroundsShowcase`
+- Individual showcases: `TextTransitionShowcase`
 - Each has its own schema and composition registration
 - Original combined `Playground` composition preserved for backward compatibility
 
@@ -233,9 +230,7 @@ export type ComponentShowcaseProps = z.infer<typeof componentSchema>;
 - Full InterpolateValue arrays can still be edited in code
 
 **Files Created:**
-- `demo/src/showcases/HeroTitleShowcase.tsx`
 - `demo/src/showcases/TextTransitionShowcase.tsx`
-- `demo/src/showcases/BackgroundsShowcase.tsx`
 - `demo/src/showcases/index.ts`
 
 **Files Modified:**
