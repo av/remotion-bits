@@ -3,11 +3,9 @@
   "version": "0.1.0",
   "description": "Remotion component bits with a shadcn-like installer",
   "type": "module",
-  "bin": {
-    "remotionbits": "src/cli.js"
-  },
   "files": [
-    "src"
+    "src",
+    "registry.json"
   ],
   "keywords": [
     "remotion",
