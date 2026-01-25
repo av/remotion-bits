@@ -61,11 +61,11 @@ export const CharacterColorShowcase: React.FC = () => (
   <Bg>
     <TextTransition
       transition={{
-        color: ["#ffffff", "#000000", "#ffffff"],
+        color: ["#ffffff", "black", "oklch(100% 0.3 270)"],
+        opacity: [1, 0.1, 1],
         split: "character",
-        splitStagger: 2,
-        frames: [0, 10],
-        easing: "easeOutCubic",
+        splitStagger: 1,
+        frames: [0, 30],
       }}
     >
       Color Transition
@@ -97,11 +97,12 @@ export const CyclingTextShowcase: React.FC = () => (
   <Bg>
     <TextTransition
       transition={{
-        opacity: [0, 1],
-        y: [24, 0],
+        opacity: [0, 1, 0],
+        y: [24, 0, -24],
+        frames: [0, 25, 30],
         cycle: {
           texts: ["Create", "Animate", "Export"],
-          itemDuration: 45,
+          itemDuration: 30,
         },
       }}
     />

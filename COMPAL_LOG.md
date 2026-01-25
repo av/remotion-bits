@@ -91,6 +91,100 @@ export type InterpolateValue =
 
 ---
 
+### Perceptually Uniform Color Interpolation with Oklch (2026-01-25)
+
+**Context:** Color transitions in animations need to appear smooth and natural to the human eye. Traditional RGB interpolation produces muddy intermediate colors and uneven brightness (e.g., red→blue transitions through dark purple). TextTransition component had a crude binary color switch.
+
+**Problem:**
+- RGB interpolation is not perceptually uniform
+- RGB red→blue goes through dark muddy colors
+- HSL is better but still has brightness inconsistencies
+- Original implementation: `return localProgress < 0.5 ? fromColor : toColor;` (binary switch, no actual interpolation)
+
+**Solution:** Use Oklch color space via the `culori` library for professional-quality color transitions.
+
+**Why Oklch:**
+- Perceptually uniform (consistent perceived brightness)
+- Modern standard (CSS, Figma, Tailwind CSS v4)
+- Better hue uniformity than LAB/LCH
+- Designed specifically for graphics/web use
+- Minimal out-of-gamut issues
+
+**Implementation:**
+```typescript
+// src/utils/color.ts
+import { interpolate as culoriInterpolate, formatRgb } from "culori";
+
+export function interpolateColorKeyframes(
+  colors: string[],
+  progress: number,
+  easingFn?: EasingFunction
+): string {
+  // Multi-keyframe support matching interpolate.ts pattern
+  const interpolator = culoriInterpolate([fromColor, toColor], "oklch");
+  const result = interpolator(easedProgress);
+  return formatRgb(result) || "transparent";
+}
+```
+
+**Key Features:**
+- Multi-keyframe support (not just two colors)
+- Easing function integration (consistent with numeric interpolation)
+- Graceful error handling for invalid colors
+- Returns RGB strings for CSS compatibility
+- Matches the API pattern of `interpolateKeyframes` from interpolate.ts
+
+**Benefits:**
+- Professional-quality color transitions for video/animation work
+- No muddy intermediate colors
+- Consistent perceived brightness
+- Reusable across all components (not just TextTransition)
+- Future-proof (Oklch is the modern standard)
+
+**Trade-offs:**
+- Bundle size: ~12KB for culori (acceptable for video rendering)
+- No native TypeScript types (created custom declarations in src/culori.d.ts)
+- Considered alternatives: colord (~5KB), pure implementation (~2KB), but culori chosen for robustness and quality
+
+**Files Created:**
+- `src/utils/color.ts` - Oklch color interpolation utility
+- `src/utils/__tests__/color.test.ts` - Comprehensive test coverage (22 tests)
+- `src/culori.d.ts` - TypeScript type definitions
+
+**Files Modified:**
+- `src/utils/index.ts` - Exported color utilities
+- `src/components/TextTransition.tsx` - Removed binary interpolateColor function, imported and used interpolateColorKeyframes
+- `package.json` - Added culori dependency
+
+**Testing Strategy:**
+- Edge cases (empty array, single color, invalid colors)
+- Two-color interpolation (hex, rgb, rgba, hsl, named colors)
+- Multi-keyframe transitions (3-4 colors with correct segment boundaries)
+- Easing integration (linear, easeIn, easeOut, custom functions)
+- Oklch perceptual uniformity validation
+- Real-world use cases (gradients, high contrast, pastels)
+
+**Usage Example:**
+```typescript
+// In TextTransition
+<TextTransition
+  transition={{
+    color: ['#ff0000', '#ffff00', '#0000ff'], // red → yellow → blue
+    frames: [0, 60],
+    easing: 'easeInOut'
+  }}
+>
+  Smooth Colors!
+</TextTransition>
+```
+
+**Future Considerations:**
+- Could expose hue interpolation direction (shorter/longer/increasing/decreasing) for rainbow effects
+- Other components (Backgrounds, HeroTitle) could adopt color arrays for animated color transitions
+- Could add LAB mode as alternative for backward compatibility with older tools
+
+---
+
 ## Architecture Decisions
 
 ### Interactive Playground with Zod Schemas (2026-01-24)
@@ -160,6 +254,116 @@ The project uses a custom `interpolate` function instead of Remotion's built-in 
 - Consistent extrapolation behavior
 
 This custom implementation is foundational and should be used throughout all components.
+
+---
+
+### Cycle Animation Reset Pattern (2026-01-25)
+
+**Context:** TextTransition component supports a `cycle` feature that rotates through different text strings. Each text should animate in with the same transition properties.
+
+**Problem:**
+- The first cycled text animated correctly (frames 0-45)
+- Subsequent texts appeared instantly without animation
+- Root cause: Animation progress was calculated from global frame, not per-cycle-item frame
+- After first cycle completed, `progress` was always ≥1, showing final animation state immediately
+
+**Solution:** Track frame position within the current cycle item using modulo arithmetic.
+
+**Implementation:**
+```typescript
+// Calculate frame offset within current cycle item
+cycleFrameOffset = relativeFrame % itemDuration;
+
+// Use cycle offset instead of global frame for progress calculation
+const baseFrame = cycle ? cycleFrameOffset : Math.max(0, frame - delay);
+const relativeFrame = baseFrame - (index * splitStagger);
+const progress = Math.min(Math.max((relativeFrame - startFrame) / totalDuration, 0), 1);
+```
+
+**Key Insight:** When implementing repeating/cycling animations, always normalize the frame counter to restart from 0 at the beginning of each cycle. Global frame counters only work for single-run animations.
+
+**Pattern Application:**
+- Use modulo (`%`) to reset frame counter per cycle: `frame % cycleDuration`
+- Apply to any component with repeating states (carousels, slideshows, alternating content)
+- Maintain separate logic paths for one-time vs. cycling animations
+
+**Files Modified:**
+- [src/components/TextTransition.tsx](src/components/TextTransition.tsx#L153-L175)
+
+**Testing:** All existing tests pass, including cycle-specific tests that verify text content changes.
+
+---
+
+### Type Broadening with Backward Compatibility Pattern (2026-01-25)
+
+**Context:** TextTransition component had `split` property constrained to literal union `"none" | "word" | "character" | "line"`, limiting flexibility for custom split behaviors.
+
+**Problem:**
+- Users wanted to split by arbitrary strings (e.g., `"|"`, `";"`, any custom delimiter)
+- Strict literal union prevented this extension
+- Needed to maintain backward compatibility with existing usage
+
+**Solution:** Broaden type to accept `string` while preserving special handling for known keywords.
+
+**Implementation:**
+```typescript
+// Before: Strict literal union
+split?: "none" | "word" | "character" | "line";
+
+// After: Flexible string type
+split?: string;
+
+// splitText function handles both cases
+function splitText(text: string, mode: string): string[] {
+  // Special handling for known keywords
+  if (mode === "none") return [text];
+  if (mode === "word") return text.split(/(\s+)/);
+  if (mode === "character") return text.split("");
+  if (mode === "line") return text.split("\n");
+
+  // Custom separator: split by the provided string
+  return text.split(mode);
+}
+```
+
+**Key Principles:**
+- **Expand type from specific to general** (literal union → string)
+- **Preserve keyword behavior** via explicit checks before fallback
+- **Default to intuitive behavior** for custom inputs (string.split())
+- **Maintain 100% backward compatibility** (existing code continues to work)
+
+**Benefits:**
+- Users can now use any string as separator: `split: "|"`, `split: "::"`
+- No breaking changes to existing code using `"word"`, `"character"`, etc.
+- Intuitive API - custom split uses JavaScript's built-in `String.split()`
+- Type system allows but doesn't enforce literal values (good IDE autocomplete)
+
+**Testing Strategy:**
+- Verify predefined keywords still work (`"word"`, `"character"`, `"line"`, `"none"`)
+- Test custom separators (`"|"`, `","`, `";;"`)
+- Test that `split: "\n"` works both as keyword `"line"` and custom separator
+- All tests pass, no regression
+
+**When to Apply:**
+- Component APIs with enum-like properties that could benefit from user extensibility
+- When you want to guide users toward standard options but not restrict them
+- Type narrowing becomes a constraint rather than a safety feature
+
+**Files Modified:**
+- [src/components/TextTransition.tsx](src/components/TextTransition.tsx)
+- [src/components/__tests__/TextTransition.test.tsx](src/components/__tests__/TextTransition.test.tsx)
+
+**Usage Examples:**
+```typescript
+// Predefined keywords (still work)
+<TextTransition transition={{ split: "word" }}>Hello World</TextTransition>
+<TextTransition transition={{ split: "character" }}>ABC</TextTransition>
+
+// Custom separators (new capability)
+<TextTransition transition={{ split: "|" }}>One|Two|Three</TextTransition>
+<TextTransition transition={{ split: "::" }}>A::B::C</TextTransition>
+<TextTransition transition={{ split: "\n" }}>Line1\nLine2</TextTransition>
+```
 
 ---
 

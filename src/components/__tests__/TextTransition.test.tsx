@@ -92,4 +92,38 @@ describe("TextTransition", () => {
     const spans = container.querySelectorAll("span span");
     expect(spans.length).toBe(2);
   });
+
+  it("splits text by custom separator", () => {
+    currentFrame = 0;
+    const { container } = render(
+      <TextTransition
+        transition={{
+          opacity: [0, 1],
+          split: "|",
+        }}
+      >
+        One|Two|Three
+      </TextTransition>
+    );
+
+    const spans = container.querySelectorAll("span span");
+    expect(spans.length).toBe(3);
+  });
+
+  it("splits text by newline using custom separator", () => {
+    currentFrame = 0;
+    const { container } = render(
+      <TextTransition
+        transition={{
+          opacity: [0, 1],
+          split: "\n",
+        }}
+      >
+        Line1{"\n"}Line2
+      </TextTransition>
+    );
+
+    const spans = container.querySelectorAll("span span");
+    expect(spans.length).toBe(2);
+  });
 });

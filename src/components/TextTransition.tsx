@@ -1,6 +1,11 @@
 import React from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
-import { Easing, type EasingName, type EasingFunction } from "../utils";
+import {
+  Easing,
+  type EasingName,
+  type EasingFunction,
+  interpolateColorKeyframes,
+} from "../utils";
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -36,7 +41,7 @@ export type TransitionProps = {
   delay?: number;
 
   // Split configuration
-  split?: "none" | "word" | "character" | "line";
+  split?: string;
   splitStagger?: number;
 
   // Easing
@@ -60,12 +65,13 @@ export type TextTransitionProps = {
 // HELPER FUNCTIONS
 // ============================================================================
 
-function splitText(text: string, mode: "none" | "word" | "character" | "line"): string[] {
+function splitText(text: string, mode: string): string[] {
   if (mode === "none") return [text];
   if (mode === "word") return text.split(/(\s+)/);
   if (mode === "character") return text.split("");
   if (mode === "line") return text.split("\n");
-  return [text];
+  // Custom separator: split by the provided string
+  return text.split(mode);
 }
 
 function interpolateKeyframes(
@@ -89,22 +95,6 @@ function interpolateKeyframes(
 
   const eased = easingFn ? easingFn(localProgress) : localProgress;
   return from + (to - from) * eased;
-}
-
-function interpolateColor(colors: string[], progress: number): string {
-  if (colors.length === 0) return "transparent";
-  if (colors.length === 1) return colors[0];
-
-  const segments = colors.length - 1;
-  const segmentProgress = progress * segments;
-  const segmentIndex = Math.min(Math.floor(segmentProgress), segments - 1);
-  const localProgress = segmentProgress - segmentIndex;
-
-  const fromColor = colors[segmentIndex];
-  const toColor = colors[segmentIndex + 1];
-
-  // Simple color interpolation (could be enhanced with proper color space conversion)
-  return localProgress < 0.5 ? fromColor : toColor;
 }
 
 function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction | undefined {
@@ -162,12 +152,15 @@ export const TextTransition: React.FC<TextTransitionProps> = ({
 
   // Handle text cycling
   let content: string;
+  let cycleFrameOffset = 0;
 
   if (cycle) {
     const { texts, itemDuration } = cycle;
     const relativeFrame = Math.max(0, frame - delay);
     const cycleIndex = Math.floor(relativeFrame / itemDuration) % texts.length;
     content = texts[cycleIndex] || "";
+    // Calculate frame offset within the current cycle item
+    cycleFrameOffset = relativeFrame % itemDuration;
   } else {
     content = typeof children === "string" ? children : String(children || "");
   }
@@ -177,7 +170,9 @@ export const TextTransition: React.FC<TextTransitionProps> = ({
 
   // Render function for each unit
   const renderUnit = (unit: string, index: number) => {
-    const relativeFrame = Math.max(0, frame - delay - (index * splitStagger));
+    // When cycling, use the frame position within the current cycle item
+    const baseFrame = cycle ? cycleFrameOffset : Math.max(0, frame - delay);
+    const relativeFrame = baseFrame - (index * splitStagger);
     const progress = Math.min(Math.max((relativeFrame - startFrame) / totalDuration, 0), 1);
 
     // Build transform string
@@ -254,11 +249,11 @@ export const TextTransition: React.FC<TextTransitionProps> = ({
     }
 
     if (color) {
-      unitStyle.color = interpolateColor(color, progress);
+      unitStyle.color = interpolateColorKeyframes(color, progress, easingFn);
     }
 
     if (backgroundColor) {
-      unitStyle.backgroundColor = interpolateColor(backgroundColor, progress);
+      unitStyle.backgroundColor = interpolateColorKeyframes(backgroundColor, progress, easingFn);
     }
 
     if (blur !== undefined) {
