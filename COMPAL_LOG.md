@@ -2,6 +2,25 @@
 
 This file tracks architectural patterns, lessons learned, and key insights for the remotion-bits project.
 
+## Core Principles
+
+### Research Before Building (CRITICAL)
+
+**Always investigate existing robust solutions before implementing custom code.** This principle saved hours on the BackgroundTransition implementation:
+
+- **Research first**: Found Granim.js (5.3k+ stars), studied their gradient interpolation algorithms
+- **Learn from proven patterns**: Extracted angle wraparound logic, position normalization, edge case handling
+- **Adapt intelligently**: Used their math but adapted to Remotion's frame-based architecture + culori's Oklch colors
+- **Result**: Avoided bugs like wrong angle direction (270° vs 90°), discovered edge cases (180° ambiguity, mismatched stops)
+
+**Red flags**: "I'll figure it out myself", "How hard can it be?", rejecting research as "not invented here"
+
+**Green flags**: "How do established libraries solve this?", "What can I learn from their source code?", "Can I reuse proven algorithms?"
+
+> Standing on the shoulders of giants is engineering wisdom, not laziness. Build on proven foundations, then innovate on top.
+
+---
+
 ## Patterns
 
 ### Custom CSS Gradient Parser and Interpolation (2026-01-25)
@@ -162,12 +181,55 @@ export const BackgroundTransition: React.FC<BackgroundTransitionProps> = ({
 </BackgroundTransition>
 ```
 
+**Research and Learning from Existing Solutions:**
+
+This implementation demonstrates a critical development principle: **research existing robust solutions before building custom implementations**.
+
+**Process Followed:**
+1. **Identified the problem domain**: CSS gradient interpolation for smooth animations
+2. **Researched existing solutions**: Found Granim.js, a battle-tested gradient animation library with 5.3k+ GitHub stars
+3. **Analyzed their approach**: Studied Granim.js source code for:
+   - Angle interpolation algorithm (shortest-path wraparound)
+   - Color stop position normalization (auto-distribution)
+   - Gradient state transition handling
+4. **Adapted proven patterns**: Extracted mathematical concepts while adapting to Remotion's frame-based architecture
+5. **Enhanced with modern techniques**: Replaced Granim's RGB interpolation with culori's Oklch for perceptually uniform colors
+
+**Why This Matters:**
+- **Avoid reinventing the wheel**: Granim.js solved angle wraparound (350°→10° via 0°) through years of real-world use
+- **Learn from edge cases**: Their code handles scenarios we wouldn't discover until production (negative angles, 180° ambiguity)
+- **Build on proven foundations**: Mathematical algorithms like shortest-path angle interpolation are well-established
+- **Adapt, don't copy**: Used their insights but tailored to Remotion's frame-based, not time-based, architecture
+
+**Red Flags When Building Custom Solutions:**
+- ❌ "I'll figure out angle interpolation myself" → Led to initial bug (270° instead of 90°)
+- ❌ "How hard can CSS parsing be?" → Very hard (nested commas, "at" keyword, multiple syntaxes)
+- ✅ "Let me see how established libraries handle this" → Discovered wraparound math, position normalization patterns
+- ✅ "Can I reuse existing solutions?" → Used culori for Oklch colors instead of building color space conversion
+
+**Concrete Benefits in This Implementation:**
+- **Angle interpolation**: Granim's `((diff % 360) + 360) % 360` with ±180 adjustment saved hours of debugging
+- **Position normalization**: Their auto-distribution algorithm handles undefined stop positions elegantly
+- **Edge case handling**: Their code revealed scenarios like 180° ambiguity, mismatched stop counts
+- **Code quality**: Well-tested patterns from production use (vs. untested custom logic)
+
+**When Custom Implementation Makes Sense:**
+- ✅ No external library fits the requirements (Remotion's frame-based vs. requestAnimationFrame)
+- ✅ Bundle size concerns (gradient-parser is 50KB, our custom parser is ~600 lines)
+- ✅ Learning from existing solutions first, then adapting their proven algorithms
+- ❌ "Not Invented Here" syndrome - rejecting research because it's not original
+
+**Key Takeaway:**
+> **Always research existing robust solutions first. Learn their design patterns, understand their algorithms, then adapt (not copy) proven approaches to your specific requirements. Standing on the shoulders of giants is engineering wisdom, not laziness.**
+
 **Lessons Learned:**
-1. **Parser complexity**: CSS gradient syntax is more complex than expected (nested commas, "at" keyword, various shapes)
-2. **isColorStop heuristic**: Had to use negative checks (NOT "at", NOT "circle") before positive checks
-3. **Angle interpolation direction**: Simple diff calculation gives wrong path; need wraparound logic with ±180 adjustment
-4. **TypeScript strictness**: Non-null assertions (`!`) after normalization cleaner than defensive checks everywhere
-5. **Test-driven development**: Writing 60 tests first caught edge cases early (angle direction, position parsing)
+1. **Research before building**: Granim.js taught us angle wraparound, position normalization, and edge cases we wouldn't discover alone
+2. **Parser complexity**: CSS gradient syntax is more complex than expected (nested commas, "at" keyword, various shapes)
+3. **isColorStop heuristic**: Had to use negative checks (NOT "at", NOT "circle") before positive checks
+4. **Angle interpolation direction**: Simple diff calculation gives wrong path; Granim's wraparound logic with ±180 adjustment is the correct approach
+5. **TypeScript strictness**: Non-null assertions (`!`) after normalization cleaner than defensive checks everywhere
+6. **Test-driven development**: Writing 60 tests first caught edge cases early (angle direction, position parsing)
+7. **Adapt proven patterns**: Granim's math + culori's Oklch + Remotion's frame-based architecture = best of all worlds
 
 **Future Enhancements:**
 - Support for `repeating-linear-gradient`, `repeating-radial-gradient`
