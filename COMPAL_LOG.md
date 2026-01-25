@@ -4,6 +4,179 @@ This file tracks architectural patterns, lessons learned, and key insights for t
 
 ## Patterns
 
+### Custom CSS Gradient Parser and Interpolation (2026-01-25)
+
+**Context:** BackgroundTransition component needed to smoothly transition between CSS gradients frame-by-frame for Remotion video rendering. This required parsing complex CSS gradient strings and intelligently interpolating between them.
+
+**Problem:**
+- CSS gradients have complex syntax (linear, radial, conic)
+- Varying numbers of color stops between keyframes
+- Missing color stop positions need auto-distribution
+- Angle interpolation should take shortest path (350°→10° via 0°, not 180°)
+- Gradient type transitions (linear→radial) need smooth handling
+- No external CSS gradient parser library was used (per requirements)
+
+**Solution:** Built a custom CSS gradient parser and interpolation system inspired by Granim.js mathematics, using culori's Oklch for color interpolation.
+
+**Implementation:**
+
+1. **Custom Gradient Parser** (`src/utils/gradient.ts`):
+```typescript
+// Supports linear-gradient, radial-gradient, conic-gradient
+export function parseGradient(gradientString: string): ParsedGradient | null
+// Handles: angles, directions, shapes, positions, color stops with/without positions
+```
+
+2. **Granim.js-Inspired Math**:
+```typescript
+// Auto-distribute missing color stop positions
+export function normalizeColorStops(stops: ColorStop[]): ColorStop[]
+
+// Shortest-path angle interpolation (350°→10° = 20° path, not 340°)
+export function interpolateAngle(from: number, to: number, progress: number): number
+
+// Pad or resample stops to match counts
+export function matchColorStopCount(stops: ColorStop[], targetCount: number): ColorStop[]
+```
+
+3. **Gradient Interpolation**:
+```typescript
+// Core interpolation between two gradients
+export function interpolateGradients(
+  from: ParsedGradient,
+  to: ParsedGradient,
+  progress: number,
+  easingFn?: EasingFunction
+): ParsedGradient
+
+// Multi-keyframe support (matching color.ts pattern)
+export function interpolateGradientKeyframes(
+  gradients: string[],
+  progress: number,
+  easingFn?: EasingFunction
+): string
+```
+
+4. **Frame-Based Component**:
+```typescript
+export const BackgroundTransition: React.FC<BackgroundTransitionProps> = ({
+  gradient,  // Array of CSS gradient strings
+  frames,    // Optional [start, end] range
+  duration,  // Or duration in frames
+  delay,
+  easing,
+  ...
+}) => {
+  const frame = useCurrentFrame();
+  const progress = calculateProgress(frame);
+  const interpolatedGradient = interpolateGradientKeyframes(gradient, progress, easingFn);
+  return <div style={{ background: interpolatedGradient }}>{children}</div>;
+};
+```
+
+**Key Features:**
+- **No external parser dependency**: Pure TypeScript implementation
+- **Handles complex syntax**: `radial-gradient(circle at 50% 50%, rgba(255,0,0,0.5), hsl(240, 100%, 50%))`
+- **Shortest-path angle interpolation**: 350°→10° goes through 0° (20° path) instead of 180° (340° path)
+- **Perceptually uniform colors**: Uses culori's Oklch interpolation from existing `color.ts`
+- **Auto-position distribution**: Missing stop positions auto-calculated evenly
+- **Mismatched stop counts**: Pads or resamples intelligently
+- **Type transitions**: Linear→radial switches at progress 0.5
+- **Frame-deterministic**: Each frame independently rendered (no requestAnimationFrame)
+
+**Testing Strategy:**
+- 60 comprehensive tests in `gradient.test.ts`
+- Parse tests: linear, radial, conic with various syntaxes
+- Math tests: angle wraparound, position normalization, stop count matching
+- Interpolation tests: easing, type transitions, multi-keyframe
+- 9 component tests in `BackgroundTransition.test.tsx`
+- All 117 tests passing
+
+**Edge Cases Handled:**
+1. **Missing positions**: `"red, blue, green"` → auto-distribute to `0%, 50%, 100%`
+2. **Angle wraparound**: `350°→10°` takes 20° path through 0°, not 340° backwards
+3. **Mismatched stops**: 2-stop gradient → 5-stop gradient (pads last stop)
+4. **Type transitions**: linear→radial switches discretely at 0.5 progress
+5. **Invalid gradients**: Parse failures return original string gracefully
+6. **Complex colors**: `rgb(255, 0, 0)`, `rgba()`, `hsl()`, `hsla()`, hex, named colors
+7. **Nested parentheses**: Comma-splitting respects `rgb(255, 0, 0)` structure
+
+**Architecture Decisions:**
+- **Separate utility**: `gradient.ts` is standalone (can be used elsewhere)
+- **Dependency on existing patterns**: Reuses `interpolate.ts` (easing) and `color.ts` (Oklch)
+- **Registry structure**: `background-transition` component depends on `gradient`, `interpolate`, and `color` utilities
+- **Backward compatible**: Follows `TextTransition` API patterns (gradient array, frames, duration, delay, easing)
+
+**Performance Considerations:**
+- Parser caches normalized stops within single interpolation call
+- Non-asserting assertion operator (`!`) used after normalization guarantees positions exist
+- Frame-based (not time-based) allows Remotion to render frames in parallel
+
+**Files Created:**
+- `src/utils/gradient.ts` (598 lines) - Parser and interpolation utilities
+- `src/utils/__tests__/gradient.test.ts` (60 tests)
+- `src/components/BackgroundTransition.tsx` (132 lines)
+- `src/components/__tests__/BackgroundTransition.test.tsx` (9 tests)
+- `demo/src/showcases/BackgroundTransitionShowcase.tsx` - Demo compositions
+- `demo/src/showcases/BackgroundTransitionShowcaseItem.tsx` - 8 showcase examples
+
+**Files Modified:**
+- `src/utils/index.ts` - Exported gradient utilities
+- `src/components/index.ts` - Exported BackgroundTransition
+- `jsrepo.config.ts` - Added background-transition, gradient, and color items to registry
+- `demo/src/Root.tsx` - Added 9 BackgroundTransition compositions
+
+**Registry Build:** Successfully builds with 5 items and 5 files from src/
+
+**Usage Examples:**
+```typescript
+// Simple linear gradient transition
+<BackgroundTransition
+  gradient={[
+    "linear-gradient(0deg, #667eea, #764ba2)",
+    "linear-gradient(180deg, #f093fb, #f5576c)",
+  ]}
+  duration={90}
+/>
+
+// Radial to conic transition with easing
+<BackgroundTransition
+  gradient={[
+    "radial-gradient(circle, #ff6b6b, #4ecdc4)",
+    "conic-gradient(from 0deg, #ff0000, #ffff00, #00ff00)",
+  ]}
+  easing="easeInOut"
+  frames={[20, 100]}
+/>
+
+// Multi-stop complex gradient
+<BackgroundTransition
+  gradient={[
+    "linear-gradient(45deg, #fa709a 0%, #fee140 50%, #30cfd0 100%)",
+    "linear-gradient(225deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
+  ]}
+  duration={120}
+  easing="easeInOutCubic"
+>
+  <h1>Content on top</h1>
+</BackgroundTransition>
+```
+
+**Lessons Learned:**
+1. **Parser complexity**: CSS gradient syntax is more complex than expected (nested commas, "at" keyword, various shapes)
+2. **isColorStop heuristic**: Had to use negative checks (NOT "at", NOT "circle") before positive checks
+3. **Angle interpolation direction**: Simple diff calculation gives wrong path; need wraparound logic with ±180 adjustment
+4. **TypeScript strictness**: Non-null assertions (`!`) after normalization cleaner than defensive checks everywhere
+5. **Test-driven development**: Writing 60 tests first caught edge cases early (angle direction, position parsing)
+
+**Future Enhancements:**
+- Support for `repeating-linear-gradient`, `repeating-radial-gradient`
+- Advanced CSS features: `closest-side`, `farthest-corner`, size keywords
+- Hue interpolation direction control (shorter/longer/increasing/decreasing) for rainbow effects
+- Gradient position interpolation (currently switches at 0.5)
+
+---
+
 ### Single Source of Truth with Import Transformation (2026-01-24)
 
 **Context:** The project had duplicate code in `src/components/` (for npm library) and `templates/components/` (for jsrepo registry), with different import patterns. This created maintenance burden and risk of divergence.

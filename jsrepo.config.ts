@@ -61,10 +61,25 @@ export default defineConfig({
         type: "component",
         add: "when-added",
         dependencyResolution: "manual",
-        registryDependencies: ["interpolate"],
+        registryDependencies: ["interpolate", "color"],
         files: [
           {
             path: "src/components/TextTransition.tsx",
+          },
+        ],
+      },
+      {
+        name: "background-transition",
+        title: "Background Transition",
+        description: "Smooth CSS gradient transitions with intelligent interpolation (linear, radial, conic).",
+        type: "component",
+        add: "when-added",
+        dependencyResolution: "manual",
+        registryDependencies: ["interpolate", "gradient"],
+        dependencies: ["culori"],
+        files: [
+          {
+            path: "src/components/BackgroundTransition.tsx",
           },
         ],
       },
@@ -78,6 +93,39 @@ export default defineConfig({
         files: [
           {
             path: "src/utils/interpolate.ts",
+          },
+        ],
+      },
+      {
+        name: "color",
+        title: "Color Interpolation",
+        description:
+          "Perceptually uniform color interpolation using Oklch color space via culori.",
+        type: "util",
+        add: "when-needed",
+        dependencies: ["culori"],
+        files: [
+          {
+            path: "src/utils/color.ts",
+          },
+          {
+            path: "src/culori.d.ts",
+          },
+        ],
+      },
+      {
+        name: "gradient",
+        title: "Gradient Interpolation",
+        description:
+          "CSS gradient parser and interpolation with Granim.js-inspired mathematics.",
+        type: "util",
+        add: "when-needed",
+        dependencyResolution: "manual",
+        registryDependencies: ["interpolate", "color"],
+        dependencies: ["culori"],
+        files: [
+          {
+            path: "src/utils/gradient.ts",
           },
         ],
       },

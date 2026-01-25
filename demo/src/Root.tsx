@@ -3,6 +3,7 @@ import { Composition } from "remotion";
 import { Playground } from "./Playground";
 import {
   TextTransitionShowcase,
+  BackgroundTransitionShowcase,
 } from "./showcases";
 import {
   FadeInShowcase,
@@ -14,15 +15,34 @@ import {
   CustomEasingShowcase,
   LineByLineShowcase,
 } from "./showcases/TextTransitionShowcaseItem";
+import {
+  LinearGradientShowcase,
+  RadialGradientShowcase,
+  ConicGradientShowcase,
+  MultiStopGradientShowcase,
+  AngleInterpolationShowcase,
+  TypeTransitionShowcase,
+  ComplexGradientShowcase,
+  ShortestPathAngleShowcase,
+} from "./showcases/BackgroundTransitionShowcaseItem";
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      {/* Individual Component Showcases with Tweakable Props */}
+      {/* Component Showcase Collections */}
       <Composition
         id="TextTransition"
         component={TextTransitionShowcase}
         durationInFrames={900}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="BackgroundTransition"
+        component={BackgroundTransitionShowcase}
+        durationInFrames={960}
         fps={30}
         width={1920}
         height={1080}
@@ -95,6 +115,79 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="TextTransition-LineByLine"
         component={LineByLineShowcase}
+        durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      {/* Individual BackgroundTransition Examples */}
+      <Composition
+        id="BackgroundTransition-Linear"
+        component={LinearGradientShowcase}
+        durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="BackgroundTransition-Radial"
+        component={RadialGradientShowcase}
+        durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="BackgroundTransition-Conic"
+        component={ConicGradientShowcase}
+        durationInFrames={120}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="BackgroundTransition-MultiStop"
+        component={MultiStopGradientShowcase}
+        durationInFrames={120}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="BackgroundTransition-AngleInterpolation"
+        component={AngleInterpolationShowcase}
+        durationInFrames={150}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="BackgroundTransition-TypeTransition"
+        component={TypeTransitionShowcase}
+        durationInFrames={180}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="BackgroundTransition-Complex"
+        component={ComplexGradientShowcase}
+        durationInFrames={120}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="BackgroundTransition-ShortestPath"
+        component={ShortestPathAngleShowcase}
         durationInFrames={90}
         fps={30}
         width={1920}
