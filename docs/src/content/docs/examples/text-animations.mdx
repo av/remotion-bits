@@ -1,0 +1,399 @@
+---
+title: Text Animation Examples
+description: Real-world examples of text animations with Remotion Bits
+---
+import { ShowcasePlayer } from '@components/ShowcasePlayer';
+import {
+  FadeInShowcase,
+  SlideFromLeftShowcase,
+  WordByWordShowcase,
+  CharacterColorShowcase,
+  ComplexAnimationShowcase,
+  CyclingTextShowcase,
+  LineByLineShowcase
+} from '@showcases/TextTransitionShowcaseItem';
+
+# Text Animation Examples
+
+Explore practical examples and patterns for creating beautiful text animations with Remotion Bits.
+
+## Title Sequences
+
+### Hero Title with Stagger
+
+Perfect for video intros and hero sections.
+
+<ShowcasePlayer client:visible component={WordByWordShowcase} duration={60} />
+
+```tsx
+<TextTransition
+  transition={{
+    y: [200, 0],
+    opacity: [0, 1],
+    split: "word",
+    splitStagger: 3,
+    easing: "easeOutQuad"
+  }}
+  style={{
+    fontSize: '8rem',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  }}
+>
+  Your Amazing Title Here
+</TextTransition>
+```
+
+### Animated Subtitles
+
+Subtle line-by-line appearance for subtitles or captions.
+
+<ShowcasePlayer client:visible component={LineByLineShowcase} duration={60} />
+
+```tsx
+<TextTransition
+  transition={{
+    x: [-50, 0],
+    opacity: [0, 1],
+    split: "line",
+    splitStagger: 10,
+    easing: "easeOutQuad"
+  }}
+  style={{
+    fontSize: '2rem',
+    lineHeight: 1.5
+  }}
+>
+  {`Line one of your subtitle\nLine two continues\nLine three completes`}
+</TextTransition>
+```
+
+## Dynamic Text Effects
+
+### Cycling Text Loop
+
+Great for showcasing multiple features or benefits.
+
+<ShowcasePlayer client:visible component={CyclingTextShowcase} duration={90} />
+
+```tsx
+<TextTransition
+  transition={{
+    opacity: [0, 1, 0],
+    y: [24, 0, -24],
+    frames: [0, 25, 30],
+    cycle: {
+      texts: ["Create", "Animate", "Export", "Share"],
+      itemDuration: 30
+    }
+  }}
+  style={{
+    fontSize: '6rem',
+    fontWeight: 'bold'
+  }}
+/>
+```
+
+**Use cases:**
+- Feature highlights
+- Brand values
+- Call-to-action variations
+- Testimonial rotations
+
+### Color Wave Animation
+
+Eye-catching character-by-character color transition.
+
+<ShowcasePlayer client:visible component={CharacterColorShowcase} duration={60} />
+
+```tsx
+<TextTransition
+  transition={{
+    color: ["#ffffff", "#667eea", "#f093fb"],
+    opacity: [1, 0.7, 1],
+    split: "character",
+    splitStagger: 1,
+    frames: [0, 30]
+  }}
+  style={{
+    fontSize: '5rem',
+    fontWeight: 'bold'
+  }}
+>
+  Rainbow Effect
+</TextTransition>
+```
+
+## Entrance Animations
+
+### Simple Fade In
+
+Clean and professional entrance.
+
+<ShowcasePlayer client:visible component={FadeInShowcase} duration={60} />
+
+```tsx
+<TextTransition
+  transition={{
+    opacity: [0, 1],
+    frames: [0, 30],
+    easing: "easeOutQuad"
+  }}
+>
+  Welcome Message
+</TextTransition>
+```
+
+### Slide from Side
+
+Dynamic entrance with movement.
+
+<ShowcasePlayer client:visible component={SlideFromLeftShowcase} duration={60} />
+
+```tsx
+<TextTransition
+  transition={{
+    opacity: [0, 1],
+    x: [-400, 0],
+    easing: "easeInOut"
+  }}
+  style={{
+    fontSize: '4rem',
+    fontWeight: 'bold'
+  }}
+>
+  Sliding Text
+</TextTransition>
+```
+
+**Variations:**
+```tsx
+// From right
+x: [400, 0]
+
+// From top
+y: [-200, 0]
+
+// From bottom
+y: [200, 0]
+```
+
+## Complex Animations
+
+### Multi-Property Effect
+
+Combine multiple properties for impactful animations.
+
+<ShowcasePlayer client:visible component={ComplexAnimationShowcase} duration={90} />
+
+```tsx
+<TextTransition
+  transition={{
+    x: [200, 0],
+    y: [50, 0],
+    scale: [0.5, 1],
+    rotate: [30, 0],
+    opacity: [0, 1],
+    easing: "easeOutCubic",
+    split: "word",
+    splitStagger: 5,
+    frames: [10, 50]
+  }}
+  style={{
+    fontSize: '6rem',
+    fontWeight: 'bold'
+  }}
+>
+  Explosive Entrance
+</TextTransition>
+```
+
+**When to use:**
+- Video intros
+- Chapter transitions
+- Important announcements
+- Climactic moments
+
+## Practical Patterns
+
+### Video Intro Sequence
+
+```tsx
+export const VideoIntro = () => {
+  return (
+    <AbsoluteFill style={{ backgroundColor: '#000' }}>
+      {/* Title appears first */}
+      <TextTransition
+        transition={{
+          opacity: [0, 1, 1, 0],
+          scale: [0.8, 1, 1, 0.8],
+          frames: [0, 20, 80, 100]
+        }}
+        style={{
+          fontSize: '6rem',
+          color: 'white',
+          position: 'absolute',
+          top: '40%',
+          width: '100%',
+          textAlign: 'center'
+        }}
+      >
+        Your Brand Name
+      </TextTransition>
+
+      {/* Subtitle follows */}
+      <TextTransition
+        transition={{
+          opacity: [0, 1, 1, 0],
+          y: [30, 0, 0, -30],
+          frames: [30, 50, 100, 120]
+        }}
+        style={{
+          fontSize: '2rem',
+          color: '#888',
+          position: 'absolute',
+          top: '55%',
+          width: '100%',
+          textAlign: 'center'
+        }}
+      >
+        Catchy Tagline
+      </TextTransition>
+    </AbsoluteFill>
+  );
+};
+```
+
+### Lower Third
+
+```tsx
+export const LowerThird = ({ name, title }: Props) => {
+  return (
+    <div style={{
+      position: 'absolute',
+      bottom: '10%',
+      left: '5%',
+      zIndex: 10
+    }}>
+      <TextTransition
+        transition={{
+          x: [-100, 0],
+          opacity: [0, 1],
+          frames: [0, 20],
+          easing: "easeOutQuad"
+        }}
+        style={{
+          fontSize: '3rem',
+          fontWeight: 'bold',
+          color: 'white',
+          marginBottom: '0.5rem'
+        }}
+      >
+        {name}
+      </TextTransition>
+
+      <TextTransition
+        transition={{
+          x: [-100, 0],
+          opacity: [0, 1],
+          frames: [10, 30],
+          easing: "easeOutQuad"
+        }}
+        style={{
+          fontSize: '1.5rem',
+          color: '#ccc'
+        }}
+      >
+        {title}
+      </TextTransition>
+    </div>
+  );
+};
+```
+
+### Call to Action
+
+```tsx
+export const CallToAction = () => {
+  return (
+    <AbsoluteFill style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      backgroundColor: '#667eea'
+    }}>
+      <TextTransition
+        transition={{
+          scale: [0.5, 1.1, 1],
+          opacity: [0, 1, 1],
+          frames: [0, 20, 30],
+          easing: "easeOutBack"
+        }}
+        style={{
+          fontSize: '5rem',
+          fontWeight: 'bold',
+          color: 'white',
+          marginBottom: '2rem'
+        }}
+      >
+        Subscribe Now!
+      </TextTransition>
+
+      <TextTransition
+        transition={{
+          opacity: [0, 1],
+          y: [30, 0],
+          frames: [30, 50],
+          easing: "easeOut"
+        }}
+        style={{
+          fontSize: '2rem',
+          color: 'rgba(255, 255, 255, 0.9)'
+        }}
+      >
+        Join 10,000+ creators
+      </TextTransition>
+    </AbsoluteFill>
+  );
+};
+```
+
+## Tips & Best Practices
+
+### Timing
+
+- **Fast intro (15-20 frames)**: Modern, snappy feel
+- **Medium (30-40 frames)**: Balanced, professional
+- **Slow (50+ frames)**: Elegant, dramatic
+
+### Stagger Amount
+
+At 30 FPS:
+- 1-2 frames: Very fast, suited for short words
+- 3-5 frames: Standard, readable pace
+- 10+ frames: Dramatic emphasis on each element
+
+### Font Choices
+
+- **Bold weights**: Work best with animations
+- **Sans-serif**: Generally more readable in motion
+- **Avoid thin fonts**: Can be hard to read during transitions
+
+### Performance
+
+- Keep `split: "character"` for shorter text (< 20 characters)
+- Use `split: "word"` for longer text
+- Avoid excessive simultaneous text animations
+
+### Accessibility
+
+- Ensure sufficient contrast ratios
+- Don't rely solely on color changes
+- Provide alternative static text for screen readers
+
+## See Also
+
+- [TextTransition Component](/docs/components/text-transition)
+- [Easing Functions](/docs/utilities/easing)
+- [Background Examples](/docs/examples/background-effects)

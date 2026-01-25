@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remotion Bits - Beautiful Animation Components</title>
+    <meta name="description" content="Production-ready animation components for Remotion video creation" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            max-width: 600px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .features {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #1a202c;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            border-radius: 12px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .feature-card p {
+            color: #4a5568;
+        }
+
+        .showcases {
+            background: #f7fafc;
+            padding: 4rem 2rem;
+        }
+
+        .showcases h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #1a202c;
+        }
+
+        .showcase-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .showcase-item {
+            margin-bottom: 4rem;
+        }
+
+        .showcase-item h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            text-align: center;
+        }
+
+        .code-snippet {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: #1e293b;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        footer {
+            background: #1a202c;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Remotion Bits</h1>
+        <p>Beautiful, production-ready animation components for Remotion</p>
+        <a href="/docs/getting-started" class="cta-button">Get Started →</a>
+    </div>
+
+    <div class="features">
+        <h2>Why Remotion Bits?</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>🎨 Beautiful Animations</h3>
+                <p>Pre-built, carefully crafted animation components that make your videos stand out.</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚡ Copy & Paste</h3>
+                <p>Simple API with TypeScript support. Just import and use, or customize to your needs.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📦 Production Ready</h3>
+                <p>Fully tested components with comprehensive documentation and live examples.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎯 Type Safe</h3>
+                <p>Built with TypeScript from the ground up with complete type definitions.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🚀 Performant</h3>
+                <p>Optimized for Remotion's rendering pipeline with smooth 60fps animations.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔧 Customizable</h3>
+                <p>Flexible props and utilities to adapt components to your exact requirements.</p>
+            </div>
+        </div>
+
+        <div class="code-snippet">
+<pre>import &#123; TextTransition &#125; from 'remotion-bits';
+
+export const MyComponent = () => (
+  &lt;TextTransition
+    transition=&#123;&#123;
+      opacity: [0, 1],
+      y: [50, 0],
+      split: "word",
+      splitStagger: 3
+    &#125;&#125;
+  &gt;
+    Hello Remotion!
+  &lt;/TextTransition&gt;
+);</pre>
+        </div>
+    </div>
+
+    <footer>
+        <p>Built with ❤️ for the Remotion community</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">
+            <a href="/docs/getting-started">Documentation</a> |
+            <a href="https://github.com/yourusername/remotion-bits">GitHub</a>
+        </p>
+    </footer>
+</body>
+</html>

@@ -4,6 +4,24 @@ This file tracks architectural patterns, lessons learned, and key insights for t
 
 ## Core Principles
 
+### Extract Before Duplicating (NEW PATTERN - 2026-01-25)
+
+**When building similar components, extract shared logic into reusable utilities FIRST.**
+
+This principle was applied when implementing MotionTransition alongside TextTransition:
+
+- **Identify duplication**: Both components needed frame-based timing, transform building, keyframe interpolation, and easing
+- **Extract early**: Created `src/utils/motion/` framework with `useMotionTiming` hook, `buildTransformString`, and `buildMotionStyles` utilities
+- **Refactor existing code**: Updated TextTransition to use the new framework, eliminating ~150 lines of duplicated logic
+- **Build new features**: MotionTransition automatically inherits all animation capabilities without reimplementing them
+- **Result**: Single source of truth for animation logic, easier testing, consistent behavior across components
+
+**Red flags**: "I'll copy-paste and modify this code", "Both components need slightly different things", "I'll refactor later"
+
+**Green flags**: "What logic is truly shared?", "Can this be a reusable utility?", "How would a third component use this?"
+
+> Code duplication compounds technical debt exponentially. Shared utilities compound knowledge linearly. Choose wisely.
+
 ### Research Before Building (CRITICAL)
 
 **Always investigate existing robust solutions before implementing custom code.** This principle saved hours on the BackgroundTransition implementation:
@@ -597,7 +615,137 @@ function splitText(text: string, mode: string): string[] {
 
 ---
 
+### Shared Motion Framework (2026-01-25)
+
+**Context:** Both TextTransition and MotionTransition needed identical animation logic (timing, transforms, keyframe interpolation). Rather than duplicate ~150 lines of code, extracted a shared motion framework.
+
+**Problem:**
+- TextTransition had complex animation logic embedded inline (~200 lines)
+- MotionTransition needed same capabilities but for generic React children
+- Code duplication leads to inconsistent behavior and harder maintenance
+- Future animation components would need the same foundation
+
+**Solution:** Created `src/utils/motion/` with reusable hooks and utilities that both components consume.
+
+**Implementation:**
+
+1. **Shared Type Definitions** (`src/utils/motion/index.ts`):
+```typescript
+export type AnimatedValue = number | [number, number] | number[];
+export interface TransformProps { x?, y?, z?, scale?, rotate?, ... }
+export interface VisualProps { opacity?, color?, backgroundColor?, blur? }
+export interface TimingProps { frames?, duration?, delay?, easing? }
+```
+
+2. **Core Utilities** (extracted from TextTransition):
+```typescript
+// Keyframe interpolation (supports arrays for multi-stop animation)
+export function interpolateKeyframes(value: AnimatedValue, progress: number, easingFn?): number
+
+// Easing function resolution (name string or custom function)
+export function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction | undefined
+
+// Transform string builder (combines all transform properties)
+export function buildTransformString(transforms: TransformProps, progress: number, easingFn?): string
+
+// Complete style generator (transforms + visual props → React.CSSProperties)
+export function buildMotionStyles(config: MotionStyleConfig): React.CSSProperties
+```
+
+3. **Timing Hook** (frame-based progress calculation):
+```typescript
+export function useMotionTiming(config: MotionTimingConfig): number
+// Handles: frames/duration, delay, stagger per unit, cycle offset
+// Returns: progress value 0-1 (clamped)
+```
+
+4. **Component Usage Pattern**:
+```typescript
+// TextTransition (refactored)
+const renderUnit = (unit: string, index: number) => {
+  const progress = useMotionTiming({ frames, duration, delay, stagger: splitStagger, unitIndex: index, easing, cycleOffset });
+  const unitStyle = buildMotionStyles({ progress, transforms: { x, y, scale, ... }, styles: { opacity, color, ... }, easing: easingFn, baseStyle });
+  return <span style={unitStyle}>{unit}</span>;
+};
+
+// MotionTransition (new component)
+const renderChild = (child: ReactNode, index: number) => {
+  const staggerIndex = calculateStaggerIndex(index, totalChildren, staggerDirection);
+  const progress = useMotionTiming({ frames, duration, delay, stagger, unitIndex: staggerIndex, easing });
+  const motionStyle = buildMotionStyles({ progress, transforms, styles, easing: easingFn });
+  return React.cloneElement(child, { style: { ...child.props.style, ...motionStyle } });
+};
+```
+
+**Key Features:**
+- **Single source of truth**: Animation logic lives in one place
+- **Consistent behavior**: Both components use identical timing/interpolation
+- **Easy testing**: Utilities are pure functions, hook is isolated
+- **Extensible**: Future components can import and use immediately
+- **Type-safe**: Shared types ensure API consistency
+
+**Architectural Insight:**
+- TextTransition: Wraps text units in `<span>` with `display: inline-block` and `whiteSpace: pre`
+- MotionTransition: Uses `React.cloneElement()` to merge styles into existing children
+- Both leverage same motion framework, different DOM manipulation strategies
+
+**Files Created:**
+- [src/utils/motion/index.ts](src/utils/motion/index.ts) - Motion framework
+
+**Files Modified:**
+- [src/components/TextTransition.tsx](src/components/TextTransition.tsx) - Refactored to use motion framework (~150 lines reduced)
+
+**Files Created:**
+- [src/components/MotionTransition.tsx](src/components/MotionTransition.tsx) - New component using motion framework
+- [src/components/__tests__/MotionTransition.test.tsx](src/components/__tests__/MotionTransition.test.tsx) - Comprehensive tests
+- [demo/src/showcases/MotionTransitionShowcase.tsx](demo/src/showcases/MotionTransitionShowcase.tsx) - Visual demos
+
+**MotionTransition Unique Features:**
+- **Stagger direction**: `forward`, `reverse`, `center` (animates from middle outward)
+- **Style merging**: Preserves existing child styles, applies animation on top
+- **Generic children**: Works with any React elements, not just text
+- **Custom components**: Children can be custom components that forward `style` prop to underlying DOM
+
+**Usage Examples:**
+```typescript
+// Forward stagger (default)
+<MotionTransition transition={{ opacity: [0, 1], y: [50, 0], stagger: 5, staggerDirection: "forward" }}>
+  <div>First</div>
+  <div>Second</div>
+  <div>Third</div>
+</MotionTransition>
+
+// Reverse stagger (last animates first)
+<MotionTransition transition={{ x: [100, 0], stagger: 5, staggerDirection: "reverse" }}>
+  <Card>A</Card>
+  <Card>B</Card>
+  <Card>C</Card>
+</MotionTransition>
+
+// Center stagger (middle animates first, spreads outward)
+<MotionTransition transition={{ scale: [0.5, 1], stagger: 4, staggerDirection: "center" }}>
+  <Icon name="star" />
+  <Icon name="heart" />
+  <Icon name="rocket" />
+</MotionTransition>
+
+// Custom component (forwards style prop)
+const Card = ({ style, children }) => <div style={{ ...baseStyle, ...style }}>{children}</div>;
+<MotionTransition transition={{ opacity: [0, 1], y: [30, 0] }}>
+  <Card>Content</Card>
+</MotionTransition>
+```
+
+---
+
 ## Best Practices
+
+### Shared Logic Extraction
+- When implementing similar components, extract shared logic into utilities FIRST
+- Create a dedicated module (e.g., `src/utils/motion/`) for reusable animation logic
+- Use hooks for React context-dependent logic (frame/fps access)
+- Use pure functions for stateless calculations (interpolation, transforms)
+- Both TextTransition and MotionTransition share ~70% of their animation code via the motion framework
 
 ### Component Template Synchronization
 - Source files live in `src/`
@@ -611,14 +759,361 @@ function splitText(text: string, mode: string): string[] {
 - Ensure backward compatibility with existing APIs
 - Add edge case tests for new patterns
 
+### Deterministic Randomness in Remotion (2026-01-26)
+
+**Context:** Added `staggerDirection: "random"` to MotionTransition component to shuffle child animation order randomly.
+
+**Problem:**
+- Video rendering requires deterministic output (same render = same result)
+- JavaScript's `Math.random()` is non-deterministic (different on each render)
+- Random stagger needs to be "random enough" but perfectly reproducible
+
+**Solution:** Use Remotion's built-in `random(seed)` function for all randomization needs.
+
+**Key Learnings:**
+
+1. **Never use `Math.random()` in Remotion components**
+   - Will cause flickering/inconsistent exports
+   - Break preview reliability
+   - Fail determinism requirements for video export
+
+2. **Use `random(seed)` with meaningful seeds**
+   ```typescript
+   import { random } from "remotion";
+
+   // Good: Stable seed for consistent randomization
+   const shuffled = items.map((item, i) => {
+     const randomValue = random(`stagger-${i}`);
+     return { item, randomValue };
+   });
+   ```
+
+3. **Fisher-Yates shuffle with Remotion's random**
+   ```typescript
+   const indices = Array.from({ length: total }, (_, i) => i);
+   for (let i = indices.length - 1; i > 0; i--) {
+     const j = Math.floor(random(`stagger-${i}`) * (i + 1));
+     [indices[i], indices[j]] = [indices[j], indices[i]];
+   }
+   ```
+
+4. **Test determinism explicitly**
+   - Mock `random()` in tests with consistent hash function
+   - Verify multiple renders produce identical results
+   - Test pattern variation (ensure "random enough")
+
+**Implementation Pattern:**
+- Added `"random"` to `StaggerDirection` union type
+- Enhanced `calculateStaggerIndex()` with random case
+- Used stable seed pattern (`stagger-${i}`) for shuffle
+- Added tests for both randomness and determinism
+
+**Red flags:** Using `Math.random()`, `Date.now()`, or any non-deterministic source
+
+**Green flags:** `random(seed)`, stable seeds, determinism tests
+
+> In video rendering, "random" means "unpredictable yet perfectly reproducible." Remotion's random() achieves both.
+
+---
+
+---
+
+### Astro + Starlight Documentation with Interactive React Islands (2026-01-26)
+
+**Context:** Needed a static documentation site with live, interactive Remotion Player examples, searchable docs, blog support, and markdown authoring. The site must deploy to CloudFlare Pages with zero server costs.
+
+**Problem:**
+- Traditional static site generators (Jekyll, Hugo) lack React component support
+- Next.js/Remix require server runtime (not truly static)
+- VitePress is Vue-focused, awkward for React components
+- Need to embed `@remotion/player` (React component requiring hydration) in static docs
+- Want to reuse existing showcase components from `demo/src/showcases/` without duplication
+
+**Solution:** Astro + Starlight with React Islands architecture - static HTML with selective client-side hydration only where needed.
+
+**Why Astro + Starlight:**
+- **Zero JS by default**: Pages ship pure HTML/CSS, JavaScript only loads for interactive components
+- **React Islands**: `client:visible` directive hydrates components when scrolled into view
+- **True static output**: `npm run build` generates pure HTML (no Node.js server needed)
+- **Starlight features**: Built-in search (Pagefind), sidebar, dark mode, mobile-responsive
+- **MDX support**: Import and use React components directly in markdown
+- **Best performance**: ~50KB base bundle vs. 300KB+ (Docusaurus) or 200KB+ (Nextra)
+
+**Implementation:**
+
+1. **Project Structure**:
+```
+docs/
+├── src/
+│   ├── pages/
+│   │   └── index.astro              # Custom marketing landing page (/)
+│   ├── content/
+│   │   └── docs/                    # Documentation under /docs route
+│   │       ├── getting-started.mdx
+│   │       ├── components/
+│   │       │   ├── text-transition.mdx
+│   │       │   ├── background-transition.mdx
+│   │       │   └── motion-transition.mdx
+│   │       ├── utilities/
+│   │       └── examples/
+│   └── components/
+│       ├── ShowcasePlayer.tsx       # Reusable Player wrapper
+│       └── showcases/               # Copied from demo/, imports updated
+│           ├── TextTransitionShowcaseItem.tsx
+│           ├── BackgroundTransitionShowcaseItem.tsx
+│           └── Center.tsx
+├── astro.config.mjs                 # Astro + Starlight config
+├── package.json
+└── dist/                            # Build output (deploy this)
+```
+
+2. **ShowcasePlayer Wrapper Pattern**:
+```tsx
+// docs/src/components/ShowcasePlayer.tsx
+import { Player } from '@remotion/player';
+
+export const ShowcasePlayer: React.FC<{
+  component: React.ComponentType;
+  duration: number;
+  fps?: number;
+  width?: number;
+  height?: number;
+}> = ({ component, duration, fps = 30, width = 1920, height = 1080 }) => (
+  <div style={{ maxWidth: '800px', margin: '2rem auto' }}>
+    <Player
+      component={component}
+      durationInFrames={duration}
+      compositionWidth={width}
+      compositionHeight={height}
+      fps={fps}
+      controls
+      loop
+      style={{ width: '100%', aspectRatio: `${width}/${height}` }}
+    />
+  </div>
+);
+```
+
+3. **Importing Showcases in MDX**:
+```mdx
+---
+title: TextTransition
+description: Animated text with smooth transitions
+---
+import { ShowcasePlayer } from '@components/ShowcasePlayer';
+import { FadeInShowcase, SlideFromLeftShowcase } from '@showcases/TextTransitionShowcaseItem';
+
+# TextTransition
+
+## Examples
+
+### Fade In Animation
+
+<ShowcasePlayer client:visible component={FadeInShowcase} duration={60} />
+
+```tsx
+<TextTransition transition={{ opacity: [0, 1] }}>
+  Hello World
+</TextTransition>
+```
+```
+
+4. **Astro Configuration**:
+```js
+// astro.config.mjs
+import { defineConfig } from 'astro/config';
+import starlight from '@astrojs/starlight';
+import react from '@astrojs/react';
+
+export default defineConfig({
+  integrations: [
+    react(), // Must come before Starlight
+    starlight({
+      title: 'Remotion Bits',
+      sidebar: [
+        { label: 'Getting Started', items: [...] },
+        { label: 'Components', items: [...] },
+        { label: 'Utilities', items: [...] },
+      ],
+    }),
+  ],
+});
+```
+
+5. **Custom Landing Page at Root**:
+```astro
+<!-- docs/src/pages/index.astro -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Remotion Bits - Beautiful Animation Components</title>
+</head>
+<body>
+  <div class="hero">
+    <h1>Remotion Bits</h1>
+    <p>Ready-made animation components for Remotion</p>
+    <a href="/docs/getting-started">Get Started</a>
+  </div>
+  <!-- Marketing content, feature grid, code snippets -->
+</body>
+</html>
+```
+
+**Key Features:**
+
+1. **Client Hydration Directives**:
+   - `client:load` - Hydrates immediately (above-the-fold examples)
+   - `client:visible` - Hydrates when scrolled into view (below-fold, best for performance)
+   - `client:idle` - Hydrates when browser is idle
+   - `client:only="react"` - Only renders on client (skip SSG entirely)
+
+2. **Import Path Aliases** (tsconfig.json):
+   ```json
+   {
+     "compilerOptions": {
+       "paths": {
+         "@components/*": ["./src/components/*"],
+         "@showcases/*": ["./src/components/showcases/*"]
+       }
+     }
+   }
+   ```
+
+3. **Showcase Component Adaptation**:
+   - Copied showcase files from `demo/src/showcases/` to `docs/src/components/showcases/`
+   - Updated imports from `"../../../src/components"` to `"remotion-bits"` (published package)
+   - Maintains single source of truth (showcases reference the library, not local src/)
+
+**Performance Characteristics:**
+
+| Metric | Value |
+|--------|-------|
+| Total build size | 2.6MB |
+| Base page (no Player) | ~50-60KB JS |
+| Page with Player | ~350KB JS (Player + React runtime) |
+| Initial HTML load | ~5-10KB (pure HTML) |
+| Build time | ~2-3 seconds |
+| Pages built | 15 (landing + 14 docs) |
+
+**Deployment (CloudFlare Pages):**
+```bash
+cd docs
+npm run build
+# Upload dist/ folder to CloudFlare Pages
+# Build command: npm run build
+# Output directory: dist
+# Environment: NODE_VERSION=18
+```
+
+**Benefits:**
+
+- ✅ **True static output**: No server runtime, no edge functions needed
+- ✅ **Best performance**: Minimal JS bundle, only loads where needed
+- ✅ **Live examples**: Full Remotion Player functionality in static docs
+- ✅ **Reusable showcases**: Imported from demo/ without duplication
+- ✅ **Built-in search**: Pagefind indexes all content automatically
+- ✅ **Blog-ready**: Astro Content Collections support blog structure
+- ✅ **Free hosting**: CloudFlare Pages, Netlify, Vercel, GitHub Pages
+- ✅ **Zero traffic costs**: Static files, no serverless function invocations
+- ✅ **SEO-friendly**: Pre-rendered HTML for search engines
+- ✅ **Fast builds**: 2-3 seconds for 15 pages
+
+**Trade-offs:**
+
+- ⚠️ **Two-build process**: Library (`npm run build` in root) + Docs (`npm run build` in docs/)
+- ⚠️ **Manual showcase sync**: Showcase files copied to docs/, must update imports to use `remotion-bits` package
+- ⚠️ **Bundle size for interactive pages**: Pages with Player add ~300KB (acceptable for video documentation)
+- ⚠️ **Remotion license notice**: Player shows license message in console (add `acknowledgeRemotionLicense` prop to suppress)
+
+**Alternative Frameworks Considered:**
+
+| Framework | Why Not Chosen |
+|-----------|----------------|
+| **Nextra** (Next.js) | Larger bundle (~200KB base), requires static export mode, less optimized |
+| **Docusaurus** | Heaviest bundle (~300KB base), Webpack-based (slower), more opinionated |
+| **VitePress** | Vue-focused, React support is awkward/hacky, not ideal for React libraries |
+| **Jekyll/Hugo** | No React component support, would need iframe embeds or video exports |
+
+**When to Use This Pattern:**
+
+- ✅ React component library needing interactive examples in docs
+- ✅ Video/animation tools where showing live output is critical
+- ✅ Static hosting requirement (CloudFlare Pages, Netlify, GitHub Pages)
+- ✅ Performance-critical (minimize JS bundle size)
+- ✅ Need professional docs features (search, sidebar, dark mode)
+
+**When NOT to Use:**
+
+- ❌ Server-side features needed (authentication, real-time data, API routes)
+- ❌ Heavy interactive app (not a documentation site)
+- ❌ Team unfamiliar with Astro (steeper learning curve than Next.js)
+- ❌ Need versioned docs (Docusaurus has better version support)
+
+**Files Created:**
+
+- `docs/` - Entire Astro documentation site
+- `docs/src/pages/index.astro` - Custom landing page
+- `docs/src/components/ShowcasePlayer.tsx` - Reusable Player wrapper
+- `docs/src/components/showcases/*` - Copied showcase components
+- `docs/src/content/docs/**/*.mdx` - 14 documentation pages
+- `docs/astro.config.mjs` - Astro + Starlight configuration
+
+**Key Learnings:**
+
+1. **Island Architecture is Perfect for Docs**: Most doc pages are static text/code; interactive examples are isolated islands
+2. **client:visible is Key for Performance**: Lazy-load Players below fold to keep initial page load fast
+3. **Reuse Showcase Components**: Don't rewrite examples, import existing showcase components from demo/
+4. **Update Imports to Published Package**: Showcases in docs should import `"remotion-bits"`, not relative paths to `src/`
+5. **Single Git Repo**: Remove `.git` from docs/ folder to maintain single top-level repository
+6. **Custom Landing + Docs Structure**: `src/pages/index.astro` for marketing, Starlight handles `/docs` route automatically
+7. **Built-in Search Works Great**: Pagefind indexes everything, no Algolia API key needed
+8. **MDX is Powerful**: Import React components directly in markdown, full TypeScript support
+
+**Testing Strategy:**
+
+- Build succeeds: `npm run build` in docs/ completes without errors
+- Search works: Pagefind builds index for 15 pages
+- Showcases load: Player components render when scrolled into view
+- Navigation works: Sidebar links, breadcrumbs, page navigation all functional
+- Responsive: Mobile menu, responsive layouts tested
+- Bundle sizes: Verify base pages stay under 100KB, Player pages under 400KB
+
+**Future Enhancements:**
+
+- Add blog section with release notes and tutorials
+- Create interactive playground with prop editors (using Zod schemas)
+- Add video recordings as fallback for no-JS scenarios
+- Set up automated deployment on git push
+- Add sitemap and SEO metadata (needs `site` config in astro.config.mjs)
+- Create OpenGraph images for social sharing
+
+> Static doesn't mean boring. Astro's island architecture lets you build documentation that's both performant (pure HTML) and interactive (React components where needed). Perfect for component libraries that need live examples without server costs.
+
 ---
 
 ## Next Agent Guidance
 
 When working on this codebase:
 1. Check this log first for established patterns
-2. Use `InterpolateValue` for any numeric animatable props
-3. Keep source and template files synchronized
-4. Maintain backward compatibility unless explicitly breaking change
-5. Add test coverage for new functionality
-6. Update this log with new insights
+2. **Shared motion framework**: Use `src/utils/motion/` utilities for any new animation components
+3. **Reuse over rewrite**: Import `useMotionTiming`, `buildMotionStyles` instead of reimplementing
+4. Use `InterpolateValue` for any numeric animatable props
+5. Keep source and template files synchronized
+6. Maintain backward compatibility unless explicitly breaking change
+7. Add test coverage for new functionality
+8. Update this log with new insights
+9. **Documentation updates**: Add new components/utilities to docs site in `docs/src/content/docs/`
+10. **Showcase reuse**: Create showcase in `demo/src/showcases/`, then import into docs with updated imports
+
+### Animation Component Checklist
+When creating new animation components:
+- [ ] Import motion framework utilities from `src/utils/motion/`
+- [ ] Use `useMotionTiming()` for progress calculation (handles frames, duration, delay, stagger, easing)
+- [ ] Use `buildMotionStyles()` for style generation (handles all transforms + visual props)
+- [ ] Define component-specific behavior (e.g., text splitting, child cloning, DOM strategy)
+- [ ] Export types: `AnimatedValue`, `TransformProps`, `VisualProps`, `TimingProps`
+- [ ] Write tests covering timing, stagger, transforms, and edge cases
+- [ ] Create showcase demo with multiple examples in `demo/src/showcases/`
+- [ ] Update exports in `src/components/index.ts` and `src/utils/index.ts`
+- [ ] Add documentation page in `docs/src/content/docs/components/`
+- [ ] Import showcase into docs with `client:visible` directive

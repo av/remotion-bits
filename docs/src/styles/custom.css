@@ -1,0 +1,44 @@
+/* Custom styles for Remotion Bits docs */
+
+:root {
+    --sl-hue-accent: 250;
+    --sl-color-accent: hsl(var(--sl-hue-accent), 84%, 60%);
+}
+
+.showcase-player {
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.showcase-player video {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.hero-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.feature-card {
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-gray-5);
+}
+
+.feature-card h3 {
+    margin-top: 0;
+    color: var(--sl-color-accent);
+}

@@ -4,6 +4,7 @@ import { Playground } from "./Playground";
 import {
   TextTransitionShowcase,
   BackgroundTransitionShowcase,
+  MotionTransitionShowcase,
 } from "./showcases";
 import {
   FadeInShowcase,
@@ -25,6 +26,14 @@ import {
   ComplexGradientShowcase,
   ShortestPathAngleShowcase,
 } from "./showcases/BackgroundTransitionShowcaseItem";
+import {
+  FadeInStaggerShowcase,
+  ReverseStaggerShowcase,
+  CenterStaggerShowcase,
+  CustomComponentShowcase,
+  ComplexMotionShowcase,
+  NestedElementsShowcase,
+} from "./showcases/MotionTransitionShowcase";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -43,6 +52,15 @@ export const RemotionRoot: React.FC = () => {
         id="BackgroundTransition"
         component={BackgroundTransitionShowcase}
         durationInFrames={960}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="MotionTransition"
+        component={MotionTransitionShowcase}
+        durationInFrames={600}
         fps={30}
         width={1920}
         height={1080}
@@ -189,6 +207,61 @@ export const RemotionRoot: React.FC = () => {
         id="BackgroundTransition-ShortestPath"
         component={ShortestPathAngleShowcase}
         durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      {/* Individual MotionTransition Examples */}
+      <Composition
+        id="MotionTransition-FadeInStagger"
+        component={FadeInStaggerShowcase}
+        durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="MotionTransition-ReverseStagger"
+        component={ReverseStaggerShowcase}
+        durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="MotionTransition-CenterStagger"
+        component={CenterStaggerShowcase}
+        durationInFrames={90}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="MotionTransition-CustomComponent"
+        component={CustomComponentShowcase}
+        durationInFrames={100}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="MotionTransition-ComplexMotion"
+        component={ComplexMotionShowcase}
+        durationInFrames={120}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="MotionTransition-NestedElements"
+        component={NestedElementsShowcase}
+        durationInFrames={110}
         fps={30}
         width={1920}
         height={1080}

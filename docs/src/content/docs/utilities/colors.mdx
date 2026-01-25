@@ -1,0 +1,323 @@
+---
+title: Color Utilities
+description: Color manipulation and interpolation utilities
+---
+
+# Color Utilities
+
+Remotion Bits includes powerful color utilities for converting, manipulating, and interpolating colors across different color spaces.
+
+## Import
+
+```tsx
+import {
+  parseColor,
+  colorToString,
+  interpolateColor
+} from 'remotion-bits';
+```
+
+## Color Formats
+
+Remotion Bits supports multiple color formats:
+
+- **Hex**: `#ff0000`, `#f00`
+- **RGB**: `rgb(255, 0, 0)`, `rgba(255, 0, 0, 0.5)`
+- **HSL**: `hsl(0, 100%, 50%)`, `hsla(0, 100%, 50%, 0.5)`
+- **OKLch**: `oklch(0.6 0.3 30)`, `oklch(0.6 0.3 30 / 0.5)`
+
+All colors are internally converted to OKLch for perceptually uniform interpolation.
+
+## Functions
+
+### `parseColor`
+
+Parse a CSS color string into OKLch components.
+
+```tsx
+parseColor(color: string): {
+  l: number;  // Lightness (0-1)
+  c: number;  // Chroma (0-0.4)
+  h: number;  // Hue (0-360)
+  alpha: number; // Alpha (0-1)
+}
+```
+
+**Example:**
+
+```tsx
+const color = parseColor('#ff0000');
+// { l: 0.628, c: 0.258, h: 29.2, alpha: 1 }
+
+const color2 = parseColor('rgba(255, 0, 0, 0.5)');
+// { l: 0.628, c: 0.258, h: 29.2, alpha: 0.5 }
+```
+
+### `colorToString`
+
+Convert OKLch components back to a CSS color string.
+
+```tsx
+colorToString(
+  l: number,
+  c: number,
+  h: number,
+  alpha?: number,
+  format?: 'oklch' | 'rgb' | 'hex'
+): string
+```
+
+**Example:**
+
+```tsx
+// Output as OKLch (default)
+colorToString(0.628, 0.258, 29.2);
+// "oklch(0.628 0.258 29.2)"
+
+// Output as RGB
+colorToString(0.628, 0.258, 29.2, 1, 'rgb');
+// "rgb(255, 0, 0)"
+
+// Output as Hex
+colorToString(0.628, 0.258, 29.2, 1, 'hex');
+// "#ff0000"
+
+// With alpha
+colorToString(0.628, 0.258, 29.2, 0.5);
+// "oklch(0.628 0.258 29.2 / 0.5)"
+```
+
+### `interpolateColor`
+
+Interpolate between two colors in OKLch space.
+
+```tsx
+interpolateColor(
+  color1: string,
+  color2: string,
+  progress: number
+): string
+```
+
+**Example:**
+
+```tsx
+// 50% between red and blue
+const midColor = interpolateColor('#ff0000', '#0000ff', 0.5);
+// "oklch(0.452 0.313 328.4)"
+
+// Animate color over time
+const frame = useCurrentFrame();
+const progress = frame / 60;
+const color = interpolateColor('#ff0000', '#00ff00', progress);
+```
+
+## Usage Examples
+
+### Basic Color Interpolation
+
+```tsx
+import { useCurrentFrame } from 'remotion';
+import { interpolateColor } from 'remotion-bits';
+
+export const ColorAnimation = () => {
+  const frame = useCurrentFrame();
+  const progress = Math.min(frame / 60, 1);
+
+  const backgroundColor = interpolateColor(
+    '#667eea',
+    '#f093fb',
+    progress
+  );
+
+  return (
+    <div style={{ backgroundColor, width: '100%', height: '100%' }}>
+      Smooth color transition
+    </div>
+  );
+};
+```
+
+### Multi-Stop Color Gradient
+
+```tsx
+const getColorAtProgress = (progress: number): string => {
+  const stops = [
+    { pos: 0, color: '#667eea' },
+    { pos: 0.33, color: '#764ba2' },
+    { pos: 0.67, color: '#f093fb' },
+    { pos: 1, color: '#f5576c' }
+  ];
+
+  // Find the two stops to interpolate between
+  for (let i = 0; i < stops.length - 1; i++) {
+    if (progress >= stops[i].pos && progress <= stops[i + 1].pos) {
+      const localProgress =
+        (progress - stops[i].pos) / (stops[i + 1].pos - stops[i].pos);
+      return interpolateColor(stops[i].color, stops[i + 1].color, localProgress);
+    }
+  }
+
+  return stops[stops.length - 1].color;
+};
+```
+
+### Parse and Manipulate
+
+```tsx
+import { parseColor, colorToString } from 'remotion-bits';
+
+// Parse a color
+const { l, c, h, alpha } = parseColor('#667eea');
+
+// Increase lightness by 20%
+const lighterColor = colorToString(
+  Math.min(l + 0.2, 1),
+  c,
+  h,
+  alpha
+);
+
+// Decrease saturation (chroma)
+const desaturatedColor = colorToString(
+  l,
+  c * 0.5,
+  h,
+  alpha
+);
+
+// Rotate hue by 180 degrees
+const complementaryColor = colorToString(
+  l,
+  c,
+  (h + 180) % 360,
+  alpha
+);
+```
+
+### Color Palette Generator
+
+```tsx
+const generatePalette = (baseColor: string, count: number): string[] => {
+  const { l, c, h } = parseColor(baseColor);
+  const palette: string[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const hueShift = (360 / count) * i;
+    palette.push(colorToString(l, c, (h + hueShift) % 360));
+  }
+
+  return palette;
+};
+
+// Generate 5 colors
+const colors = generatePalette('#667eea', 5);
+```
+
+### Alpha Fade
+
+```tsx
+const fadeColor = (color: string, targetAlpha: number, progress: number): string => {
+  const { l, c, h, alpha } = parseColor(color);
+  const newAlpha = alpha + (targetAlpha - alpha) * progress;
+  return colorToString(l, c, h, newAlpha);
+};
+
+// Fade to 50% opacity
+const fadedColor = fadeColor('#667eea', 0.5, 0.5);
+```
+
+## Why OKLch?
+
+OKLch (Oklab Lightness Chroma Hue) is a perceptually uniform color space, meaning:
+
+1. **Even interpolation**: Colors transition smoothly without muddy middle tones
+2. **Consistent lightness**: Interpolating between colors maintains perceived brightness
+3. **Predictable hue**: Hue changes are linear and intuitive
+4. **Better than RGB/HSL**: Avoids the perceptual issues of RGB and HSL interpolation
+
+### Comparison
+
+```tsx
+// RGB interpolation (often looks muddy)
+// Red → Blue = Dark purple/gray
+
+// OKLch interpolation (perceptually uniform)
+// Red → Blue = Vibrant purple
+```
+
+## Advanced Usage
+
+### Custom Color Space Conversion
+
+```tsx
+// Convert to custom format
+const toHSL = (color: string): string => {
+  // Parse to OKLch first
+  const oklch = parseColor(color);
+
+  // Convert OKLch to RGB to HSL
+  // (implementation details...)
+
+  return `hsl(${h}, ${s}%, ${l}%)`;
+};
+```
+
+### Gradient Stop Generation
+
+```tsx
+const generateGradientStops = (
+  color1: string,
+  color2: string,
+  stops: number
+): string[] => {
+  const gradient: string[] = [];
+
+  for (let i = 0; i < stops; i++) {
+    const progress = i / (stops - 1);
+    gradient.push(interpolateColor(color1, color2, progress));
+  }
+
+  return gradient;
+};
+
+// Generate 10 stops between two colors
+const stops = generateGradientStops('#ff0000', '#0000ff', 10);
+```
+
+### Color Validation
+
+```tsx
+const isValidColor = (color: string): boolean => {
+  try {
+    parseColor(color);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+if (isValidColor('#667eea')) {
+  // Use the color
+}
+```
+
+## Performance
+
+- **Caching**: Repeated parsing of the same color is cached
+- **Optimized**: Color conversions are highly optimized
+- **Minimal overhead**: Color utilities add minimal bundle size
+
+## Browser Support
+
+OKLch is supported in modern browsers. Remotion Bits automatically handles:
+- Conversion between color spaces
+- Fallbacks for older browsers (when using RGB/hex output)
+- Proper alpha channel handling
+
+## See Also
+
+- [Interpolate](/docs/utilities/interpolate) - Uses color utilities internally
+- [BackgroundTransition](/docs/components/background-transition) - Leverages color interpolation
+- [TextTransition](/docs/components/text-transition) - Color property animations
+- [Gradient Utilities](/docs/utilities/gradients) - Work with gradients

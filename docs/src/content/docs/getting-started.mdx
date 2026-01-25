@@ -1,0 +1,130 @@
+---
+title: Getting Started
+description: Get up and running with Remotion Bits in minutes
+---
+
+# Getting Started
+
+Remotion Bits is a collection of beautiful, production-ready animation components for [Remotion](https://remotion.dev). Get started in minutes and create stunning video animations with minimal code.
+
+## Installation
+
+### Via npm
+
+Install the package using your preferred package manager:
+
+```bash
+npm install remotion-bits
+```
+
+```bash
+pnpm add remotion-bits
+```
+
+```bash
+yarn add remotion-bits
+```
+
+### Via jsrepo
+
+Alternatively, copy individual components directly into your project:
+
+```bash
+npx jsrepo add text-transition
+npx jsrepo add background-transition
+```
+
+## Prerequisites
+
+Remotion Bits requires the following peer dependencies:
+
+- `remotion` >= 4.0.0
+- `react` >= 18.0.0
+- `react-dom` >= 18.0.0
+
+If you haven't already set up a Remotion project, follow the [Remotion quickstart guide](https://www.remotion.dev/docs/).
+
+## Quick Example
+
+Here's a simple example to get you started with a text animation:
+
+```tsx
+import { Composition } from 'remotion';
+import { TextTransition } from 'remotion-bits';
+
+export const MyComposition = () => {
+  return (
+    <div style={{
+      backgroundColor: '#000',
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <TextTransition
+        transition={{
+          opacity: [0, 1],
+          y: [50, 0],
+          easing: "easeOutQuad"
+        }}
+        style={{
+          fontSize: '4rem',
+          color: 'white',
+          fontWeight: 'bold'
+        }}
+      >
+        Hello Remotion!
+      </TextTransition>
+    </div>
+  );
+};
+
+// Register the composition
+export const Root = () => {
+  return (
+    <Composition
+      id="MyComposition"
+      component={MyComposition}
+      durationInFrames={90}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+  );
+};
+```
+
+## What's Next?
+
+Now that you have Remotion Bits installed, explore the components:
+
+- **[TextTransition](/docs/components/text-transition)** - Animate text with fade, slide, word-by-word, and character effects
+- **[BackgroundTransition](/docs/components/background-transition)** - Smooth gradient transitions between any CSS gradients
+- **[MotionTransition](/docs/components/motion-transition)** - Flexible motion wrapper for any element
+
+Or check out the [examples](/docs/examples/text-animations) to see real-world use cases.
+
+## Need Help?
+
+- Browse the [component documentation](/docs/components/text-transition)
+- Check out [utilities](/docs/utilities/interpolate) for advanced customization
+- View [examples](/docs/examples/text-animations) for inspiration
+
+## TypeScript Support
+
+Remotion Bits is built with TypeScript and provides full type definitions out of the box. Your IDE will provide autocomplete and type checking for all component props.
+
+```tsx
+import type { TextTransitionProps } from 'remotion-bits';
+
+// Full TypeScript support
+const props: TextTransitionProps = {
+  transition: {
+    opacity: [0, 1],
+    y: [50, 0],
+    split: "word", // TypeScript knows valid values
+    splitStagger: 3,
+  }
+};
+```

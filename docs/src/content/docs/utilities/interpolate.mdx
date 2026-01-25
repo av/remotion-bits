@@ -1,0 +1,278 @@
+---
+title: Interpolate
+description: Powerful interpolation utilities for smooth animations
+---
+
+# Interpolate
+
+The `interpolate` function is the core utility behind all Remotion Bits animations. It maps an input value to an output range with customizable easing.
+
+## Import
+
+```tsx
+import { interpolate } from 'remotion-bits';
+```
+
+## Basic Usage
+
+```tsx
+import { useCurrentFrame } from 'remotion';
+import { interpolate } from 'remotion-bits';
+
+export const MyComponent = () => {
+  const frame = useCurrentFrame();
+
+  const opacity = interpolate(frame, [0, 30], [0, 1]);
+
+  return (
+    <div style={{ opacity }}>
+      Fading in...
+    </div>
+  );
+};
+```
+
+## Signature
+
+```tsx
+function interpolate(
+  input: number,
+  inputRange: number[],
+  outputRange: number[] | string[],
+  options?: {
+    easing?: EasingFunction | string;
+    extrapolate?: 'clamp' | 'extend' | 'identity';
+  }
+): number | string;
+```
+
+## Parameters
+
+### `input`
+
+The current value to interpolate (typically the current frame).
+
+### `inputRange`
+
+Array of input milestones. Must be in ascending order.
+
+```tsx
+inputRange: [0, 30, 60]
+```
+
+### `outputRange`
+
+Array of output values corresponding to each input milestone. Can be numbers or strings (for colors).
+
+```tsx
+outputRange: [0, 50, 100]
+// or
+outputRange: ['#ff0000', '#00ff00', '#0000ff']
+```
+
+### `options`
+
+Optional configuration object.
+
+#### `easing`
+
+Easing function to apply. Can be:
+- A string (preset name, see [Easing](/docs/utilities/easing))
+- A custom function `(t: number) => number`
+
+```tsx
+{ easing: 'easeOutQuad' }
+// or
+{ easing: (t) => t * t * t }
+```
+
+#### `extrapolate`
+
+How to handle values outside the input range:
+- `'clamp'` (default): Clamp to output range boundaries
+- `'extend'`: Extend the interpolation beyond boundaries
+- `'identity'`: Return the input value as-is
+
+## Examples
+
+### Simple Linear Interpolation
+
+```tsx
+const frame = useCurrentFrame();
+const x = interpolate(frame, [0, 60], [0, 500]);
+
+// frame 0  -> x = 0
+// frame 30 -> x = 250
+// frame 60 -> x = 500
+```
+
+### Multiple Keyframes
+
+```tsx
+const frame = useCurrentFrame();
+const y = interpolate(
+  frame,
+  [0, 30, 60, 90],
+  [0, -100, 50, 0]
+);
+
+// Creates a bounce effect
+```
+
+### With Easing
+
+```tsx
+const frame = useCurrentFrame();
+const scale = interpolate(
+  frame,
+  [0, 60],
+  [0, 1],
+  { easing: 'easeOutQuad' }
+);
+```
+
+### Color Interpolation
+
+```tsx
+const frame = useCurrentFrame();
+const color = interpolate(
+  frame,
+  [0, 30, 60],
+  ['#ff0000', '#00ff00', '#0000ff']
+);
+
+return <div style={{ color }}>Colorful Text</div>;
+```
+
+### Extrapolation
+
+```tsx
+// Clamp (default)
+interpolate(150, [0, 100], [0, 1], { extrapolate: 'clamp' });
+// Returns 1 (clamped to max)
+
+// Extend
+interpolate(150, [0, 100], [0, 1], { extrapolate: 'extend' });
+// Returns 1.5 (extended beyond range)
+
+// Identity
+interpolate(150, [0, 100], [0, 1], { extrapolate: 'identity' });
+// Returns 150 (original input)
+```
+
+### Custom Easing Function
+
+```tsx
+const bounceOut = (t: number) => {
+  if (t < 1 / 2.75) {
+    return 7.5625 * t * t;
+  } else if (t < 2 / 2.75) {
+    return 7.5625 * (t -= 1.5 / 2.75) * t + 0.75;
+  } else if (t < 2.5 / 2.75) {
+    return 7.5625 * (t -= 2.25 / 2.75) * t + 0.9375;
+  }
+  return 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
+};
+
+const y = interpolate(frame, [0, 60], [100, 0], {
+  easing: bounceOut
+});
+```
+
+## Advanced Usage
+
+### Sequence Multiple Animations
+
+```tsx
+const frame = useCurrentFrame();
+
+// First animation: 0-30 frames
+const opacity1 = interpolate(
+  frame,
+  [0, 30],
+  [0, 1],
+  { easing: 'easeIn', extrapolate: 'clamp' }
+);
+
+// Second animation: 30-60 frames
+const opacity2 = interpolate(
+  frame,
+  [30, 60],
+  [1, 0],
+  { easing: 'easeOut', extrapolate: 'clamp' }
+);
+
+// Use whichever is active
+const opacity = frame < 30 ? opacity1 : opacity2;
+```
+
+### Animate on Scroll (with useVideoConfig)
+
+```tsx
+import { useCurrentFrame, useVideoConfig } from 'remotion';
+
+export const ScrollAnimation = () => {
+  const frame = useCurrentFrame();
+  const { height } = useVideoConfig();
+
+  const y = interpolate(
+    frame,
+    [0, 120],
+    [height, -height]
+  );
+
+  return (
+    <div style={{ transform: `translateY(${y}px)` }}>
+      Scrolling content
+    </div>
+  );
+};
+```
+
+### Spring-like Motion
+
+```tsx
+const elasticOut = (t: number) => {
+  if (t === 0 || t === 1) return t;
+  return Math.pow(2, -10 * t) * Math.sin((t - 0.1) * 5 * Math.PI) + 1;
+};
+
+const x = interpolate(frame, [0, 60], [0, 500], {
+  easing: elasticOut
+});
+```
+
+## Color Interpolation
+
+The interpolate function automatically detects color strings and interpolates them in OKLch color space for perceptually uniform results.
+
+Supported formats:
+- Hex: `#ff0000`, `#f00`
+- RGB: `rgb(255, 0, 0)`
+- HSL: `hsl(0, 100%, 50%)`
+- OKLch: `oklch(0.6 0.3 30)`
+
+```tsx
+const color = interpolate(
+  frame,
+  [0, 60],
+  ['#ff0000', 'oklch(0.7 0.2 270)']
+);
+```
+
+## Performance
+
+The interpolate function is highly optimized:
+- Cached calculations for repeated calls with same parameters
+- Efficient binary search for large input ranges
+- Optimized color conversion routines
+
+For best performance:
+- Reuse the same input/output ranges when possible
+- Avoid creating new easing functions on every render
+
+## See Also
+
+- [Easing Functions](/docs/utilities/easing) - Available easing presets
+- [Color Utilities](/docs/utilities/colors) - Color manipulation functions
+- [MotionTransition](/docs/components/motion-transition) - Built on interpolate
