@@ -11,28 +11,28 @@ export const HeroShowcase: React.FC = () => {
             <BackgroundTransition
                 gradient={[
                     "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-                    "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
+                    "linear-gradient(30deg, #1e293b 0%, #334155 100%)",
                     "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
                 ]}
                 duration={300}
-                loop
             >
                 <Center>
-                     <TextTransition
+                    <TextTransition
                         transition={{
                             opacity: [0, 1, 0],
                             y: [40, 0, -40],
                             scale: [0.9, 1, 1],
-                            frames: [0, 50, 80],
+                            frames: [0, 25, 30],
                             cycle: {
                                 texts: [
-                                    "Production Ready",
-                                    "Type Safe",
-                                    "Copy & Paste",
-                                    "Remotion Bits"
+                                    "Remotion",
+                                    "React",
+                                    "Components",
+                                    "Video",
                                 ],
-                                itemDuration: 90
-                            }
+                                itemDuration: 30
+                            },
+                            easing: 'easeInOut'
                         }}
                         style={{
                             fontSize: width * 0.09,
