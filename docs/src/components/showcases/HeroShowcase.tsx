@@ -1,9 +1,11 @@
 import React from 'react';
-import { AbsoluteFill } from 'remotion';
+import { AbsoluteFill, useVideoConfig } from 'remotion';
 import { TextTransition, BackgroundTransition } from 'remotion-bits';
 import { Center } from './Center';
 
 export const HeroShowcase: React.FC = () => {
+    const { width } = useVideoConfig();
+
     return (
         <AbsoluteFill>
             <BackgroundTransition
@@ -26,20 +28,22 @@ export const HeroShowcase: React.FC = () => {
                                 texts: [
                                     "Production Ready",
                                     "Type Safe",
-                                    "Copy & Paste", 
+                                    "Copy & Paste",
                                     "Remotion Bits"
                                 ],
                                 itemDuration: 90
                             }
                         }}
                         style={{
-                            fontSize: '6rem',
+                            fontSize: width * 0.09,
                             fontWeight: 800,
                             color: 'white',
                             fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
                             textAlign: 'center',
                             letterSpacing: '-0.02em',
-                            textShadow: '0 10px 30px rgba(0,0,0,0.5)'
+                            textShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                            padding: '0 20px',
+                            width: '100%',
                         }}
                     >
                     </TextTransition>

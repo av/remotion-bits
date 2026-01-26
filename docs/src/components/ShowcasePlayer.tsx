@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Player } from '@remotion/player';
 
 interface ShowcasePlayerProps {
@@ -11,6 +11,7 @@ interface ShowcasePlayerProps {
   loop?: boolean;
   autoPlay?: boolean;
   className?: string;
+  autoResize?: boolean;
 }
 
 export const ShowcasePlayer: React.FC<ShowcasePlayerProps> = ({
@@ -23,21 +24,53 @@ export const ShowcasePlayer: React.FC<ShowcasePlayerProps> = ({
   loop = true,
   autoPlay = true,
   className = '',
+  autoResize = false,
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ width, height });
+
+  useEffect(() => {
+    if (!autoResize || !containerRef.current) return;
+
+    // Initial measurement
+    const initialRect = containerRef.current.getBoundingClientRect();
+    setSize({ width: initialRect.width, height: initialRect.height });
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        setSize({ width, height });
+      }
+    });
+
+    observer.observe(containerRef.current);
+
+    return () => observer.disconnect();
+  }, [autoResize]);
+
+  // Use props if autoResize is false, otherwise use measured size (with prop fallbacks for initial render)
+  const compositionWidth = autoResize ? (size.width || width) : width;
+  const compositionHeight = autoResize ? (size.height || height) : height;
+
   return (
-    <div className={`showcase-player ${className}`}>
+    <div
+      ref={containerRef}
+      className={`showcase-player ${className}`}
+      style={autoResize ? { width: '100%', height: '100%' } : undefined}
+    >
       <Player
         component={Component}
         durationInFrames={duration}
-        compositionWidth={width}
-        compositionHeight={height}
+        compositionWidth={Math.floor(compositionWidth)}
+        compositionHeight={Math.floor(compositionHeight)}
         fps={fps}
         controls={controls}
         loop={loop}
         autoPlay={autoPlay}
         style={{
           width: '100%',
-          aspectRatio: `${width} / ${height}`,
+          height: autoResize ? '100%' : undefined,
+          // aspectRatio: `${width} / ${height}`,
         }}
       />
     </div>

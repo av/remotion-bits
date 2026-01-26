@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill } from "remotion";
+import { AbsoluteFill, useVideoConfig } from "remotion";
 import { BackgroundTransition } from "remotion-bits";
 import { Center } from "./Center";
 
@@ -12,6 +12,15 @@ const textStyle = {
   textShadow: "0 4px 12px rgba(0, 0, 0, 0.5)",
 };
 
+const Header = ({ children }: { children: React.ReactNode }) => {
+    const { width } = useVideoConfig();
+    return (
+        <Center style={{ padding: "4rem", ...textStyle, fontSize: width * 0.08 }}>
+            {children}
+        </Center>
+    );
+};
+
 export const LinearGradientShowcase: React.FC = () => (
   <BackgroundTransition
     gradient={[
@@ -20,9 +29,9 @@ export const LinearGradientShowcase: React.FC = () => (
     ]}
     duration={90}
   >
-    <Center style={{ padding: "4rem", ...textStyle }}>
+    <Header>
       Linear Gradient Transition
-    </Center>
+    </Header>
   </BackgroundTransition>
 );
 
@@ -35,9 +44,9 @@ export const RadialGradientShowcase: React.FC = () => (
     duration={90}
     easing="easeInOut"
   >
-    <Center style={{ padding: "4rem", ...textStyle }}>
+    <Header>
       Radial Gradient Transition
-    </Center>
+    </Header>
   </BackgroundTransition>
 );
 
@@ -49,9 +58,9 @@ export const ConicGradientShowcase: React.FC = () => (
     ]}
     duration={120}
   >
-    <Center style={{ padding: "4rem", ...textStyle }}>
+    <Header>
       Conic Rainbow
-    </Center>
+    </Header>
   </BackgroundTransition>
 );
 
@@ -65,9 +74,9 @@ export const MultiStopGradientShowcase: React.FC = () => (
     duration={120}
     easing="easeInOutCubic"
   >
-    <Center style={{ padding: "4rem", ...textStyle }}>
+    <Header>
       Multi-Stop Gradients
-    </Center>
+    </Header>
   </BackgroundTransition>
 );
 
@@ -82,9 +91,9 @@ export const AngleInterpolationShowcase: React.FC = () => (
     ]}
     duration={150}
   >
-    <Center style={{ padding: "4rem", ...textStyle }}>
+    <Header>
       Angle Rotation
-    </Center>
+    </Header>
   </BackgroundTransition>
 );
 

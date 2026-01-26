@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill } from "remotion";
+import { AbsoluteFill, useVideoConfig } from "remotion";
 import { TextTransition } from "remotion-bits";
 import { Center } from "./Center";
 
@@ -11,13 +11,16 @@ const baseStyle = {
   textAlign: "center" as const,
 };
 
-export const Bg = ({ children }: { children: React.ReactNode }) => (
-  <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
-    <Center style={{ padding: '4rem', ...baseStyle }}>
-      {children}
-    </Center>
-  </AbsoluteFill>
-);
+export const Bg = ({ children }: { children: React.ReactNode }) => {
+  const { width } = useVideoConfig();
+  return (
+    <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
+      <Center style={{ padding: '4rem', ...baseStyle, fontSize: width * 0.12 }}>
+        {children}
+      </Center>
+    </AbsoluteFill>
+  );
+};
 
 export const FadeInShowcase: React.FC = () => (
   <Bg>
@@ -27,35 +30,41 @@ export const FadeInShowcase: React.FC = () => (
   </Bg>
 );
 
-export const SlideFromLeftShowcase: React.FC = () => (
-  <Bg>
-    <TextTransition
-      transition={{
-        opacity: [0, 1],
-        x: [-400, 0],
-        easing: "easeInOut",
-      }}
-    >
-      Sliding Text
-    </TextTransition>
-  </Bg>
-);
+export const SlideFromLeftShowcase: React.FC = () => {
+  const { width } = useVideoConfig();
+  return (
+    <Bg>
+      <TextTransition
+        transition={{
+          opacity: [0, 1],
+          x: [-width / 2, 0],
+          easing: "easeInOut",
+        }}
+      >
+        Sliding Text
+      </TextTransition>
+    </Bg>
+  );
+};
 
-export const WordByWordShowcase: React.FC = () => (
-  <Bg>
-    <TextTransition
-      transition={{
-        y: [200, 0],
-        opacity: [0, 1],
-        split: "word",
-        splitStagger: 3,
-        easing: "easeOutQuad",
-      }}
-    >
-      This appears word by word
-    </TextTransition>
-  </Bg>
-);
+export const WordByWordShowcase: React.FC = () => {
+  const { height } = useVideoConfig();
+  return (
+    <Bg>
+      <TextTransition
+        transition={{
+          y: [height * 0.25, 0],
+          opacity: [0, 1],
+          split: "word",
+          splitStagger: 3,
+          easing: "easeOutQuad",
+        }}
+      >
+        This appears word by word
+      </TextTransition>
+    </Bg>
+  );
+};
 
 export const CharacterColorShowcase: React.FC = () => (
   <Bg>
@@ -73,25 +82,28 @@ export const CharacterColorShowcase: React.FC = () => (
   </Bg>
 );
 
-export const ComplexAnimationShowcase: React.FC = () => (
-  <Bg>
-    <TextTransition
-      transition={{
-        x: [200, 0],
-        y: [50, 0],
-        scale: [0.5, 1],
-        rotate: [30, 0],
-        opacity: [0, 1],
-        easing: "easeOutCubic",
-        split: "word",
-        splitStagger: 5,
-        frames: [10, 50],
-      }}
-    >
-      Composite Animation
-    </TextTransition>
-  </Bg>
-);
+export const ComplexAnimationShowcase: React.FC = () => {
+  const { width, height } = useVideoConfig();
+  return (
+    <Bg>
+      <TextTransition
+        transition={{
+          x: [width * 0.25, 0],
+          y: [height * 0.1, 0],
+          scale: [0.5, 1],
+          rotate: [30, 0],
+          opacity: [0, 1],
+          easing: "easeOutCubic",
+          split: "word",
+          splitStagger: 5,
+          frames: [10, 50],
+        }}
+      >
+        Composite Animation
+      </TextTransition>
+    </Bg>
+  );
+};
 
 export const CyclingTextShowcase: React.FC = () => (
   <Bg>

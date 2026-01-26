@@ -1,46 +1,77 @@
 @import "tailwindcss";
 
-/* Custom styles for Remotion Bits docs */
+@theme {
+  --color-primary: #FF5500;
+  --color-primary-hover: #FF7733;
+  --color-background-dark: #030303;
+  --color-surface-dark: #0A0A0A;
+  --color-surface-light: #121212;
+  --color-border-dark: #222222;
+  --color-border-light: #333333;
+  
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
 
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Custom styles for Remotion Bits docs */
+/* Retain existing vars for Starlight compat if needed, though we are overriding the index page */
 :root {
     --sl-hue-accent: 250;
     --sl-color-accent: hsl(var(--sl-hue-accent), 84%, 60%);
 }
 
-.showcase-player {
-    width: 100%;
-    max-width: 800px;
-    margin: 2rem auto;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+@utility custom-scrollbar {
+  &::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+      background: #0a0a0a;
+  }
+  &::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 4px;
+  }
 }
 
-.showcase-player video {
-    display: block;
-    width: 100%;
-    height: auto;
+@utility glass-panel {
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.hero-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+@utility glow-text {
+  text-shadow: 0 0 20px rgba(255, 85, 0, 0.5);
 }
 
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin: 3rem 0;
+@utility bg-grid-pattern {
+  background-image: linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px);
 }
 
-.feature-card {
-    padding: 1.5rem;
-    border-radius: 8px;
-    background: var(--sl-color-bg-nav);
-    border: 1px solid var(--sl-color-gray-5);
+@utility bg-radial-glow {
+  background-image: radial-gradient(circle at center, var(--tw-gradient-stops));
 }
 
-.feature-card h3 {
-    margin-top: 0;
-    color: var(--sl-color-accent);
-}
+/* Syntax highlighting colors matching landing2 */
+.code-syntax-keyword { color: #c678dd; }
+.code-syntax-func { color: #61afef; }
+.code-syntax-string { color: #98c379; }
+.code-syntax-tag { color: #e06c75; }
+.code-syntax-attr { color: #d19a66; }
+.code-syntax-plain { color: #abb2bf; }
