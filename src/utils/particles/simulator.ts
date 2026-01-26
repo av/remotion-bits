@@ -38,17 +38,24 @@ export function simulateParticles({
     let totalBorn = 0;
     let birthFn: (index: number) => number; // Returns birth frame for index I
 
-    if (spawner.burst) {
-      // All spawned at frame 0 (relative to parent container usually, but here we assume absolute)
-      // If we want burst at specific time, we'd add logic. Assuming t=0 for now.
-      totalBorn = spawnerFrame >= 0 ? spawner.burst : 0;
-      birthFn = () => 0;
-    } else {
-      // Continuous emission
-      const rate = spawner.rate || 1;
-      totalBorn = Math.floor(Math.max(0, spawnerFrame) * rate);
-      birthFn = (i) => i / rate;
-    }
+    // burst and rate are non-exclusive - they can both be active
+    const burst = spawner.burst || 0;
+    const rate = spawner.rate || 0;
+
+    // Calculate total particles: burst (all at frame 0) + rate-based particles
+    const burstParticles = spawnerFrame >= 0 ? burst : 0;
+    const rateParticles = rate > 0 ? Math.floor(Math.max(0, spawnerFrame) * rate) : 0;
+    totalBorn = burstParticles + rateParticles;
+
+    // Birth function:
+    // - Particles with index < burst are born at frame 0 (burst particles)
+    // - Particles with index >= burst are born based on rate
+    birthFn = (i) => {
+      if (i < burst) {
+        return 0; // Burst particles born at frame 0
+      }
+      return (i - burst) / rate; // Rate-based particles
+    };
 
     // ------------------------------------------------------------------------
     // 2. Iterate Potential Candidates

@@ -1,1 +1,2 @@
 Refer to [COMPAL_LOG.md](./COMPAL_LOG.md) for additional technical context.
+You're not allowed to create markdown files with outline of what you did. You'll be asked to produce such content when needed. This means that you should not create any new markdown files in the root of the project that describe your work. No such files are allowed.

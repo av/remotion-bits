@@ -1,6 +1,5 @@
 import React from "react";
 import { Composition } from "remotion";
-import { Playground } from "./Playground";
 import {
   TextTransitionShowcase,
   BackgroundTransitionShowcase,

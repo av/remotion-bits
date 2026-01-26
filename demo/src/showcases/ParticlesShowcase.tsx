@@ -3,138 +3,152 @@ import { AbsoluteFill } from "remotion";
 import { Particles, Spawner, Behavior } from "../../../src/components/Particles";
 import { Center } from "./Center";
 
-// ----------------------------------------------------------------------------
-// 1) "Snow" - randomised snowflakes with falling down in nice patterns
-// ----------------------------------------------------------------------------
 export const ParticlesSnowShowcase = () => {
   return (
-    <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
+    <AbsoluteFill style={{ backgroundColor: "#01050e" }}>
       <Particles>
         <Spawner
           rate={1}
-          area={{ width: 1920, height: 0 }} // Horizontal line at top
-          position={{ x: 960, y: -50 }}
+          area={{ width: 1920, height: 0 }}
+          position={{ x: 960, y: -200 }}
           lifespan={200}
-          max={1000}
           startFrame={200}
           transition={{
-            // Micro animation: Spin slowly and fade in
-            // rotate: 360,
-            // opacity: { frames: [0, 20], values: [0, 1] },
-            // scale: [0.5, 1]
+            opacity: [0, 1],
           }}
         >
-          {/* Simple snowflake shape */}
-          <div style={{ fontSize: 40, color: "white" }}>❄️</div>
+          <div
+            style={{
+              width: 12,
+              height: 12,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(255,255,255,0.9), transparent 70%)",
+            }}
+          />
+          <div
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(224,231,255,0.9), transparent 70%)",
+            }}
+          />
+          <div
+            style={{
+              width: 24,
+              height: 24,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(199,210,254,0.3), transparent 70%)",
+            }}
+          />
         </Spawner>
-
         <Behavior gravity={{ y: 0.1 }} />
-
-        {/* Wiggle adds the "floating" feeling */}
         <Behavior wiggle={{ magnitude: 1, frequency: 0.5 }} />
-
-        {/* Slight drift via custom handler */}
         <Behavior handler={(p) => { p.velocity.x += 0.01; }} />
       </Particles>
       <Center>
-        <h1 style={{ color: "white", fontFamily: "sans-serif" }}>Snow</h1>
+        <h1 style={{ color: "white", fontFamily: "sans-serif", fontSize: '128px' }}>Snow</h1>
       </Center>
     </AbsoluteFill>
   );
 };
 
-// ----------------------------------------------------------------------------
-// 2) "Fountain" - randomised physics based spread of particles
-// ----------------------------------------------------------------------------
 export const ParticlesFountainShowcase = () => {
   return (
-    <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
+    <AbsoluteFill style={{ backgroundColor: "#000000" }}>
       <Particles>
         <Spawner
-          rate={5}
-          position={{ x: 960, y: 800 }} // Bottom center
-          velocity={{ x: 0, y: -25, varianceX: 5, varianceY: 5 }} // Shoot up
-          lifespan={80}
+          rate={20}
+          burst={20}
+          position={{ x: 960, y: 1350 }}
+          area={{ width: 50, height: 0 }}
+          velocity={{ x: 0, y: -70, varianceX: 100, varianceY: 30, }}
+          lifespan={100}
+          max={500}
           transition={{
-             // Scale up fast, then shrink
-             scale: [0, 1.5, 0],
-             duration: 60
+            opacity: [0, 1],
+            duration: 20,
           }}
         >
-           <div style={{
-               width: 20, height: 20,
-               borderRadius: "50%",
-               background: "linear-gradient(to bottom, #fbbf24, #d97706)"
-           }} />
+          <div style={{
+            width: 30, height: 30,
+            background: "radial-gradient(circle, #ebb03b, transparent 50%)",
+          }} />
+          <div style={{
+            width: 20, height: 20,
+            background: "radial-gradient(circle, gray, transparent 50%)",
+          }} />
+          <div style={{
+            width: 400, height: 400,
+            background: "radial-gradient(circle, rgba(176, 126, 223, 0.05), transparent 50%)",
+          }} />
         </Spawner>
 
-        <Behavior gravity={{ y: 0.8 }} />
+        <Behavior gravity={{ y: 0.1, }} />
       </Particles>
       <Center>
-        <h1 style={{ color: "white", fontFamily: "sans-serif" }}>Fountain</h1>
+        <h1 style={{ color: "white", fontFamily: "sans-serif", fontSize: '128px' }}>Burst</h1>
       </Center>
     </AbsoluteFill>
   );
 };
 
-
-// ----------------------------------------------------------------------------
-// 3) Randomised grid of particles
-// ----------------------------------------------------------------------------
-const GridBox = () => (
-    <div style={{
-        width: 80, height: 80,
-        backgroundColor: "#3b82f6",
-        border: "2px solid #60a5fa",
-        opacity: 0.8
-    }} />
-);
 
 export const ParticlesGridShowcase = () => {
 
-  // Custom behavior to snap physics positions to a 100px grid
   const snapToGridHandler = (p: any, age: number) => {
-       // Snap current position
-       p.position.x = Math.floor(p.position.x / 100) * 100;
-       p.position.y = Math.floor(p.position.y / 100) * 100;
+    p.position.x = Math.floor(p.position.x / 100) * 100;
+    p.position.y = Math.floor(p.position.y / 100) * 100;
 
-       // Cardinal Movement: every 30 frames, jump 100px
-       const jumpInterval = 30;
-       if (age % jumpInterval === 0 && age > 0) {
-           // Deterministic random direction based on partile + step
-           const step = Math.floor(age / jumpInterval);
-           // We used "seed" but here we can hack it via internal random props if exposed?
-           // The Sim exposes `p.seed`.
+    const jumpInterval = 30;
 
-           // Simple pseudo random
-           const dir = (p.seed + step) % 4; // 0,1,2,3
-           if (dir === 0) p.position.x += 100;
-           if (dir === 1) p.position.x -= 100;
-           if (dir === 2) p.position.y += 100;
-           if (dir === 3) p.position.y -= 100;
-       }
+    if (age % jumpInterval === 0 && age > 0) {
+      const step = Math.floor(age / jumpInterval);
+      const dir = (p.seed + step) % 4; // 0,1,2,3
+      if (dir === 0) p.position.x += 100;
+      if (dir === 1) p.position.x -= 100;
+      if (dir === 2) p.position.y += 100;
+      if (dir === 3) p.position.y -= 100;
+    }
   };
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
       <Particles>
-         <Spawner
-            rate={2} // slow spawn
-            area={{ width: 1000, height: 800 }}
-            position={{ x: 960, y: 540 }}
-            lifespan={150}
-            transition={{
-                scale: [0, 1],
-                duration: 10
-            }}
-         >
-            <GridBox />
-         </Spawner>
+        <Spawner
+          rate={1}
+          area={{ width: 1000, height: 800 }}
+          position={{ x: 960, y: 540 }}
+          lifespan={150}
+          max={10}
+          transition={{
+            opacity: [0, 1],
+            duration: 10
+          }}
+        >
+          <div style={{
+            width: 80, height: 80,
+            backgroundColor: "#ffffff5f",
+            opacity: 0.8
+          }} />
+          <div style={{
+            width: 80, height: 80,
+            borderRadius: "50%",
+            backgroundColor: "#ffffff5f",
+            opacity: 0.8
+          }} />
+          <div style={{
+            width: 80, height: 80,
+            transform: 'rotate(45deg) scale(0.75)',
+            backgroundColor: "#ffffff5f",
+            opacity: 0.8
+          }} />
+        </Spawner>
 
-         <Behavior handler={snapToGridHandler} />
+        <Behavior handler={snapToGridHandler} />
       </Particles>
       <Center>
-        <h1 style={{ color: "white", fontFamily: "sans-serif" }}>Grid</h1>
+        <h1 style={{ color: "white", fontFamily: "sans-serif", fontSize: '128px' }}>Grid</h1>
       </Center>
     </AbsoluteFill>
   );

@@ -48,12 +48,18 @@ export const Particles: React.FC<ParticlesProps> = ({
       // @ts-ignore - Check for type name or specific prop
       if (child.type === Spawner) {
          const props = child.props as SpawnerProps;
+
+         // Extract children as variants
+         const childrenArray = React.Children.toArray(props.children);
+         const hasMultipleVariants = childrenArray.length > 1;
+
          extractedSpawners.push({
              ...props,
              id: props.id || `spawner-${spawnerCount++}`,
              // Merge startFrame: spawner's startFrame takes precedence over Particles' startFrame
              startFrame: props.startFrame !== undefined ? props.startFrame : startFrame,
-             children: props.children // Keep reference to render later
+             children: props.children, // Keep original for single child case
+             childrenVariants: hasMultipleVariants ? childrenArray : undefined
          } as SpawnerConfig);
       }
 
@@ -99,6 +105,17 @@ export const Particles: React.FC<ParticlesProps> = ({
         const spawner = spawners.find(s => s.id === p.spawnerId);
         if (!spawner) return null;
 
+        // Select variant based on particle seed for determinism
+        let childToRender: React.ReactNode;
+        if (spawner.childrenVariants && spawner.childrenVariants.length > 0) {
+          // Use particle seed to deterministically select a variant
+          const variantIndex = Math.floor(p.seed * spawner.childrenVariants.length);
+          childToRender = spawner.childrenVariants[variantIndex];
+        } else {
+          // Single child case
+          childToRender = spawner.children;
+        }
+
         // simulateParticles() already filters particles outside their lifecycle
         // "Macro" styles from behaviors
         const particleStyle: React.CSSProperties = {
@@ -113,10 +130,10 @@ export const Particles: React.FC<ParticlesProps> = ({
           <div key={p.id} style={particleStyle}>
             {spawner.transition ? (
               <MotionTransition transition={spawner.transition}>
-                {spawner.children}
+                {childToRender}
               </MotionTransition>
             ) : (
-              spawner.children
+              childToRender
             )}
           </div>
         );

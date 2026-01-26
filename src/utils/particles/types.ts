@@ -62,6 +62,7 @@ export interface SpawnerConfig {
   // Render
   transition?: MotionTransitionProps;
   children: React.ReactNode;
+  childrenVariants?: React.ReactNode[]; // Array of child variants for random selection
 }
 
 export type ParticleBehaviorHandler = (

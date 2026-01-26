@@ -3,7 +3,7 @@ import type { MotionTransitionProps } from "../MotionTransition";
 import type { SpawnerConfig, SpawnerShape } from "../../utils/particles/types";
 
 // We exclude 'id' from props because the Particles container will assign it or use index
-export interface SpawnerProps extends Omit<SpawnerConfig, "id"> {
+export interface SpawnerProps extends Omit<SpawnerConfig, "id" | "childrenVariants"> {
   // Override slightly for DX
   rate?: number; // per frame
   burst?: number; // count
@@ -23,6 +23,11 @@ export interface SpawnerProps extends Omit<SpawnerConfig, "id"> {
    */
   startFrame?: number;
 
+  /**
+   * Children can be:
+   * - A single React node (all particles use this)
+   * - Multiple React nodes (each child is a variant, randomly selected per particle)
+   */
   children: React.ReactNode;
 }
 
