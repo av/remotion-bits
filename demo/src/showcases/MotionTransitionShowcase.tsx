@@ -73,6 +73,54 @@ const Cross: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ styl
   </div>
 );
 
+export const SimpleFadeSlideShowcase: React.FC = () => {
+  return (
+    <Bg>
+      <div style={labelStyle}>Simple Fade & Slide</div>
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        <MotionTransition
+          transition={{
+            opacity: [0, 1],
+            y: [80, 0],
+            duration: 60,
+            easing: "easeOutCubic",
+          }}
+        >
+          <Circle color="#3b82f6" />
+        </MotionTransition>
+      </div>
+    </Bg>
+  );
+};
+
+export const SimultaneousFadeShowcase: React.FC = () => {
+  return (
+    <Bg>
+      <div style={labelStyle}>Simultaneous Fade In</div>
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        <MotionTransition
+          transition={{
+            opacity: [0, 1],
+            duration: 60,
+            easing: "easeOutCubic",
+          }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "4rem",
+          }}
+        >
+          <Circle color="#3b82f6" />
+          <Triangle color="#ef4444" />
+          <RoundedSquare color="#10b981" />
+          <Star color="#f59e0b" />
+          <Cross color="#8b5cf6" />
+        </MotionTransition>
+      </div>
+    </Bg>
+  );
+};
+
 export const FadeInStaggerShowcase: React.FC = () => {
   return (
     <Bg>
@@ -166,32 +214,6 @@ export const CenterStaggerShowcase: React.FC = () => {
   );
 };
 
-export const CustomComponentShowcase: React.FC = () => {
-  return (
-    <Bg>
-      <div style={labelStyle}>Custom Components with Style Prop</div>
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-        <MotionTransition
-          transition={{
-            opacity: [0, 1],
-            y: [50, 0],
-            rotate: [15, 0],
-            duration: 70,
-            stagger: 6,
-            easing: "easeOutCubic",
-          }}
-        >
-          <Circle color="#3b82f6" />
-          <Triangle color="#ef4444" />
-          <RoundedSquare color="#10b981" />
-          <Star color="#f59e0b" />
-          <Cross color="#8b5cf6" />
-        </MotionTransition>
-      </div>
-    </Bg>
-  );
-};
-
 export const ComplexMotionShowcase: React.FC = () => {
   return (
     <Bg>
@@ -202,42 +224,22 @@ export const ComplexMotionShowcase: React.FC = () => {
             opacity: [0, 1, 1, 0.8],
             y: [100, -20, 0, 0],
             scale: [0.5, 1.1, 1, 1],
-            rotate: [0, 0, 360, 360],
+            rotate: [0, 0, 90, 90],
             duration: 90,
-            stagger: 8,
+            stagger: 5,
             staggerDirection: "forward",
             easing: "easeInOutCubic",
           }}
-        >
-          <Circle color="#3b82f6" />
-          <Triangle color="#ef4444" />
-          <RoundedSquare color="#10b981" />
-          <Star color="#f59e0b" />
-        </MotionTransition>
-      </div>
-    </Bg>
-  );
-};
-
-export const NestedElementsShowcase: React.FC = () => {
-  return (
-    <Bg>
-      <div style={labelStyle}>Component Style Forwarding</div>
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-        <MotionTransition
-          transition={{
-            opacity: [0, 1],
-            y: [80, 0],
-            duration: 80,
-            stagger: 10,
-            easing: "easeOutQuart",
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "4rem",
           }}
         >
           <Circle color="#3b82f6" />
           <Triangle color="#ef4444" />
           <RoundedSquare color="#10b981" />
           <Star color="#f59e0b" />
-          <Cross color="#8b5cf6" />
         </MotionTransition>
       </div>
     </Bg>
@@ -290,30 +292,30 @@ export const MotionTransitionShowcase: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
       <Sequence from={0} durationInFrames={90}>
-        <FadeInStaggerShowcase />
+        <SimpleFadeSlideShowcase />
       </Sequence>
 
       <Sequence from={90} durationInFrames={90}>
-        <ReverseStaggerShowcase />
+        <SimultaneousFadeShowcase />
       </Sequence>
 
       <Sequence from={180} durationInFrames={90}>
+        <FadeInStaggerShowcase />
+      </Sequence>
+
+      <Sequence from={270} durationInFrames={90}>
+        <ReverseStaggerShowcase />
+      </Sequence>
+
+      <Sequence from={360} durationInFrames={90}>
         <CenterStaggerShowcase />
       </Sequence>
 
-      <Sequence from={270} durationInFrames={100}>
-        <CustomComponentShowcase />
-      </Sequence>
-
-      <Sequence from={370} durationInFrames={120}>
+      <Sequence from={450} durationInFrames={120}>
         <ComplexMotionShowcase />
       </Sequence>
 
-      <Sequence from={490} durationInFrames={110}>
-        <NestedElementsShowcase />
-      </Sequence>
-
-      <Sequence from={600} durationInFrames={100}>
+      <Sequence from={570} durationInFrames={120}>
         <RandomGridShowcase />
       </Sequence>
     </AbsoluteFill>
