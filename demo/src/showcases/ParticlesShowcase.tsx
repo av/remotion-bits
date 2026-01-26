@@ -11,23 +11,24 @@ export const ParticlesSnowShowcase = () => {
     <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
       <Particles>
         <Spawner
-          rate={10}
+          rate={1}
           area={{ width: 1920, height: 0 }} // Horizontal line at top
           position={{ x: 960, y: -50 }}
-          lifespan={20}
+          lifespan={200}
+          max={1000}
+          startFrame={200}
           transition={{
             // Micro animation: Spin slowly and fade in
-            rotate: 360,
-            opacity: { frames: [0, 20], values: [0, 1] },
-            scale: [0.5, 1]
+            // rotate: 360,
+            // opacity: { frames: [0, 20], values: [0, 1] },
+            // scale: [0.5, 1]
           }}
         >
           {/* Simple snowflake shape */}
           <div style={{ fontSize: 40, color: "white" }}>❄️</div>
         </Spawner>
 
-        {/* Gravity pulls them down */}
-        <Behavior gravity={{ y: 2 }} />
+        <Behavior gravity={{ y: 0.1 }} />
 
         {/* Wiggle adds the "floating" feeling */}
         <Behavior wiggle={{ magnitude: 1, frequency: 0.5 }} />

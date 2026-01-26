@@ -22,6 +22,7 @@ export const createGravity = (force: { x?: number; y?: number }): ParticleBehavi
   return (p) => {
     if (force.x) p.acceleration.x += force.x;
     if (force.y) p.acceleration.y += force.y;
+
   };
 };
 

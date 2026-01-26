@@ -30,18 +30,23 @@ export function simulateParticles({
     // ------------------------------------------------------------------------
     // 1. Determine Particle Count
     // ------------------------------------------------------------------------
+    // Apply spawner-specific startFrame offset
+    // This makes this spawner appear as if it has been running for startFrame frames
+    const spawnerStartFrame = spawner.startFrame || 0;
+    const spawnerFrame = frame + spawnerStartFrame;
+
     let totalBorn = 0;
     let birthFn: (index: number) => number; // Returns birth frame for index I
 
     if (spawner.burst) {
       // All spawned at frame 0 (relative to parent container usually, but here we assume absolute)
       // If we want burst at specific time, we'd add logic. Assuming t=0 for now.
-      totalBorn = frame >= 0 ? spawner.burst : 0;
+      totalBorn = spawnerFrame >= 0 ? spawner.burst : 0;
       birthFn = () => 0;
     } else {
       // Continuous emission
       const rate = spawner.rate || 1;
-      totalBorn = Math.floor(Math.max(0, frame) * rate);
+      totalBorn = Math.floor(Math.max(0, spawnerFrame) * rate);
       birthFn = (i) => i / rate;
     }
 
@@ -50,26 +55,36 @@ export function simulateParticles({
     //    Optimization: Start from the newest (highest index) and go back
     //    Stop when particle is too old.
     // ------------------------------------------------------------------------
+
+    // Calculate the maximum possible lifespan for any particle from this spawner
+    // This allows us to safely break the loop when age exceeds this maximum
+    const variance = spawner.lifespanVariance || 0;
+    const baseLifespan = spawner.lifespan || 60;
+    const maxPossibleLifespan = baseLifespan + variance;
+
+    // Track active particle count for max limit enforcement
+    let activeCount = 0;
+    const maxLimit = spawner.max;
+
     for (let i = totalBorn - 1; i >= 0; i--) {
       const birthFrame = birthFn(i);
-      const age = frame - birthFrame;
+      const age = spawnerFrame - birthFrame;
+
+      // Early exit optimization: Since we iterate backwards (newest to oldest),
+      // if this particle's age exceeds the maximum possible lifespan, all older
+      // particles must also be dead. Safe to break.
+      if (age > maxPossibleLifespan) {
+        break;
+      }
 
       // Calculate specific lifespan for this particle
       // We seed based on spawner+index to keep it consistent
       const seed = random(`${spawner.id}-${i}`);
-      const variance = spawner.lifespanVariance || 0;
-      const baseLifespan = spawner.lifespan || 60;
       const actualLifespan = baseLifespan + (random(`life-${seed}`) - 0.5) * 2 * variance;
 
-      // If dead, since we iterate backwards, older particles will also be dead.
-      // (Exception: high variance might keep some older ones alive, but we can usually optimized)
-      // For safety with high variance, we might want to check a bit deeper,
-      // but for now, strict cutoff if age is WAY past base lifespan.
+      // Skip this particle if it's dead
       if (age >= actualLifespan) {
-         // Optimization: if variance is small, we can break.
-         // If variance is huge, we continue.
-         if(variance < baseLifespan * 0.5) break;
-         continue;
+        continue;
       }
 
       if (age < 0) continue; // Should not happen with current logic but safe guard
@@ -122,17 +137,25 @@ export function simulateParticles({
       for (let t = 0; t <= steps; t++) {
         // Apply all configured behaviors
         for (const behavior of behaviors) {
-            behavior.handler(particle, t, { frame, fps });
+            behavior.handler(particle, t, { frame: spawnerFrame, fps });
         }
         // Apply standard physics (velocity -> position)
-        movement(particle, t, { frame, fps });
+        movement(particle, t, { frame: spawnerFrame, fps });
       }
 
       // Add INTERPOLATION?
       // If frame is 10.5, we constructed state at 10.
       // We could add partial step. For now, we assume integer frames.
 
+      // Check max limit before adding particle
+      if (maxLimit !== undefined && activeCount >= maxLimit) {
+        // Skip this particle if we've reached the max limit
+        // Since we iterate from newest to oldest, this ensures we keep the newest particles
+        continue;
+      }
+
       activeParticles.push(particle);
+      activeCount++;
     }
   }
 

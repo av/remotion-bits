@@ -1,4 +1,4 @@
-import type { MotionTransitionProps } from "../motion";
+import type { MotionTransitionProps } from "../../components/MotionTransition";
 
 // ============================================================================
 // CORE DATA STRUCTURES
@@ -45,6 +45,10 @@ export interface SpawnerConfig {
   // Timing
   rate?: number; // Particles per frame. Mutually exclusive with burst.
   burst?: number; // Particles to spawn at start.
+  startFrame?: number; // Frame offset for this spawner's simulation
+
+  // Limits
+  max?: number; // Maximum number of active particles from this spawner
 
   // Shape & Position
   position?: Vector2; // Offset of the spawner itself

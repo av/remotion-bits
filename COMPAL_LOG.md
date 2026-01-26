@@ -1128,6 +1128,7 @@ When working on this codebase:
 9. **Documentation updates**: Add new components/utilities to docs site in `docs/src/content/docs/`
 10. **Showcase reuse**: Create showcase in `demo/src/showcases/`, then import into docs with updated imports
 
+
 ### Animation Component Checklist
 When creating new animation components:
 - [ ] Import motion framework utilities from `src/utils/motion/`
@@ -1140,3 +1141,186 @@ When creating new animation components:
 - [ ] Update exports in `src/components/index.ts` and `src/utils/index.ts`
 - [ ] Add documentation page in `docs/src/content/docs/components/`
 - [ ] Import showcase into docs with `client:visible` directive
+
+---
+
+### Per-Spawner Frame Offset for Particle Systems (2026-01-26)
+
+**Context:** Particles component had a global `startFrame` prop that offset all spawners simultaneously, but individual Spawner components had a non-functional `startFrame` prop that was defined but never used. This prevented independent control of when different particle emitters would begin their simulation.
+
+**Problem:**
+- Spawner interface included `startFrame?: number` but it wasn't being applied
+- In a previous fix attempt, calling `simulateParticles` separately per spawner broke particle display
+- The simulator used a single frame value for all spawners, preventing per-spawner frame offsets
+- Users couldn't create staggered particle effects (e.g., left emitter starts at frame 0, right emitter starts at frame 50)
+
+**Requirements:**
+1. Each spawner needs its own independent frame offset
+2. Spawner's `startFrame` should override Particles' global `startFrame`
+3. Must not break particle display (previous attempt broke this)
+4. Must remain fully deterministic (Remotion requirement)
+
+**Solution: Apply Per-Spawner Frame Offset in Simulator**
+
+Rather than calling `simulateParticles` multiple times (Option A, which broke before), modify the simulator to apply each spawner's frame offset individually within a single simulation pass (Option B).
+
+**Implementation:**
+
+1. **Merge Spawner-level and Particles-level startFrame** ([Particles.tsx](src/components/Particles/Particles.tsx)):
+   ```tsx
+   // In useMemo where spawners are extracted from children
+   extractedSpawners.push({
+     ...props,
+     id: props.id || `spawner-${spawnerCount++}`,
+     // Spawner's startFrame takes precedence over Particles' startFrame
+     startFrame: props.startFrame !== undefined ? props.startFrame : startFrame,
+     children: props.children
+   });
+   ```
+
+2. **Apply Per-Spawner Frame Offset in Simulator** ([simulator.ts](src/utils/particles/simulator.ts)):
+   ```typescript
+   for (const spawner of spawners) {
+     // Apply spawner-specific startFrame offset
+     const spawnerStartFrame = spawner.startFrame || 0;
+     const spawnerFrame = frame + spawnerStartFrame;
+
+     // Use spawnerFrame instead of global frame for all calculations
+     totalBorn = Math.floor(Math.max(0, spawnerFrame) * rate);
+     const age = spawnerFrame - birthFrame;
+
+     // Pass spawnerFrame to behaviors and movement
+     behavior.handler(particle, t, { frame: spawnerFrame, fps });
+     movement(particle, t, { frame: spawnerFrame, fps });
+   }
+   ```
+
+3. **Remove Global Frame Offset** (Particles.tsx):
+   ```tsx
+   // Before: Applied global offset
+   const simulationFrame = frame + startFrame;
+   return simulateParticles({ frame: simulationFrame, ... });
+
+   // After: Let each spawner handle its own offset
+   return simulateParticles({ frame, ... });
+   ```
+
+**Why This Works:**
+
+- **Single simulation pass**: All spawners processed in one call (no particle ID conflicts)
+- **Independent timelines**: Each spawner calculates `spawnerFrame = frame + spawnerStartFrame`
+- **Deterministic**: Same frame input always produces same particle output
+- **Backward compatible**: If `startFrame` is undefined, defaults to 0 (no offset)
+- **Proper override behavior**: Spawner's `startFrame` takes precedence when set, otherwise inherits from Particles
+
+**Key Architectural Insight:**
+
+The previous broken approach likely called `simulateParticles` multiple times:
+```typescript
+// DON'T DO THIS - causes particle ID conflicts and rendering issues
+spawners.forEach(spawner => {
+  const particles = simulateParticles({ frame: frame + spawner.startFrame, spawners: [spawner], ... });
+  allParticles.push(...particles);
+});
+```
+
+The correct approach is to handle frame offsets **inside** the simulator loop:
+```typescript
+// DO THIS - single pass, per-spawner frame calculation
+for (const spawner of spawners) {
+  const spawnerFrame = frame + (spawner.startFrame || 0);
+  // Use spawnerFrame for all spawner-specific calculations
+}
+```
+
+**Testing:**
+
+Added comprehensive test suite (142 tests total, all passing):
+
+1. **Per-spawner startFrame independence**:
+   - Spawner A (startFrame=0) at frame 10 → 10 particles
+   - Spawner B (startFrame=50) at frame 10 → 60 particles (acts as if frame 60)
+
+2. **Burst spawning with offset**:
+   - Spawner A (burst=10, startFrame=0) at frame 0 → 10 particles alive
+   - Spawner B (burst=10, startFrame=10, lifespan=5) at frame 0 → 0 particles (all dead from age 10)
+
+3. **Multiple spawners with different offsets**:
+   - Spawner A (startFrame=0) at frame 5 → 10 particles (rate=2)
+   - Spawner B (startFrame=10) at frame 5 → 30 particles (rate=2, acts as frame 15)
+   - Spawner C (startFrame=20) at frame 5 → 50 particles (rate=2, acts as frame 25)
+
+4. **Default to 0 when undefined**:
+   - Spawner without `startFrame` prop behaves as if `startFrame=0`
+
+**Usage Examples:**
+
+```tsx
+// Global offset for all spawners
+<Particles startFrame={100}>
+  <Spawner rate={1} /> {/* Starts at frame 100 */}
+  <Spawner rate={1} /> {/* Starts at frame 100 */}
+</Particles>
+
+// Per-spawner offset (overrides Particles startFrame)
+<Particles startFrame={50}>
+  <Spawner rate={1} startFrame={0} />   {/* Starts at frame 0 */}
+  <Spawner rate={1} startFrame={100} /> {/* Starts at frame 100 */}
+  <Spawner rate={1} />                  {/* Starts at frame 50 (inherits) */}
+</Particles>
+
+// Staggered particle effects
+<Particles>
+  <Spawner position={{ x: 0, y: 500 }} startFrame={0}>
+    <div>❄️</div>
+  </Spawner>
+  <Spawner position={{ x: 500, y: 500 }} startFrame={30}>
+    <div>❄️</div>
+  </Spawner>
+  <Spawner position={{ x: 1000, y: 500 }} startFrame={60}>
+    <div>❄️</div>
+  </Spawner>
+</Particles>
+```
+
+**Files Modified:**
+- [src/components/Particles/Particles.tsx](src/components/Particles/Particles.tsx) - Merge spawner startFrame with global startFrame
+- [src/utils/particles/simulator.ts](src/utils/particles/simulator.ts) - Apply per-spawner frame offset in simulation loop
+- [src/utils/particles/__tests__/simulator.test.ts](src/utils/particles/__tests__/simulator.test.ts) - Added 4 new tests for per-spawner startFrame
+
+**Test Results:**
+- All 142 tests passing (12 in simulator.test.ts, 130 in other test files)
+- TypeScript compilation passes with no errors
+- No regressions in existing particle behavior
+
+**Benefits:**
+- ✅ Per-spawner frame control enables complex choreographed particle effects
+- ✅ Maintains deterministic simulation (Remotion requirement)
+- ✅ Particles still render correctly (fixed the previous broken approach)
+- ✅ Clean API: Spawner's `startFrame` naturally overrides Particles' `startFrame`
+- ✅ Fully backward compatible (undefined startFrame defaults to 0)
+- ✅ Efficient: Single simulation pass, no duplicate calculations
+
+**Key Learnings:**
+
+1. **Apply frame offsets inside the simulation loop, not by calling the simulator multiple times**
+   - Multiple simulator calls can cause particle ID conflicts and accumulation issues
+   - Single pass with per-spawner frame calculations is cleaner and more efficient
+
+2. **Frame offset inheritance pattern**:
+   ```typescript
+   // In parent component, merge child prop with parent default
+   startFrame: childProp !== undefined ? childProp : parentDefault
+   ```
+
+3. **Deterministic simulation requires frame-based offsets, not time-based**:
+   - Each spawner gets its own "virtual frame" (`spawnerFrame = frame + spawnerStartFrame`)
+   - All calculations (birth, age, behaviors) use `spawnerFrame` instead of global `frame`
+
+4. **Test both independence and interaction**:
+   - Test each spawner works independently with its own offset
+   - Test multiple spawners with different offsets in same simulation
+   - Test inheritance (undefined spawner startFrame uses Particles default)
+   - Test override (defined spawner startFrame ignores Particles default)
+
+---

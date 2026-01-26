@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { simulateParticles } from "../../utils/particles/simulator";
 import { getBehaviorHandlersFromProps, Behavior, type BehaviorProps } from "./Behavior";
 import { Spawner, type SpawnerProps } from "./Spawner";
@@ -10,9 +10,24 @@ export interface ParticlesProps {
   children?: React.ReactNode;
   style?: React.CSSProperties;
   className?: string;
+  /**
+   * Frame offset to start the simulation from. This makes the simulation
+   * appear as if it has been running for `startFrame` frames already.
+   *
+   * For example, if `startFrame={30}`, the simulation at frame 0 will
+   * display the particle state as it would appear at frame 30.
+   *
+   * @default 0
+   */
+  startFrame?: number;
 }
 
-export const Particles: React.FC<ParticlesProps> = ({ children, style, className }) => {
+export const Particles: React.FC<ParticlesProps> = ({
+  children,
+  style,
+  className,
+  startFrame = 0
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -36,6 +51,8 @@ export const Particles: React.FC<ParticlesProps> = ({ children, style, className
          extractedSpawners.push({
              ...props,
              id: props.id || `spawner-${spawnerCount++}`,
+             // Merge startFrame: spawner's startFrame takes precedence over Particles' startFrame
+             startFrame: props.startFrame !== undefined ? props.startFrame : startFrame,
              children: props.children // Keep reference to render later
          } as SpawnerConfig);
       }
@@ -55,19 +72,23 @@ export const Particles: React.FC<ParticlesProps> = ({ children, style, className
     });
 
     return { spawners: extractedSpawners, behaviors: extractedBehaviors };
-  }, [children]);
+  }, [children, startFrame]);
 
   // --------------------------------------------------------------------------
   // 2. Run Simulation
   // --------------------------------------------------------------------------
   // This runs every single frame to determine the list of active particles
   // and their current state.
-  const activeParticles = simulateParticles({
-    frame,
-    fps,
-    spawners,
-    behaviors
-  });
+  const activeParticles = useMemo(() => {
+    // Each spawner now has its own startFrame offset already merged in the config
+    // No need to apply a global offset here
+    return simulateParticles({
+      frame,
+      fps,
+      spawners,
+      behaviors
+    });
+  }, [frame, fps, spawners, behaviors]);
 
   // --------------------------------------------------------------------------
   // 3. Render
@@ -78,6 +99,7 @@ export const Particles: React.FC<ParticlesProps> = ({ children, style, className
         const spawner = spawners.find(s => s.id === p.spawnerId);
         if (!spawner) return null;
 
+        // simulateParticles() already filters particles outside their lifecycle
         // "Macro" styles from behaviors
         const particleStyle: React.CSSProperties = {
           position: "absolute",
@@ -85,29 +107,18 @@ export const Particles: React.FC<ParticlesProps> = ({ children, style, className
           top: 0,
           transform: `translate(${p.position.x}px, ${p.position.y}px) rotate(${p.rotation}deg) scale(${p.scale})`,
           opacity: p.opacity,
-          // Optimization: If opacity is 0, maybe don't render?
-          // But simulateParticles checks death. Opacity behavior might fade it early though.
         };
 
         return (
-          <Sequence
-            key={p.id}
-            from={p.birthFrame}
-            duration={Math.ceil(p.lifespan)} // Ceil just in case
-            layout="none"
-            // layout="none" is CRITICAL so Sequence doesn't wrap in AbsoluteFill
-            // allowing our positioning to work
-          >
-            <div style={particleStyle}>
-                {spawner.transition ? (
-                  <MotionTransition transition={spawner.transition}>
-                    {spawner.children}
-                  </MotionTransition>
-                ) : (
-                  spawner.children
-                )}
-            </div>
-          </Sequence>
+          <div key={p.id} style={particleStyle}>
+            {spawner.transition ? (
+              <MotionTransition transition={spawner.transition}>
+                {spawner.children}
+              </MotionTransition>
+            ) : (
+              spawner.children
+            )}
+          </div>
         );
       })}
     </AbsoluteFill>
