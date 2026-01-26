@@ -435,6 +435,29 @@ export function interpolateColorKeyframes(
 
 ---
 
+### Deterministic Simulation Replay (2026-01-26)
+
+**Context:** Implementing a particle system that needs iterative physics (velocity, acceleration, drag) but must run in Remotion's deterministic, frame-independent environment.
+
+**Problem:**
+- Particles are inherently stateful ($P_{t} = P_{t-1} + V$).
+- Remotion renders frames in any order/parallel.
+- Standard React state (\`useState\`, \`useRef\`) is reset on generic renders and doesn't support seeking.
+
+**Solution: "Replay Pattern"**
+- **Deterministic Birth:** Particle $I$ is always born at Frame $T_{birth}$ (calculated via seed/rate).
+- **On-the-fly Simulation:** On Frame $F$, if a particle is "alive" ($T_{birth} < F < T_{death}$):
+    1. Re-initialize state at $T_{birth}$ with deterministic seed.
+    2. Run a micro-simulation loop for $(F - T_{birth})$ steps inside the render pass.
+- **Performance:** For N < 1000 and Life < 100, checking N particles and running average 50 loop steps is negligible in JS (~50k ops).
+
+**Result:**
+- Fully deterministic physics without pre-rendering.
+- Frame-perfect seeking.
+- Supports complex, state-dependent behaviors (e.g., bouncing, logic constraints) unlike closed-form math equations.
+
+---
+
 ## Architecture Decisions
 
 ### Interactive Playground with Zod Schemas (2026-01-24)

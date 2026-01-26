@@ -1,238 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
+---
+import { ShowcasePlayer } from '../components/ShowcasePlayer';
+import { HeroShowcase } from '../components/showcases/HeroShowcase';
+import '../styles/custom.css';
+---
+
+<html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remotion Bits - Beautiful Animation Components</title>
-    <meta name="description" content="Production-ready animation components for Remotion video creation" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: white;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 6rem 2rem;
-            text-align: center;
-            min-height: 70vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-            max-width: 600px;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .features {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
-
-        .features h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #1a202c;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .feature-card {
-            padding: 2rem;
-            border-radius: 12px;
-            background: #f7fafc;
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #667eea;
-        }
-
-        .feature-card p {
-            color: #4a5568;
-        }
-
-        .showcases {
-            background: #f7fafc;
-            padding: 4rem 2rem;
-        }
-
-        .showcases h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #1a202c;
-        }
-
-        .showcase-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .showcase-item {
-            margin-bottom: 4rem;
-        }
-
-        .showcase-item h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: #2d3748;
-            text-align: center;
-        }
-
-        .code-snippet {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: #1e293b;
-            border-radius: 8px;
-            color: #e2e8f0;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-        }
-
-        footer {
-            background: #1a202c;
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        footer a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1.2rem;
-            }
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remotion Bits - Production-ready animation components</title>
+    <meta name="description" content="Beautiful, production-ready animation components for Remotion video creation" />
 </head>
-<body>
-    <div class="hero">
-        <h1>Remotion Bits</h1>
-        <p>Beautiful, production-ready animation components for Remotion</p>
-        <a href="/docs/getting-started" class="cta-button">Get Started →</a>
-    </div>
+<body class="bg-black text-slate-200 font-sans selection:bg-indigo-500/30 min-h-dvh flex flex-col">
 
-    <div class="features">
-        <h2>Why Remotion Bits?</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <h3>🎨 Beautiful Animations</h3>
-                <p>Pre-built, carefully crafted animation components that make your videos stand out.</p>
-            </div>
-            <div class="feature-card">
-                <h3>⚡ Copy & Paste</h3>
-                <p>Simple API with TypeScript support. Just import and use, or customize to your needs.</p>
-            </div>
-            <div class="feature-card">
-                <h3>📦 Production Ready</h3>
-                <p>Fully tested components with comprehensive documentation and live examples.</p>
-            </div>
-            <div class="feature-card">
-                <h3>🎯 Type Safe</h3>
-                <p>Built with TypeScript from the ground up with complete type definitions.</p>
-            </div>
-            <div class="feature-card">
-                <h3>🚀 Performant</h3>
-                <p>Optimized for Remotion's rendering pipeline with smooth 60fps animations.</p>
-            </div>
-            <div class="feature-card">
-                <h3>🔧 Customizable</h3>
-                <p>Flexible props and utilities to adapt components to your exact requirements.</p>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 w-full border-b border-white/5 bg-black/50 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-6 h-16">
+            <a href="/" class="text-lg font-bold tracking-tight text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <div class="size-6 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-md flex items-center justify-center border border-white/10 shadow-inner">
+                    <div class="size-2 bg-white rounded-full"></div>
+                </div>
+                Remotion Bits
+            </a>
+            <div class="flex items-center gap-6 text-sm font-medium">
+                <a href="/docs/getting-started" class="hover:text-white transition-colors">Documentation</a>
+                <a href="https://github.com/everlier/remotion-bits" target="_blank" class="hover:text-white transition-colors">GitHub</a>
             </div>
         </div>
+    </nav>
 
-        <div class="code-snippet">
-<pre>import &#123; TextTransition &#125; from 'remotion-bits';
+    <main class="flex-1">
+        <!-- Hero Section -->
+        <section class="relative pt-20 pb-20 lg:pt-32 lg:pb-32 overflow-hidden">
+             <!-- Background Grid Effect -->
+             <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+             <div class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black to-transparent pointer-events-none"></div>
+             <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
 
-export const MyComponent = () => (
-  &lt;TextTransition
-    transition=&#123;&#123;
-      opacity: [0, 1],
-      y: [50, 0],
-      split: "word",
-      splitStagger: 3
-    &#125;&#125;
-  &gt;
-    Hello Remotion!
-  &lt;/TextTransition&gt;
-);</pre>
+             <div class="relative max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+                 <div class="space-y-8 max-w-2xl">
+                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-medium">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                        </span>
+                        Library Updated
+                     </div>
+
+                     <h1 class="text-5xl lg:text-7xl font-bold tracking-tight text-white text-balance leading-[1.1]">
+                         Motion primitives for <span class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Remotion</span>.
+                     </h1>
+                     
+                     <p class="text-lg text-slate-400 max-w-xl text-pretty leading-relaxed">
+                         Beautiful, type-safe, and copy-pasteable components for your next programmed video. Built on top of Remotion for maximum precision and performance.
+                     </p>
+
+                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                         <a href="/docs/getting-started" class="h-12 px-6 rounded-lg bg-white text-black font-semibold flex items-center gap-2 hover:bg-indigo-50 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                             Get Started
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>
+                         </a>
+                         <div class="h-12 px-4 rounded-lg border border-white/10 bg-white/5 flex items-center gap-3 text-sm font-mono text-slate-400 hover:bg-white/10 transition-colors cursor-text group select-all">
+                             <span class="text-indigo-400 select-none">$</span>
+                             <span className="selection:bg-white/20">npx jsrepo add remotion-bits</span>
+                             
+                         </div>
+                     </div>
+                 </div>
+
+                 <div class="relative group w-full">
+                     <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-2xl opacity-20 group-hover:opacity-30 blur-2xl transition duration-1000"></div>
+                     <div class="relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-slate-900/50 backdrop-blur-sm shadow-2xl">
+                         <ShowcasePlayer client:load component={HeroShowcase} duration={300} controls={false} autoPlay loop />
+                     </div>
+                 </div>
+             </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section id="components" class="py-24 border-t border-white/5 bg-slate-950">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="mb-16">
+                    <h2 class="text-3xl font-bold text-white mb-4">The Workbench</h2>
+                    <p class="text-slate-400 max-w-2xl">
+                        A curated collection of reliable, performant components. Designed to help you ship higher quality videos, faster.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <a href="/docs/components/text-transition" class="block p-8 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-all group hover:border-indigo-500/30">
+                        <div class="size-12 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform duration-300 border border-indigo-500/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-indigo-300 transition-colors">Text Transitions</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Staggered, split-text animations with fine-grained control over characters, words, and lines. Supports custom easings.
+                        </p>
+                    </a>
+
+                    <a href="/docs/components/background-transition" class="block p-8 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-all group hover:border-purple-500/30">
+                        <div class="size-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition-transform duration-300 border border-purple-500/20">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-purple-300 transition-colors">Background Effects</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Performant gradient interpolations, noise textures, and animated patterns that run smoothly at 60fps.
+                        </p>
+                    </a>
+
+                    <a href="/docs/getting-started" class="block p-8 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-all group hover:border-cyan-500/30">
+                        <div class="size-12 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 mb-6 group-hover:scale-110 transition-transform duration-300 border border-cyan-500/20">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polyline points="4 17 10 11"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors">Developer Experience</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Fully typed, accessible props, and sensible defaults. Installed via CLI so you own the code.
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/5 py-12 bg-black">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p class="text-sm text-slate-600">
+                Built for the Remotion community. Licensed under MIT.
+            </p>
+            <div class="flex items-center gap-8 text-sm text-slate-500 font-medium">
+                <a href="/docs/getting-started" class="hover:text-white transition-colors">Documentation</a>
+                <a href="https://github.com/everlier/remotion-bits" class="hover:text-white transition-colors">GitHub</a>
+            </div>
         </div>
-    </div>
-
-    <footer>
-        <p>Built with ❤️ for the Remotion community</p>
-        <p style="margin-top: 0.5rem; opacity: 0.8;">
-            <a href="/docs/getting-started">Documentation</a> |
-            <a href="https://github.com/yourusername/remotion-bits">GitHub</a>
-        </p>
     </footer>
 </body>
 </html>

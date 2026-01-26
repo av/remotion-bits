@@ -5,6 +5,9 @@ import {
   TextTransitionShowcase,
   BackgroundTransitionShowcase,
   MotionTransitionShowcase,
+  ParticlesSnowShowcase,
+  ParticlesFountainShowcase,
+  ParticlesGridShowcase,
 } from "./showcases";
 import {
   FadeInShowcase,
@@ -62,6 +65,34 @@ export const RemotionRoot: React.FC = () => {
         id="MotionTransition"
         component={MotionTransitionShowcase}
         durationInFrames={690}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      {/* Individual Particles Examples */}
+      <Composition
+        id="Particles-Snow"
+        component={ParticlesSnowShowcase}
+        durationInFrames={240}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="Particles-Fountain"
+        component={ParticlesFountainShowcase}
+        durationInFrames={120}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="Particles-Grid"
+        component={ParticlesGridShowcase}
+        durationInFrames={180}
         fps={30}
         width={1920}
         height={1080}

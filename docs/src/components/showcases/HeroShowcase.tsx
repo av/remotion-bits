@@ -1,0 +1,50 @@
+import React from 'react';
+import { AbsoluteFill } from 'remotion';
+import { TextTransition, BackgroundTransition } from 'remotion-bits';
+import { Center } from './Center';
+
+export const HeroShowcase: React.FC = () => {
+    return (
+        <AbsoluteFill>
+            <BackgroundTransition
+                gradient={[
+                    "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
+                    "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
+                    "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
+                ]}
+                duration={300}
+                loop
+            >
+                <Center>
+                     <TextTransition
+                        transition={{
+                            opacity: [0, 1, 0],
+                            y: [40, 0, -40],
+                            scale: [0.9, 1, 1],
+                            frames: [0, 50, 80],
+                            cycle: {
+                                texts: [
+                                    "Production Ready",
+                                    "Type Safe",
+                                    "Copy & Paste", 
+                                    "Remotion Bits"
+                                ],
+                                itemDuration: 90
+                            }
+                        }}
+                        style={{
+                            fontSize: '6rem',
+                            fontWeight: 800,
+                            color: 'white',
+                            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                            textAlign: 'center',
+                            letterSpacing: '-0.02em',
+                            textShadow: '0 10px 30px rgba(0,0,0,0.5)'
+                        }}
+                    >
+                    </TextTransition>
+                </Center>
+            </BackgroundTransition>
+        </AbsoluteFill>
+    );
+};

@@ -4,12 +4,26 @@ import starlight from '@astrojs/starlight';
 
 import react from '@astrojs/react';
 
+import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 // https://astro.build/config
 export default defineConfig({
     vite: {
-        ssr: {
-            noExternal: ['remotion', '@remotion/player'],
-        },
+      resolve: {
+        dedupe: ['react', 'react-dom', 'remotion', '@remotion/player', 'remotion-bits'],
+      },
+      ssr: {
+          noExternal: ['remotion', '@remotion/player', 'remotion-bits'],
+      },
+      optimizeDeps: {
+        include: ['react', 'react-dom', 'remotion', '@remotion/player', 'remotion-bits'],
+      },
+
+      plugins: [tailwindcss()],
     },
     integrations: [
         react(),

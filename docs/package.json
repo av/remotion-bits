@@ -13,12 +13,16 @@
     "@astrojs/react": "^4.4.2",
     "@astrojs/starlight": "^0.37.4",
     "@remotion/player": "^4.0.409",
+    "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "astro": "^5.6.1",
+    "clsx": "^2.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "remotion": "^4.0.409",
-    "sharp": "^0.34.2"
+    "sharp": "^0.34.2",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.18"
   }
 }
