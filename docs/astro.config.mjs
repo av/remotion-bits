@@ -6,7 +6,6 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-    base: '/docs',
     vite: {
         ssr: {
             noExternal: ['remotion', '@remotion/player'],
@@ -17,6 +16,7 @@ export default defineConfig({
         starlight({
             title: 'Remotion Bits',
             description: 'Beautiful animation components for Remotion',
+            disable404Route: true,
             social: [
                 {
                     icon: 'github',
@@ -28,32 +28,32 @@ export default defineConfig({
                 {
                     label: 'Getting Started',
                     items: [
-                        { label: 'Introduction', slug: 'getting-started' },
-                        { label: 'Installation', slug: 'installation' },
+                        { label: 'Introduction', link: '/docs/getting-started' },
+                        { label: 'Installation', link: '/docs/installation' },
                     ],
                 },
                 {
                     label: 'Components',
                     items: [
-                        { label: 'TextTransition', slug: 'components/text-transition' },
-                        { label: 'BackgroundTransition', slug: 'components/background-transition' },
-                        { label: 'MotionTransition', slug: 'components/motion-transition' },
+                        { label: 'TextTransition', link: '/docs/components/text-transition' },
+                        { label: 'BackgroundTransition', link: '/docs/components/background-transition' },
+                        { label: 'MotionTransition', link: '/docs/components/motion-transition' },
                     ],
                 },
                 {
                     label: 'Utilities',
                     items: [
-                        { label: 'Interpolate', slug: 'utilities/interpolate' },
-                        { label: 'Easing Functions', slug: 'utilities/easing' },
-                        { label: 'Color Utilities', slug: 'utilities/colors' },
-                        { label: 'Gradient Utilities', slug: 'utilities/gradients' },
+                        { label: 'Interpolate', link: '/docs/utilities/interpolate' },
+                        { label: 'Easing Functions', link: '/docs/utilities/easing' },
+                        { label: 'Color Utilities', link: '/docs/utilities/colors' },
+                        { label: 'Gradient Utilities', link: '/docs/utilities/gradients' },
                     ],
                 },
                 {
                     label: 'Examples',
                     items: [
-                        { label: 'Text Animations', slug: 'examples/text-animations' },
-                        { label: 'Background Effects', slug: 'examples/background-effects' },
+                        { label: 'Text Animations', link: '/docs/examples/text-animations' },
+                        { label: 'Background Effects', link: '/docs/examples/background-effects' },
                     ],
                 },
             ],

@@ -51,7 +51,7 @@ export const MyComponent = () => (
 
 Simple fade-in animation from transparent to opaque.
 
-<ShowcasePlayer client:visible component={FadeInShowcase} duration={60} />
+<ShowcasePlayer client:only="react" component={FadeInShowcase} duration={60} />
 
 ```tsx
 <TextTransition transition={{ opacity: [0, 1] }}>
@@ -63,7 +63,7 @@ Simple fade-in animation from transparent to opaque.
 
 Combine opacity and position for a smooth slide-in effect.
 
-<ShowcasePlayer client:visible component={SlideFromLeftShowcase} duration={60} />
+<ShowcasePlayer client:only="react" component={SlideFromLeftShowcase} duration={60} />
 
 ```tsx
 <TextTransition
@@ -81,7 +81,7 @@ Combine opacity and position for a smooth slide-in effect.
 
 Animate text word by word with staggered timing.
 
-<ShowcasePlayer client:visible component={WordByWordShowcase} duration={60} />
+<ShowcasePlayer client:only="react" component={WordByWordShowcase} duration={60} />
 
 ```tsx
 <TextTransition
@@ -101,7 +101,7 @@ Animate text word by word with staggered timing.
 
 Animate color changes on a per-character basis.
 
-<ShowcasePlayer client:visible component={CharacterColorShowcase} duration={60} />
+<ShowcasePlayer client:only="react" component={CharacterColorShowcase} duration={60} />
 
 ```tsx
 <TextTransition
@@ -121,7 +121,7 @@ Animate color changes on a per-character basis.
 
 Combine multiple properties for rich animations.
 
-<ShowcasePlayer client:visible component={ComplexAnimationShowcase} duration={90} />
+<ShowcasePlayer client:only="react" component={ComplexAnimationShowcase} duration={90} />
 
 ```tsx
 <TextTransition
@@ -145,7 +145,7 @@ Combine multiple properties for rich animations.
 
 Animate multi-line text one line at a time.
 
-<ShowcasePlayer client:visible component={LineByLineShowcase} duration={60} />
+<ShowcasePlayer client:only="react" component={LineByLineShowcase} duration={60} />
 
 ```tsx
 <TextTransition
