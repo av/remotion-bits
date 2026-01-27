@@ -116,7 +116,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
   const ActiveComponent: React.FC = () => (
     <AbsoluteFill style={{
       backgroundColor: '#000000',
-      fontSize: "2rem",
+      fontSize: "6rem",
       fontWeight: 700,
       color: "#ffffff",
       display: 'flex',
@@ -137,19 +137,27 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
 
   return (
     <div className="bit-playground not-content">
-      <div className="bit-playground-header">
-        <h3 className="bit-playground-title">Interactive Playground</h3>
-        <button
-          className="bit-playground-action-btn"
-          onClick={handleReset}
-          type="button"
-          title="Reset to original code"
-        >
-          ↺ Reset
-        </button>
-      </div>
-
       <div className="bit-playground-content">
+        <div className="bit-playground-preview-section">
+          <div className="bit-playground-preview">
+            <div
+              className="bit-playground-player-container"
+            >
+              <ShowcasePlayer
+                component={ActiveComponent}
+                duration={duration}
+                width={width}
+                height={height}
+                fps={30}
+                controls={true}
+                loop={true}
+                autoPlay={false}
+                autoResize={true}
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="bit-playground-code-section">
           {compileError && (
             <div className="bit-playground-error">
@@ -158,7 +166,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           )}
           <CodeMirror
             value={editedCode}
-            height="500px"
+            height="200px"
             theme={oneDark}
             extensions={[javascript({ jsx: true, typescript: true })]}
             onChange={handleCodeChange}
@@ -185,26 +193,15 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
               lintKeymap: true,
             }}
           />
-        </div>
 
-        <div className="bit-playground-preview-section">
-          <div className="bit-playground-preview">
-            <div
-              className="bit-playground-player-container"
-            >
-              <ShowcasePlayer
-                component={ActiveComponent}
-                duration={duration}
-                width={width}
-                height={height}
-                fps={30}
-                controls={true}
-                loop={true}
-                autoPlay={false}
-                autoResize={true}
-              />
-            </div>
-          </div>
+          <button
+            className="bit-playground-action-btn"
+            onClick={handleReset}
+            type="button"
+            title="Reset to original code"
+          >
+            ↺
+          </button>
         </div>
       </div>
 
@@ -242,6 +239,9 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
         }
 
         .bit-playground-action-btn {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
           padding: 0.5rem 1rem;
           background: var(--sl-color-gray-5);
           border: 1px solid var(--sl-color-gray-4);
@@ -265,13 +265,14 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
 
         .bit-playground-content {
           display: grid;
-          grid-template-columns: 3fr 7fr;
+          grid-template-rows: 3fr 1fr;
           gap: 0;
           background: var(--sl-color-bg);
         }
 
         .bit-playground-code-section,
         .bit-playground-preview-section {
+          position: relative;
           display: flex;
           flex-direction: column;
           height: 100%;
@@ -335,7 +336,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           justify-content: center;
           align-items: center;
           background: var(--sl-color-black);
-          min-height: 500px;
+          min-height: 200px;
           flex: 1;
           overflow: hidden;
           width: 100%;
@@ -386,7 +387,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
 
           .bit-playground-preview {
             padding: 0;
-            min-height: 300px;
+            min-height: 100px;
           }
 
           .bit-playground-metadata {

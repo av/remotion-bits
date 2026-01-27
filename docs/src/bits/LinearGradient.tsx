@@ -18,7 +18,6 @@ export const Component: React.FC = () => (
     ]}
     duration={90}
   >
-    <div>Linear Gradient Transition</div>
   </BackgroundTransition>
 );
 
@@ -29,5 +28,4 @@ export const sourceCode = `<BackgroundTransition
   ]}
   duration={90}
 >
-  <div>Linear Gradient Transition</div>
 </BackgroundTransition>`;

@@ -31,6 +31,7 @@
     "remotion-bits": "file:../",
     "sharp": "^0.34.2",
     "starlight-theme-black": "^0.6.0",
+    "starlight-theme-flexoki": "^0.2.2",
     "sucrase": "^3.35.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18"

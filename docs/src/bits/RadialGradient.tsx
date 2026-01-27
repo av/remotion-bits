@@ -18,9 +18,6 @@ export const Component: React.FC = () => (
     ]}
     duration={90}
   >
-    <div style={{ color: '#fff' }}>
-      Radial Gradient Transition
-    </div>
   </BackgroundTransition>
 );
 
@@ -31,7 +28,4 @@ export const sourceCode = `<BackgroundTransition
   ]}
   duration={90}
 >
-  <div style={{ color: '#fff' }}>
-    Radial Gradient Transition
-  </div>
 </BackgroundTransition>`;

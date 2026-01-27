@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import starlightThemeBlack from 'starlight-theme-black';
+import startlightThemeFlexoki from 'starlight-theme-flexoki';
 
 import react from '@astrojs/react';
 
@@ -36,17 +36,13 @@ export default defineConfig({
     integrations: [
         react(),
         starlight({
-            plugins: [starlightThemeBlack({
-                footerText: `Remotion Bits / ${new Date().getFullYear()}`,
-                navLinks: [
-                    {
-                        label: 'GitHub',
-                        link: 'https://github.com/av/remotion-bits',
-                    }
-                ]
-            })],
+            plugins: [
+                startlightThemeFlexoki({
+                    accentColor: 'orange',
+                })
+            ],
             title: 'Remotion Bits',
-            description: 'Beautiful animation components for Remotion',
+            description: 'Building blocks for your Remotion videos.',
             disable404Route: true,
             social: [
                 {
@@ -61,7 +57,7 @@ export default defineConfig({
                     link: '/docs/getting-started',
                 },
                 {
-                    label: 'Bits Catalog',
+                    label: 'Bits',
                     items: [
                         { label: 'Introduction', link: '/docs/bits-catalog' },
                         {
@@ -83,7 +79,7 @@ export default defineConfig({
                     ],
                 },
             ],
-            customCss: ['./src/styles/custom.css'],
+            // customCss: ['./src/styles/custom.css'],
         }),
     ],
 });
