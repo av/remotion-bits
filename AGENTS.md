@@ -19,11 +19,19 @@ When fixing bugs or errors, ALWAYS follow this process:
 4. **Verify assumptions** - Test that your understanding is correct by checking actual outputs, not assumed outputs
 5. **Make comprehensive fixes** - Address all aspects of the problem in one proper solution, not incremental patches
 
+**Observing runtime behavior when dev server is already running:**
+- Check browser console via Simple Browser tool or ask user for console output
+- Examine log files if they exist
+- Use `ps aux | grep node` to check running processes (don't start new ones)
+- NEVER try to run `npm run dev` or start services that are already running
+- NEVER execute commands that would conflict with existing processes
+
 NEVER:
 - Make assumption-based fixes without observing actual behavior
 - Apply surface-level regex/string fixes without understanding what data they process
 - Guess at solutions and iterate blindly
 - Fix one aspect while ignoring related issues in the same system
+- Try to start servers or services that the user is already running
 
 ### Coding guidelines
 
@@ -46,9 +54,16 @@ You're not allowed to create markdown files with outline of what you did. You'll
 
 ### Development
 
-You can only run a single command at a time in foreground. User already runs the dev server for docs, you don't need to run it again.
-Use Playwright MCP or "Simple Browser" tool to validate your changes in the docs site.
-When changing docs contents, you must update astro.config.mjs to reflect the changes in the sidebar or other relevant places.
+**Critical constraints:**
+- You can only run ONE foreground command at a time
+- The dev server for docs is ALREADY RUNNING - never run `npm run dev`, `npm start`, or any server commands
+- Running `npm run dev` will cause port conflicts and fail
+- To observe runtime behavior, use Simple Browser tool or ask user for console output
+
+**Workflow:**
+- Use Playwright MCP or "Simple Browser" tool to validate your changes in the docs site
+- When changing docs contents, you must update astro.config.mjs to reflect the changes in the sidebar or other relevant places
+- For runtime errors, check browser console via Simple Browser or request output from user
 
 ### Additional context
 

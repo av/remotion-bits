@@ -1,5 +1,4 @@
 import React from "react";
-import { AbsoluteFill } from "remotion";
 import { BackgroundTransition } from "remotion-bits";
 
 export const metadata = {
@@ -11,37 +10,7 @@ export const metadata = {
   height: 1080,
 };
 
-const textStyle = {
-  fontSize: "6rem",
-  fontWeight: 700,
-  color: "#ffffff",
-  fontFamily: "Inter, ui-sans-serif, system-ui",
-  textAlign: "center" as const,
-  textShadow: "0 4px 12px rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "4rem",
-  height: "100%",
-};
-
 export const Component: React.FC = () => (
-  <BackgroundTransition
-    gradient={[
-      "linear-gradient(0deg, #667eea 0%, #764ba2 100%)",
-      "linear-gradient(180deg, #f093fb 0%, #f5576c 100%)",
-    ]}
-    duration={90}
-  >
-    <div style={textStyle}>
-      Linear Gradient Transition
-    </div>
-  </BackgroundTransition>
-);
-
-export const sourceCode = `import { BackgroundTransition } from 'remotion-bits';
-
-export const LinearGradient = () => (
   <BackgroundTransition
     gradient={[
       "linear-gradient(0deg, #667eea 0%, #764ba2 100%)",
@@ -51,4 +20,14 @@ export const LinearGradient = () => (
   >
     <div>Linear Gradient Transition</div>
   </BackgroundTransition>
-);`;
+);
+
+export const sourceCode = `<BackgroundTransition
+  gradient={[
+    "linear-gradient(0deg, #667eea 0%, #764ba2 100%)",
+    "linear-gradient(180deg, #f093fb 0%, #f5576c 100%)",
+  ]}
+  duration={90}
+>
+  <div>Linear Gradient Transition</div>
+</BackgroundTransition>`;
