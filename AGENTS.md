@@ -30,6 +30,7 @@ You're not allowed to create markdown files with outline of what you did. You'll
 
 You can only run a single command at a time in foreground. User already runs the dev server for docs, you don't need to run it again.
 Use Playwright MCP or "Simple Browser" tool to validate your changes in the docs site.
+When changing docs contents, you must update astro.config.mjs to reflect the changes in the sidebar or other relevant places.
 
 ### Additional context
 

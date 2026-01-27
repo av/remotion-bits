@@ -1,5 +1,9 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Player } from '@remotion/player';
+import CodeMirror from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
+import { oneDark } from '@codemirror/theme-one-dark';
+import { transform } from 'sucrase';
 import type { Bit } from '../bits';
 
 interface BitPlaygroundProps {
@@ -11,30 +15,62 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
   bit,
   defaultTab = 'preview'
 }) => {
-  const [activeTab, setActiveTab] = useState<'preview' | 'code'>(defaultTab);
   const [editedCode, setEditedCode] = useState(bit.sourceCode);
-  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [CompiledComponent, setCompiledComponent] = useState<React.FC | null>(null);
 
-  const { Component } = bit;
+  const { Component: OriginalComponent } = bit;
   const { duration, width = 1920, height = 1080 } = bit.metadata;
 
-  // Use edited code if editing, otherwise use original
-  const displayCode = isEditing ? editedCode : bit.sourceCode;
+  // Choose which component to display
+  const DisplayComponent = CompiledComponent || OriginalComponent;
 
-  const handleCodeChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditedCode(e.target.value);
-    setError(null);
-  }, []);
+  // Compile the code whenever it changes
+  useEffect(() => {
+    const compileCode = async () => {
+      try {
+        // Transform TypeScript/JSX to JavaScript
+        const result = transform(editedCode, {
+          transforms: ['typescript', 'jsx'],
+          production: false,
+        });
 
-  const handleEditToggle = useCallback(() => {
-    if (isEditing) {
-      // Reset to original when disabling edit mode
-      setEditedCode(bit.sourceCode);
+        // Create a function that returns the component
+        // We need to provide React and remotion imports
+        const componentFactory = new Function(
+          'React',
+          'remotion',
+          `
+          const { useCurrentFrame, interpolate, spring, Easing, AbsoluteFill } = remotion;
+          ${result.code}
+          return Component;
+          `
+        );
+
+        // Import remotion dynamically
+        const remotion = await import('remotion');
+        const NewComponent = componentFactory(React, remotion);
+
+        setCompiledComponent(() => NewComponent);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to compile code');
+        setCompiledComponent(null);
+      }
+    };
+
+    // Only compile if the code has changed from the original
+    if (editedCode !== bit.sourceCode) {
+      compileCode();
+    } else {
+      setCompiledComponent(null);
       setError(null);
     }
-    setIsEditing(!isEditing);
-  }, [isEditing, bit.sourceCode]);
+  }, [editedCode, bit.sourceCode]);
+
+  const handleCodeChange = useCallback((value: string) => {
+    setEditedCode(value);
+  }, []);
 
   const handleReset = useCallback(() => {
     setEditedCode(bit.sourceCode);
@@ -43,50 +79,67 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
 
   return (
     <div className="bit-playground">
-      <div className="bit-playground-tabs">
+      <div className="bit-playground-header">
+        <h3 className="bit-playground-title">Interactive Playground</h3>
         <button
-          className={`bit-playground-tab ${activeTab === 'preview' ? 'active' : ''}`}
-          onClick={() => setActiveTab('preview')}
+          className="bit-playground-action-btn"
+          onClick={handleReset}
           type="button"
+          title="Reset to original code"
         >
-          Preview
+          ↺ Reset
         </button>
-        <button
-          className={`bit-playground-tab ${activeTab === 'code' ? 'active' : ''}`}
-          onClick={() => setActiveTab('code')}
-          type="button"
-        >
-          Code
-        </button>
-        {activeTab === 'code' && (
-          <div className="bit-playground-tab-actions">
-            <button
-              className="bit-playground-action-btn"
-              onClick={handleEditToggle}
-              type="button"
-              title={isEditing ? "Disable editing" : "Enable editing"}
-            >
-              {isEditing ? '🔒 Lock' : '✏️ Edit'}
-            </button>
-            {isEditing && (
-              <button
-                className="bit-playground-action-btn"
-                onClick={handleReset}
-                type="button"
-                title="Reset to original code"
-              >
-                ↺ Reset
-              </button>
-            )}
-          </div>
-        )}
       </div>
 
       <div className="bit-playground-content">
-        {activeTab === 'preview' ? (
+        <div className="bit-playground-code-section">
+          <div className="bit-playground-code-header">
+            <span>Code Editor</span>
+          </div>
+          {error && (
+            <div className="bit-playground-error">
+              <strong>⚠️ Compilation Error:</strong>
+              <pre>{error}</pre>
+            </div>
+          )}
+          <CodeMirror
+            value={editedCode}
+            height="500px"
+            theme={oneDark}
+            extensions={[javascript({ jsx: true, typescript: true })]}
+            onChange={handleCodeChange}
+            basicSetup={{
+              lineNumbers: true,
+              highlightActiveLineGutter: true,
+              highlightSpecialChars: true,
+              foldGutter: true,
+              drawSelection: true,
+              dropCursor: true,
+              allowMultipleSelections: true,
+              indentOnInput: true,
+              bracketMatching: true,
+              closeBrackets: true,
+              autocompletion: true,
+              rectangularSelection: true,
+              crosshairCursor: true,
+              highlightActiveLine: true,
+              highlightSelectionMatches: true,
+              closeBracketsKeymap: true,
+              searchKeymap: true,
+              foldKeymap: true,
+              completionKeymap: true,
+              lintKeymap: true,
+            }}
+          />
+        </div>
+
+        <div className="bit-playground-preview-section">
+          <div className="bit-playground-preview-header">
+            <span>Live Preview</span>
+          </div>
           <div className="bit-playground-preview">
             <Player
-              component={Component}
+              component={DisplayComponent}
               durationInFrames={duration}
               compositionWidth={width}
               compositionHeight={height}
@@ -99,35 +152,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
               loop
             />
           </div>
-        ) : (
-          <div className="bit-playground-code">
-            {isEditing ? (
-              <>
-                {error && (
-                  <div className="bit-playground-error">
-                    {error}
-                  </div>
-                )}
-                <textarea
-                  className="bit-playground-editor"
-                  value={editedCode}
-                  onChange={handleCodeChange}
-                  spellCheck={false}
-                  autoComplete="off"
-                  autoCorrect="off"
-                  autoCapitalize="off"
-                />
-                <div className="bit-playground-hint">
-                  💡 Note: Live preview updates are not yet implemented. This is a code editor preview.
-                </div>
-              </>
-            ) : (
-              <pre className="astro-code" style={{ padding: '1rem', borderRadius: '0.5rem' }}>
-                <code>{displayCode}</code>
-              </pre>
-            )}
-          </div>
-        )}
+        </div>
       </div>
 
       <div className="bit-playground-metadata">
@@ -147,52 +172,30 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           margin: 2rem 0;
         }
 
-        .bit-playground-tabs {
+        .bit-playground-header {
           display: flex;
-          gap: 0;
-          border-bottom: 1px solid var(--sl-color-gray-5);
-          background: var(--sl-color-gray-6);
+          justify-content: space-between;
           align-items: center;
+          padding: 1rem 1.5rem;
+          background: var(--sl-color-gray-6);
+          border-bottom: 1px solid var(--sl-color-gray-5);
         }
 
-        .bit-playground-tab {
-          padding: 0.75rem 1.5rem;
-          background: transparent;
-          border: none;
-          color: var(--sl-color-gray-2);
-          cursor: pointer;
-          font-size: 0.875rem;
-          font-weight: 500;
-          transition: all 0.2s;
-          border-bottom: 2px solid transparent;
-        }
-
-        .bit-playground-tab:hover {
-          background: var(--sl-color-gray-5);
+        .bit-playground-title {
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 600;
           color: var(--sl-color-white);
-        }
-
-        .bit-playground-tab.active {
-          background: var(--sl-color-bg);
-          color: var(--sl-color-white);
-          border-bottom-color: var(--sl-color-accent);
-        }
-
-        .bit-playground-tab-actions {
-          margin-left: auto;
-          padding: 0.5rem 1rem;
-          display: flex;
-          gap: 0.5rem;
         }
 
         .bit-playground-action-btn {
-          padding: 0.375rem 0.75rem;
+          padding: 0.5rem 1rem;
           background: var(--sl-color-gray-5);
           border: 1px solid var(--sl-color-gray-4);
           border-radius: 0.25rem;
           color: var(--sl-color-white);
           cursor: pointer;
-          font-size: 0.75rem;
+          font-size: 0.875rem;
           font-weight: 500;
           transition: all 0.2s;
         }
@@ -203,7 +206,51 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
         }
 
         .bit-playground-content {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0;
           background: var(--sl-color-bg);
+        }
+
+        .bit-playground-code-section,
+        .bit-playground-preview-section {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .bit-playground-code-section {
+          border-right: 1px solid var(--sl-color-gray-5);
+        }
+
+        .bit-playground-code-header,
+        .bit-playground-preview-header {
+          padding: 0.75rem 1rem;
+          background: var(--sl-color-gray-6);
+          border-bottom: 1px solid var(--sl-color-gray-5);
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: var(--sl-color-gray-2);
+        }
+
+        .bit-playground-error {
+          padding: 1rem;
+          background: rgba(239, 68, 68, 0.1);
+          border-bottom: 2px solid rgb(239, 68, 68);
+          color: rgb(252, 165, 165);
+          font-size: 0.875rem;
+        }
+
+        .bit-playground-error strong {
+          display: block;
+          margin-bottom: 0.5rem;
+        }
+
+        .bit-playground-error pre {
+          margin: 0;
+          white-space: pre-wrap;
+          word-break: break-word;
+          font-family: monospace;
+          font-size: 0.8rem;
         }
 
         .bit-playground-preview {
@@ -212,51 +259,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           justify-content: center;
           align-items: center;
           background: var(--sl-color-black);
-        }
-
-        .bit-playground-code {
-          padding: 0;
-          position: relative;
-        }
-
-        .bit-playground-code pre {
-          margin: 0;
-          background: var(--sl-color-gray-6) !important;
-        }
-
-        .bit-playground-editor {
-          width: 100%;
-          min-height: 300px;
-          padding: 1rem;
-          background: var(--sl-color-gray-6);
-          border: none;
-          color: var(--sl-color-white);
-          font-family: 'Courier New', monospace;
-          font-size: 0.875rem;
-          line-height: 1.5;
-          resize: vertical;
-          outline: none;
-        }
-
-        .bit-playground-editor:focus {
-          background: var(--sl-color-gray-5);
-        }
-
-        .bit-playground-error {
-          padding: 0.75rem 1rem;
-          background: rgba(239, 68, 68, 0.1);
-          border-left: 3px solid rgb(239, 68, 68);
-          color: rgb(252, 165, 165);
-          font-size: 0.875rem;
-          font-family: monospace;
-        }
-
-        .bit-playground-hint {
-          padding: 0.75rem 1rem;
-          background: rgba(59, 130, 246, 0.1);
-          border-left: 3px solid rgb(59, 130, 246);
-          color: rgb(147, 197, 253);
-          font-size: 0.875rem;
+          min-height: 500px;
         }
 
         .bit-playground-metadata {
@@ -278,24 +281,35 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           margin-right: 0.5rem;
         }
 
-        @media (max-width: 768px) {
+        /* Responsive: Stack vertically on mobile */
+        @media (max-width: 1024px) {
+          .bit-playground-content {
+            grid-template-columns: 1fr;
+          }
+
+          .bit-playground-code-section {
+            border-right: none;
+            border-bottom: 1px solid var(--sl-color-gray-5);
+          }
+
           .bit-playground-preview {
             padding: 1rem;
+            min-height: 300px;
           }
 
           .bit-playground-metadata {
             flex-direction: column;
             gap: 0.5rem;
           }
+        }
 
-          .bit-playground-tab-actions {
-            padding: 0.25rem 0.5rem;
-          }
+        /* Override CodeMirror styles to fit our theme */
+        .bit-playground-code-section .cm-editor {
+          font-size: 0.875rem;
+        }
 
-          .bit-playground-action-btn {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.7rem;
-          }
+        .bit-playground-code-section .cm-scroller {
+          font-family: 'Courier New', 'Consolas', monospace;
         }
       `}</style>
     </div>
