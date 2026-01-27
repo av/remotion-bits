@@ -1,6 +1,5 @@
 import React from 'react';
-import { AbsoluteFill } from 'remotion';
-import { ShowcasePlayer } from '../ShowcasePlayer';
+import { ShowcasePlayer, withShowcaseFill } from '../ShowcasePlayer';
 import { bits } from '../../bits';
 
 // Helper to get slug from bit name (assuming kebab-case file names in content/docs/bits)
@@ -26,19 +25,7 @@ export const HeroShowcase: React.FC = () => {
                     >
                         <div className="absolute inset-0 pointer-events-none">
                             <ShowcasePlayer
-                                component={
-                                    () => <AbsoluteFill style={{
-                                        backgroundColor: '#000000',
-                                        fontSize: "30px",
-                                        fontWeight: 700,
-                                        color: "#ffffff",
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        <module.Component />
-                                    </AbsoluteFill>
-                                }
+                                component={withShowcaseFill(module.Component)}
                                 duration={module.metadata.duration}
                                 width={module.metadata.width ?? 1920}
                                 height={module.metadata.height ?? 1080}

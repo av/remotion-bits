@@ -1,5 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Player } from '@remotion/player';
+import { AbsoluteFill, useVideoConfig } from 'remotion';
+
+interface ShowcaseFillOptions {
+  backgroundColor?: string;
+  color?: string;
+  fontWeight?: number;
+  fontScale?: number;
+  style?: React.CSSProperties;
+}
 
 interface ShowcasePlayerProps {
   component: React.ComponentType;
@@ -13,6 +22,37 @@ interface ShowcasePlayerProps {
   className?: string;
   autoResize?: boolean;
 }
+
+export const withShowcaseFill = (
+  Component: React.ComponentType,
+  options: ShowcaseFillOptions = {}
+): React.FC => {
+  const WrappedComponent: React.FC = () => {
+    const config = useVideoConfig();
+    const fontSize = `${config.width * (options.fontScale ?? 0.05)}px`;
+
+    return (
+      <AbsoluteFill
+        style={{
+          backgroundColor: options.backgroundColor ?? '#000000',
+          fontSize,
+          fontWeight: options.fontWeight ?? 700,
+          color: options.color ?? '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          ...options.style,
+        }}
+      >
+        <Component />
+      </AbsoluteFill>
+    );
+  };
+
+  WrappedComponent.displayName = `ShowcaseFill(${Component.displayName || Component.name || 'Component'})`;
+
+  return WrappedComponent;
+};
 
 export const ShowcasePlayer: React.FC<ShowcasePlayerProps> = ({
   component: Component,

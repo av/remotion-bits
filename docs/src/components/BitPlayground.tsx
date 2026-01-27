@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { AbsoluteFill } from 'remotion';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { getBit, type BitName } from '../bits';
-import { ShowcasePlayer } from './ShowcasePlayer';
+import { ShowcasePlayer, withShowcaseFill } from './ShowcasePlayer';
 import { transform } from 'sucrase';
 import * as RemotionBits from 'remotion-bits';
 import * as Remotion from 'remotion';
@@ -112,20 +111,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
   // Use the live component if available, otherwise fall back to original
   const BaseComponent = LiveComponent || OriginalComponent;
 
-  // Wrap the component with styling
-  const ActiveComponent: React.FC = () => (
-    <AbsoluteFill style={{
-      backgroundColor: '#000000',
-      fontSize: "6rem",
-      fontWeight: 700,
-      color: "#ffffff",
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
-      <BaseComponent />
-    </AbsoluteFill>
-  );
+  const ActiveComponent = withShowcaseFill(BaseComponent);
 
   const handleCodeChange = useCallback((value: string) => {
     setEditedCode(value);
