@@ -7,7 +7,7 @@ const baseStyle = {
   fontSize: "12rem",
   fontWeight: 700,
   color: "#ffffff",
-  fontFamily: "Inter, ui-sans-serif, system-ui",
+  fontFamily: "Geist Sans, sans-serif",
   textAlign: "center" as const,
 };
 

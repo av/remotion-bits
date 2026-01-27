@@ -116,7 +116,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
   const ActiveComponent: React.FC = () => (
     <AbsoluteFill style={{
       backgroundColor: '#000000',
-      fontSize: "12rem",
+      fontSize: "2rem",
       fontWeight: 700,
       color: "#ffffff",
       display: 'flex',
@@ -191,9 +191,6 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           <div className="bit-playground-preview">
             <div
               className="bit-playground-player-container"
-              style={{
-                aspectRatio: `${width} / ${height}`
-              }}
             >
               <ShowcasePlayer
                 component={ActiveComponent}
@@ -349,7 +346,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           width: 100%;
           max-width: 100%;
           max-height: 100%;
-          height: auto;
+          height: 100%;
         }
 
         .bit-playground-player-container .showcase-player {

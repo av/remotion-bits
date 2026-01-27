@@ -49,7 +49,7 @@ export const ParticlesSnowShowcase = () => {
         <Behavior handler={(p) => { p.velocity.x += 0.01; }} />
       </Particles>
       <Center>
-        <h1 style={{ color: "white", fontFamily: "sans-serif", fontSize: width * 0.16 }}>Snow</h1>
+        <h1 style={{ color: "white", fontFamily: "Geist Sans, sans-serif", fontSize: width * 0.16 }}>Snow</h1>
       </Center>
     </AbsoluteFill>
   );

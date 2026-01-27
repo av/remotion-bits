@@ -56,7 +56,7 @@ export const ShowcasePlayer: React.FC<ShowcasePlayerProps> = ({
     <div
       ref={containerRef}
       className={`showcase-player ${className}`}
-      style={autoResize ? { width: '100%', height: '100%' } : undefined}
+      style={{ width: '100%', height: '100%' }}
     >
       <Player
         component={Component}
@@ -69,8 +69,7 @@ export const ShowcasePlayer: React.FC<ShowcasePlayerProps> = ({
         autoPlay={autoPlay}
         style={{
           width: '100%',
-          height: autoResize ? '100%' : undefined,
-          // aspectRatio: `${width} / ${height}`,
+          height: '100%',
         }}
       />
     </div>

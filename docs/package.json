@@ -16,6 +16,8 @@
     "@codemirror/state": "^6.5.4",
     "@codemirror/theme-one-dark": "^6.1.3",
     "@codemirror/view": "^6.39.11",
+    "@fontsource/geist-mono": "^5.2.7",
+    "@fontsource/geist-sans": "^5.2.5",
     "@remotion/player": "^4.0.409",
     "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^18.3.12",
@@ -28,6 +30,7 @@
     "remotion": "^4.0.409",
     "remotion-bits": "file:../",
     "sharp": "^0.34.2",
+    "starlight-theme-black": "^0.6.0",
     "sucrase": "^3.35.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18"

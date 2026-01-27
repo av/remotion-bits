@@ -38,7 +38,7 @@ export const HeroShowcase: React.FC = () => {
                             fontSize: width * 0.09,
                             fontWeight: 800,
                             color: 'white',
-                            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                            fontFamily: 'Geist Sans, sans-serif',
                             textAlign: 'center',
                             letterSpacing: '-0.02em',
                             textShadow: '0 10px 30px rgba(0,0,0,0.5)',

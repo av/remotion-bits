@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@fontsource/geist-sans";
+@import "@fontsource/geist-mono";
 
 @theme {
   --color-primary: #FF5500;
@@ -8,17 +10,17 @@
   --color-surface-light: #121212;
   --color-border-dark: #222222;
   --color-border-light: #333333;
-  
-  --font-sans: "Inter", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-  
+
+  --font-sans: "Geist Sans", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
 
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
-  
+
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
