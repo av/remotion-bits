@@ -2,7 +2,7 @@ import React from "react";
 import { TextTransition } from "remotion-bits";
 
 export const metadata = {
-  name: "Character by Character",
+  name: "Staggered Char Animation",
   description: "Text that appears character by character with staggered timing",
   tags: ["text", "character", "stagger"],
   duration: 120,
@@ -14,9 +14,11 @@ export const Component: React.FC = () => (
   <TextTransition
     transition={{
       opacity: [0, 1],
-      scale: [0.5, 1],
+      scale: [0.7, 1],
+      y: [15, 0],
+      duration: 10,
       split: "character",
-      splitStagger: 2,
+      splitStagger: 1,
       easing: "easeOutCubic",
     }}
   >
@@ -24,14 +26,4 @@ export const Component: React.FC = () => (
   </TextTransition>
 );
 
-export const sourceCode = `<TextTransition
-  transition={{
-    opacity: [0, 1],
-    scale: [0.5, 1],
-    split: "character",
-    splitStagger: 2,
-    easing: "easeOutCubic",
-  }}
->
-  Character Animation
-</TextTransition>`;
+

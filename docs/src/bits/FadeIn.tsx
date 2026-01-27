@@ -16,6 +16,4 @@ export const Component: React.FC = () => (
   </TextTransition>
 );
 
-export const sourceCode = `<TextTransition transition={{ opacity: [0, 1] }}>
-  Hello World
-</TextTransition>`;
+

@@ -1,6 +1,6 @@
 ---
 import "../styles/custom.css";
-import { HomeShowcase } from "../components/HomeShowcase";
+import { HeroShowcase } from '@/components/showcases/HeroShowcase';
 ---
 
 <!doctype html>
@@ -124,9 +124,7 @@ import { HomeShowcase } from "../components/HomeShowcase";
               >
             </a>
           </div>
-          <div class="w-full max-w-6xl mx-auto perspective-1000">
-            <HomeShowcase client:only="react" />
-          </div>
+          <HeroShowcase client:only="react" />
         </div>
       </section>
       <section class="py-24 relative">

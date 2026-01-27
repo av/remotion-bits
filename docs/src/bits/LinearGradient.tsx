@@ -21,11 +21,4 @@ export const Component: React.FC = () => (
   </BackgroundTransition>
 );
 
-export const sourceCode = `<BackgroundTransition
-  gradient={[
-    "linear-gradient(0deg, #667eea 0%, #764ba2 100%)",
-    "linear-gradient(180deg, #f093fb 0%, #f5576c 100%)",
-  ]}
-  duration={90}
->
-</BackgroundTransition>`;
+

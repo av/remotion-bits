@@ -21,11 +21,4 @@ export const Component: React.FC = () => (
   </BackgroundTransition>
 );
 
-export const sourceCode = `<BackgroundTransition
-  gradient={[
-    "radial-gradient(circle at center, #667eea 0%, #764ba2 100%)",
-    "radial-gradient(circle at top right, #f093fb 0%, #f5576c 100%)",
-  ]}
-  duration={90}
->
-</BackgroundTransition>`;
+

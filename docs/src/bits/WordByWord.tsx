@@ -13,7 +13,7 @@ export const metadata = {
 export const Component: React.FC = () => (
   <TextTransition
     transition={{
-      y: [200, 0],
+      y: [20, 0],
       opacity: [0, 1],
       split: "word",
       splitStagger: 3,
@@ -24,14 +24,4 @@ export const Component: React.FC = () => (
   </TextTransition>
 );
 
-export const sourceCode = `<TextTransition
-  transition={{
-    y: [200, 0],
-    opacity: [0, 1],
-    split: "word",
-    splitStagger: 3,
-    easing: "easeOutQuad",
-  }}
->
-  This appears word by word
-</TextTransition>`;
+

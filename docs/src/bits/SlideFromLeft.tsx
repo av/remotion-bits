@@ -22,12 +22,4 @@ export const Component: React.FC = () => (
   </TextTransition>
 );
 
-export const sourceCode = `<TextTransition
-  transition={{
-    opacity: [0, 1],
-    x: [-400, 0],
-    easing: "easeInOut",
-  }}
->
-  Sliding Text
-</TextTransition>`;
+
