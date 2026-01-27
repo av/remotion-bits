@@ -62,7 +62,25 @@ export default defineConfig({
                 },
                 {
                     label: 'Bits Catalog',
-                    link: '/docs/bits-catalog',
+                    items: [
+                        { label: 'Introduction', link: '/docs/bits-catalog' },
+                        {
+                            label: 'Text Animations',
+                            items: [
+                                { label: 'Fade In', link: '/docs/bits/fade-in' },
+                                { label: 'Slide from Left', link: '/docs/bits/slide-from-left' },
+                                { label: 'Word by Word', link: '/docs/bits/word-by-word' },
+                                { label: 'Character by Character', link: '/docs/bits/char-by-char' },
+                            ]
+                        },
+                        {
+                            label: 'Background Effects',
+                            items: [
+                                { label: 'Linear Gradient', link: '/docs/bits/linear-gradient' },
+                                { label: 'Radial Gradient', link: '/docs/bits/radial-gradient' },
+                            ]
+                        },
+                    ],
                 },
             ],
             customCss: ['./src/styles/custom.css'],

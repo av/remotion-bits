@@ -2,13 +2,6 @@
 title: Bits Catalog
 description: Browse all available animation bits
 ---
-import { BitPlayground } from '@components/BitPlayground';
-import * as FadeInBit from '@bits/FadeIn';
-import * as WordByWordBit from '@bits/WordByWord';
-import * as SlideFromLeftBit from '@bits/SlideFromLeft';
-import * as CharByCharBit from '@bits/CharByChar';
-import * as LinearGradientBit from '@bits/LinearGradient';
-import * as RadialGradientBit from '@bits/RadialGradient';
 
 Browse through all available animation bits. Each bit is a self-contained, reusable animation component that you can customize and integrate into your Remotion projects.
 
@@ -16,69 +9,17 @@ Browse through all available animation bits. Each bit is a self-contained, reusa
 
 Text-based animation bits for creating dynamic typography effects.
 
-### Fade In
-
-Simple fade-in text animation from transparent to opaque.
-
-**Tags:** {FadeInBit.metadata.tags.join(', ')}
-
-<BitPlayground client:only="react" bitName="FadeIn" />
-
----
-
-### Slide from Left
-
-Text that slides in from the left with a smooth fade-in effect.
-
-**Tags:** {SlideFromLeftBit.metadata.tags.join(', ')}
-
-<BitPlayground client:only="react" bitName="SlideFromLeft" />
-
----
-
-### Word by Word
-
-Animated text that appears word by word with staggered timing for a sequential reveal.
-
-**Tags:** {WordByWordBit.metadata.tags.join(', ')}
-
-<BitPlayground client:only="react" bitName="WordByWord" />
-
----
-
-### Character by Character
-
-Text that appears character by character with staggered timing and scale effects.
-
-**Tags:** {CharByCharBit.metadata.tags.join(', ')}
-
-<BitPlayground client:only="react" bitName="CharByChar" />
-
----
+- [Fade In](/docs/bits/fade-in) - Simple fade-in text animation.
+- [Slide from Left](/docs/bits/slide-from-left) - Text that slides in from the left.
+- [Word by Word](/docs/bits/word-by-word) - Animated text that appears word by word.
+- [Character by Character](/docs/bits/char-by-char) - Text that appears character by character.
 
 ## Background Effects
 
 Beautiful gradient animations for creating dynamic backgrounds.
 
-### Linear Gradient
-
-Smooth transition between linear gradients with customizable colors and angles.
-
-**Tags:** {LinearGradientBit.metadata.tags.join(', ')}
-
-<BitPlayground client:only="react" bitName="LinearGradient" />
-
----
-
-### Radial Gradient
-
-Smooth transition between radial gradients with customizable colors and positions.
-
-**Tags:** {RadialGradientBit.metadata.tags.join(', ')}
-
-<BitPlayground client:only="react" bitName="RadialGradient" />
-
----
+- [Linear Gradient](/docs/bits/linear-gradient) - Smooth transition between linear gradients.
+- [Radial Gradient](/docs/bits/radial-gradient) - Smooth transition between radial gradients.
 
 ---
 
@@ -98,14 +39,12 @@ npm install remotion-bits
 
 Then import and use components directly:
 ```tsx
-import { TextTransition, BackgroundTransition } from 'remotion-bits';
+import { FadeIn } from 'remotion-bits';
 ```
 
-**Option 2: Use jsrepo to add specific components**
-```bash
-npx jsrepo add text-transition
-npx jsrepo add background-transition
-```
+**Option 2: Copy individual bits**
+
+You can also copy the source code of any bit directly into your project if you prefer not to install the full package.
 
 ### Customization
 
