@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Player } from '@remotion/player';
 import { AbsoluteFill } from 'remotion';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { getBit, type BitName } from '../bits';
+import { ShowcasePlayer } from './ShowcasePlayer';
 import { transform } from 'sucrase';
 import * as RemotionBits from 'remotion-bits';
 import * as Remotion from 'remotion';
@@ -32,17 +32,7 @@ const compileUserCode = (code: string): { Component: React.FC | null; error: str
     if (!hasComponentDefinition) {
       // Wrap bare JSX in a component automatically
       codeWithoutImports = `const BitComponent = () => {
-      return <AbsoluteFill style={{
-        backgroundColor: '#000000',
-        fontSize: "12rem",
-        fontWeight: 700,
-        color: "#ffffff",
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        ${codeWithoutImports}
-      </AbsoluteFill>
+        return ${codeWithoutImports}
       }`;
     }
 
@@ -199,19 +189,24 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
 
         <div className="bit-playground-preview-section">
           <div className="bit-playground-preview">
-            <Player
-              component={ActiveComponent}
-              durationInFrames={duration}
-              compositionWidth={width}
-              compositionHeight={height}
-              fps={30}
+            <div
+              className="bit-playground-player-container"
               style={{
-                width: '100%',
-                maxWidth: '100%',
+                aspectRatio: `${width} / ${height}`
               }}
-              controls
-              loop
-            />
+            >
+              <ShowcasePlayer
+                component={ActiveComponent}
+                duration={duration}
+                width={width}
+                height={height}
+                fps={30}
+                controls={true}
+                loop={true}
+                autoPlay={false}
+                autoResize={true}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -273,7 +268,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
 
         .bit-playground-content {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 3fr 7fr;
           gap: 0;
           background: var(--sl-color-bg);
         }
@@ -282,10 +277,18 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
         .bit-playground-preview-section {
           display: flex;
           flex-direction: column;
+          height: 100%;
+          min-width: 0;
+          min-height: 0;
         }
 
         .bit-playground-code-section {
           border-right: 1px solid var(--sl-color-gray-5);
+          overflow: hidden;
+        }
+
+        .bit-playground-preview-section {
+          overflow: hidden;
         }
 
         .bit-playground-code-header,
@@ -330,13 +333,28 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
         }
 
         .bit-playground-preview {
-          padding: 1rem;
+          padding: 0;
           display: flex;
           justify-content: center;
           align-items: center;
           background: var(--sl-color-black);
           min-height: 500px;
+          flex: 1;
           overflow: hidden;
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .bit-playground-player-container {
+          width: 100%;
+          max-width: 100%;
+          max-height: 100%;
+          height: auto;
+        }
+
+        .bit-playground-player-container .showcase-player {
+          width: 100%;
+          height: 100%;
         }
 
         .bit-playground-metadata {
@@ -370,7 +388,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           }
 
           .bit-playground-preview {
-            padding: 1rem;
+            padding: 0;
             min-height: 300px;
           }
 

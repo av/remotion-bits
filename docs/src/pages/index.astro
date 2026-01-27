@@ -160,38 +160,15 @@ import { HomeShowcase } from "../components/HomeShowcase";
                     class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center text-primary mb-4 border border-primary/20"
                   >
                     <span class="material-symbols-outlined text-2xl"
-                      >widgets</span
+                      >text_fields</span
                     >
                   </div>
                   <h3 class="text-2xl font-semibold text-white mb-2">
-                    Composable Primitives
+                    Text Effects
                   </h3>
                   <p class="text-gray-400 text-sm max-w-md">
-                    Don't reinvent the wheel. Use our pre-built components for
-                    particles, transitions, text effects, and more. Nest them
-                    deeply to create complex scenes.
+                    Create complex typography animations with ease. Stagger characters, words, or lines. Combine blur, scale, and position offsets for professional reveals.
                   </p>
-                </div>
-                <div
-                  class="flex gap-2 mt-4 opacity-50 group-hover:opacity-100 transition-opacity"
-                >
-                  <div
-                    class="h-16 w-32 rounded border border-white/10 bg-white/5 flex items-center justify-center text-xs font-mono text-gray-500"
-                  >
-                    &lt;Scene /&gt;
-                  </div>
-                  <div
-                    class="h-16 w-8 flex items-center justify-center text-gray-600"
-                  >
-                    <span class="material-symbols-outlined"
-                      >arrow_right_alt</span
-                    >
-                  </div>
-                  <div
-                    class="h-16 w-32 rounded border border-white/10 bg-white/5 flex items-center justify-center text-xs font-mono text-gray-500"
-                  >
-                    &lt;Effect /&gt;
-                  </div>
                 </div>
               </div>
             </div>
@@ -200,26 +177,18 @@ import { HomeShowcase } from "../components/HomeShowcase";
             >
               <div class="relative z-10 h-full flex flex-col">
                 <div
-                  class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4 border border-blue-500/20"
+                  class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 mb-4 border border-purple-500/20"
                 >
                   <span class="material-symbols-outlined text-2xl"
-                    >compress</span
+                    >grain</span
                   >
                 </div>
                 <h3 class="text-xl font-semibold text-white mb-2">
-                  Tiny Footprint
+                  Particle System
                 </h3>
                 <p class="text-gray-400 text-sm mb-4">
-                  Tree-shakeable and lightweight.
+                  A complete physics-based particle engine. Simulate rain, confetti, or starfields with customizable behaviors.
                 </p>
-                <div class="mt-auto">
-                  <div class="text-4xl font-mono font-bold text-white">
-                    &lt;2kb
-                  </div>
-                  <div class="text-xs text-gray-500 font-mono mt-1">
-                    Gzipped size
-                  </div>
-                </div>
               </div>
             </div>
             <div
@@ -228,20 +197,19 @@ import { HomeShowcase } from "../components/HomeShowcase";
               <div
                 class="absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12 select-none group-hover:text-primary/10 transition-colors"
               >
-                <span class="material-symbols-outlined">lock_open</span>
+                <span class="material-symbols-outlined">animation</span>
               </div>
               <div class="relative z-10">
                 <div
                   class="w-12 h-12 rounded-lg bg-green-500/10 flex items-center justify-center text-green-400 mb-4 border border-green-500/20"
                 >
-                  <span class="material-symbols-outlined text-2xl">public</span>
+                  <span class="material-symbols-outlined text-2xl">animation</span>
                 </div>
                 <h3 class="text-xl font-semibold text-white mb-2">
-                  Open Source
+                  Motion Primitives
                 </h3>
                 <p class="text-gray-400 text-sm">
-                  MIT Licensed. Use it in personal or commercial projects
-                  without restriction. Community driven.
+                  Declarative entry and exit animations. Chain fades, slides, and scaling without managing complex interpolations manually.
                 </p>
               </div>
             </div>
@@ -257,17 +225,12 @@ import { HomeShowcase } from "../components/HomeShowcase";
                   >
                 </div>
                 <h3 class="text-xl font-semibold text-white mb-2">
-                  Typed by default
+                  Type Safe
                 </h3>
                 <p class="text-gray-400 text-sm mb-4">
                   First-class TypeScript support. Autocomplete for every prop
                   and component.
                 </p>
-                <div
-                  class="font-mono text-xs text-blue-300 bg-blue-900/20 p-2 rounded border border-blue-900/50 inline-block"
-                >
-                  props: ParticleProps
-                </div>
               </div>
             </div>
             <div
@@ -275,24 +238,16 @@ import { HomeShowcase } from "../components/HomeShowcase";
             >
               <div class="relative z-10 flex-1">
                 <div
-                  class="w-12 h-12 rounded-lg bg-red-500/10 flex items-center justify-center text-red-400 mb-4 border border-red-500/20"
+                  class="w-12 h-12 rounded-lg bg-teal-500/10 flex items-center justify-center text-teal-400 mb-4 border border-teal-500/20"
                 >
-                  <span class="material-symbols-outlined text-2xl">block</span>
+                  <span class="material-symbols-outlined text-2xl">content_copy</span>
                 </div>
                 <h3 class="text-xl font-semibold text-white mb-2">
-                  Zero Dependencies
+                  Copy-Paste Ready
                 </h3>
                 <p class="text-gray-400 text-sm">
-                  No bloat. No surprise peer dependency conflicts.
+                  Install components directly into your codebase. Own the source, customize endlessly, and suffer zero bloat.
                 </p>
-              </div>
-              <div
-                class="h-1 bg-gray-800 rounded-full w-full overflow-hidden mt-4"
-              >
-                <div class="h-full bg-red-500 w-full animate-pulse"></div>
-              </div>
-              <div class="text-[10px] text-gray-500 mt-2 text-right">
-                0 external deps
               </div>
             </div>
           </div>
@@ -321,6 +276,7 @@ import { HomeShowcase } from "../components/HomeShowcase";
                 <span class="text-white font-bold">remotion-bits</span>
               </div>
               <button
+                id="copy-npm-install"
                 aria-label="Copy"
                 class="text-gray-500 hover:text-white transition-colors"
               >
@@ -446,5 +402,29 @@ import { HomeShowcase } from "../components/HomeShowcase";
         </div>
       </footer>
     </div>
+    <script>
+      const copyButton = document.getElementById("copy-npm-install");
+      if (copyButton) {
+        copyButton.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText("npm install remotion-bits");
+
+            const icon = copyButton.querySelector(".material-symbols-outlined");
+            if (icon) {
+              const originalText = icon.innerText;
+              icon.innerText = "check";
+              icon.classList.add("text-green-500"); // Add green color for feedback
+
+              setTimeout(() => {
+                icon.innerText = originalText;
+                icon.classList.remove("text-green-500");
+              }, 2000);
+            }
+          } catch (err) {
+            console.error("Failed to copy:", err);
+          }
+        });
+      }
+    </script>
   </body>
 </html>
