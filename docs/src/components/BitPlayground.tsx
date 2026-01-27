@@ -1,80 +1,36 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Player } from '@remotion/player';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
-import { transform } from 'sucrase';
-import type { Bit } from '../bits';
+import { getBit, type BitName } from '../bits';
 
 interface BitPlaygroundProps {
-  bit: Bit;
+  bitName: BitName;
   defaultTab?: 'preview' | 'code';
 }
 
 export const BitPlayground: React.FC<BitPlaygroundProps> = ({
-  bit,
+  bitName,
   defaultTab = 'preview'
 }) => {
+  // Get the bit from the registry using the name
+  const bit = getBit(bitName);
+
   const [editedCode, setEditedCode] = useState(bit.sourceCode);
-  const [error, setError] = useState<string | null>(null);
-  const [CompiledComponent, setCompiledComponent] = useState<React.FC | null>(null);
+  const [hasEdits, setHasEdits] = useState(false);
 
-  const { Component: OriginalComponent } = bit;
+  const { Component } = bit;
   const { duration, width = 1920, height = 1080 } = bit.metadata;
-
-  // Choose which component to display
-  const DisplayComponent = CompiledComponent || OriginalComponent;
-
-  // Compile the code whenever it changes
-  useEffect(() => {
-    const compileCode = async () => {
-      try {
-        // Transform TypeScript/JSX to JavaScript
-        const result = transform(editedCode, {
-          transforms: ['typescript', 'jsx'],
-          production: false,
-        });
-
-        // Create a function that returns the component
-        // We need to provide React and remotion imports
-        const componentFactory = new Function(
-          'React',
-          'remotion',
-          `
-          const { useCurrentFrame, interpolate, spring, Easing, AbsoluteFill } = remotion;
-          ${result.code}
-          return Component;
-          `
-        );
-
-        // Import remotion dynamically
-        const remotion = await import('remotion');
-        const NewComponent = componentFactory(React, remotion);
-
-        setCompiledComponent(() => NewComponent);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to compile code');
-        setCompiledComponent(null);
-      }
-    };
-
-    // Only compile if the code has changed from the original
-    if (editedCode !== bit.sourceCode) {
-      compileCode();
-    } else {
-      setCompiledComponent(null);
-      setError(null);
-    }
-  }, [editedCode, bit.sourceCode]);
 
   const handleCodeChange = useCallback((value: string) => {
     setEditedCode(value);
-  }, []);
+    setHasEdits(value !== bit.sourceCode);
+  }, [bit.sourceCode]);
 
   const handleReset = useCallback(() => {
     setEditedCode(bit.sourceCode);
-    setError(null);
+    setHasEdits(false);
   }, [bit.sourceCode]);
 
   return (
@@ -86,6 +42,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           onClick={handleReset}
           type="button"
           title="Reset to original code"
+          disabled={!hasEdits}
         >
           ↺ Reset
         </button>
@@ -95,13 +52,13 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
         <div className="bit-playground-code-section">
           <div className="bit-playground-code-header">
             <span>Code Editor</span>
+            {hasEdits && (
+              <span className="bit-playground-edit-badge">✏️ Modified</span>
+            )}
           </div>
-          {error && (
-            <div className="bit-playground-error">
-              <strong>⚠️ Compilation Error:</strong>
-              <pre>{error}</pre>
-            </div>
-          )}
+          <div className="bit-playground-info">
+            💡 Edit the code to experiment and learn. Live preview shows the original animation.
+          </div>
           <CodeMirror
             value={editedCode}
             height="500px"
@@ -139,14 +96,14 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           </div>
           <div className="bit-playground-preview">
             <Player
-              component={DisplayComponent}
+              component={Component}
               durationInFrames={duration}
               compositionWidth={width}
               compositionHeight={height}
               fps={30}
               style={{
                 width: '100%',
-                aspectRatio: `${width}/${height}`,
+                maxWidth: '100%',
               }}
               controls
               loop
@@ -200,7 +157,16 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           transition: all 0.2s;
         }
 
-        .bit-playground-action-btn:hover {
+        .bit-playground-action-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+        .bit-playground-action-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .bit-playground-action-btn:not(:disabled):hover {
           background: var(--sl-color-gray-4);
           border-color: var(--sl-color-gray-3);
         }
@@ -230,36 +196,37 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           font-size: 0.875rem;
           font-weight: 500;
           color: var(--sl-color-gray-2);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
         }
 
-        .bit-playground-error {
-          padding: 1rem;
-          background: rgba(239, 68, 68, 0.1);
-          border-bottom: 2px solid rgb(239, 68, 68);
-          color: rgb(252, 165, 165);
+        .bit-playground-edit-badge {
+          background: rgba(59, 130, 246, 0.2);
+          color: rgb(147, 197, 253);
+          padding: 0.25rem 0.5rem;
+          border-radius: 0.25rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .bit-playground-info {
+          padding: 0.75rem 1rem;
+          background: rgba(59, 130, 246, 0.1);
+          border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+          color: rgb(147, 197, 253);
           font-size: 0.875rem;
-        }
-
-        .bit-playground-error strong {
-          display: block;
-          margin-bottom: 0.5rem;
-        }
-
-        .bit-playground-error pre {
-          margin: 0;
-          white-space: pre-wrap;
-          word-break: break-word;
-          font-family: monospace;
-          font-size: 0.8rem;
+          line-height: 1.5;
         }
 
         .bit-playground-preview {
-          padding: 2rem;
+          padding: 1rem;
           display: flex;
           justify-content: center;
           align-items: center;
           background: var(--sl-color-black);
           min-height: 500px;
+          overflow: hidden;
         }
 
         .bit-playground-metadata {
