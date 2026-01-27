@@ -21,6 +21,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "remotion": "^4.0.409",
+    "remotion-bits": "file:../",
     "sharp": "^0.34.2",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18"

@@ -15,6 +15,13 @@ export default defineConfig({
     vite: {
       resolve: {
         dedupe: ['react', 'react-dom', 'remotion', '@remotion/player', 'remotion-bits'],
+        alias: {
+          '@': path.resolve(__dirname, './src'),
+          '@components': path.resolve(__dirname, './src/components'),
+          '@showcases': path.resolve(__dirname, './src/components/showcases'),
+          '@bits': path.resolve(__dirname, './src/bits'),
+          'remotion-bits': path.resolve(__dirname, '../src/index.ts'),
+        },
       },
       ssr: {
           noExternal: ['remotion', '@remotion/player', 'remotion-bits'],
@@ -35,7 +42,7 @@ export default defineConfig({
                 {
                     icon: 'github',
                     label: 'GitHub',
-                    href: 'https://github.com/yourusername/remotion-bits',
+                    href: 'https://github.com/av/remotion-bits',
                 },
             ],
             sidebar: [
@@ -45,6 +52,10 @@ export default defineConfig({
                         { label: 'Introduction', link: '/docs/getting-started' },
                         { label: 'Installation', link: '/docs/installation' },
                     ],
+                },
+                {
+                    label: 'Bits Catalog',
+                    link: '/docs/bits-catalog',
                 },
                 {
                     label: 'Components',
