@@ -163,18 +163,6 @@ export default defineConfig({
         ],
       },
       {
-        name: "use-scene-3d",
-        title: "useScene3D Hook",
-        description: "Hook to access the 3D scene context and state.",
-        type: "hook",
-        add: "when-needed",
-        files: [
-          {
-            path: "src/components/Scene3D/context.ts",
-          },
-        ],
-      },
-      {
         name: "interpolate",
         title: "Interpolate",
         description:

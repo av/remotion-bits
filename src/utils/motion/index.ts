@@ -1,5 +1,6 @@
 import { useCurrentFrame, useVideoConfig } from "remotion";
-import { Easing, type EasingName, type EasingFunction, interpolateColorKeyframes } from "../index";
+import { Easing, type EasingName, type EasingFunction } from "../interpolate";
+import { interpolateColorKeyframes } from "../color";
 
 // ============================================================================
 // TYPE DEFINITIONS
