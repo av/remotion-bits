@@ -13,8 +13,8 @@ export const metadata = {
 export const Component: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "radial-gradient(circle at center, #667eea 0%, #764ba2 100%)",
-      "radial-gradient(circle at top right, #f093fb 0%, #f5576c 100%)",
+      "radial-gradient(circle at center, #000000 0%, #ffffff 100%)",
+      "radial-gradient(circle at top right, #96eb03 0%, #f5576c 100%)",
     ]}
     duration={90}
   >

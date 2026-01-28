@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import { Particles, Spawner, Behavior } from "remotion-bits";
+import { Particles, Spawner, Behavior, useViewportRect, resolvePoint } from "remotion-bits";
 
 export const metadata = {
   name: "Grid Particles",
@@ -11,70 +11,60 @@ export const metadata = {
   height: 1080,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const snapToGridHandler = (p: any, age: number) => {
-    p.position.x = Math.floor(p.position.x / 100) * 100;
-    p.position.y = Math.floor(p.position.y / 100) * 100;
+export const Component: React.FC = () => {
+  const rect = useViewportRect();
+  const gridSize = Math.floor(rect.width * 0.05);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const snapToGridHandler = (p: any, age: number) => {
+    p.position.x = Math.floor(p.position.x / gridSize) * gridSize;
+    p.position.y = Math.floor(p.position.y / gridSize) * gridSize;
 
     const jumpInterval = 30;
 
     if (age % jumpInterval === 0 && age > 0) {
       const step = Math.floor(age / jumpInterval);
       const dir = (p.seed + step) % 4; // 0,1,2,3
-      if (dir === 0) p.position.x += 100;
-      if (dir === 1) p.position.x -= 100;
-      if (dir === 2) p.position.y += 100;
-      if (dir === 3) p.position.y -= 100;
+      if (dir === 0) p.position.x += gridSize;
+      if (dir === 1) p.position.x -= gridSize;
+      if (dir === 2) p.position.y += gridSize;
+      if (dir === 3) p.position.y -= gridSize;
     }
-};
+  };
 
-export const Component: React.FC = () => {
   return (
-    <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
-      <Particles>
-        <Spawner
-          rate={1}
-          area={{ width: 1000, height: 800 }}
-          position={{ x: 960, y: 540 }}
-          lifespan={150}
-          max={10}
-          transition={{
-            opacity: [0, 1],
-            duration: 10
-          }}
-        >
-          <div style={{
-            width: 80, height: 80,
-            backgroundColor: "#ffffff5f",
-            opacity: 0.8
-          }} />
-          <div style={{
-            width: 80, height: 80,
-            borderRadius: "50%",
-            backgroundColor: "#ffffff5f",
-            opacity: 0.8
-          }} />
-          <div style={{
-            width: 80, height: 80,
-            transform: 'rotate(45deg) scale(0.75)',
-            backgroundColor: "#ffffff5f",
-            opacity: 0.8
-          }} />
-        </Spawner>
+    <Particles>
+      <Spawner
+        rate={1}
+        area={{ width: rect.width * 0.52, height: rect.height * 0.74 }}
+        position={rect.center}
+        lifespan={150}
+        max={50}
+        transition={{
+          opacity: [0, 1],
+          duration: 10
+        }}
+      >
+        <div style={{
+          width: gridSize, height: gridSize,
+          backgroundColor: "#ffffff22",
+          opacity: 0.8
+        }} />
+        <div style={{
+          width: gridSize, height: gridSize,
+          borderRadius: "50%",
+          backgroundColor: "#ffffff5f",
+          opacity: 0.8
+        }} />
+        <div style={{
+          width: gridSize, height: gridSize,
+          transform: 'rotate(45deg) scale(0.75)',
+          backgroundColor: "#ffffff5f",
+          opacity: 0.8
+        }} />
+      </Spawner>
 
-        <Behavior handler={snapToGridHandler} />
-      </Particles>
-      <div style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          color: "white", 
-          fontFamily: "sans-serif", 
-          fontSize: '128px' 
-      }}>
-        Grid
-      </div>
-    </AbsoluteFill>
+      <Behavior handler={snapToGridHandler} />
+    </Particles>
   );
 };

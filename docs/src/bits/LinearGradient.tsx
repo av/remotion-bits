@@ -13,8 +13,8 @@ export const metadata = {
 export const Component: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "linear-gradient(0deg, #667eea 0%, #764ba2 100%)",
-      "linear-gradient(180deg, #f093fb 0%, #f5576c 100%)",
+      "linear-gradient(0deg, #cacaca 0%, #b76c1c 100%)",
+      "linear-gradient(180deg, #454545 0%, #f5576c 100%)",
     ]}
     duration={90}
   >

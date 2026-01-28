@@ -5,12 +5,13 @@ import { bits } from '../../bits';
 // Helper to get slug from bit name (assuming kebab-case file names in content/docs/bits)
 // Keys in `bits` object match the export names in `docs/src/bits/index.ts`
 const BITS_LIST = [
-    { module: bits.CharByChar, slug: 'char-by-char' },
-    { module: bits.FadeIn, slug: 'fade-in' },
-    { module: bits.LinearGradient, slug: 'linear-gradient' },
-    { module: bits.RadialGradient, slug: 'radial-gradient' },
-    { module: bits.SlideFromLeft, slug: 'slide-from-left' },
+    // { module: bits.CharByChar, slug: 'char-by-char' },
+    { module: bits.ParticlesFountain, slug: 'particles-fountain' },
     { module: bits.WordByWord, slug: 'word-by-word' },
+    { module: bits.LinearGradient, slug: 'linear-gradient' },
+    { module: bits.ParticlesGrid, slug: 'particles-grid' },
+    { module: bits.SlideFromLeft, slug: 'slide-from-left' },
+    { module: bits.FadeIn, slug: 'fade-in' },
 ];
 
 export const HeroShowcase: React.FC = () => {

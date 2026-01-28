@@ -18,10 +18,10 @@ export const Component: React.FC = () => (
     ]}
     duration={120}
   >
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       height: '100%',
       fontSize: "6rem",
       fontWeight: 700,

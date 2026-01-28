@@ -25,14 +25,28 @@ const compileUserCode = (code: string): { Component: React.FC | null; error: str
       .trim();
 
     // Check if the code is just JSX (no component definition)
-    // Look for component definitions like: const/let/var/function ComponentName
-    const hasComponentDefinition = /^\s*(export\s+)?(const|let|var|function)\s+\w+/.test(codeWithoutImports);
+    // We specifically look for the main Component, ignoring metadata objects
+    const hasComponentDefinition = /(?:export\s+)?(?:const|let|var|function)\s+Component\b/.test(codeWithoutImports);
 
     if (!hasComponentDefinition) {
-      // Wrap bare JSX in a component automatically
-      codeWithoutImports = `const BitComponent = () => {
-        return ${codeWithoutImports}
-      }`;
+      // Determine if code is an expression (e.g. <Div />) or a function body (has statements/return)
+      const isExpression = !/return\b/.test(codeWithoutImports) && !/(?:const|let|var)\s/.test(codeWithoutImports);
+
+      if (isExpression) {
+        // Wrap bare JSX in a component automatically
+        codeWithoutImports = `const BitComponent = () => {
+          return (
+            <>
+              ${codeWithoutImports}
+            </>
+          );
+        }`;
+      } else {
+        // Wrap statements in a function body
+        codeWithoutImports = `const BitComponent = () => {
+          ${codeWithoutImports}
+        }`;
+      }
     }
 
     // Transpile TypeScript/JSX to JavaScript
@@ -49,15 +63,13 @@ const compileUserCode = (code: string): { Component: React.FC | null; error: str
       .replace(/export\s+(const|let|var|function|class|default)\s+/g, '$1 ')
       .trim();
 
-    // Extract the component name from the transpiled code
-    const componentNameMatch = cleanedTranspiled.match(/(?:const|let|var|function)\s+(\w+)/);
-    const componentName = componentNameMatch ? componentNameMatch[1] : null;
-
-    if (!componentName) {
-      throw new Error('Could not find component in code.');
+    // Determine the component name to return
+    let componentName = 'BitComponent';
+    if (hasComponentDefinition) {
+      // Expecting 'Component' based on convention
+       componentName = 'Component';
     }
 
-    // Create a function that executes the code and returns the component
     const wrappedCode = `
       const React = arguments[0];
       const Remotion = arguments[1];
@@ -65,11 +77,20 @@ const compileUserCode = (code: string): { Component: React.FC | null; error: str
 
       // Destructure common exports for convenience
       const { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } = Remotion;
-      const { TextTransition, MotionTransition, BackgroundTransition, Particles } = RemotionBits;
+      const {
+        TextTransition,
+        MotionTransition,
+        BackgroundTransition,
+        Particles,
+        Spawner,
+        Behavior,
+        useViewportRect,
+        resolvePoint,
+      } = RemotionBits;
 
       ${cleanedTranspiled}
 
-      return BitComponent;
+      return ${componentName};
     `;
 
     // Execute the code

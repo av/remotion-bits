@@ -28,7 +28,8 @@ export default defineConfig({
             noExternal: ['remotion', '@remotion/player', 'remotion-bits'],
         },
         optimizeDeps: {
-            include: ['react', 'react-dom', 'remotion', '@remotion/player', 'remotion-bits'],
+            include: ['react', 'react-dom', 'remotion', '@remotion/player'],
+            exclude: ['remotion-bits'],
         },
 
         plugins: [tailwindcss()],
@@ -76,6 +77,14 @@ export default defineConfig({
                                 { label: 'Radial Gradient', link: '/docs/bits/radial-gradient' },
                             ]
                         },
+                        {
+                            label: 'Particles',
+                            items: [
+                                { label: 'Particles Fountain', link: '/docs/bits/particles-fountain' },
+                                { label: 'Snow', link: '/docs/bits/particles-snow' },
+                                { label: 'Grid Particles', link: '/docs/bits/particles-grid' },
+                            ]
+                        }
                     ],
                 },
             ],

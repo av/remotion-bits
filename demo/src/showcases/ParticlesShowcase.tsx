@@ -1,16 +1,18 @@
 import React from "react";
-import { AbsoluteFill } from "remotion";
+import { AbsoluteFill, useVideoConfig } from "remotion";
 import { Particles, Spawner, Behavior } from "../../../src/components/Particles";
 import { Center } from "./Center";
 
 export const ParticlesSnowShowcase = () => {
+  const { width } = useVideoConfig();
+
   return (
     <AbsoluteFill style={{ backgroundColor: "#01050e" }}>
       <Particles>
         <Spawner
           rate={1}
-          area={{ width: 1920, height: 0 }}
-          position={{ x: 960, y: -200 }}
+          area={{ width, height: 0 }}
+          position={{ x: width / 2, y: -200 }}
           lifespan={200}
           startFrame={200}
           transition={{

@@ -37,15 +37,25 @@ export interface Bit {
 }
 
 const extractSource = (raw: string): string => {
-  // Regex to match the component body inside `export const Component: React.FC = () => (` ... `);`
-  const match = raw.match(/export const Component: React\.FC = \(\) => \(([\s\S]*?)\);/);
-  if (match && match[1]) {
-    return match[1].trim();
+  // 1. Match explicit block body: export const Component: React.FC = () => { ... }
+  const blockStart = "export const Component: React.FC = () => {";
+  const startIdx = raw.indexOf(blockStart);
+  if (startIdx !== -1) {
+    let body = raw.substring(startIdx + blockStart.length);
+    body = body.trim();
+    // Remove trailing }; or }
+    if (body.endsWith("};")) {
+      body = body.substring(0, body.length - 2);
+    } else if (body.endsWith("}")) {
+      body = body.substring(0, body.length - 1);
+    }
+    return body.trim();
   }
-  // Try to match return statement inside block
-  const returnMatch = raw.match(/return \(([\s\S]*?)\);/);
-  if (returnMatch && returnMatch[1]) {
-    return returnMatch[1].trim();
+
+  // 2. Match implicit return: export const Component: React.FC = () => ( ... );
+  const matchImplicit = raw.match(/export const Component: React\.FC = \(\) => \(([\s\S]*?)\);/);
+  if (matchImplicit && matchImplicit[1]) {
+    return matchImplicit[1].trim();
   }
 
   return raw;
