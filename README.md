@@ -90,6 +90,7 @@ npx jsrepo add text-transition
 ## Available components
 
 - `text-transition`
+- `background-transition`
 
 ## Demo Playground
 
@@ -104,7 +105,7 @@ npm start
 ```
 
 This opens Remotion Studio where you can:
-- Preview all three components in action
+- Preview the components in action
 - Adjust component properties using the controls panel
 - See changes instantly without reloading
 - Render the demo video
@@ -113,7 +114,7 @@ See [demo/README.md](demo/README.md) for more details on available properties an
 
 ## Default install path
 
-By default, components are added to `src/remotionbits`. You can change this in your project’s jsrepo config by setting the `paths.component` value.
+By default, components are added to `src/components`. You can change this in your project’s jsrepo config by setting the `paths.component` value.
 
 ## Library usage example import
 
@@ -124,7 +125,7 @@ import { TextTransition } from "remotion-bits";
 If you installed components into your project via jsrepo, you can import from your local files, for example:
 
 ```ts
-import { TextTransition } from "./remotionbits";
+import { TextTransition } from "./components/TextTransition";
 ```
 
 ## Directory structure
@@ -133,7 +134,7 @@ After installing components into your project, you will typically have:
 
 ```
 src/
-	remotionbits/
+	components/
 		TextTransition.tsx
 ```
 

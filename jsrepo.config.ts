@@ -84,6 +84,97 @@ export default defineConfig({
         ],
       },
       {
+        name: "motion-transition",
+        title: "Motion Transition",
+        description: "Advanced motion and transform animations with stagger effects and easing control.",
+        type: "component",
+        add: "when-added",
+        dependencyResolution: "manual",
+        registryDependencies: ["interpolate", "motion"],
+        files: [
+          {
+            path: "src/components/MotionTransition.tsx",
+          },
+        ],
+      },
+      {
+        name: "particles",
+        title: "Particles System",
+        description: "Particle effect system with spawners, behaviors (gravity, drag, wiggle, scale, opacity), and deterministic simulation.",
+        type: "component",
+        add: "when-added",
+        dependencyResolution: "manual",
+        registryDependencies: ["random", "particles-utilities"],
+        files: [
+          {
+            path: "src/components/Particles/Particles.tsx",
+          },
+          {
+            path: "src/components/Particles/Spawner.tsx",
+          },
+          {
+            path: "src/components/Particles/Behavior.tsx",
+          },
+          {
+            path: "src/components/Particles/index.ts",
+          },
+        ],
+      },
+      {
+        name: "scene-3d",
+        title: "3D Scene System",
+        description: "3D scene rendering with camera controls, steps, elements, transforms, and transitions.",
+        type: "component",
+        add: "when-added",
+        dependencyResolution: "manual",
+        registryDependencies: ["interpolate"],
+        files: [
+          {
+            path: "src/components/Scene3D/Scene3D.tsx",
+          },
+          {
+            path: "src/components/Scene3D/Step.tsx",
+          },
+          {
+            path: "src/components/Scene3D/Element3D.tsx",
+          },
+          {
+            path: "src/components/Scene3D/context.ts",
+          },
+          {
+            path: "src/components/Scene3D/types.ts",
+          },
+          {
+            path: "src/components/Scene3D/index.ts",
+          },
+        ],
+      },
+      {
+        name: "use-viewport-rect",
+        title: "useViewportRect Hook",
+        description: "Hook to get the current video composition's viewport rectangle with responsive sizing utilities.",
+        type: "hook",
+        add: "when-needed",
+        registryDependencies: ["geometry"],
+        files: [
+          {
+            path: "src/hooks/useViewportRect.ts",
+          },
+        ],
+      },
+      {
+        name: "use-scene-3d",
+        title: "useScene3D Hook",
+        description: "Hook to access the 3D scene context and state.",
+        type: "hook",
+        add: "when-needed",
+        files: [
+          {
+            path: "src/components/Scene3D/context.ts",
+          },
+        ],
+      },
+      {
         name: "interpolate",
         title: "Interpolate",
         description:
@@ -126,6 +217,69 @@ export default defineConfig({
         files: [
           {
             path: "src/utils/gradient.ts",
+          },
+        ],
+      },
+      {
+        name: "motion",
+        title: "Motion Utilities",
+        description:
+          "Utilities for keyframe interpolation, easing, transform and style building, and motion timing calculations.",
+        type: "util",
+        add: "when-needed",
+        registryDependencies: ["interpolate"],
+        files: [
+          {
+            path: "src/utils/motion/index.ts",
+          },
+        ],
+      },
+      {
+        name: "geometry",
+        title: "Geometry Utilities",
+        description:
+          "Utilities for geometric calculations: Rect class with viewport units (vh, vw, vmin, vmax), point/size handling, and relative value parsing.",
+        type: "util",
+        add: "when-needed",
+        files: [
+          {
+            path: "src/utils/geometry.ts",
+          },
+        ],
+      },
+      {
+        name: "random",
+        title: "Random Utilities",
+        description:
+          "Utility functions for generating random floats, integers, and selecting random array elements.",
+        type: "util",
+        add: "when-needed",
+        files: [
+          {
+            path: "src/utils/random.ts",
+          },
+        ],
+      },
+      {
+        name: "particles-utilities",
+        title: "Particles Utilities",
+        description:
+          "Core utilities for particle systems: types, behaviors (gravity, drag, wiggle, scale, opacity), and deterministic simulation.",
+        type: "util",
+        add: "when-needed",
+        registryDependencies: ["random"],
+        files: [
+          {
+            path: "src/utils/particles/types.ts",
+          },
+          {
+            path: "src/utils/particles/behaviors.ts",
+          },
+          {
+            path: "src/utils/particles/simulator.ts",
+          },
+          {
+            path: "src/utils/particles/index.ts",
           },
         ],
       },
