@@ -30,19 +30,19 @@ export const Component: React.FC = () => {
         }}
       >
         <div style={{
-          width: rect.vmin * 2, height: rect.vmin * 2,
+          width: rect.vmax * 2, height: rect.vmax * 2,
           background: "radial-gradient(circle, #ebb03b99, transparent 50%)",
         }} />
         <div style={{
-          width: rect.vmin * 5, height: rect.vmin * 5,
+          width: rect.vmax * 5, height: rect.vmax * 5,
           background: "radial-gradient(circle, #ebb03b22, transparent 50%)",
         }} />
         <div style={{
-          width: rect.vmin * 3, height: rect.vmin * 3,
+          width: rect.vmax * 3, height: rect.vmax * 3,
           background: "radial-gradient(circle, gray, transparent 50%)",
         }} />
         <div style={{
-          width: rect.vmin * 30, height: rect.vmin * 30,
+          width: rect.vmax * 30, height: rect.vmax * 30,
           background: "radial-gradient(circle, rgba(176, 126, 223, 0.05), transparent 50%)",
         }} />
       </Spawner>

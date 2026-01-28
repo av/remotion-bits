@@ -7,7 +7,7 @@ import { bits } from '../../bits';
 const BITS_LIST = [
     // { module: bits.CharByChar, slug: 'char-by-char' },
     { module: bits.ParticlesFountain, slug: 'particles-fountain' },
-    { module: bits.WordByWord, slug: 'word-by-word' },
+    { module: bits.BlurSlideWord, slug: 'blur-slide-word' },
     { module: bits.LinearGradient, slug: 'linear-gradient' },
     { module: bits.ParticlesGrid, slug: 'particles-grid' },
     { module: bits.SlideFromLeft, slug: 'slide-from-left' },

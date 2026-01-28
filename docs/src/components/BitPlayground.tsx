@@ -13,7 +13,11 @@ interface BitPlaygroundProps {
 }
 
 // Helper function to compile and evaluate user code
-const compileUserCode = (code: string): { Component: React.FC | null; error: string | null } => {
+const compileUserCode = (
+  code: string,
+  defaultProps: Record<string, any> = {},
+  inputProps: Record<string, any> = {}
+): { Component: React.FC | null; error: string | null } => {
   try {
     // Strip all import statements from the code (including multiline imports)
     let codeWithoutImports = code
@@ -74,6 +78,11 @@ const compileUserCode = (code: string): { Component: React.FC | null; error: str
       const React = arguments[0];
       const Remotion = arguments[1];
       const RemotionBits = arguments[2];
+      const __BIT_DEFAULT_PROPS__ = arguments[3] || {};
+      const __BIT_PROPS__ = arguments[4] || {};
+
+      // Inject magic props
+      const props = { ...__BIT_DEFAULT_PROPS__, ...__BIT_PROPS__ };
 
       // Destructure common exports for convenience
       const { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } = Remotion;
@@ -95,7 +104,7 @@ const compileUserCode = (code: string): { Component: React.FC | null; error: str
 
     // Execute the code
     const componentFactory = new Function(wrappedCode);
-    const Component = componentFactory(React, Remotion, RemotionBits);
+    const Component = componentFactory(React, Remotion, RemotionBits, defaultProps, inputProps);
 
     if (!Component || typeof Component !== 'function') {
       return {
@@ -120,14 +129,15 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
   const bit = getBit(bitName);
 
   const [editedCode, setEditedCode] = useState(bit.sourceCode);
+  const [bitProps, setBitProps] = useState<Record<string, any>>(bit.defaultProps || {});
 
   const { Component: OriginalComponent } = bit;
   const { duration, width = 1920, height = 1080 } = bit.metadata;
 
   // Compile the edited code to get a live component
   const { Component: LiveComponent, error: compileError } = useMemo(() => {
-    return compileUserCode(editedCode);
-  }, [editedCode]);
+    return compileUserCode(editedCode, bit.defaultProps || {}, bitProps);
+  }, [editedCode, bit.defaultProps, bitProps]);
 
   // Use the live component if available, otherwise fall back to original
   const BaseComponent = LiveComponent || OriginalComponent;
@@ -142,8 +152,109 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
     setEditedCode(bit.sourceCode);
   }, [bit.sourceCode]);
 
+  const handlePropChange = useCallback((key: string, value: any) => {
+    setBitProps(prev => ({ ...prev, [key]: value }));
+  }, []);
+
+  const handleCopyBit = useCallback(() => {
+    const hasBlockBody = /return\b/.test(editedCode) || /(?:const|let|var)\s/.test(editedCode);
+    const componentBody = hasBlockBody
+      ? editedCode
+      : `return (\n    ${editedCode}\n  );`;
+
+    const propsDeclaration = bit.defaultProps
+      ? `\nconst props = { ...defaultProps, ...__BIT_PROPS__ };\n`
+      : '';
+
+    const generated = `import React from "react";
+import { BackgroundTransition } from "remotion-bits";
+
+export const metadata = ${JSON.stringify(bit.metadata, null, 2)};
+
+${bit.defaultProps ? `export const defaultProps = ${JSON.stringify(bit.defaultProps, null, 2)};\n` : ''}
+${bit.controls ? `export const controls = ${JSON.stringify(bit.controls, null, 2)};\n` : ''}
+export const Component: React.FC = () => {${propsDeclaration}
+  ${componentBody}
+};
+`;
+
+    navigator.clipboard.writeText(generated).then(() => {
+      alert('Bit code copied to clipboard!');
+    });
+  }, [editedCode, bit]);
+
   return (
     <div className="bit-playground not-content">
+      {bit.controls && bit.controls.length > 0 && (
+        <div className="bit-playground-controls">
+          <div className="bit-playground-controls-header">Controls</div>
+          <div className="bit-playground-controls-grid">
+            {bit.controls.map((control) => {
+              const value = bitProps[control.key] ?? bit.defaultProps?.[control.key];
+
+              return (
+                <div key={control.key} className="bit-playground-control">
+                  <label className="bit-playground-control-label">
+                    {control.label || control.key}
+                  </label>
+                  {control.type === 'string' && (
+                    <input
+                      type="text"
+                      value={value || ''}
+                      onChange={(e) => handlePropChange(control.key, e.target.value)}
+                      className="bit-playground-control-input"
+                    />
+                  )}
+                  {control.type === 'number' && (
+                    <input
+                      type="number"
+                      value={value ?? 0}
+                      min={control.min}
+                      max={control.max}
+                      step={control.step ?? 1}
+                      onChange={(e) => handlePropChange(control.key, parseFloat(e.target.value))}
+                      className="bit-playground-control-input"
+                    />
+                  )}
+                  {control.type === 'color' && (
+                    <input
+                      type="color"
+                      value={value || '#000000'}
+                      onChange={(e) => handlePropChange(control.key, e.target.value)}
+                      className="bit-playground-control-color"
+                    />
+                  )}
+                  {control.type === 'boolean' && (
+                    <input
+                      type="checkbox"
+                      checked={value ?? false}
+                      onChange={(e) => handlePropChange(control.key, e.target.checked)}
+                      className="bit-playground-control-checkbox"
+                    />
+                  )}
+                  {control.type === 'select' && control.options && (
+                    <select
+                      value={value}
+                      onChange={(e) => {
+                        const option = control.options?.find(o => String(o.value) === e.target.value);
+                        handlePropChange(control.key, option?.value);
+                      }}
+                      className="bit-playground-control-input"
+                    >
+                      {control.options.map((opt) => (
+                        <option key={String(opt.value)} value={String(opt.value)}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="bit-playground-content">
         <div className="bit-playground-preview-section">
           <div className="bit-playground-preview">
@@ -209,6 +320,14 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           >
             ↺
           </button>
+          <button
+            className="bit-playground-action-btn"
+            onClick={handleCopyBit}
+            type="button"
+            title="Copy full Bit code"
+          >
+            📋
+          </button>
         </div>
       </div>
 
@@ -227,6 +346,67 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           border-radius: 0.5rem;
           overflow: hidden;
           margin: 2rem 0;
+        }
+
+        .bit-playground-controls {
+          padding: 1rem 1.5rem;
+          background: var(--sl-color-gray-6);
+          border-bottom: 1px solid var(--sl-color-gray-5);
+        }
+
+        .bit-playground-controls-header {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: var(--sl-color-white);
+          margin-bottom: 0.75rem;
+        }
+
+        .bit-playground-controls-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 0.75rem;
+        }
+
+        .bit-playground-control {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .bit-playground-control-label {
+          font-size: 0.75rem;
+          color: var(--sl-color-gray-2);
+          font-weight: 500;
+        }
+
+        .bit-playground-control-input {
+          padding: 0.375rem 0.5rem;
+          background: var(--sl-color-gray-5);
+          border: 1px solid var(--sl-color-gray-4);
+          border-radius: 0.25rem;
+          color: var(--sl-color-white);
+          font-size: 0.875rem;
+        }
+
+        .bit-playground-control-input:focus {
+          outline: none;
+          border-color: var(--sl-color-accent);
+        }
+
+        .bit-playground-control-color {
+          width: 100%;
+          height: 2.5rem;
+          padding: 0.25rem;
+          background: var(--sl-color-gray-5);
+          border: 1px solid var(--sl-color-gray-4);
+          border-radius: 0.25rem;
+          cursor: pointer;
+        }
+
+        .bit-playground-control-checkbox {
+          width: 1.25rem;
+          height: 1.25rem;
+          cursor: pointer;
         }
 
         .bit-playground-header {
@@ -248,7 +428,6 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
         .bit-playground-action-btn {
           position: absolute;
           top: 1rem;
-          right: 1rem;
           padding: 0.5rem 1rem;
           background: var(--sl-color-gray-5);
           border: 1px solid var(--sl-color-gray-4);
@@ -258,6 +437,14 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
           font-size: 0.875rem;
           font-weight: 500;
           transition: all 0.2s;
+        }
+
+        .bit-playground-action-btn:first-of-type {
+          right: 5rem;
+        }
+
+        .bit-playground-action-btn:last-of-type {
+          right: 1rem;
         }
 
         .bit-playground-action-btn:disabled {

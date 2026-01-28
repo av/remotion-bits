@@ -32,10 +32,24 @@ export interface BitMetadata {
   height?: number;
 }
 
+export type ControlType = 'string' | 'number' | 'boolean' | 'color' | 'select';
+
+export interface Control {
+  key: string;
+  type: ControlType;
+  label?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+  options?: { label: string; value: any }[];
+}
+
 export interface Bit {
   metadata: BitMetadata;
   Component: React.FC;
   sourceCode: string;
+  defaultProps?: Record<string, any>;
+  controls?: Control[];
 }
 
 const extractSource = (raw: string): string => {
@@ -51,13 +65,16 @@ const extractSource = (raw: string): string => {
     } else if (body.endsWith("}")) {
       body = body.substring(0, body.length - 1);
     }
+    // Transform defaultProps to props for editable code
+    body = body.replace(/defaultProps\./g, 'props.');
     return body.trim();
   }
 
   // 2. Match implicit return: export const Component: React.FC = () => ( ... );
   const matchImplicit = raw.match(/export const Component: React\.FC = \(\) => \(([\s\S]*?)\);/);
   if (matchImplicit && matchImplicit[1]) {
-    return matchImplicit[1].trim();
+    // Transform defaultProps to props for editable code
+    return matchImplicit[1].trim().replace(/defaultProps\./g, 'props.');
   }
 
   return raw;

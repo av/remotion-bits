@@ -10,11 +10,29 @@ export const metadata = {
   height: 1080,
 };
 
+export const defaultProps = {
+  color1Start: "#cacaca",
+  color1End: "#b76c1c",
+  color2Start: "#454545",
+  color2End: "#f5576c",
+  angle1: 0,
+  angle2: 180,
+};
+
+export const controls = [
+  { key: "color1Start", type: "color" as const, label: "Gradient 1 Start" },
+  { key: "color1End", type: "color" as const, label: "Gradient 1 End" },
+  { key: "color2Start", type: "color" as const, label: "Gradient 2 Start" },
+  { key: "color2End", type: "color" as const, label: "Gradient 2 End" },
+  { key: "angle1", type: "number" as const, label: "Angle 1", min: 0, max: 360, step: 15 },
+  { key: "angle2", type: "number" as const, label: "Angle 2", min: 0, max: 360, step: 15 },
+];
+
 export const Component: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "linear-gradient(0deg, #cacaca 0%, #b76c1c 100%)",
-      "linear-gradient(180deg, #454545 0%, #f5576c 100%)",
+      `linear-gradient(${defaultProps.angle1}deg, ${defaultProps.color1Start} 0%, ${defaultProps.color1End} 100%)`,
+      `linear-gradient(${defaultProps.angle2}deg, ${defaultProps.color2Start} 0%, ${defaultProps.color2End} 100%)`,
     ]}
     duration={90}
   >
