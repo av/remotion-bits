@@ -19,6 +19,8 @@ export interface Rotation3D {
 
 export interface Scale3D {
   scale?: AnimatedValue;
+  scaleX?: AnimatedValue;
+  scaleY?: AnimatedValue;
 }
 
 export interface Transform3D extends Position3D, Rotation3D, Scale3D {}
@@ -45,6 +47,8 @@ export interface CameraState {
   rotateY: number;
   rotateZ: number;
   scale: number;
+  scaleX: number;
+  scaleY: number;
 }
 
 export interface Scene3DContextValue {
@@ -62,6 +66,8 @@ export interface Scene3DProps {
   easing?: EasingFunction | EasingName;
   activeStep?: number | string;
   stepDuration?: number;
+  width?: number;
+  height?: number;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;

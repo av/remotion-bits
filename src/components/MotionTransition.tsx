@@ -30,6 +30,12 @@ export type MotionTransitionComponentProps = {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  /**
+   * Optional offset to override the current frame state.
+   * If provided, this value is used as the current frame progress for the animation.
+   * Useful for relative animations like particles.
+   */
+  cycleOffset?: number;
 };
 
 // ============================================================================
@@ -124,6 +130,7 @@ export const MotionTransition: React.FC<MotionTransitionComponentProps> = ({
       stagger,
       unitIndex: staggerIndex,
       easing,
+      cycleOffset: cycleOffset !== undefined ? cycleOffset - delay : undefined,
     });
 
     // Build animated styles using motion framework

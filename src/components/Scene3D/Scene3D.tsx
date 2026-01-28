@@ -18,6 +18,8 @@ function interpolateCameraState(
     rotateY: from.rotateY + (to.rotateY - from.rotateY) * progress,
     rotateZ: from.rotateZ + (to.rotateZ - from.rotateZ) * progress,
     scale: from.scale + (to.scale - from.scale) * progress,
+    scaleX: from.scaleX + (to.scaleX - from.scaleX) * progress,
+    scaleY: from.scaleY + (to.scaleY - from.scaleY) * progress,
   };
 }
 
@@ -30,12 +32,16 @@ function stepConfigToCameraTarget(step: StepConfig): CameraState {
     rotateY: interpolateKeyframes(step.rotateY ?? 0, 1),
     rotateZ: interpolateKeyframes(step.rotateZ ?? 0, 1),
     scale: interpolateKeyframes(step.scale ?? 1, 1),
+    scaleX: interpolateKeyframes(step.scaleX ?? 1, 1),
+    scaleY: interpolateKeyframes(step.scaleY ?? 1, 1),
   };
 }
 
-function getCameraTransformString(camera: CameraState): string {
-  const inverseScale = 1 / camera.scale;
-  return `scale(${inverseScale}) rotateZ(${-camera.rotateZ}deg) rotateY(${-camera.rotateY}deg) rotateX(${-camera.rotateX}deg) translate3d(${-camera.x}px, ${-camera.y}px, ${-camera.z}px)`;
+function getCameraTransformString(camera: CameraState, fitScale: number): string {
+  const inverseScale = (1 / camera.scale) * fitScale;
+  const inverseScaleX = 1 / camera.scaleX;
+  const inverseScaleY = 1 / camera.scaleY;
+  return `scale(${inverseScale}) scaleX(${inverseScaleX}) scaleY(${inverseScaleY}) rotateZ(${-camera.rotateZ}deg) rotateY(${-camera.rotateY}deg) rotateX(${-camera.rotateX}deg) translate3d(${-camera.x}px, ${-camera.y}px, ${-camera.z}px)`;
 }
 
 export const Scene3D: React.FC<Scene3DProps> = ({
@@ -44,12 +50,23 @@ export const Scene3D: React.FC<Scene3DProps> = ({
   easing = "easeInOutCubic",
   activeStep,
   stepDuration,
+  width,
+  height,
   className,
   style,
   children,
 }) => {
   const frame = useCurrentFrame();
-  const { durationInFrames } = useVideoConfig();
+  const { durationInFrames, width: videoWidth, height: videoHeight } = useVideoConfig();
+
+  const fitScale = useMemo(() => {
+    const designWidth = width ?? videoWidth;
+    const designHeight = height ?? videoHeight;
+    const xScale = videoWidth / designWidth;
+    const yScale = videoHeight / designHeight;
+    return Math.min(xScale, yScale);
+  }, [width, height, videoWidth, videoHeight]);
+
   const stepsRef = useRef<StepConfig[]>([]);
   const stepIndexRef = useRef(0);
 
@@ -74,6 +91,8 @@ export const Scene3D: React.FC<Scene3DProps> = ({
         y: props.y ?? 0,
         z: props.z ?? 0,
         scale: props.scale ?? 1,
+        scaleX: props.scaleX ?? 1,
+        scaleY: props.scaleY ?? 1,
         rotateX: props.rotateX ?? 0,
         rotateY: props.rotateY ?? 0,
         rotateZ: props.rotateZ ?? 0,
@@ -100,7 +119,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({
       return {
         activeStepIndex: 0,
         transitionProgress: 0,
-        camera: { x: 0, y: 0, z: 0, rotateX: 0, rotateY: 0, rotateZ: 0, scale: 1 },
+        camera: { x: 0, y: 0, z: 0, rotateX: 0, rotateY: 0, rotateZ: 0, scale: 1, scaleX: 1, scaleY: 1 },
       };
     }
 
@@ -185,7 +204,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({
     width: "100%",
     height: "100%",
     transformStyle: "preserve-3d",
-    transform: getCameraTransformString(camera),
+    transform: getCameraTransformString(camera, fitScale),
     transformOrigin: "center center",
   };
 

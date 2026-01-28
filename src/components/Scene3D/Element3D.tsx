@@ -153,6 +153,8 @@ const Element3DComponent: React.FC<Element3DProps> = ({
   y = 0,
   z = 0,
   scale = 1,
+  scaleX = 1,
+  scaleY = 1,
   rotateX = 0,
   rotateY = 0,
   rotateZ = 0,
@@ -169,6 +171,8 @@ const Element3DComponent: React.FC<Element3DProps> = ({
   const yVal = interpolateKeyframes(y, 1);
   const zVal = interpolateKeyframes(z, 1);
   const scaleVal = interpolateKeyframes(scale, 1);
+  const scaleXVal = interpolateKeyframes(scaleX, 1);
+  const scaleYVal = interpolateKeyframes(scaleY, 1);
   const rotateXVal = interpolateKeyframes(rotateX, 1);
   const rotateYVal = interpolateKeyframes(rotateY, 1);
   const rotateZVal = interpolateKeyframes(rotateZ, 1);
@@ -189,11 +193,11 @@ const Element3DComponent: React.FC<Element3DProps> = ({
   if (fixed) {
     const inverseRotation = `rotateZ(${camera.rotateZ}deg) rotateY(${camera.rotateY}deg) rotateX(${camera.rotateX}deg)`;
     const inverseTranslate = `translate3d(${camera.x}px, ${camera.y}px, ${camera.z}px)`;
-    const inverseScale = `scale(${camera.scale})`;
+    const inverseScale = `scale(${camera.scale}) scaleX(${camera.scaleX}) scaleY(${camera.scaleY})`;
 
-    transformString = `${inverseTranslate} ${inverseRotation} ${inverseScale} translate3d(${xVal}px, ${yVal}px, ${zVal}px) ${rotationString} scale(${scaleVal})`;
+    transformString = `${inverseTranslate} ${inverseRotation} ${inverseScale} translate3d(${xVal}px, ${yVal}px, ${zVal}px) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
   } else {
-    transformString = `translate3d(${xVal}px, ${yVal}px, ${zVal}px) ${rotationString} scale(${scaleVal})`;
+    transformString = `translate3d(${xVal}px, ${yVal}px, ${zVal}px) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
   }
 
   const childArray = React.Children.toArray(children);

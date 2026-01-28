@@ -1,9 +1,8 @@
 import React from "react";
-import { AbsoluteFill } from "remotion";
-import { Scene3D, Step, Element3D, useViewportRect } from "remotion-bits";
+import { Scene3D, Step, useViewportRect } from "remotion-bits";
 
 export const metadata = {
-  name: "Basic",
+  name: "Basic 3D Scene",
   description: "3D camera transitions between positioned steps, impress.js style",
   tags: ["3d", "camera", "presentation", "transition"],
   duration: 60,
@@ -18,28 +17,35 @@ export const Component: React.FC = () => {
   return (
     <Scene3D
       perspective={1000}
-      transitionDuration={45}
-      easing="easeInOutCubic"
+      transitionDuration={20}
       stepDuration={20}
+      easing="easeInOutCubic"
     >
       <Step
-        id="hello"
+        id="1"
         x={0}
         y={0}
         z={0}
       >
-        <h1 style={{ fontSize, background: 'red' }}>Hello</h1>
+        <h1 style={{ fontSize }}>Hello</h1>
       </Step>
-
       <Step
-        id="3d"
-        x={0}
+        id="2"
+        x={200}
         y={0}
-        z={-200}
-        rotateY={-90}
-        rotateX={-90}
+        z={-300}
+        rotateZ={45}
+        scale={0.5}
       >
-        <h1 style={{ fontSize, background: 'blue' }}>3D</h1>
+        <h1 style={{ fontSize }}>Hello</h1>
+      </Step>
+      <Step
+        id="3"
+        x={400}
+        y={0}
+        z={0}
+      >
+        <h1 style={{ fontSize }}>Hello</h1>
       </Step>
     </Scene3D>
   );

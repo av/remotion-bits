@@ -155,6 +155,8 @@ const StepComponent: React.FC<StepProps> = ({
   y = 0,
   z = 0,
   scale = 1,
+  scaleX = 1,
+  scaleY = 1,
   rotateX = 0,
   rotateY = 0,
   rotateZ = 0,
@@ -174,6 +176,8 @@ const StepComponent: React.FC<StepProps> = ({
       y,
       z,
       scale,
+      scaleX,
+      scaleY,
       rotateX,
       rotateY,
       rotateZ,
@@ -191,6 +195,8 @@ const StepComponent: React.FC<StepProps> = ({
   const yVal = interpolateKeyframes(y, 1);
   const zVal = interpolateKeyframes(z, 1);
   const scaleVal = interpolateKeyframes(scale, 1);
+  const scaleXVal = interpolateKeyframes(scaleX, 1);
+  const scaleYVal = interpolateKeyframes(scaleY, 1);
   const rotateXVal = interpolateKeyframes(rotateX, 1);
   const rotateYVal = interpolateKeyframes(rotateY, 1);
   const rotateZVal = interpolateKeyframes(rotateZ, 1);
@@ -206,7 +212,7 @@ const StepComponent: React.FC<StepProps> = ({
     .map((axis) => rotationTransforms[axis])
     .join(" ");
 
-  const positionTransform = `translate3d(${xVal}px, ${yVal}px, ${zVal}px) ${rotationString} scale(${scaleVal})`;
+  const positionTransform = `translate(-50%, -50%) translate3d(${xVal}px, ${yVal}px, ${zVal}px) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
 
   const enterTransitionStyle = useTransitionStyle(transition, isActive);
   const exitTransitionStyle = useTransitionStyle(exitTransition, isPast);

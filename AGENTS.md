@@ -69,8 +69,7 @@ You're not allowed to create markdown files with outline of what you did. You'll
 
 When adding new Bits to the documentation site, ensure that you:
 1. Create the Bit in the appropriate directory under `docs/src/bits`
-2. Update `astro.config.mjs` to include the new Bit in the sidebar navigation
-3. Create a new mdx file for the Bit with proper frontmatter and content structure
+2. Create a new mdx file for the Bit with proper frontmatter and content structure
 
 When creating bits, keep the following in mind:
 - Do not hardcode font sizes; use the `useViewportRect` and fractional sizing instead

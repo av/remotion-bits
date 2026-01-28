@@ -126,10 +126,16 @@ export const Particles: React.FC<ParticlesProps> = ({
           opacity: p.opacity,
         };
 
+        // Calculate particle age for transition timing
+        // The simulator uses (frame + startFrame) as the timeline
+        const spawnerStartFrame = spawner.startFrame || 0;
+        const currentSpawnerFrame = frame + spawnerStartFrame;
+        const age = currentSpawnerFrame - p.birthFrame;
+
         return (
           <div key={p.id} style={particleStyle}>
             {spawner.transition ? (
-              <MotionTransition transition={spawner.transition}>
+              <MotionTransition transition={spawner.transition} cycleOffset={age}>
                 {childToRender}
               </MotionTransition>
             ) : (

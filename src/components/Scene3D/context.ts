@@ -9,6 +9,8 @@ const defaultCamera: CameraState = {
   rotateY: 0,
   rotateZ: 0,
   scale: 1,
+  scaleX: 1,
+  scaleY: 1,
 };
 
 const defaultContext: Scene3DContextValue = {
