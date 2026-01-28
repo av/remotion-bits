@@ -1,0 +1,43 @@
+---
+title: Step
+description: A navigation target positioned in 3D space.
+---
+
+A navigation target positioned in 3D space. The camera will move to center on each step.
+
+## Usage
+
+```tsx
+<Step
+  id="intro"                   // Optional identifier
+  x={0} y={0} z={0}           // 3D position
+  scale={1}                    // Scale multiplier
+  rotateX={0} rotateY={0} rotateZ={0}  // 3D rotation (degrees)
+  rotateOrder="xyz"            // Transform order
+  transition={{                // Enter animation when step activates
+    opacity: [0, 1],
+    y: [50, 0],
+    duration: 30,
+  }}
+>
+  <h1>Welcome</h1>
+</Step>
+```
+
+## Transition Props
+
+`Step` supports a `transition` prop with these properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `x`, `y`, `z` | `AnimatedValue` | Translation animation |
+| `scale` | `AnimatedValue` | Scale animation |
+| `rotateX/Y/Z` | `AnimatedValue` | Rotation animation |
+| `opacity` | `AnimatedValue` | Opacity animation |
+| `blur` | `AnimatedValue` | Blur filter animation |
+| `frames` | `[number, number]` | Start and end frames |
+| `duration` | `number` | Duration in frames |
+| `delay` | `number` | Delay before animation starts |
+| `easing` | `string \| function` | Easing function |
+| `stagger` | `number` | Stagger delay between children |
+| `staggerDirection` | `string` | Stagger order: forward, reverse, center, random |

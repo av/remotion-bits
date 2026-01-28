@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useMemo } from "react";
 import { random } from "remotion";
 import type { StepProps, TransitionConfig } from "./types";
 import { useScene3D } from "./context";
@@ -44,21 +44,10 @@ function calculateStaggerIndex(
   return actualIndex;
 }
 
-function useTransitionStyle(
-  transition: TransitionConfig | undefined,
-  shouldApply: boolean
+function getTransitionStyles(
+  transition: TransitionConfig,
+  progress: number
 ): React.CSSProperties {
-  const progress = useMotionTiming({
-    frames: transition?.frames,
-    duration: transition?.duration,
-    delay: transition?.delay ?? 0,
-    easing: transition?.easing,
-  });
-
-  if (!transition || !shouldApply) {
-    return {};
-  }
-
   return buildMotionStyles({
     progress,
     transforms: {
@@ -84,6 +73,24 @@ function useTransitionStyle(
     },
     easing: getEasingFunction(transition.easing),
   });
+}
+
+function useTransitionStyle(
+  transition: TransitionConfig | undefined,
+  shouldApply: boolean
+): React.CSSProperties {
+  const progress = useMotionTiming({
+    frames: transition?.frames,
+    duration: transition?.duration,
+    delay: transition?.delay ?? 0,
+    easing: transition?.easing,
+  });
+
+  if (!transition || !shouldApply) {
+    return {};
+  }
+
+  return getTransitionStyles(transition, progress);
 }
 
 interface StaggeredChildProps {
@@ -212,16 +219,46 @@ const StepComponent: React.FC<StepProps> = ({
     .map((axis) => rotationTransforms[axis])
     .join(" ");
 
-  const positionTransform = `translate(-50%, -50%) translate3d(${xVal}px, ${yVal}px, ${zVal}px) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
+  const toCss = (val: number | string) => typeof val === 'number' ? `${val}px` : val;
 
-  const enterTransitionStyle = useTransitionStyle(transition, isActive);
-  const exitTransitionStyle = useTransitionStyle(exitTransition, isPast);
+  const positionTransform = `translate(-50%, -50%) translate3d(${toCss(xVal)}, ${toCss(yVal)}, ${toCss(zVal)}) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
 
-  const activeTransitionStyle = isActive
-    ? enterTransitionStyle
-    : isPast
+  const stepConfig = steps[stepIndex];
+
+  const computedEnterTransition = useMemo(() => {
+    if (!transition) return undefined;
+    if (transition.frames) return transition;
+    if (!stepConfig) return transition;
+
+    const startFrame = stepConfig.enterFrame;
+    const duration = transition.duration ?? 30;
+
+    return {
+      ...transition,
+      frames: [startFrame, startFrame + duration] as [number, number],
+    };
+  }, [transition, stepConfig]);
+
+  const computedExitTransition = useMemo(() => {
+    if (!exitTransition) return undefined;
+    if (exitTransition.frames) return exitTransition;
+    if (!stepConfig) return exitTransition;
+
+    const startFrame = stepConfig.exitFrame;
+    const duration = exitTransition.duration ?? 30;
+
+    return {
+      ...exitTransition,
+      frames: [startFrame, startFrame + duration] as [number, number],
+    };
+  }, [exitTransition, stepConfig]);
+
+  const enterTransitionStyle = useTransitionStyle(computedEnterTransition, !isPast);
+  const exitTransitionStyle = useTransitionStyle(computedExitTransition, isPast);
+
+  const activeTransitionStyle = isPast
     ? exitTransitionStyle
-    : {};
+    : enterTransitionStyle;
 
   const childArray = React.Children.toArray(children);
   const totalChildren = childArray.length;
@@ -235,11 +272,11 @@ const StepComponent: React.FC<StepProps> = ({
   };
 
   const renderChildren = () => {
-    if (!transition?.stagger) {
+    if (!computedEnterTransition?.stagger) {
       return children;
     }
 
-    const staggerDirection = transition.staggerDirection ?? "forward";
+    const staggerDirection = computedEnterTransition.staggerDirection ?? "forward";
 
     return childArray.map((child, actualIndex) => {
       const staggerIndex = calculateStaggerIndex(actualIndex, totalChildren, staggerDirection);
@@ -249,7 +286,7 @@ const StepComponent: React.FC<StepProps> = ({
           child={child}
           actualIndex={actualIndex}
           staggerIndex={staggerIndex}
-          transition={transition}
+          transition={computedEnterTransition}
         />
       );
     });

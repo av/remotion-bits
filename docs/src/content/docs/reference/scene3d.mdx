@@ -1,0 +1,25 @@
+---
+title: Scene3D
+description: The main container that manages the 3D viewport and camera transitions.
+---
+
+The `Scene3D` component creates a 3D presentation environment where content is positioned in 3D space and a virtual camera smoothly transitions between steps.
+
+## Usage
+
+```tsx
+<Scene3D
+  perspective={1000}          // CSS perspective (default: 1000)
+  transitionDuration={30}     // Frames per camera transition
+  easing="easeInOutCubic"     // Easing function for transitions
+  stepDuration={60}           // Frames per step (auto-advance)
+>
+  {children}
+</Scene3D>
+```
+
+## Hooks
+
+- [useScene3D](/docs/reference/use-scene3d)
+- [useCamera](/docs/reference/use-camera)
+- [useActiveStep](/docs/reference/use-active-step)

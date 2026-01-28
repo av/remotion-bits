@@ -122,7 +122,7 @@ export const Particles: React.FC<ParticlesProps> = ({
           position: "absolute",
           left: 0,
           top: 0,
-          transform: `translate(${p.position.x}px, ${p.position.y}px) rotate(${p.rotation}deg) scale(${p.scale})`,
+          transform: `translate3d(${p.position.x}px, ${p.position.y}px, ${p.position.z}px) rotate(${p.rotation}deg) scale(${p.scale})`,
           opacity: p.opacity,
         };
 
@@ -132,15 +132,30 @@ export const Particles: React.FC<ParticlesProps> = ({
         const currentSpawnerFrame = frame + spawnerStartFrame;
         const age = currentSpawnerFrame - p.birthFrame;
 
+        let content = childToRender;
+
+        if (React.isValidElement(content) && content.type === MotionTransition) {
+          const props = content.props as any;
+          content = React.cloneElement(content, {
+            cycleOffset: age,
+            transition: {
+              duration: p.lifespan,
+              ...(props.transition || {}),
+            },
+          } as any);
+        }
+
+        if (spawner.transition) {
+          content = (
+            <MotionTransition transition={spawner.transition} cycleOffset={age}>
+              {content}
+            </MotionTransition>
+          );
+        }
+
         return (
           <div key={p.id} style={particleStyle}>
-            {spawner.transition ? (
-              <MotionTransition transition={spawner.transition} cycleOffset={age}>
-                {childToRender}
-              </MotionTransition>
-            ) : (
-              childToRender
-            )}
+            {content}
           </div>
         );
       })}

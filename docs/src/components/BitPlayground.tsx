@@ -85,7 +85,7 @@ const compileUserCode = (
       const props = { ...__BIT_DEFAULT_PROPS__, ...__BIT_PROPS__ };
 
       // Destructure common exports for convenience
-      const { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } = Remotion;
+      const { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, random } = Remotion;
       const {
         TextTransition,
         MotionTransition,
@@ -101,6 +101,9 @@ const compileUserCode = (
         useScene3D,
         useCamera,
         useActiveStep,
+        randomInt,
+        randomFloat,
+        anyElement,
       } = RemotionBits;
 
       ${cleanedTranspiled}

@@ -8,11 +8,14 @@ import type { Particle, ParticleBehaviorHandler } from "./types";
 export const movement: ParticleBehaviorHandler = (p) => {
   p.velocity.x += p.acceleration.x;
   p.velocity.y += p.acceleration.y;
+  p.velocity.z += p.acceleration.z;
   p.position.x += p.velocity.x;
   p.position.y += p.velocity.y;
+  p.position.z += p.velocity.z;
   // Reset acceleration - forces must be re-applied each frame
   p.acceleration.x = 0;
   p.acceleration.y = 0;
+  p.acceleration.z = 0;
 };
 
 /**
@@ -36,26 +39,31 @@ export const movement: ParticleBehaviorHandler = (p) => {
 export const createGravity = (force: {
   x?: number;
   y?: number;
+  z?: number;
   varianceX?: number;
   varianceY?: number;
+  varianceZ?: number;
 }): ParticleBehaviorHandler => {
-  const perParticleForce = new Map<string, { x: number; y: number }>();
+  const perParticleForce = new Map<string, { x: number; y: number; z: number }>();
 
   return (p) => {
     // Calculate per-particle force on first encounter
     if (!perParticleForce.has(p.id)) {
       const varX = force.varianceX || 0;
       const varY = force.varianceY || 0;
+      const varZ = force.varianceZ || 0;
 
       const forceX = (force.x || 0) + (random(`gravity-x-${p.seed}`) - 0.5) * 2 * varX;
       const forceY = (force.y || 0) + (random(`gravity-y-${p.seed}`) - 0.5) * 2 * varY;
+      const forceZ = (force.z || 0) + (random(`gravity-z-${p.seed}`) - 0.5) * 2 * varZ;
 
-      perParticleForce.set(p.id, { x: forceX, y: forceY });
+      perParticleForce.set(p.id, { x: forceX, y: forceY, z: forceZ });
     }
 
     const particleForce = perParticleForce.get(p.id)!;
     p.acceleration.x += particleForce.x;
     p.acceleration.y += particleForce.y;
+    p.acceleration.z += particleForce.z;
   };
 };
 
@@ -95,6 +103,7 @@ export const createDrag = (factor: number, variance?: number): ParticleBehaviorH
     const particleDrag = perParticleDrag.get(p.id)!;
     p.velocity.x *= particleDrag;
     p.velocity.y *= particleDrag;
+    p.velocity.z *= particleDrag;
   };
 };
 
@@ -124,10 +133,12 @@ export const createWiggle = (
     return (p, age) => {
       const noiseX = (random(`wiggle-x-${p.seed}-${age}`) - 0.5) * 2;
       const noiseY = (random(`wiggle-y-${p.seed}-${age}`) - 0.5) * 2;
+      const noiseZ = (random(`wiggle-z-${p.seed}-${age}`) - 0.5) * 2;
 
       if (random(`wiggle-freq-${p.seed}-${age}`) < frequency) {
         p.velocity.x += noiseX * magnitude;
         p.velocity.y += noiseY * magnitude;
+        p.velocity.z += noiseZ * magnitude;
       }
     };
   }
@@ -144,10 +155,12 @@ export const createWiggle = (
     const particleMagnitude = perParticleMagnitude.get(p.id)!;
     const noiseX = (random(`wiggle-x-${p.seed}-${age}`) - 0.5) * 2;
     const noiseY = (random(`wiggle-y-${p.seed}-${age}`) - 0.5) * 2;
+    const noiseZ = (random(`wiggle-z-${p.seed}-${age}`) - 0.5) * 2;
 
     if (random(`wiggle-freq-${p.seed}-${age}`) < frequency) {
       p.velocity.x += noiseX * particleMagnitude;
       p.velocity.y += noiseY * particleMagnitude;
+      p.velocity.z += noiseZ * particleMagnitude;
     }
   };
 };

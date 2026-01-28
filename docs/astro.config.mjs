@@ -113,6 +113,17 @@ export default defineConfig({
                     link: '/docs/getting-started',
                 },
                 {
+                    label: 'Reference',
+                    items: [
+                        { label: 'Scene3D', link: '/docs/reference/scene3d' },
+                        { label: 'Step', link: '/docs/reference/step' },
+                        { label: 'Element3D', link: '/docs/reference/element3d' },
+                        { label: 'useScene3D', link: '/docs/reference/use-scene3d' },
+                        { label: 'useCamera', link: '/docs/reference/use-camera' },
+                        { label: 'useActiveStep', link: '/docs/reference/use-active-step' },
+                    ]
+                },
+                {
                     label: 'Bits',
                     items: getBitsSidebar(),
                 },

@@ -9,9 +9,9 @@ const BITS_LIST = [
     { module: bits.ParticlesFountain, slug: 'particles-fountain' },
     { module: bits.BlurSlideWord, slug: 'blur-slide-word' },
     { module: bits.LinearGradient, slug: 'linear-gradient' },
+    { module: bits.FlyingThroughWords, slug: 'flying-through-words' },
     { module: bits.ParticlesGrid, slug: 'particles-grid' },
-    { module: bits.SlideFromLeft, slug: 'slide-from-left' },
-    { module: bits.FadeIn, slug: 'fade-in' },
+    { module: bits.Elements3D, slug: '3d-elements' },
 ];
 
 export const HeroShowcase: React.FC = () => {

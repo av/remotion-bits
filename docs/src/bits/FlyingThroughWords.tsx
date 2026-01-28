@@ -13,37 +13,36 @@ export const metadata = {
 
 export const Component: React.FC = () => {
   const rect = useViewportRect();
-  const WORDS = ["Idea", "Concept", "Vision", "Future", "Dream", "Create", "Design", "Inspire", "Build", "Launch"];
-
-  // Custom handler for [0, 1, 0] opacity
-  // Using explicit any for particle to avoid complex type imports in docs
-  const opacityHandler = (p: any, age: number) => {
-    const progress = age / p.lifespan;
-    // Fade in 0->0.2, Visible 0.2->0.8, Fade out 0.8->1
-    p.opacity = interpolate(progress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-  };
+  const WORDS = [
+    "Apple II", "Commodore 64", "IBM PC", "IBM PC/XT", "IBM PC/AT", "TRS-80", "Atari 800", "Amiga 500", "ZX Spectrum", "MSX"
+  ];
 
   return (
     <Particles
       style={{ perspective: '1000px' }}
     >
       <Spawner
-        rate={0.15}
-        area={{ width: rect.width, height: rect.height }}
+        rate={0.2}
+        area={{ width: rect.width, height: rect.height, depth: -rect.vmin * 50 }}
         position={resolvePoint(rect, { x: "center", y: "center" })}
-        lifespan={180}
+        lifespan={50}
+        velocity={{
+          x: 0,
+          y: 0,
+          z: rect.vmin * 10,
+          varianceZ: rect.vmin * 10,
+        }}
       >
         {WORDS.map((word, i) => (
           <MotionTransition
             key={i}
             style={{
               color: "white",
-              fontSize: rect.vmin * 2,
+              fontSize: rect.vmin * 10,
               textAlign: "center"
             }}
             transition={{
-              x: [0, 100],
-              z: [0, 1000]
+              opacity: [0, 1, 0.5, 0.2, 0],
             }}
           >
             {word}

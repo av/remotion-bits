@@ -71,8 +71,16 @@ export const Scene3D: React.FC<Scene3DProps> = ({
   const stepIndexRef = useRef(0);
 
   const childArray = React.Children.toArray(children);
-  const stepChildren = childArray.filter(isStepElement);
-  const nonStepChildren = childArray.filter((child) => !isStepElement(child));
+
+  const stepChildren = useMemo(
+    () => childArray.filter(isStepElement),
+    [childArray]
+  );
+
+  const nonStepChildren = useMemo(
+    () => childArray.filter((child) => !isStepElement(child)),
+    [childArray]
+  );
 
   const steps = useMemo(() => {
     const stepConfigs: StepConfig[] = [];
@@ -106,7 +114,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({
 
     stepsRef.current = stepConfigs;
     return stepConfigs;
-  }, [stepChildren.length, stepDuration, durationInFrames]);
+  }, [stepChildren, stepDuration, durationInFrames]);
 
   const registerStep = useCallback((config: Omit<StepConfig, "index">) => {
     const index = stepIndexRef.current;

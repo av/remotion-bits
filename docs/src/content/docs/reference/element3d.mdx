@@ -1,0 +1,40 @@
+---
+title: Element3D
+description: Arbitrary 3D-positioned content.
+---
+
+Arbitrary 3D-positioned content that is NOT a navigation target. Useful for decorative elements.
+
+## Usage
+
+```tsx
+<Element3D
+  x={-500} y={-300} z={-800}   // 3D position
+  fixed={false}                 // If true, stays fixed in screen-space
+  transition={{                 // Content animation
+    opacity: [0, 1],
+    scale: [0.5, 1],
+    duration: 20,
+  }}
+>
+  <div className="decoration" />
+</Element3D>
+```
+
+## Transition Props
+
+`Element3D` supports a `transition` prop with these properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `x`, `y`, `z` | `AnimatedValue` | Translation animation |
+| `scale` | `AnimatedValue` | Scale animation |
+| `rotateX/Y/Z` | `AnimatedValue` | Rotation animation |
+| `opacity` | `AnimatedValue` | Opacity animation |
+| `blur` | `AnimatedValue` | Blur filter animation |
+| `frames` | `[number, number]` | Start and end frames |
+| `duration` | `number` | Duration in frames |
+| `delay` | `number` | Delay before animation starts |
+| `easing` | `string \| function` | Easing function |
+| `stagger` | `number` | Stagger delay between children |
+| `staggerDirection` | `string` | Stagger order: forward, reverse, center, random |

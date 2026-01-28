@@ -101,20 +101,30 @@ export function simulateParticles({
       // ----------------------------------------------------------------------
 
       // Initial Position
-      const spawnerPos = spawner.position || { x: 0, y: 0 };
+      const spawnerPos = spawner.position || {};
+      const spawnerX = spawnerPos.x || 0;
+      const spawnerY = spawnerPos.y || 0;
+      const spawnerZ = spawnerPos.z || 0;
+
       const area = spawner.area || { width: 0, height: 0 };
+      const areaWidth = area.width || 0;
+      const areaHeight = area.height || 0;
+      const areaDepth = area.depth || 0;
 
       // Random position within area (Rect by default)
-      const posX = spawnerPos.x + (random(`x-${seed}`) - 0.5) * area.width;
-      const posY = spawnerPos.y + (random(`y-${seed}`) - 0.5) * area.height;
+      const posX = spawnerX + (random(`x-${seed}`) - 0.5) * areaWidth;
+      const posY = spawnerY + (random(`y-${seed}`) - 0.5) * areaHeight;
+      const posZ = spawnerZ + (random(`z-${seed}`) - 0.5) * areaDepth;
 
       // Initial Velocity
       const velConfig = spawner.velocity || { x: 0, y: 0 };
       const vVarX = velConfig.varianceX || 0;
       const vVarY = velConfig.varianceY || 0;
+      const vVarZ = velConfig.varianceZ || 0;
 
       const velX = velConfig.x + (random(`vx-${seed}`) - 0.5) * 2 * vVarX;
       const velY = velConfig.y + (random(`vy-${seed}`) - 0.5) * 2 * vVarY;
+      const velZ = (velConfig.z || 0) + (random(`vz-${seed}`) - 0.5) * 2 * vVarZ;
 
       const particle: Particle = {
         id: `${spawner.id}-${i}`,
@@ -123,9 +133,9 @@ export function simulateParticles({
         birthFrame,
         lifespan: actualLifespan,
         spawnerId: spawner.id,
-        position: { x: posX, y: posY },
-        velocity: { x: velX, y: velY },
-        acceleration: { x: 0, y: 0 },
+        position: { x: posX, y: posY, z: posZ },
+        velocity: { x: velX, y: velY, z: velZ },
+        acceleration: { x: 0, y: 0, z: 0 },
         scale: 1,
         rotation: 0,
         opacity: 1,

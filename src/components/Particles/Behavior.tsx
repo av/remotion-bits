@@ -10,7 +10,7 @@ import {
 
 export interface BehaviorProps {
     // Standard Presets
-    gravity?: { x?: number; y?: number; varianceX?: number; varianceY?: number };
+    gravity?: { x?: number; y?: number; z?: number; varianceX?: number; varianceY?: number; varianceZ?: number };
     drag?: number;
     dragVariance?: number;
     wiggle?: { magnitude: number; frequency?: number };

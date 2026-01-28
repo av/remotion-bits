@@ -84,6 +84,7 @@ export const MotionTransition: React.FC<MotionTransitionComponentProps> = ({
   children,
   className,
   style,
+  cycleOffset,
 }) => {
   const {
     x,

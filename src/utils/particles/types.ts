@@ -4,9 +4,10 @@ import type { MotionTransitionProps } from "../../components/MotionTransition";
 // CORE DATA STRUCTURES
 // ============================================================================
 
-export interface Vector2 {
+export interface Vector3 {
   x: number;
   y: number;
+  z: number;
 }
 
 export interface Particle {
@@ -20,9 +21,9 @@ export interface Particle {
   lifespan: number;
 
   // Physics State (Mutable during simulation step)
-  position: Vector2;
-  velocity: Vector2;
-  acceleration: Vector2;
+  position: Vector3;
+  velocity: Vector3;
+  acceleration: Vector3;
 
   // visual overrides (Mutable during simulation step)
   scale: number;
@@ -51,11 +52,18 @@ export interface SpawnerConfig {
   max?: number; // Maximum number of active particles from this spawner
 
   // Shape & Position
-  position?: Vector2; // Offset of the spawner itself
-  area?: { width: number; height: number }; // For rect/circle
+  position?: Partial<Vector3>; // Offset of the spawner itself
+  area?: { width: number; height: number; depth?: number }; // For rect/circle
 
   // Initial Physics
-  velocity?: { x: number; y: number; varianceX?: number; varianceY?: number };
+  velocity?: {
+    x: number;
+    y: number;
+    z?: number;
+    varianceX?: number;
+    varianceY?: number;
+    varianceZ?: number;
+  };
   lifespan?: number;
   lifespanVariance?: number;
 
