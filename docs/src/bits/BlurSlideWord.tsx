@@ -25,6 +25,6 @@ export const Component: React.FC = () => (
       color: "white",
     }}
   >
-    Blur Slide Transition
+    Text Transition
   </TextTransition>
 );

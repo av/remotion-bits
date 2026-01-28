@@ -1,0 +1,118 @@
+---
+title: Scene3D Presentation
+category: 3D Scenes
+description: 3D camera transitions between positioned steps, impress.js style
+---
+import { BitPlayground } from '@components/BitPlayground';
+import * as Scene3DPresentationBit from '@bits/3DBasic';
+
+3D camera transitions between positioned steps, impress.js style.
+
+**Tags:** {Scene3DPresentationBit.metadata.tags.join(', ')}
+
+<BitPlayground client:only="react" bitName="Scene3DPresentation" />
+
+## Overview
+
+The `Scene3D` component creates a 3D presentation environment where content is positioned in 3D space and a virtual camera smoothly transitions between steps. Inspired by [impress.js](https://impress.js.org/).
+
+## Components
+
+### Scene3D
+
+The main container that manages the 3D viewport and camera transitions.
+
+```tsx
+<Scene3D
+  perspective={1000}          // CSS perspective (default: 1000)
+  transitionDuration={30}     // Frames per camera transition
+  easing="easeInOutCubic"     // Easing function for transitions
+  stepDuration={60}           // Frames per step (auto-advance)
+>
+  {children}
+</Scene3D>
+```
+
+### Step
+
+A navigation target positioned in 3D space. The camera will move to center on each step.
+
+```tsx
+<Step
+  id="intro"                   // Optional identifier
+  x={0} y={0} z={0}           // 3D position
+  scale={1}                    // Scale multiplier
+  rotateX={0} rotateY={0} rotateZ={0}  // 3D rotation (degrees)
+  rotateOrder="xyz"            // Transform order
+  transition={{                // Enter animation when step activates
+    opacity: [0, 1],
+    y: [50, 0],
+    duration: 30,
+  }}
+>
+  <h1>Welcome</h1>
+</Step>
+```
+
+### Element3D
+
+Arbitrary 3D-positioned content that is NOT a navigation target. Useful for decorative elements.
+
+```tsx
+<Element3D
+  x={-500} y={-300} z={-800}   // 3D position
+  fixed={false}                 // If true, stays fixed in screen-space
+  transition={{                 // Content animation
+    opacity: [0, 1],
+    scale: [0.5, 1],
+    duration: 20,
+  }}
+>
+  <div className="decoration" />
+</Element3D>
+```
+
+## Hooks
+
+### useScene3D
+
+Access the full scene context including camera state and active step.
+
+```tsx
+const { camera, activeStepIndex, activeStepId, transitionProgress } = useScene3D();
+```
+
+### useCamera
+
+Get just the current camera state.
+
+```tsx
+const camera = useCamera();
+// { x, y, z, rotateX, rotateY, rotateZ, scale }
+```
+
+### useActiveStep
+
+Get information about the currently active step.
+
+```tsx
+const { index, id, progress } = useActiveStep();
+```
+
+## Transition Props
+
+Both `Step` and `Element3D` support a `transition` prop with these properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `x`, `y`, `z` | `AnimatedValue` | Translation animation |
+| `scale` | `AnimatedValue` | Scale animation |
+| `rotateX/Y/Z` | `AnimatedValue` | Rotation animation |
+| `opacity` | `AnimatedValue` | Opacity animation |
+| `blur` | `AnimatedValue` | Blur filter animation |
+| `frames` | `[number, number]` | Start and end frames |
+| `duration` | `number` | Duration in frames |
+| `delay` | `number` | Delay before animation starts |
+| `easing` | `string \| function` | Easing function |
+| `stagger` | `number` | Stagger delay between children |
+| `staggerDirection` | `string` | Stagger order: forward, reverse, center, random |

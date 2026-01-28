@@ -10,7 +10,7 @@ export const metadata = {
   height: 1080,
 };
 
-export const defaultProps = {
+export const props = {
   color1Start: "#cacaca",
   color1End: "#b76c1c",
   color2Start: "#454545",
@@ -31,8 +31,8 @@ export const controls = [
 export const Component: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      `linear-gradient(${defaultProps.angle1}deg, ${defaultProps.color1Start} 0%, ${defaultProps.color1End} 100%)`,
-      `linear-gradient(${defaultProps.angle2}deg, ${defaultProps.color2Start} 0%, ${defaultProps.color2End} 100%)`,
+      `linear-gradient(${props.angle1}deg, ${props.color1Start} 0%, ${props.color1End} 100%)`,
+      `linear-gradient(${props.angle2}deg, ${props.color2Start} 0%, ${props.color2End} 100%)`,
     ]}
     duration={90}
   >

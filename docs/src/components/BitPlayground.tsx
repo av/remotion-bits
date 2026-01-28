@@ -95,6 +95,12 @@ const compileUserCode = (
         Behavior,
         useViewportRect,
         resolvePoint,
+        Scene3D,
+        Step,
+        Element3D,
+        useScene3D,
+        useCamera,
+        useActiveStep,
       } = RemotionBits;
 
       ${cleanedTranspiled}
@@ -129,15 +135,15 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
   const bit = getBit(bitName);
 
   const [editedCode, setEditedCode] = useState(bit.sourceCode);
-  const [bitProps, setBitProps] = useState<Record<string, any>>(bit.defaultProps || {});
+  const [bitProps, setBitProps] = useState<Record<string, any>>(bit.props || {});
 
   const { Component: OriginalComponent } = bit;
   const { duration, width = 1920, height = 1080 } = bit.metadata;
 
   // Compile the edited code to get a live component
   const { Component: LiveComponent, error: compileError } = useMemo(() => {
-    return compileUserCode(editedCode, bit.defaultProps || {}, bitProps);
-  }, [editedCode, bit.defaultProps, bitProps]);
+    return compileUserCode(editedCode, bit.props || {}, bitProps);
+  }, [editedCode, bit.props, bitProps]);
 
   // Use the live component if available, otherwise fall back to original
   const BaseComponent = LiveComponent || OriginalComponent;
@@ -162,8 +168,9 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
       ? editedCode
       : `return (\n    ${editedCode}\n  );`;
 
-    const propsDeclaration = bit.defaultProps
-      ? `\nconst props = { ...defaultProps, ...__BIT_PROPS__ };\n`
+    const currentProps = { ...bit.props, ...bitProps };
+    const propsDeclaration = bit.props
+      ? `\nconst props = { ...props };\n`
       : '';
 
     const generated = `import React from "react";
@@ -171,7 +178,7 @@ import { BackgroundTransition } from "remotion-bits";
 
 export const metadata = ${JSON.stringify(bit.metadata, null, 2)};
 
-${bit.defaultProps ? `export const defaultProps = ${JSON.stringify(bit.defaultProps, null, 2)};\n` : ''}
+${bit.props ? `export const props = ${JSON.stringify(currentProps, null, 2)};\n` : ''}
 ${bit.controls ? `export const controls = ${JSON.stringify(bit.controls, null, 2)};\n` : ''}
 export const Component: React.FC = () => {${propsDeclaration}
   ${componentBody}
@@ -181,7 +188,7 @@ export const Component: React.FC = () => {${propsDeclaration}
     navigator.clipboard.writeText(generated).then(() => {
       alert('Bit code copied to clipboard!');
     });
-  }, [editedCode, bit]);
+  }, [editedCode, bit, bitProps]);
 
   return (
     <div className="bit-playground not-content">
@@ -190,7 +197,7 @@ export const Component: React.FC = () => {${propsDeclaration}
           <div className="bit-playground-controls-header">Controls</div>
           <div className="bit-playground-controls-grid">
             {bit.controls.map((control) => {
-              const value = bitProps[control.key] ?? bit.defaultProps?.[control.key];
+              const value = bitProps[control.key] ?? bit.props?.[control.key];
 
               return (
                 <div key={control.key} className="bit-playground-control">

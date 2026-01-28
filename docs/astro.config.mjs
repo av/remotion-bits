@@ -7,9 +7,64 @@ import react from '@astrojs/react';
 
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Function to generate Bits sidebar dynamically
+function getBitsSidebar() {
+    const bitsDir = path.resolve(__dirname, './src/content/docs/bits');
+    if (!fs.existsSync(bitsDir)) return [];
+
+    const files = fs.readdirSync(bitsDir).filter(f => f.endsWith('.mdx'));
+    const categories = {};
+
+    files.forEach(file => {
+        const content = fs.readFileSync(path.join(bitsDir, file), 'utf-8');
+        const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+
+        if (frontmatterMatch) {
+            const frontmatter = frontmatterMatch[1];
+            const titleMatch = frontmatter.match(/title:\s*(.*)/);
+            const categoryMatch = frontmatter.match(/category:\s*(.*)/);
+
+            const title = titleMatch ? titleMatch[1].trim() : file;
+            const category = categoryMatch ? categoryMatch[1].trim() : 'Uncategorized';
+            const link = `/docs/bits/${file.replace('.mdx', '')}`;
+
+            if (!categories[category]) {
+                categories[category] = [];
+            }
+            categories[category].push({ label: title, link });
+        }
+    });
+
+    // Define preferred order for categories
+    const orderedCategories = ['Text Animations', 'Background Effects', 'Particles', '3D Scenes'];
+    const sidebarItems = [{ label: 'Introduction', link: '/docs/bits-catalog' }];
+
+    // Add ordered categories first
+    orderedCategories.forEach(cat => {
+        if (categories[cat]) {
+            sidebarItems.push({
+                label: cat,
+                items: categories[cat]
+            });
+            delete categories[cat];
+        }
+    });
+
+    // Add any remaining categories
+    Object.keys(categories).forEach(cat => {
+        sidebarItems.push({
+            label: cat,
+            items: categories[cat]
+        });
+    });
+
+    return sidebarItems;
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -59,34 +114,7 @@ export default defineConfig({
                 },
                 {
                     label: 'Bits',
-                    items: [
-                        { label: 'Introduction', link: '/docs/bits-catalog' },
-                        {
-                            label: 'Text Animations',
-                            items: [
-                                { label: 'Fade In', link: '/docs/bits/fade-in' },
-                                { label: 'Slide from Left', link: '/docs/bits/slide-from-left' },
-                                { label: 'Word by Word', link: '/docs/bits/word-by-word' },
-                                { label: 'Character by Character', link: '/docs/bits/char-by-char' },
-                                { label: 'Blur Slide Word', link: '/docs/bits/blur-slide-word' },
-                            ]
-                        },
-                        {
-                            label: 'Background Effects',
-                            items: [
-                                { label: 'Linear Gradient', link: '/docs/bits/linear-gradient' },
-                                { label: 'Radial Gradient', link: '/docs/bits/radial-gradient' },
-                            ]
-                        },
-                        {
-                            label: 'Particles',
-                            items: [
-                                { label: 'Particles Fountain', link: '/docs/bits/particles-fountain' },
-                                { label: 'Snow', link: '/docs/bits/particles-snow' },
-                                { label: 'Grid Particles', link: '/docs/bits/particles-grid' },
-                            ]
-                        }
-                    ],
+                    items: getBitsSidebar(),
                 },
             ],
             // customCss: ['./src/styles/custom.css'],

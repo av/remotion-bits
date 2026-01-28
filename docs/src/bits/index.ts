@@ -22,6 +22,8 @@ import * as StaggeredFadeInModule from './StaggeredFadeIn';
 import StaggeredFadeInSource from './StaggeredFadeIn.tsx?raw';
 import * as BlurSlideWordModule from './BlurSlideWord';
 import BlurSlideWordSource from './BlurSlideWord.tsx?raw';
+import * as Scene3DPresentationModule from './3DBasic';
+import Scene3DPresentationSource from './3DBasic.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -48,7 +50,7 @@ export interface Bit {
   metadata: BitMetadata;
   Component: React.FC;
   sourceCode: string;
-  defaultProps?: Record<string, any>;
+  props?: Record<string, any>;
   controls?: Control[];
 }
 
@@ -65,16 +67,13 @@ const extractSource = (raw: string): string => {
     } else if (body.endsWith("}")) {
       body = body.substring(0, body.length - 1);
     }
-    // Transform defaultProps to props for editable code
-    body = body.replace(/defaultProps\./g, 'props.');
     return body.trim();
   }
 
   // 2. Match implicit return: export const Component: React.FC = () => ( ... );
   const matchImplicit = raw.match(/export const Component: React\.FC = \(\) => \(([\s\S]*?)\);/);
   if (matchImplicit && matchImplicit[1]) {
-    // Transform defaultProps to props for editable code
-    return matchImplicit[1].trim().replace(/defaultProps\./g, 'props.');
+    return matchImplicit[1].trim();
   }
 
   return raw;
@@ -93,6 +92,7 @@ export const bits = {
   ParticlesGrid: { ...ParticlesGridModule, sourceCode: extractSource(ParticlesGridSource) },
   StaggeredFadeIn: { ...StaggeredFadeInModule, sourceCode: extractSource(StaggeredFadeInSource) },
   BlurSlideWord: { ...BlurSlideWordModule, sourceCode: extractSource(BlurSlideWordSource) },
+  Scene3DPresentation: { ...Scene3DPresentationModule, sourceCode: extractSource(Scene3DPresentationSource) },
 } as const;
 
 export type BitName = keyof typeof bits;
