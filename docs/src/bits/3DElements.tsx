@@ -79,7 +79,7 @@ export const Component: React.FC = () => {
             y={0}
             z={0}
             style={{
-              width: '200px'
+              width: '250px'
             }}
           >
             <h1 style={{ fontSize, color: 'white', textAlign: 'center' }}>{word}</h1>

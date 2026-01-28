@@ -21,7 +21,7 @@ export const HeroShowcase: React.FC = () => {
                 {BITS_LIST.map(({ module, slug }) => (
                     <a
                         key={slug}
-                        href={`/bits/${slug}`}
+                        href={`/docs/bits/${slug}`}
                         className="block group relative aspect-video bg-gray-900 rounded-lg overflow-hidden border border-white/10 hover:border-primary transition-all shadow-lg"
                     >
                         <div className="absolute inset-0 pointer-events-none">
