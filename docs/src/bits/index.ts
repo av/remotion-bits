@@ -20,6 +20,8 @@ import * as ParticlesGridModule from './ParticlesGrid';
 import ParticlesGridSource from './ParticlesGrid.tsx?raw';
 import * as StaggeredFadeInModule from './StaggeredFadeIn';
 import StaggeredFadeInSource from './StaggeredFadeIn.tsx?raw';
+import * as BlurSlideWordModule from './BlurSlideWord';
+import BlurSlideWordSource from './BlurSlideWord.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -73,6 +75,7 @@ export const bits = {
   ParticlesFountain: { ...ParticlesFountainModule, sourceCode: extractSource(ParticlesFountainSource) },
   ParticlesGrid: { ...ParticlesGridModule, sourceCode: extractSource(ParticlesGridSource) },
   StaggeredFadeIn: { ...StaggeredFadeInModule, sourceCode: extractSource(StaggeredFadeInSource) },
+  BlurSlideWord: { ...BlurSlideWordModule, sourceCode: extractSource(BlurSlideWordSource) },
 } as const;
 
 export type BitName = keyof typeof bits;

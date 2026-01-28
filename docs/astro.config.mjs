@@ -68,6 +68,7 @@ export default defineConfig({
                                 { label: 'Slide from Left', link: '/docs/bits/slide-from-left' },
                                 { label: 'Word by Word', link: '/docs/bits/word-by-word' },
                                 { label: 'Character by Character', link: '/docs/bits/char-by-char' },
+                                { label: 'Blur Slide Word', link: '/docs/bits/blur-slide-word' },
                             ]
                         },
                         {

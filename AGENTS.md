@@ -65,6 +65,16 @@ You're not allowed to create markdown files with outline of what you did. You'll
 - When changing docs contents, you must update astro.config.mjs to reflect the changes in the sidebar or other relevant places
 - For runtime errors, check browser console via Simple Browser or request output from user
 
+### Adding new Bits
+
+When adding new Bits to the documentation site, ensure that you:
+1. Create the Bit in the appropriate directory under `docs/src/bits`
+2. Update `astro.config.mjs` to include the new Bit in the sidebar navigation
+3. Create a new mdx file for the Bit with proper frontmatter and content structure
+
+When creating bits, keep the following in mind:
+- Do not hardcode font sizes; use the `useViewportRect` and fractional sizing instead
+
 ### Additional context
 
 Refer to [COMPAL_LOG.md](./COMPAL_LOG.md) for additional technical context.
