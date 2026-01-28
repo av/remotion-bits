@@ -1,0 +1,29 @@
+---
+title: Random Utils
+description: Seeded random number generation utilities.
+---
+
+Wrappers around Remotion's seeded `random` function for common use cases.
+
+## Functions
+
+### `randomFloat(seed, min, max)`
+Returns a floating-point number between `min` and `max`.
+
+```tsx
+const opacity = randomFloat(index, 0.5, 1);
+```
+
+### `randomInt(seed, min, max)`
+Returns an integer between `min` and `max` (inclusive).
+
+```tsx
+const count = randomInt(index, 1, 10);
+```
+
+### `anyElement(seed, array)`
+Returns a random element from an array.
+
+```tsx
+const color = anyElement(index, ["red", "blue", "green"]);
+```

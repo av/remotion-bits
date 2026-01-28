@@ -115,12 +115,36 @@ export default defineConfig({
                 {
                     label: 'Reference',
                     items: [
-                        { label: 'Scene3D', link: '/docs/reference/scene3d' },
-                        { label: 'Step', link: '/docs/reference/step' },
-                        { label: 'Element3D', link: '/docs/reference/element3d' },
-                        { label: 'useScene3D', link: '/docs/reference/use-scene3d' },
-                        { label: 'useCamera', link: '/docs/reference/use-camera' },
-                        { label: 'useActiveStep', link: '/docs/reference/use-active-step' },
+                        {
+                            label: 'Components',
+                            items: [
+                                { label: 'BackgroundTransition', link: '/docs/reference/background-transition' },
+                                { label: 'MotionTransition', link: '/docs/reference/motion-transition' },
+                                { label: 'TextTransition', link: '/docs/reference/text-transition' },
+                                { label: 'Particles', link: '/docs/reference/particles' },
+                                { label: 'Scene3D', link: '/docs/reference/scene3d' },
+                                { label: 'Step', link: '/docs/reference/step' },
+                                { label: 'Element3D', link: '/docs/reference/element3d' },
+                            ]
+                        },
+                        {
+                            label: 'Hooks',
+                            items: [
+                                { label: 'useViewportRect', link: '/docs/reference/use-viewport-rect' },
+                                { label: 'useScene3D', link: '/docs/reference/use-scene3d' },
+                                { label: 'useCamera', link: '/docs/reference/use-camera' },
+                                { label: 'useActiveStep', link: '/docs/reference/use-active-step' },
+                            ]
+                        },
+                        {
+                            label: 'Utilities',
+                            items: [
+                                { label: 'Interpolation', link: '/docs/reference/utils-interpolation' },
+                                { label: 'Geometry', link: '/docs/reference/utils-geometry' },
+                                { label: 'Motion', link: '/docs/reference/utils-motion' },
+                                { label: 'Random', link: '/docs/reference/utils-random' },
+                            ]
+                        }
                     ]
                 },
                 {

@@ -1,0 +1,86 @@
+---
+title: MotionTransition
+description: Animate elements with transform properties.
+---
+
+The `MotionTransition` component applies interpolate-based animations to `transform`, `opacity`, and `filter` properties. It supports standard distinct properties like `x`, `y`, `scale`, `rotate`, as well as staggered animations for children.
+
+## Usage
+
+```tsx
+import { MotionTransition } from "remotion-bits";
+
+export const MyComponent = () => {
+    return (
+        <MotionTransition
+            transition={{
+                y: [50, 0],       // Slide up
+                opacity: [0, 1],  // Fade in
+                scale: [0.8, 1],  // Scale up
+                duration: 30,
+                easing: "easeOutCubic"
+            }}
+        >
+            <h1>Hello World</h1>
+        </MotionTransition>
+    );
+};
+```
+
+## Props
+
+### `transition`
+**Type:** `MotionTransitionProps`
+
+Configuration object for the animation. See [Motion Configuration](#motion-configuration) below.
+
+### `children`
+**Type:** `React.ReactNode`
+
+The content to animate. If `stagger` is used, children should be a list of elements/components.
+
+### `className`
+**Type:** `string`
+**Optional**
+
+CSS class names for the wrapper div.
+
+### `style`
+**Type:** `React.CSSProperties`
+**Optional**
+
+Inline styles for the wrapper div.
+
+### `cycleOffset`
+**Type:** `number`
+**Optional**
+
+Overrides the current frame progress. Useful for relative animations or creating loops manually.
+
+## Motion Configuration
+
+The `transition` prop accepts an object with the following properties:
+
+### Transform Properties
+Each property accepts a single value (static), an array (keyframes), or a tuple `[from, to]`.
+
+- `x`, `y`, `z`: Translation values (pixels).
+- `scale`, `scaleX`, `scaleY`: Scale factors.
+- `rotate`, `rotateX`, `rotateY`, `rotateZ`: Rotation degrees.
+- `skew`, `skewX`, `skewY`: Skew degrees.
+
+### Visual Properties
+- `opacity`: `number | number[]` (0 to 1).
+- `blur`: `number | number[]` (pixels).
+- `color`: `string[]` (Text color keyframes).
+- `backgroundColor`: `string[]` (Background color keyframes).
+
+### Timing Properties
+- `frames`: `[number, number]` - Start and end frame.
+- `duration`: `number` - Duration in frames.
+- `delay`: `number` - Start delay in frames.
+- `easing`: `EasingFunction | EasingName` - Easing function.
+
+### Stagger Properties
+- `stagger`: `number` - Frames to delay each subsequent child.
+- `staggerDirection`: `"forward" | "reverse" | "center" | "random"` - Order of staggering.

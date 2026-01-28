@@ -1,0 +1,53 @@
+---
+title: Interpolation Utils
+description: Utilities for value interpolation and easing.
+---
+
+A collection of interpolation functions for animation timing, values, and colors.
+
+## Interpolation
+
+### `interpolate`
+
+An enhanced version of Remotion's `interpolate` that supports non-monotonic input ranges (e.g., repeating frames for pauses, or back-and-forth sequences).
+
+```tsx
+import { interpolate } from "remotion-bits";
+
+const val = interpolate(frame, [0, 30, 30, 60], [0, 100, 100, 200]);
+```
+
+**Features:**
+- Supports input ranges like `[0, 30, 30, 60]` to "hold" values.
+- Supports input ranges like `[0, 20, 10]` for reverse playback segments.
+
+### `interpolateColorKeyframes`
+
+Interpolates between multiple color stops using the Oklch color space for perceptually uniform results.
+
+```tsx
+import { interpolateColorKeyframes } from "remotion-bits";
+
+const color = interpolateColorKeyframes(
+    ["red", "blue", "green"], 
+    progress // 0 to 1
+);
+```
+
+## Easing
+
+The `Easing` object contains standard easing functions.
+
+```tsx
+import { Easing } from "remotion-bits";
+
+const t = Easing.easeOutCubic(progress);
+```
+
+**Available Easings:**
+- `linear`
+- `easeIn`, `easeOut`, `easeInOut` (Cubic by default, or Quad?) _(Check source for specifics, typically defaults usually map to Quad or Cubic)_
+- `easeInQuad`, `easeOutQuad`, `easeInOutQuad`
+- `easeInCubic`, `easeOutCubic`, `easeInOutCubic`
+- `easeInSine`, `easeOutSine`, `easeInOutSine`
+- `easeInQuart`, `easeOutQuart`, `easeInOutQuart`

@@ -1,0 +1,32 @@
+---
+title: Geometry Utils
+description: Geometric primitives and helpers.
+---
+
+## Rect
+
+The `Rect` class represents a rectangle and provides convenience getters for positioning.
+
+```tsx
+import { Rect } from "remotion-bits";
+
+const rect = new Rect(1920, 1080);
+```
+
+### Properties
+- `x`, `y`: Top-left coordinates.
+- `width`, `height`: Dimensions.
+- `left`, `top`, `right`, `bottom`: Edge coordinates.
+- `cx`, `cy`: Center coordinates.
+- `shorter`: The length of the shorter side.
+- `longer`: The length of the longer side.
+
+### Methods
+
+#### `relative(x, y)`
+Resolves relative coordinates (percentages or numbers) to absolute points within the rect.
+
+```tsx
+// 50% of width, 20% of height
+const point = rect.relative("50%", "20%"); 
+```

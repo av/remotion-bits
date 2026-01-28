@@ -1,0 +1,49 @@
+---
+title: useViewportRect
+description: Hook to get the current video composition's geometry.
+---
+
+The `useViewportRect` hook returns a `Rect` object representing the full dimensions of the current composition. It is a convenience wrapper around `useVideoConfig` that provides helper methods for geometric calculations.
+
+## Usage
+
+```tsx
+import { useViewportRect } from "remotion-bits";
+
+export const MyComponent = () => {
+    const rect = useViewportRect();
+
+    // rect.width = composition width
+    // rect.height = composition height
+    // rect.cx = center X
+    // rect.cy = center Y
+    // rect.top, rect.bottom, rect.left, rect.right
+
+    return (
+        <div style={{ 
+            position: 'absolute', 
+            left: rect.cx, 
+            top: rect.cy 
+        }}>
+            Centered Object
+        </div>
+    );
+};
+```
+
+## Return Value
+
+Returns a `Rect` instance with the following properties:
+
+- `width`: Composition width.
+- `height`: Composition height.
+- `x`: Always 0.
+- `y`: Always 0.
+- `left`, `top`: 0.
+- `right`: Same as width.
+- `bottom`: Same as height.
+- `cx`: Horizontal center (`width / 2`).
+- `cy`: Vertical center (`height / 2`).
+
+And methods:
+- `relative(x, y)`: Calculates absolute coordinates from percentage values or relative numbers.

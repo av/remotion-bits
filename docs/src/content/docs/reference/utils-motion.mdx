@@ -1,0 +1,72 @@
+---
+title: Motion Utils
+description: Low-level utilities for building custom motion components.
+---
+
+These utilities power the core `MotionTransition` and can be used to build your own animated components.
+
+## Hooks
+
+### `useMotionTiming`
+
+Calculates the animation progress (0 to 1) for the current frame based on timing configuration.
+
+```tsx
+import { useMotionTiming } from "remotion-bits";
+
+const progress = useMotionTiming({
+    duration: 30,
+    delay: 10,
+    stagger: 2,
+    unitIndex: index // If inside a list
+});
+```
+
+**Props:**
+- `frames`: `[start, end]` (Optional)
+- `duration`: `number` (Optional)
+- `delay`: `number` (Default: 0)
+- `stagger`: `number` (Default: 0)
+- `unitIndex`: `number` (Default: 0) - Index for staggering calculation.
+- `cycleOffset`: `number` (Optional) - Override current frame.
+
+## Functions
+
+### `buildMotionStyles`
+
+Generates a `React.CSSProperties` object containing `transform`, `opacity`, `filter`, `color`, etc., based on current progress.
+
+```tsx
+import { buildMotionStyles } from "remotion-bits";
+
+const style = buildMotionStyles({
+    progress: 0.5,
+    transforms: { scale: [0, 1] },
+    styles: { opacity: [0, 1] },
+    easing: Easing.easeOut
+});
+```
+
+### `buildTransformString`
+
+Generates just the `transform` CSS string.
+
+```tsx
+import { buildTransformString } from "remotion-bits";
+
+const transform = buildTransformString(
+    { x: 100, rotate: 45 },
+    progress
+);
+// "translateX(100px) rotate(45deg)"
+```
+
+### `interpolateKeyframes`
+
+Interpolates a value (number or array of numbers) based on progress.
+
+```tsx
+import { interpolateKeyframes } from "remotion-bits";
+
+const value = interpolateKeyframes([0, 10, 5], 0.5); // 10
+```

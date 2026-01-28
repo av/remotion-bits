@@ -1,0 +1,80 @@
+---
+title: BackgroundTransition
+description: Smoothly transition between CSS gradients.
+---
+
+The `BackgroundTransition` component enables smooth, high-quality transitions between CSS gradients. It handles interpolation of colors (using Oklch for perceptually uniform results), angles, and positions.
+
+## Usage
+
+```tsx
+import { BackgroundTransition } from "remotion-bits";
+
+export const MyComposition = () => {
+    return (
+        <BackgroundTransition
+            gradient={[
+                "linear-gradient(90deg, #ff0000, #0000ff)",
+                "linear-gradient(180deg, #00ff00, #ffff00)",
+            ]}
+            duration={60}
+        >
+            <div style={{ color: "white" }}>Content on top</div>
+        </BackgroundTransition>
+    );
+};
+```
+
+## Props
+
+### `gradient`
+**Type:** `string[]`
+
+An array of CSS gradient strings to transition between. Supports:
+- `linear-gradient`
+- `radial-gradient`
+- `conic-gradient`
+
+The component will automatically interpolate between them, handling varying numbers of color stops and different gradient types.
+
+### `frames`
+**Type:** `[number, number]`
+**Optional** (Default: `[0, composition duration]`)
+
+The frame range `[start, end]` during which the transition occurs.
+
+### `duration`
+**Type:** `number`
+**Optional**
+
+Alternative to `frames`. Specifies the duration in frames.
+
+### `delay`
+**Type:** `number`
+**Optional** (Default: `0`)
+
+The start frame (delay) before the transition begins.
+
+### `easing`
+**Type:** `EasingFunction | EasingName`
+**Optional** (Default: `linear`)
+
+The easing function to apply to the interpolation.
+
+### `className`
+**Type:** `string`
+**Optional**
+
+CSS class names to apply to the container.
+
+### `style`
+**Type:** `React.CSSProperties`
+**Optional**
+
+Inline styles to apply to the container. Note that the `background` property will be overwritten by the computed gradient.
+
+### `children`
+**Type:** `React.ReactNode`
+**Optional**
+
+Content to render on top of the gradient background.

@@ -1,0 +1,80 @@
+---
+title: Particles
+description: High-performance particle system using React and Remotion.
+---
+
+The `Particles` system allows you to create complex particle effects using `Spawner` to emit particles and `Behavior` to control their physics and properties over time.
+
+## Usage
+
+```tsx
+import { Particles, Spawner, Behavior } from "remotion-bits";
+
+export const FireEffect = () => {
+    return (
+        <Particles>
+            <Spawner rate={5} max={100}>
+                {/* Visual representation of a particle */}
+                <div style={{ width: 10, height: 10, background: 'orange', borderRadius: '50%' }} />
+            </Spawner>
+
+            {/* Behaviors apply to all particles */}
+            <Behavior 
+                gravity={{ y: -0.2 }} // Upward gravity (fire)
+                opacity={[1, 0]}      // Fade out
+                scale={{ start: 1, end: 0 }} // Shrink
+            />
+        </Particles>
+    );
+};
+```
+
+## Components
+
+### `<Particles />`
+
+The main container that runs the simulation loop.
+
+**Props:**
+
+- **`startFrame`** (`number`): Frame offset to pre-simulate. Use this to make the effect appear "already running" at frame 0.
+- **`children`**: Must contain `<Spawner>` and `<Behavior>` components.
+
+---
+
+### `<Spawner />`
+
+Defines a source of particles.
+
+**Props:**
+
+- **`rate`** (`number`): Particles emitted per frame.
+- **`burst`** (`number`): Number of particles to emit immediately on the first frame (of the spawner).
+- **`max`** (`number`): Maximum number of active particles allowed from this spawner.
+- **`startFrame`** (`number`): Offset for this specific spawner (overrides parent).
+- **`children`**:
+    - **Single Node**: All particles look like this.
+    - **Multiple Nodes**: Each particle randomly chooses one of the children as its visual variant.
+
+---
+
+### `<Behavior />`
+
+Defines physical rules or property changes over a particle's life.
+
+**Props:**
+
+- **`gravity`** (`object`): 
+    - `x`, `y`, `z`: Force vector.
+    - `varianceX`, `varianceY`, `varianceZ`: Random variation.
+- **`drag`** (`number`): Air resistance (0-1). 1 = no drag, 0.9 = heavy drag.
+- **`dragVariance`** (`number`): Random variation in drag.
+- **`wiggle`** (`object`):
+    - `magnitude`: Strength of random movement.
+    - `frequency`: Speed of direction change.
+    - `variance`: Random variation.
+- **`scale`** (`object`):
+    - `start`: Initial scale.
+    - `end`: Final scale.
+    - `startVariance`, `endVariance`: Random variation.
+- **`opacity`** (`number[]`): Keyframes for opacity over life (e.g., `[0, 1, 0]`).

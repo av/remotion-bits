@@ -1,0 +1,90 @@
+---
+title: TextTransition
+description: Animate text content with splitting capabilities.
+---
+
+The `TextTransition` component specializes in animating text, allowing you to split text by characters, words, or lines, and animate them individually with staggering.
+
+## Usage
+
+```tsx
+import { TextTransition } from "remotion-bits";
+
+export const MyTitle = () => {
+    return (
+        <TextTransition
+            transition={{
+                split: "word",      // Split by words
+                y: [20, 0],         // Slide up
+                opacity: [0, 1],    // Fade in
+                stagger: 3,         // 3 frames delay between words
+                duration: 20
+            }}
+            className="text-4xl font-bold"
+        >
+            Animated Text Title
+        </TextTransition>
+    );
+};
+```
+
+## Props
+
+### `transition`
+**Type:** `TransitionProps`
+
+Configuration object combining motion properties and text-specific settings.
+
+### `children`
+**Type:** `React.ReactNode`
+
+The text content to animate. Should primarily be a string, but can potentially handle nested nodes depending on `split` mode.
+
+### `className`
+**Type:** `string`
+**Optional**
+
+CSS class names for the container.
+
+### `style`
+**Type:** `React.CSSProperties`
+**Optional**
+
+Inline styles for the container.
+
+## Transition Configuration
+
+Inherits all properties from [MotionTransition Configuration](/docs/reference/motion-transition#motion-configuration) (transforms, visual, timing), plus:
+
+### Text Properties
+
+#### `split`
+**Type:** `"none" | "word" | "character" | "line" | string`
+**Default:** `"none"`
+
+Determines how to split the text content into animating units.
+- `"none"`: Animates the whole block.
+- `"word"`: Splits by whitespace.
+- `"character"`: Splits by character.
+- `"line"`: Splits by newline characters `\n`.
+- `string`: Custom separator/regex.
+
+#### `splitStagger`
+**Type:** `number`
+**Default:** `0`
+
+Deprecated alias for `stagger`? (In code `splitStagger` is used if `stagger` is not set, or specifically for the split items. The code uses `stagger` from `TimingProps` mostly, but let's check `TextTransition.tsx` again.)
+
+*Correction per source code:* The code destructures `splitStagger` from `transition`. It seems to be the specific property for staggering split elements if different from general stagger logic.
+
+#### `cycle`
+**Type:** `{ texts: string[]; itemDuration: number; }`
+**Optional**
+
+Allows cycling through a list of text strings endlessly.
+- `texts`: Array of strings to cycle.
+- `itemDuration`: Duration in frames for each text item.
+
+## Staggering
+
+When `split` is active, the `stagger` (or `splitStagger`) and `staggerDirection` properties control the delay between the animation of each split segment (char/word/line).
