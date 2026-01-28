@@ -19,7 +19,7 @@ export const FireEffect = () => {
             </Spawner>
 
             {/* Behaviors apply to all particles */}
-            <Behavior 
+            <Behavior
                 gravity={{ y: -0.2 }} // Upward gravity (fire)
                 opacity={[1, 0]}      // Fade out
                 scale={{ start: 1, end: 0 }} // Shrink
@@ -64,7 +64,7 @@ Defines physical rules or property changes over a particle's life.
 
 **Props:**
 
-- **`gravity`** (`object`): 
+- **`gravity`** (`object`):
     - `x`, `y`, `z`: Force vector.
     - `varianceX`, `varianceY`, `varianceZ`: Random variation.
 - **`drag`** (`number`): Air resistance (0-1). 1 = no drag, 0.9 = heavy drag.
