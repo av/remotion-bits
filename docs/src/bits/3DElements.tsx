@@ -13,6 +13,13 @@ export const metadata = {
 export const Component: React.FC = () => {
   const rect = useViewportRect();
   const fontSize = rect.vmin * 8;
+  const words = [
+    "Fly",
+    "Your",
+    "Camera",
+    "Through",
+    "Space",
+  ]
 
 
   const els = React.useMemo(() => {
@@ -63,7 +70,7 @@ export const Component: React.FC = () => {
     >
       {els}
 
-      {Array(5).fill(0).map((_, i) => {
+      {words.map((word, i) => {
         return (
           <Step
             id={`step-${i}`}
@@ -75,7 +82,7 @@ export const Component: React.FC = () => {
               width: '200px'
             }}
           >
-            <h1 style={{ fontSize, color: 'white', textAlign: 'center' }}>Step {i + 1}</h1>
+            <h1 style={{ fontSize, color: 'white', textAlign: 'center' }}>{word}</h1>
           </Step>
         )
       })}

@@ -14,12 +14,14 @@ export const metadata = {
 export const Component: React.FC = () => {
   const rect = useViewportRect();
   const WORDS = [
-    "Apple II", "Commodore 64", "IBM PC", "IBM PC/XT", "IBM PC/AT", "TRS-80", "Atari 800", "Amiga 500", "ZX Spectrum", "MSX"
+    "GPT", "Claude", "PaLM", "Gemini", "LLaMA", "Mistral", "Mixtral", "Falcon", "BLOOM",
+    "Kimi", "MiniMax", "Qwen"
   ];
+  const isSmall = rect.width < 500;
 
   return (
     <Particles
-      style={{ perspective: '1000px' }}
+      style={{ perspective: isSmall ? 1000 : 5000 }}
     >
       <Spawner
         rate={0.2}
