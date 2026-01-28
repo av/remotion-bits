@@ -74,6 +74,7 @@ When adding new Bits to the documentation site, ensure that you:
 
 When creating bits, keep the following in mind:
 - Do not hardcode font sizes; use the `useViewportRect` and fractional sizing instead
+- Use `rect.vmin`, `rect.vmax` for responsive sizing of the Bit elements
 
 ### Additional context
 

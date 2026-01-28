@@ -29,24 +29,24 @@ export const Component: React.FC = () => {
         >
           <div
             style={{
-              width: 12,
-              height: 12,
+              width: rect.vmin * 1,
+              height: rect.vmin * 1,
               borderRadius: "50%",
               background: "radial-gradient(circle, rgba(255,255,255,0.9), transparent 70%)",
             }}
           />
           <div
             style={{
-              width: 8,
-              height: 8,
+              width: rect.vmin * 2,
+              height: rect.vmin * 2,
               borderRadius: "50%",
               background: "radial-gradient(circle, rgba(224,231,255,0.9), transparent 70%)",
             }}
           />
           <div
             style={{
-              width: 24,
-              height: 24,
+              width: rect.vmin * 4,
+              height: rect.vmin * 4,
               borderRadius: "50%",
               background: "radial-gradient(circle, rgba(199,210,254,0.3), transparent 70%)",
             }}

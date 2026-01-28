@@ -54,6 +54,22 @@ export class Rect implements RectLike {
   get center(): Point {
     return { x: this.cx, y: this.cy };
   }
+
+  get vh(): number {
+    return this.height / 100;
+  }
+
+  get vw(): number {
+    return this.width / 100;
+  }
+
+  get vmin(): number {
+    return Math.min(this.vw, this.vh);
+  }
+
+  get vmax(): number {
+    return Math.max(this.vw, this.vh);
+  }
 }
 
 /**
