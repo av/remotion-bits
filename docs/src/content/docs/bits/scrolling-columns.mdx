@@ -1,0 +1,22 @@
+---
+title: Scrolling Columns
+category: Particle System
+description: Four columns of images scrolling with different speeds in a panning 3D scene
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+Four columns of images scrolling with different speeds in a panning 3D scene.
+
+<BitPlayground client:only="react" bitName="ScrollingColumns" />
+
+## Overview
+
+This example demonstrates how to combine `Particles`, `Spawner`, and `Scene3D` to create a complex scrolling visual.
+
+-   **Particles & Spawners**: Four separate spawners are used to create the columns. Each spawner has a different position and initial velocity, creating the "parallax" scrolling speed effect.
+-   **Scene3D**: Creates the 3D environment.
+-   **Camera Pan**: The camera gently pans horizontally by transitioning between two `Step` components over the entire duration of the video.
+
+## Usage
+
+This pattern is great for credits sequences, showcase galleries, or background visuals where you want to display a lot of content drifting by.

@@ -27,7 +27,7 @@ export const Component: React.FC = () => {
         rate={0.2}
         area={{ width: rect.width, height: rect.height, depth: -rect.vmin * 50 }}
         position={resolvePoint(rect, { x: "center", y: "center" })}
-        lifespan={50}
+        lifespan={100}
         velocity={{
           x: 0,
           y: 0,

@@ -99,6 +99,10 @@ export default defineConfig({
             ],
             title: 'Remotion Bits',
             description: 'Building blocks for your Remotion videos.',
+            logo: {
+                src: './src/components/Logo.astro',
+                replacesTitle: false,
+            },
             disable404Route: true,
             social: [
                 {

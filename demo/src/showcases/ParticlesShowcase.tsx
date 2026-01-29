@@ -7,7 +7,7 @@ export const ParticlesSnowShowcase = () => {
   const { width } = useVideoConfig();
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#01050e" }}>
+    <AbsoluteFill style={{ backgroundColor: "#100f0f" }}>
       <Particles>
         <Spawner
           rate={1}
@@ -49,7 +49,7 @@ export const ParticlesSnowShowcase = () => {
         <Behavior handler={(p) => { p.velocity.x += 0.01; }} />
       </Particles>
       <Center>
-        <h1 style={{ color: "white", fontFamily: "sans-serif", fontSize: '128px' }}>Snow</h1>
+        <h1 style={{ color: "#fffcf0", fontFamily: "sans-serif", fontSize: '128px' }}>Snow</h1>
       </Center>
     </AbsoluteFill>
   );
@@ -57,7 +57,7 @@ export const ParticlesSnowShowcase = () => {
 
 export const ParticlesFountainShowcase = () => {
   return (
-    <AbsoluteFill style={{ backgroundColor: "#000000" }}>
+    <AbsoluteFill style={{ backgroundColor: "#100f0f" }}>
       <Particles>
         <Spawner
           rate={20}
@@ -89,7 +89,7 @@ export const ParticlesFountainShowcase = () => {
         <Behavior gravity={{ y: 0.1, }} />
       </Particles>
       <Center>
-        <h1 style={{ color: "white", fontFamily: "sans-serif", fontSize: '128px' }}>Burst</h1>
+        <h1 style={{ color: "#fffcf0", fontFamily: "sans-serif", fontSize: '128px' }}>Burst</h1>
       </Center>
     </AbsoluteFill>
   );
@@ -115,7 +115,7 @@ export const ParticlesGridShowcase = () => {
   };
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
+    <AbsoluteFill style={{ backgroundColor: "#100f0f" }}>
       <Particles>
         <Spawner
           rate={1}
@@ -150,7 +150,7 @@ export const ParticlesGridShowcase = () => {
         <Behavior handler={snapToGridHandler} />
       </Particles>
       <Center>
-        <h1 style={{ color: "white", fontFamily: "sans-serif", fontSize: '128px' }}>Grid</h1>
+        <h1 style={{ color: "#fffcf0", fontFamily: "sans-serif", fontSize: '128px' }}>Grid</h1>
       </Center>
     </AbsoluteFill>
   );

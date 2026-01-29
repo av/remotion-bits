@@ -6,7 +6,7 @@ import { Center } from "./Center";
 const textStyle = {
   fontSize: "6rem",
   fontWeight: 700,
-  color: "#ffffff",
+  color: "#fffcf0",
   fontFamily: "Inter, ui-sans-serif, system-ui",
   textAlign: "center" as const,
   textShadow: "0 4px 12px rgba(0, 0, 0, 0.5)",
@@ -15,8 +15,8 @@ const textStyle = {
 export const LinearGradientShowcase: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "linear-gradient(0deg, #667eea 0%, #764ba2 100%)",
-      "linear-gradient(180deg, #f093fb 0%, #f5576c 100%)",
+      "linear-gradient(0deg, #205ea6 0%, #735eb5 100%)",
+      "linear-gradient(180deg, #ce5d97 0%, #d14d41 100%)",
     ]}
     duration={90}
   >
@@ -29,8 +29,8 @@ export const LinearGradientShowcase: React.FC = () => (
 export const RadialGradientShowcase: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "radial-gradient(circle, #ff6b6b 0%, #4ecdc4 100%)",
-      "radial-gradient(circle, #feca57 0%, #48dbfb 100%)",
+      "radial-gradient(circle, #d14d41 0%, #24837b 100%)",
+      "radial-gradient(circle, #dfb431 0%, #2f968d 100%)",
     ]}
     duration={90}
     easing="easeInOut"
@@ -58,9 +58,9 @@ export const ConicGradientShowcase: React.FC = () => (
 export const MultiStopGradientShowcase: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "linear-gradient(45deg, #fa709a 0%, #fee140 50%, #30cfd0 100%)",
-      "linear-gradient(225deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
-      "linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%)",
+      "linear-gradient(45deg, #ce5d97 0%, #dfb431 50%, #2f968d 100%)",
+      "linear-gradient(225deg, #205ea6 0%, #735eb5 50%, #ce5d97 100%)",
+      "linear-gradient(135deg, #2f968d 0%, #24837b 50%, #768d21 100%)",
     ]}
     duration={120}
     easing="easeInOutCubic"
@@ -74,11 +74,11 @@ export const MultiStopGradientShowcase: React.FC = () => (
 export const AngleInterpolationShowcase: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "linear-gradient(0deg, #f12711 0%, #f5af19 100%)",
-      "linear-gradient(90deg, #c21500 0%, #ffc500 100%)",
-      "linear-gradient(180deg, #f12711 0%, #f5af19 100%)",
-      "linear-gradient(270deg, #c21500 0%, #ffc500 100%)",
-      "linear-gradient(360deg, #f12711 0%, #f5af19 100%)",
+      "linear-gradient(0deg, #d14d41 0%, #da702c 100%)",
+      "linear-gradient(90deg, #c03e35 0%, #dfb431 100%)",
+      "linear-gradient(180deg, #d14d41 0%, #da702c 100%)",
+      "linear-gradient(270deg, #c03e35 0%, #dfb431 100%)",
+      "linear-gradient(360deg, #d14d41 0%, #da702c 100%)",
     ]}
     duration={150}
   >
@@ -91,10 +91,10 @@ export const AngleInterpolationShowcase: React.FC = () => (
 export const TypeTransitionShowcase: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "linear-gradient(90deg, #8e2de2 0%, #4a00e0 100%)",
-      "radial-gradient(circle, #fa8bff 0%, #2bd2ff 50%, #2bff88 100%)",
-      "conic-gradient(from 0deg, #00c9ff, #92fe9d, #00c9ff)",
-      "linear-gradient(45deg, #ff512f 0%, #dd2476 100%)",
+      "linear-gradient(90deg, #5e409d 0%, #4f3685 100%)",
+      "radial-gradient(circle, #b74583 0%, #2f968d 50%, #768d21 100%)",
+      "conic-gradient(from 0deg, #24837b, #768d21, #24837b)",
+      "linear-gradient(45deg, #c03e35 0%, #a02f6f 100%)",
     ]}
     duration={180}
     easing="easeInOut"
@@ -108,8 +108,8 @@ export const TypeTransitionShowcase: React.FC = () => (
 export const ComplexGradientShowcase: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%)",
-      "linear-gradient(225deg, #f093fb 0%, #f5576c 25%, #ffd89b 50%, #19547b 75%, #667eea 100%)",
+      "linear-gradient(135deg, #205ea6 0%, #735eb5 25%, #ce5d97 50%, #2f968d 75%, #24837b 100%)",
+      "linear-gradient(225deg, #ce5d97 0%, #d14d41 25%, #dfb431 50%, #1a4f8c 75%, #205ea6 100%)",
     ]}
     duration={120}
   >
@@ -122,8 +122,8 @@ export const ComplexGradientShowcase: React.FC = () => (
 export const ShortestPathAngleShowcase: React.FC = () => (
   <BackgroundTransition
     gradient={[
-      "linear-gradient(350deg, #fa709a 0%, #fee140 100%)",
-      "linear-gradient(10deg, #30cfd0 0%, #330867 100%)",
+      "linear-gradient(350deg, #ce5d97 0%, #dfb431 100%)",
+      "linear-gradient(10deg, #2f968d 0%, #4f3685 100%)",
     ]}
     duration={90}
   >

@@ -3,13 +3,15 @@
 @import "@fontsource/geist-mono";
 
 @theme {
-  --color-primary: #FF5500;
-  --color-primary-hover: #FF7733;
-  --color-background-dark: #030303;
-  --color-surface-dark: #0A0A0A;
-  --color-surface-light: #121212;
-  --color-border-dark: #222222;
-  --color-border-light: #333333;
+  --color-primary: #ec8b49;
+  --color-primary-hover: #fcc192;
+
+  --color-background-dark: #100f0f;
+  --color-surface-dark: #1c1b1a;
+  --color-surface-light: #343331;
+
+  --color-border-dark: #100f0f;
+  --color-border-light: #1c1b1a;
 
   --font-sans: "Geist Sans", sans-serif;
   --font-mono: "Geist Mono", monospace;

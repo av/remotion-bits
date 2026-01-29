@@ -4,7 +4,7 @@ import { MotionTransition } from "../../../src/components/MotionTransition";
 import { Center } from "./Center";
 
 const Bg = ({ children }: { children: React.ReactNode }) => (
-  <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
+  <AbsoluteFill style={{ backgroundColor: "#100f0f" }}>
     <Center style={{ padding: "4rem" }}>{children}</Center>
   </AbsoluteFill>
 );
@@ -12,7 +12,7 @@ const Bg = ({ children }: { children: React.ReactNode }) => (
 const boxStyle: React.CSSProperties = {
   width: 256,
   height: 256,
-  backgroundColor: "#3b82f6",
+  backgroundColor: "#205ea6",
   borderRadius: "12px",
   display: "flex",
   alignItems: "center",
@@ -27,13 +27,13 @@ const labelStyle: React.CSSProperties = {
   fontSize: "2.5rem",
   fontWeight: 600,
   opacity: 0.2,
-  color: "#94a3b8",
+  color: "#b7b5ac",
   marginBottom: "4rem",
   fontFamily: "Inter, ui-sans-serif, system-ui",
 };
 
 // Shape components
-const Circle: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#3b82f6" }) => (
+const Circle: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#205ea6" }) => (
   <div style={{ ...boxStyle, backgroundColor: color, ...style }}>
     <svg width="120" height="120" viewBox="0 0 60 60">
       <circle cx="30" cy="30" r="25" fill="white" />
@@ -41,7 +41,7 @@ const Circle: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ sty
   </div>
 );
 
-const Triangle: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#ef4444" }) => (
+const Triangle: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#d14d41" }) => (
   <div style={{ ...boxStyle, backgroundColor: color, ...style }}>
     <svg width="120" height="120" viewBox="0 0 60 60">
       <polygon points="30,10 55,50 5,50" fill="white" />
@@ -49,7 +49,7 @@ const Triangle: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ s
   </div>
 );
 
-const RoundedSquare: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#10b981" }) => (
+const RoundedSquare: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#768d21" }) => (
   <div style={{ ...boxStyle, backgroundColor: color, ...style }}>
     <svg width="120" height="120" viewBox="0 0 60 60">
       <rect x="10" y="10" width="40" height="40" rx="8" fill="white" />
@@ -57,7 +57,7 @@ const RoundedSquare: React.FC<{ style?: React.CSSProperties; color?: string }> =
   </div>
 );
 
-const Star: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#f59e0b" }) => (
+const Star: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#da702c" }) => (
   <div style={{ ...boxStyle, backgroundColor: color, ...style }}>
     <svg width="120" height="120" viewBox="0 0 60 60">
       <path d="M30 5 L37 23 L56 23 L41 35 L48 53 L30 41 L12 53 L19 35 L4 23 L23 23 Z" fill="white" />
@@ -65,7 +65,7 @@ const Star: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style
   </div>
 );
 
-const Cross: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#8b5cf6" }) => (
+const Cross: React.FC<{ style?: React.CSSProperties; color?: string }> = ({ style, color = "#735eb5" }) => (
   <div style={{ ...boxStyle, backgroundColor: color, ...style }}>
     <svg width="120" height="120" viewBox="0 0 60 60">
       <path d="M30 10 L30 25 L45 25 L45 35 L30 35 L30 50 L20 50 L20 35 L5 35 L5 25 L20 25 L20 10 Z" fill="white" />
@@ -86,7 +86,7 @@ export const SimpleFadeSlideShowcase: React.FC = () => {
             easing: "easeOutCubic",
           }}
         >
-          <Circle color="#3b82f6" />
+          <Circle color="#205ea6" />
         </MotionTransition>
       </div>
     </Bg>
@@ -110,11 +110,11 @@ export const SimultaneousFadeShowcase: React.FC = () => {
             gap: "4rem",
           }}
         >
-          <Circle color="#3b82f6" />
-          <Triangle color="#ef4444" />
-          <RoundedSquare color="#10b981" />
-          <Star color="#f59e0b" />
-          <Cross color="#8b5cf6" />
+          <Circle color="#205ea6" />
+          <Triangle color="#d14d41" />
+          <RoundedSquare color="#768d21" />
+          <Star color="#da702c" />
+          <Cross color="#735eb5" />
         </MotionTransition>
       </div>
     </Bg>
@@ -141,11 +141,11 @@ export const FadeInStaggerShowcase: React.FC = () => {
             gap: "4rem",
           }}
         >
-          <Circle color="#3b82f6" />
-          <Triangle color="#ef4444" />
-          <RoundedSquare color="#10b981" />
-          <Star color="#f59e0b" />
-          <Cross color="#8b5cf6" />
+          <Circle color="#205ea6" />
+          <Triangle color="#d14d41" />
+          <RoundedSquare color="#768d21" />
+          <Star color="#da702c" />
+          <Cross color="#735eb5" />
         </MotionTransition>
       </div>
     </Bg>
@@ -172,11 +172,11 @@ export const ReverseStaggerShowcase: React.FC = () => {
             gap: "4rem",
           }}
         >
-          <Circle color="#3b82f6" />
-          <Triangle color="#ef4444" />
-          <RoundedSquare color="#10b981" />
-          <Star color="#f59e0b" />
-          <Cross color="#8b5cf6" />
+          <Circle color="#205ea6" />
+          <Triangle color="#d14d41" />
+          <RoundedSquare color="#768d21" />
+          <Star color="#da702c" />
+          <Cross color="#735eb5" />
         </MotionTransition>
       </div>
     </Bg>
@@ -203,11 +203,11 @@ export const CenterStaggerShowcase: React.FC = () => {
             gap: "4rem",
           }}
         >
-          <Circle color="#3b82f6" />
-          <Triangle color="#ef4444" />
-          <RoundedSquare color="#10b981" />
-          <Star color="#f59e0b" />
-          <Cross color="#8b5cf6" />
+          <Circle color="#205ea6" />
+          <Triangle color="#d14d41" />
+          <RoundedSquare color="#768d21" />
+          <Star color="#da702c" />
+          <Cross color="#735eb5" />
         </MotionTransition>
       </div>
     </Bg>
@@ -236,10 +236,10 @@ export const ComplexMotionShowcase: React.FC = () => {
             gap: "4rem",
           }}
         >
-          <Circle color="#3b82f6" />
-          <Triangle color="#ef4444" />
-          <RoundedSquare color="#10b981" />
-          <Star color="#f59e0b" />
+          <Circle color="#205ea6" />
+          <Triangle color="#d14d41" />
+          <RoundedSquare color="#768d21" />
+          <Star color="#da702c" />
         </MotionTransition>
       </div>
     </Bg>

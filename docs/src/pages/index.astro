@@ -1,6 +1,9 @@
 ---
 import "../styles/custom.css";
-import { HeroShowcase } from '@/components/showcases/HeroShowcase';
+import { HeroShowcase } from "@/components/showcases/HeroShowcase";
+import { Code } from "@astrojs/starlight/components";
+import BentoCard from "@/components/BentoCard.astro";
+import Logo from "@/components/Logo.astro";
 ---
 
 <!doctype html>
@@ -27,11 +30,11 @@ import { HeroShowcase } from '@/components/showcases/HeroShowcase';
       >
       </div>
       <div
-        class="fixed bottom-0 right-0 w-[600px] h-[600px] bg-blue-900/10 blur-[120px] rounded-full pointer-events-none z-0"
+        class="fixed bottom-0 right-0 w-[600px] h-[600px] bg-white/5 blur-[120px] rounded-full pointer-events-none z-0"
       >
       </div>
       <div
-        class="fixed inset-0 bg-[size:40px_40px] bg-grid-pattern opacity-[0.15] pointer-events-none z-0"
+        class="fixed inset-0 bg-[size:40px_40px] opacity-[0.15] pointer-events-none z-0"
       >
       </div>
       <nav
@@ -39,7 +42,8 @@ import { HeroShowcase } from '@/components/showcases/HeroShowcase';
       >
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16 items-center">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2">
+              <Logo size="md" class="text-primary" />
               <span class="font-bold text-xl tracking-tight text-white"
                 >Remotion Bits</span
               >
@@ -80,12 +84,13 @@ import { HeroShowcase } from '@/components/showcases/HeroShowcase';
         <div
           class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center"
         >
-          <div
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-xs font-mono text-primary mb-8 animate-fade-in-up"
+          <button
+            id="hero-npm-install"
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-mono text-primary mb-8 animate-fade-in-up cursor-pointer hover:bg-primary/20 transition-colors"
           >
             <span class="material-symbols-outlined text-sm">terminal</span>
             npm install remotion-bits
-          </div>
+          </button>
           <h1
             class="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-white mb-8 leading-[1.1] md:leading-[1.1]"
           >
@@ -124,7 +129,17 @@ import { HeroShowcase } from '@/components/showcases/HeroShowcase';
               >
             </a>
           </div>
-          <HeroShowcase client:only="react" bitNames={["ParticlesFountain", "BlurSlideWord", "LinearGradient", "FlyingThroughWords", "ParticlesGrid", "Elements3D"]} />
+          <HeroShowcase
+            client:only="react"
+            bitNames={[
+              "ParticlesFountain",
+              "BlurSlideWord",
+              "LinearGradient",
+              "FlyingThroughWords",
+              "ParticlesGrid",
+              "Elements3D",
+            ]}
+          />
         </div>
       </section>
       <section class="py-24 relative">
@@ -141,17 +156,13 @@ import { HeroShowcase } from '@/components/showcases/HeroShowcase';
           <div
             class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-6 gap-4 md:gap-6 auto-rows-[250px] md:auto-rows-[280px]"
           >
-            <div
-              class="md:col-span-4 rounded-xl border border-white/10 bg-surface-light p-8 relative overflow-hidden group hover:border-primary/30 transition-colors duration-500"
-            >
+            <BentoCard class="md:col-span-6 lg:col-span-4">
               <div
-                class="absolute inset-0 bg-gradient-to-br from-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"
+                class="relative z-10 h-full flex flex-col md:flex-row gap-8 items-center"
               >
-              </div>
-              <div class="relative z-10 h-full flex flex-col justify-between">
-                <div>
+                <div class="flex-1 min-w-0">
                   <div
-                    class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center text-primary mb-4 border border-primary/20"
+                    class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 border border-primary/20"
                   >
                     <span class="material-symbols-outlined text-2xl"
                       >text_fields</span
@@ -161,33 +172,50 @@ import { HeroShowcase } from '@/components/showcases/HeroShowcase';
                     Text Effects
                   </h3>
                   <p class="text-gray-400 text-sm max-w-md">
-                    Create complex typography animations with ease. Stagger characters, words, or lines. Combine blur, scale, and position offsets for professional reveals.
+                    Create complex typography animations with ease. Stagger
+                    characters, words, or lines. Combine blur, scale, and
+                    position offsets for professional reveals.
                   </p>
                 </div>
+                <div class="flex-1 w-full hidden md:block">
+                  <div
+                    class="rounded-lg overflow-hidden border border-white/10 shadow-xl bg-[#0d1117] text-xs"
+                  >
+                    <Code
+                      code={`<AnimatedText
+  transition={{
+    y: [40, 0],
+    blur: [10, 0], // Word-by-word blur
+    opacity: [0, 1],
+    split: "word",
+    splitStagger: 1,
+  }}
+>
+  Text Transition
+</AnimatedText>`}
+                      lang="tsx"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-            <div
-              class="md:col-span-2 rounded-xl border border-white/10 bg-surface-light p-8 relative overflow-hidden group hover:border-primary/30 transition-colors duration-500"
-            >
+            </BentoCard>
+            <BentoCard class="md:col-span-3 lg:col-span-2">
               <div class="relative z-10 h-full flex flex-col">
                 <div
-                  class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 mb-4 border border-purple-500/20"
+                  class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 border border-primary/20"
                 >
-                  <span class="material-symbols-outlined text-2xl"
-                    >grain</span
-                  >
+                  <span class="material-symbols-outlined text-2xl">grain</span>
                 </div>
                 <h3 class="text-xl font-semibold text-white mb-2">
                   Particle System
                 </h3>
                 <p class="text-gray-400 text-sm mb-4">
-                  A complete physics-based particle engine. Simulate rain, confetti, or starfields with customizable behaviors.
+                  A complete physics-based particle engine. Simulate rain,
+                  confetti, or starfields with customizable behaviors.
                 </p>
               </div>
-            </div>
-            <div
-              class="md:col-span-2 rounded-xl border border-white/10 bg-surface-light p-8 relative overflow-hidden group hover:border-primary/30 transition-colors duration-500"
-            >
+            </BentoCard>
+            <BentoCard class="md:col-span-3 lg:col-span-2">
               <div
                 class="absolute -right-4 -bottom-4 text-9xl text-white/5 rotate-12 select-none group-hover:text-primary/10 transition-colors"
               >
@@ -195,55 +223,55 @@ import { HeroShowcase } from '@/components/showcases/HeroShowcase';
               </div>
               <div class="relative z-10">
                 <div
-                  class="w-12 h-12 rounded-lg bg-green-500/10 flex items-center justify-center text-green-400 mb-4 border border-green-500/20"
+                  class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 border border-primary/20"
                 >
-                  <span class="material-symbols-outlined text-2xl">animation</span>
+                  <span class="material-symbols-outlined text-2xl"
+                    >animation</span
+                  >
                 </div>
                 <h3 class="text-xl font-semibold text-white mb-2">
                   Motion Primitives
                 </h3>
                 <p class="text-gray-400 text-sm">
-                  Declarative entry and exit animations. Chain fades, slides, and scaling without managing complex interpolations manually.
+                  Declarative entry and exit animations. Chain fades, slides,
+                  and scaling without managing complex interpolations manually.
                 </p>
               </div>
-            </div>
-            <div
-              class="md:col-span-2 rounded-xl border border-white/10 bg-surface-light p-8 relative overflow-hidden group hover:border-primary/30 transition-colors duration-500"
-            >
+            </BentoCard>
+            <BentoCard class="md:col-span-3 lg:col-span-2">
               <div class="relative z-10 h-full">
                 <div
-                  class="w-12 h-12 rounded-lg bg-blue-600/10 flex items-center justify-center text-blue-500 mb-4 border border-blue-600/20"
+                  class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 border border-primary/20"
                 >
                   <span class="material-symbols-outlined text-2xl"
                     >integration_instructions</span
                   >
                 </div>
-                <h3 class="text-xl font-semibold text-white mb-2">
-                  Type Safe
-                </h3>
+                <h3 class="text-xl font-semibold text-white mb-2">Type Safe</h3>
                 <p class="text-gray-400 text-sm mb-4">
                   First-class TypeScript support. Autocomplete for every prop
                   and component.
                 </p>
               </div>
-            </div>
-            <div
-              class="md:col-span-2 rounded-xl border border-white/10 bg-surface-light p-8 relative overflow-hidden group hover:border-primary/30 transition-colors duration-500 flex flex-col"
-            >
+            </BentoCard>
+            <BentoCard class="md:col-span-3 lg:col-span-2 flex flex-col">
               <div class="relative z-10 flex-1">
                 <div
-                  class="w-12 h-12 rounded-lg bg-teal-500/10 flex items-center justify-center text-teal-400 mb-4 border border-teal-500/20"
+                  class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 border border-primary/20"
                 >
-                  <span class="material-symbols-outlined text-2xl">content_copy</span>
+                  <span class="material-symbols-outlined text-2xl"
+                    >content_copy</span
+                  >
                 </div>
                 <h3 class="text-xl font-semibold text-white mb-2">
                   Copy-Paste Ready
                 </h3>
                 <p class="text-gray-400 text-sm">
-                  Install components directly into your codebase. Own the source, customize endlessly, and suffer zero bloat.
+                  Install components directly into your codebase. Own the
+                  source, customize endlessly, and suffer zero bloat.
                 </p>
               </div>
-            </div>
+            </BentoCard>
           </div>
         </div>
       </section>
@@ -293,11 +321,7 @@ import { HeroShowcase } from '@/components/showcases/HeroShowcase';
           >
             <div class="col-span-2 lg:col-span-2">
               <div class="flex items-center gap-2 mb-4">
-                <div
-                  class="w-6 h-6 rounded bg-primary flex items-center justify-center text-white font-bold text-xs"
-                >
-                  R
-                </div>
+                <Logo size="md" class="text-primary" />
                 <span class="font-semibold text-white">Remotion Bits</span>
               </div>
               <p class="text-gray-500 text-sm mb-6 max-w-xs">
@@ -407,11 +431,36 @@ import { HeroShowcase } from '@/components/showcases/HeroShowcase';
             if (icon) {
               const originalText = icon.innerText;
               icon.innerText = "check";
-              icon.classList.add("text-green-500"); // Add green color for feedback
+              icon.classList.add("text-primary"); // Add green color for feedback
 
               setTimeout(() => {
                 icon.innerText = originalText;
-                icon.classList.remove("text-green-500");
+                icon.classList.remove("text-primary");
+              }, 2000);
+            }
+          } catch (err) {
+            console.error("Failed to copy:", err);
+          }
+        });
+      }
+
+      const heroCopyButton = document.getElementById("hero-npm-install");
+      if (heroCopyButton) {
+        heroCopyButton.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText("npm install remotion-bits");
+
+            const icon = heroCopyButton.querySelector(
+              ".material-symbols-outlined",
+            );
+            if (icon) {
+              const originalText = icon.innerText;
+              icon.innerText = "check";
+              icon.classList.add("text-primary");
+
+              setTimeout(() => {
+                icon.innerText = originalText;
+                icon.classList.remove("text-primary");
               }, 2000);
             }
           } catch (err) {

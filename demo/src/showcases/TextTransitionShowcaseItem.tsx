@@ -6,13 +6,13 @@ import { Center } from "./Center";
 const baseStyle = {
   fontSize: "12rem",
   fontWeight: 700,
-  color: "#ffffff",
+  color: "#fffcf0",
   fontFamily: "Inter, ui-sans-serif, system-ui",
   textAlign: "center" as const,
 };
 
 export const Bg = ({ children }: { children: React.ReactNode }) => (
-  <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
+  <AbsoluteFill style={{ backgroundColor: "#100f0f" }}>
     <Center style={{ padding: '4rem', ...baseStyle }}>
       {children}
     </Center>
@@ -61,7 +61,7 @@ export const CharacterColorShowcase: React.FC = () => (
   <Bg>
     <TextTransition
       transition={{
-        color: ["#ffffff", "black", "oklch(100% 0.3 270)"],
+        color: ["#fffcf0", "#100f0f", "oklch(100% 0.3 270)"],
         opacity: [1, 0.1, 1],
         split: "character",
         splitStagger: 1,

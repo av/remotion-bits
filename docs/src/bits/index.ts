@@ -22,6 +22,8 @@ import * as ParticlesFountainModule from './examples/particle-system/ParticlesFo
 import ParticlesFountainSource from './examples/particle-system/ParticlesFountain.tsx?raw';
 import * as ParticlesGridModule from './examples/particle-system/ParticlesGrid';
 import ParticlesGridSource from './examples/particle-system/ParticlesGrid.tsx?raw';
+import * as ScrollingColumnsModule from './examples/particle-system/ScrollingColumns';
+import ScrollingColumnsSource from './examples/particle-system/ScrollingColumns.tsx?raw';
 import * as Scene3DBasicModule from './examples/scene-3d/3DBasic';
 import Scene3DBasicSource from './examples/scene-3d/3DBasic.tsx?raw';
 import * as FlyingThroughWordsModule from './examples/scene-3d/FlyingThroughWords';
@@ -96,6 +98,7 @@ export const bits = {
   ParticlesSnow: { ...ParticlesSnowModule, sourceCode: extractSource(ParticlesSnowSource) },
   ParticlesFountain: { ...ParticlesFountainModule, sourceCode: extractSource(ParticlesFountainSource) },
   ParticlesGrid: { ...ParticlesGridModule, sourceCode: extractSource(ParticlesGridSource) },
+  ScrollingColumns: { ...ScrollingColumnsModule, sourceCode: extractSource(ScrollingColumnsSource) },
   Scene3DPresentation: { ...Scene3DBasicModule, sourceCode: extractSource(Scene3DBasicSource) },
   FlyingThroughWords: { ...FlyingThroughWordsModule, sourceCode: extractSource(FlyingThroughWordsSource) },
   Elements3D: { ...Elements3DModule, sourceCode: extractSource(Elements3DSource) },

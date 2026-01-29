@@ -7,13 +7,13 @@ import { CharacterColorShowcase, ComplexAnimationShowcase, CustomEasingShowcase,
 const baseStyle = {
   fontSize: "12rem",
   fontWeight: 700,
-  color: "#ffffff",
+  color: "#fffcf0",
   fontFamily: "Inter, ui-sans-serif, system-ui",
 };
 
 export const TextTransitionShowcase: React.FC = () => {
   return (
-    <AbsoluteFill style={{ backgroundColor: "#0f172a" }}>
+    <AbsoluteFill style={{ backgroundColor: "#100f0f" }}>
       <Sequence from={0} durationInFrames={90}>
         <FadeInShowcase />
       </Sequence>

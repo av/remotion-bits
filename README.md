@@ -1,35 +1,15 @@
-# Remotion Bits
-
-Remotion component bits distributed as a jsrepo registry. Add ready-made components to your project with jsrepo, or import them directly as a library.
+![Splash Image](./docs/public/splash.png)
 
 ## Overview
 
-Remotion Bits provides small, composable Remotion/React components you can install into your codebase. jsrepo copies component templates into your project so you can customize them, and manages updates over time. This package no longer ships a custom installer—use jsrepo for installs and updates.
+Remotion Bits is a comprehensive collection of animation components and utilities designed specifically for Remotion video projects. It provides ready-made, composable components for common animation needs: text effects, gradient transitions, particle systems, 3D scenes, and more. It also includes lower-level utilities for advanced motion and color handling.
+
+Using jsrepo, components are copied directly into your project so you can customize them, and updates are managed over time. This approach (similar to shadcn/ui) gives you full ownership of the code while maintaining the ability to receive improvements.
 
 ## Installation
 
-### npm
-
 ```bash
 npm install remotion-bits
-```
-
-### pnpm
-
-```bash
-pnpm add remotion-bits
-```
-
-### yarn
-
-```bash
-yarn add remotion-bits
-```
-
-### bun
-
-```bash
-bun add remotion-bits
 ```
 
 ## Install with jsrepo (recommended)
@@ -46,16 +26,19 @@ https://unpkg.com/remotion-bits/registry.json
 npx jsrepo init https://unpkg.com/remotion-bits/registry.json
 ```
 
-### Add components
+### Add a component or utility
 
 ```bash
 npx jsrepo add animated-text
+npx jsrepo add particle-system
+npx jsrepo add color
 ```
 
 ### One-off add without init
 
 ```bash
 npx jsrepo add --registry https://unpkg.com/remotion-bits/registry.json animated-text
+npx jsrepo add --registry https://unpkg.com/remotion-bits/registry.json particle-system
 ```
 
 ## Local registry usage (this repo)
@@ -89,8 +72,27 @@ npx jsrepo add animated-text
 
 ## Available components
 
-- `animated-text`
-- `gradient-transition`
+### Main Components
+
+- `animated-text` - Character-by-character, word-by-word, or full text animations with staggering, easing, and transform controls
+- `gradient-transition` - Smooth CSS gradient transitions with intelligent interpolation (linear, radial, conic)
+- `staggered-motion` - Advanced motion and transform animations for child elements with stagger effects and directional timing
+- `particle-system` - Complete particle effect system with spawners, behaviors (gravity, drag, wiggle, scale, opacity), and deterministic simulation
+- `scene-3d` - 3D scene rendering with camera controls, steps, elements, and smooth transitions
+
+### Utilities
+
+- `interpolate` - Custom interpolation function with easing support and non-monotonic input ranges
+- `color` - Perceptually uniform color interpolation using Oklch color space
+- `gradient` - CSS gradient parser and interpolation with Granim.js-inspired mathematics
+- `motion` - Keyframe interpolation, easing, transform and style building, and motion timing calculations
+- `geometry` - Geometric calculations including Rect class with viewport units (vh, vw, vmin, vmax)
+- `random` - Random value generation utilities
+- `particles-utilities` - Core particle system infrastructure with types, behaviors, and deterministic simulation
+
+### Hooks
+
+- `use-viewport-rect` - Hook to get the current video composition's viewport rectangle
 
 ## Demo Playground
 
@@ -118,24 +120,58 @@ By default, components are added to `src/components`. You can change this in you
 
 ## Library usage example import
 
+When using remotion-bits as a library:
+
 ```ts
-import { TextTransition } from "remotion-bits";
+import { AnimatedText, GradientTransition, ParticleSystem, Scene3D, StaggeredMotion } from "remotion-bits";
+import { interpolate, color, gradient } from "remotion-bits";
+import { useViewportRect } from "remotion-bits";
 ```
 
 If you installed components into your project via jsrepo, you can import from your local files, for example:
 
 ```ts
-import { TextTransition } from "./components/TextTransition";
+import { AnimatedText } from "./components/AnimatedText";
+import { interpolate } from "./utils/interpolate";
+import { useViewportRect } from "./hooks/useViewportRect";
 ```
 
 ## Directory structure
 
-After installing components into your project, you will typically have:
+After installing components and utilities into your project, you will typically have:
 
 ```
 src/
 	components/
-		TextTransition.tsx
+		AnimatedText.tsx
+		GradientTransition.tsx
+		ParticleSystem/
+			Particles.tsx
+			Spawner.tsx
+			Behavior.tsx
+			index.ts
+		Scene3D/
+			Scene3D.tsx
+			Step.tsx
+			Element3D.tsx
+			context.ts
+			types.ts
+			index.ts
+	utils/
+		interpolate.ts
+		color.ts
+		gradient.ts
+		motion/
+			index.ts
+		geometry.ts
+		random.ts
+		particles/
+			types.ts
+			behaviors.ts
+			simulator.ts
+			index.ts
+	hooks/
+		useViewportRect.ts
 ```
 
 ## Registry build output (maintainers)
