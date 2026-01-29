@@ -23,10 +23,24 @@ const CopyIcon = () => (
     fill="none"
     stroke="currentColor"
     strokeWidth="1.75"
-    style={{ width: '1.25em', height: '1.25em' }}
+    style={{ width: '1em', height: '1em' }}
   >
     <path d="M3 19a2 2 0 0 1-1-2V2a2 2 0 0 1 1-1h13a2 2 0 0 1 2 1" />
     <rect x="6" y="5" width="16" height="18" rx="1.5" ry="1.5" />
+  </svg>
+);
+
+const UndoIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.75"
+    style={{ width: '1em', height: '1em' }}
+  >
+    <path d="M3 7v6h6" />
+    <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
   </svg>
 );
 
@@ -349,7 +363,7 @@ export const Component: React.FC = () => {${propsDeclaration}
               type="button"
               title="Reset to original code"
             >
-              ↺
+              <UndoIcon />
             </button>
           )}
           <button
@@ -365,10 +379,9 @@ export const Component: React.FC = () => {${propsDeclaration}
 
       <div className="bit-playground-metadata">
         <div className="bit-playground-meta-item">
-          <strong>Duration:</strong> {duration} frames ({(duration / 30).toFixed(1)}s at 30fps)
+          {duration} frames ({(duration / 30).toFixed(1)}s at 30fps)
         </div>
         <div className="bit-playground-meta-item">
-          <strong>Tags:</strong>
           <span className="bit-playground-badges">
             {bit.metadata.tags.map((tag) => (
               <a
@@ -452,52 +465,37 @@ export const Component: React.FC = () => {${propsDeclaration}
           cursor: pointer;
         }
 
-        .bit-playground-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1rem 1.5rem;
-          background: var(--sl-color-gray-6);
-          border-bottom: 1px solid var(--sl-color-gray-5);
-        }
-
-        .bit-playground-title {
-          margin: 0;
-          font-size: 1rem;
-          font-weight: 600;
-          color: var(--sl-color-white);
-        }
-
         .bit-playground-action-btn {
           position: absolute;
           top: 1rem;
-          padding: 0.5rem 1rem;
-          background: var(--sl-color-gray-5);
-          border: 1px solid var(--sl-color-gray-4);
+          width: 2rem;
+          height: 2rem;
+          padding: 0;
+          background: transparent;
+          border: 1px solid transparent;
           border-radius: 0.25rem;
-          color: var(--sl-color-white);
+          color: var(--sl-color-gray-2);
           cursor: pointer;
-          font-size: 0.875rem;
-          font-weight: 500;
-          transition: all 0.2s;
+          opacity: 0.6;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .bit-playground-action-btn:first-of-type {
-          right: 5rem;
+          right: 2.5rem;
         }
 
         .bit-playground-action-btn:last-of-type {
-          right: 1rem;
+          right: 0.25rem;
         }
 
-        .bit-playground-action-btn:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        .bit-playground-action-btn:not(:disabled):hover {
-          background: var(--sl-color-gray-4);
-          border-color: var(--sl-color-gray-3);
+        .bit-playground-action-btn:hover {
+          opacity: 1;
+          background: var(--sl-color-gray-5);
+          border-color: var(--sl-color-gray-4);
+          color: var(--sl-color-white);
         }
 
         .bit-playground-content {
@@ -524,37 +522,6 @@ export const Component: React.FC = () => {${propsDeclaration}
         .bit-playground-preview-section {
           overflow: hidden;
           aspect-ratio: 16 / 9;
-        }
-
-        .bit-playground-code-header,
-        .bit-playground-preview-header {
-          padding: 0.75rem 1rem;
-          background: var(--sl-color-gray-6);
-          border-bottom: 1px solid var(--sl-color-gray-5);
-          font-size: 0.875rem;
-          font-weight: 500;
-          color: var(--sl-color-gray-2);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .bit-playground-edit-badge {
-          background: rgba(59, 130, 246, 0.2);
-          color: rgb(147, 197, 253);
-          padding: 0.25rem 0.5rem;
-          border-radius: 0.25rem;
-          font-size: 0.75rem;
-          font-weight: 600;
-        }
-
-        .bit-playground-info {
-          padding: 0.75rem 1rem;
-          background: rgba(59, 130, 246, 0.1);
-          border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-          color: rgb(147, 197, 253);
-          font-size: 0.875rem;
-          line-height: 1.5;
         }
 
         .bit-playground-error {
@@ -593,13 +560,14 @@ export const Component: React.FC = () => {${propsDeclaration}
         }
 
         .bit-playground-metadata {
-          padding: 1rem 1.5rem;
+          padding: 0.25rem 0.5rem;
+          opacity: 0.5;
           background: var(--sl-color-gray-6);
           border-top: 1px solid var(--sl-color-gray-5);
           display: flex;
+          justify-content: space-between;
           gap: 2rem;
-          flex-wrap: wrap;
-          font-size: 0.875rem;
+          font-size: 0.75rem;
         }
 
         .bit-playground-meta-item {
@@ -621,24 +589,6 @@ export const Component: React.FC = () => {${propsDeclaration}
           text-decoration: none;
         }
 
-        .bit-playground-badges {
-          display: inline-flex;
-          flex-wrap: wrap;
-          gap: 0.375rem;
-        }
-
-        .bit-playground-badge {
-          display: inline-flex;
-          align-items: center;
-          padding: 0.1rem 0.5rem;
-          border-radius: 999px;
-          border: 1px solid var(--sl-color-gray-4);
-          background: var(--sl-color-gray-5);
-          color: var(--sl-color-gray-2);
-          font-size: 0.75rem;
-          font-weight: 600;
-        }
-
         /* Responsive: Stack vertically on mobile */
         @media (max-width: 1024px) {
           .bit-playground-content {
@@ -653,11 +603,6 @@ export const Component: React.FC = () => {${propsDeclaration}
           .bit-playground-preview {
             padding: 0;
             min-height: 100px;
-          }
-
-          .bit-playground-metadata {
-            flex-direction: column;
-            gap: 0.5rem;
           }
         }
 

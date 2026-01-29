@@ -216,3 +216,22 @@
 @utility bg-radial-glow {
   background-image: radial-gradient(circle at center, var(--tw-gradient-stops));
 }
+
+/* Global scrollbar styling */
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sl-color-gray-4);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sl-color-gray-3);
+}
