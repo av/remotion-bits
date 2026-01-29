@@ -118,6 +118,7 @@ export default defineConfig({
                 },
                 {
                     label: 'Reference',
+                    collapsed: true,
                     items: [
                         {
                             label: 'Components',

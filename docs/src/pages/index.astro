@@ -1,6 +1,8 @@
 ---
 import "../styles/custom.css";
 import { HeroShowcase } from "@/components/showcases/HeroShowcase";
+import { ParticlesCardShowcase } from "@/components/showcases/ParticlesCardShowcase";
+import { MotionPrimitivesCardIcon } from "@/components/showcases/MotionPrimitivesCardIcon";
 import { Code } from "@astrojs/starlight/components";
 import BentoCard from "@/components/BentoCard.astro";
 import Logo from "@/components/Logo.astro";
@@ -200,9 +202,12 @@ import Logo from "@/components/Logo.astro";
               </div>
             </BentoCard>
             <BentoCard class="md:col-span-3 lg:col-span-2">
+              <div class="absolute inset-0 z-0">
+                <ParticlesCardShowcase client:only="react" />
+              </div>
               <div class="relative z-10 h-full flex flex-col">
                 <div
-                  class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 border border-primary/20"
+                  class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 border border-primary/20 bg-surface-light/80 backdrop-blur-sm"
                 >
                   <span class="material-symbols-outlined text-2xl">grain</span>
                 </div>
@@ -222,13 +227,7 @@ import Logo from "@/components/Logo.astro";
                 <span class="material-symbols-outlined">animation</span>
               </div>
               <div class="relative z-10">
-                <div
-                  class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 border border-primary/20"
-                >
-                  <span class="material-symbols-outlined text-2xl"
-                    >animation</span
-                  >
-                </div>
+                <MotionPrimitivesCardIcon client:visible />
                 <h3 class="text-xl font-semibold text-white mb-2">
                   Motion Primitives
                 </h3>
@@ -239,6 +238,11 @@ import Logo from "@/components/Logo.astro";
               </div>
             </BentoCard>
             <BentoCard class="md:col-span-3 lg:col-span-2">
+              <div
+                class="absolute inset-0 z-0 bg-cover bg-top"
+                style="background-image: url('/suggestion.png'); mask-image: linear-gradient(to top, black, transparent 40%);"
+              >
+              </div>
               <div class="relative z-10 h-full">
                 <div
                   class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4 border border-primary/20"

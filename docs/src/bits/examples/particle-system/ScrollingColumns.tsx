@@ -75,6 +75,7 @@ export const Component: React.FC = () => {
         transitionDuration={durationInFrames}
         stepDuration={1}
         activeStep={1}
+        easing={'easeIn'}
       >
         <Step
           id="start"
