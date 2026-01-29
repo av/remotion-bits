@@ -23,22 +23,19 @@ export const Component: React.FC = () => {
         area={{ width: rect.width * 0.1, height: 0 }}
         velocity={{ x: 0, y: -rect.height * 0.05, varianceX: rect.width * 0.1, varianceY: rect.height * 0.01, }}
         lifespan={100}
+        startFrame={100}
         max={200}
-        transition={{
-          opacity: [0, 1],
-          duration: 10,
-        }}
       >
         <div style={{
-          width: rect.vmax * 2, height: rect.vmax * 2,
+          width: rect.vmax * 1, height: rect.vmax * 1,
           background: "radial-gradient(circle, #ebb03b99, transparent 50%)",
         }} />
         <div style={{
-          width: rect.vmax * 5, height: rect.vmax * 5,
+          width: rect.vmax * 2, height: rect.vmax * 2,
           background: "radial-gradient(circle, #ebb03b22, transparent 50%)",
         }} />
         <div style={{
-          width: rect.vmax * 3, height: rect.vmax * 3,
+          width: rect.vmax * 1.5, height: rect.vmax * 1.5,
           background: "radial-gradient(circle, gray, transparent 50%)",
         }} />
         <div style={{
