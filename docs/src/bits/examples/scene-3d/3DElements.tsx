@@ -3,7 +3,7 @@ import { Scene3D, Step, Element3D, useViewportRect, StaggeredMotion, randomFloat
 
 export const metadata = {
   name: "Basic 3D Scene",
-  description: "3D camera transitions between positioned steps, impress.js style",
+  description: "3D Scene allows placing arbitrary elements in 3D space",
   tags: ["3d", "camera", "presentation", "transition"],
   duration: 200,
   width: 1920,

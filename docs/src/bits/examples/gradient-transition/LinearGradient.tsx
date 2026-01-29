@@ -11,10 +11,10 @@ export const metadata = {
 };
 
 export const props = {
-  color1Start: "#cacaca",
-  color1End: "#b76c1c",
-  color2Start: "#454545",
-  color2End: "#f5576c",
+  color1Start: "#051226",
+  color1End: "#1e0541",
+  color2Start: "#a5d4dd",
+  color2End: "#5674b1",
   angle1: 0,
   angle2: 180,
 };

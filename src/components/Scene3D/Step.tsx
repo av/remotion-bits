@@ -221,7 +221,7 @@ const StepComponent: React.FC<StepProps> = ({
 
   const toCss = (val: number | string) => typeof val === 'number' ? `${val}px` : val;
 
-  const positionTransform = `translate(-50%, -50%) translate3d(${toCss(xVal)}, ${toCss(yVal)}, ${toCss(zVal)}) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
+  const positionTransform = `translate(-50%, -50%) rotate(0.01deg) translate3d(${toCss(xVal)}, ${toCss(yVal)}, ${toCss(zVal)}) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
 
   const stepConfig = steps[stepIndex];
 

@@ -1,42 +1,24 @@
 import { interpolate as culoriInterpolate, formatRgb } from "culori";
 import type { EasingFunction } from "./interpolate";
 
-// ============================================================================
-// TYPE DEFINITIONS
-// ============================================================================
-
 export type GradientType = "linear" | "radial" | "conic";
 
 export interface ColorStop {
   color: string;
-  position?: number; // 0-100 percentage
+  position?: number;
 }
 
 export interface ParsedGradient {
   type: GradientType;
-  angle?: number; // For linear gradients (degrees)
-  shape?: string; // For radial gradients (circle, ellipse)
-  position?: string; // For radial/conic (e.g., "center", "50% 50%")
+  angle?: number;
+  shape?: string;
+  position?: string;
   stops: ColorStop[];
 }
 
-// ============================================================================
-// CSS GRADIENT PARSER (NO EXTERNAL DEPENDENCIES)
-// ============================================================================
-
-/**
- * Parse CSS gradient string into structured format
- * Supports: linear-gradient, radial-gradient, conic-gradient
- *
- * @example
- * parseGradient("linear-gradient(90deg, red, blue 50%, green)")
- * parseGradient("radial-gradient(circle at center, red, blue)")
- * parseGradient("conic-gradient(from 0deg, red, yellow, green)")
- */
 export function parseGradient(gradientString: string): ParsedGradient | null {
   const trimmed = gradientString.trim();
 
-  // Detect gradient type
   let type: GradientType;
   let contentStart: number;
 
@@ -50,16 +32,13 @@ export function parseGradient(gradientString: string): ParsedGradient | null {
     type = "conic";
     contentStart = "conic-gradient(".length;
   } else {
-    return null; // Not a valid gradient
+    return null;
   }
 
-  // Extract content between parentheses
   const lastParen = trimmed.lastIndexOf(")");
   if (lastParen === -1) return null;
 
   const content = trimmed.substring(contentStart, lastParen).trim();
-
-  // Parse based on type
   if (type === "linear") {
     return parseLinearGradient(content);
   } else if (type === "radial") {
@@ -71,21 +50,16 @@ export function parseGradient(gradientString: string): ParsedGradient | null {
   return null;
 }
 
-/**
- * Parse linear-gradient content
- * Format: [angle,] color-stop [, color-stop]*
- */
 function parseLinearGradient(content: string): ParsedGradient {
   const gradient: ParsedGradient = {
     type: "linear",
-    angle: 180, // Default: to bottom
+    angle: 180,
     stops: [],
   };
 
   const parts = splitGradientParts(content);
   let startIndex = 0;
 
-  // Check if first part is an angle
   const firstPart = parts[0]?.trim();
   if (firstPart) {
     const angleMatch = firstPart.match(/^(-?\d+\.?\d*)deg$/);
@@ -93,13 +67,11 @@ function parseLinearGradient(content: string): ParsedGradient {
       gradient.angle = parseFloat(angleMatch[1]);
       startIndex = 1;
     } else if (firstPart.startsWith("to ")) {
-      // Handle directional keywords: to top, to right, etc.
       gradient.angle = parseDirection(firstPart);
       startIndex = 1;
     }
   }
 
-  // Parse color stops
   for (let i = startIndex; i < parts.length; i++) {
     const stop = parseColorStop(parts[i]);
     if (stop) gradient.stops.push(stop);
@@ -108,10 +80,6 @@ function parseLinearGradient(content: string): ParsedGradient {
   return gradient;
 }
 
-/**
- * Parse radial-gradient content
- * Format: [shape size at position,] color-stop [, color-stop]*
- */
 function parseRadialGradient(content: string): ParsedGradient {
   const gradient: ParsedGradient = {
     type: "radial",
@@ -123,16 +91,13 @@ function parseRadialGradient(content: string): ParsedGradient {
   const parts = splitGradientParts(content);
   let startIndex = 0;
 
-  // Check if first part contains shape/position info
   const firstPart = parts[0]?.trim();
   if (firstPart && !isColorStop(firstPart)) {
-    // Parse shape
     const shapeMatch = firstPart.match(/\b(circle|ellipse)\b/);
     if (shapeMatch) {
       gradient.shape = shapeMatch[1];
     }
 
-    // Parse position (after "at")
     const atIndex = firstPart.indexOf(" at ");
     if (atIndex !== -1) {
       gradient.position = firstPart.substring(atIndex + 4).trim();
@@ -141,7 +106,6 @@ function parseRadialGradient(content: string): ParsedGradient {
     startIndex = 1;
   }
 
-  // Parse color stops
   for (let i = startIndex; i < parts.length; i++) {
     const stop = parseColorStop(parts[i]);
     if (stop) gradient.stops.push(stop);
@@ -150,14 +114,10 @@ function parseRadialGradient(content: string): ParsedGradient {
   return gradient;
 }
 
-/**
- * Parse conic-gradient content
- * Format: [from angle] [at position,] color-stop [, color-stop]*
- */
 function parseConicGradient(content: string): ParsedGradient {
   const gradient: ParsedGradient = {
     type: "conic",
-    angle: 0, // Default: from 0deg
+    angle: 0,
     position: "center",
     stops: [],
   };
@@ -165,16 +125,13 @@ function parseConicGradient(content: string): ParsedGradient {
   const parts = splitGradientParts(content);
   let startIndex = 0;
 
-  // Check if first part contains from/at info
   const firstPart = parts[0]?.trim();
   if (firstPart && !isColorStop(firstPart)) {
-    // Parse "from" angle
     const fromMatch = firstPart.match(/from\s+(-?\d+\.?\d*)deg/);
     if (fromMatch) {
       gradient.angle = parseFloat(fromMatch[1]);
     }
 
-    // Parse "at" position
     const atIndex = firstPart.indexOf(" at ");
     if (atIndex !== -1) {
       gradient.position = firstPart.substring(atIndex + 4).trim();
@@ -183,7 +140,6 @@ function parseConicGradient(content: string): ParsedGradient {
     startIndex = 1;
   }
 
-  // Parse color stops
   for (let i = startIndex; i < parts.length; i++) {
     const stop = parseColorStop(parts[i]);
     if (stop) gradient.stops.push(stop);
@@ -192,10 +148,6 @@ function parseConicGradient(content: string): ParsedGradient {
   return gradient;
 }
 
-/**
- * Split gradient content by commas, respecting nested parentheses
- * Handles: rgb(255, 0, 0), rgba(255, 0, 0, 0.5), hsl(), etc.
- */
 function splitGradientParts(content: string): string[] {
   const parts: string[] = [];
   let current = "";
@@ -225,16 +177,10 @@ function splitGradientParts(content: string): string[] {
   return parts;
 }
 
-/**
- * Parse a color stop: "color [position]"
- * Examples: "red", "blue 50%", "rgba(255,0,0,0.5) 25%"
- */
 function parseColorStop(stopString: string): ColorStop | null {
   const trimmed = stopString.trim();
   if (!trimmed) return null;
 
-  // Match: color followed by optional position
-  // Position can be: 50%, 100px, etc.
   const match = trimmed.match(/^(.+?)\s+([\d.]+%|[\d.]+px)$/);
 
   if (match) {
@@ -244,26 +190,16 @@ function parseColorStop(stopString: string): ColorStop | null {
     return { color, position };
   }
 
-  // No position specified
   return { color: trimmed };
 }
 
-/**
- * Parse position string to percentage (0-100)
- */
 function parsePosition(positionStr: string): number {
   if (positionStr.endsWith("%")) {
     return parseFloat(positionStr);
   }
-  // For px values, we can't convert without context, so return as-is
-  // (This is a limitation; real implementation might need gradient size)
   return parseFloat(positionStr);
 }
 
-/**
- * Convert CSS direction keywords to angles
- * to top = 0deg, to right = 90deg, to bottom = 180deg, to left = 270deg
- */
 function parseDirection(direction: string): number {
   const normalized = direction.toLowerCase().trim();
 
@@ -276,16 +212,12 @@ function parseDirection(direction: string): number {
   if (normalized === "to bottom left") return 225;
   if (normalized === "to top left") return 315;
 
-  return 180; // Default
+  return 180;
 }
 
-/**
- * Check if a string is likely a color stop (vs. gradient params)
- */
 function isColorStop(str: string): boolean {
   const trimmed = str.trim().toLowerCase();
 
-  // Gradient-specific keywords (not color stops)
   if (trimmed.includes(" at ") || trimmed.startsWith("from ") || trimmed.startsWith("to ")) {
     return false;
   }
@@ -293,7 +225,6 @@ function isColorStop(str: string): boolean {
     return false;
   }
 
-  // Color keywords
   const colorKeywords = [
     "red", "blue", "green", "yellow", "orange", "purple", "pink", "brown",
     "black", "white", "gray", "grey", "cyan", "magenta", "transparent",
@@ -302,48 +233,82 @@ function isColorStop(str: string): boolean {
     return true;
   }
 
-  // Hex colors
   if (trimmed.startsWith("#")) return true;
 
-  // rgb/rgba/hsl/hsla functions
   if (trimmed.startsWith("rgb") || trimmed.startsWith("hsl")) return true;
 
-  // Has percentage or px (likely a positioned color stop)
   if (trimmed.includes("%") || trimmed.includes("px")) return true;
 
   return false;
 }
 
-// ============================================================================
-// GRADIENT INTERPOLATION (GRANIM.JS-INSPIRED MATH)
-// ============================================================================
+function parseGradientPosition(position: string): { x: number; y: number } {
+  const parts = position.trim().split(/\s+/);
+  let x: number | null = null;
+  let y: number | null = null;
 
-/**
- * Auto-distribute positions for color stops that don't have explicit positions
- * Matching Granim.js behavior
- */
+  parts.forEach((part) => {
+    switch (part) {
+      case "left":
+        x = 0;
+        break;
+      case "right":
+        x = 100;
+        break;
+      case "top":
+        y = 0;
+        break;
+      case "bottom":
+        y = 100;
+        break;
+      case "center":
+        if (x === null) x = 50;
+        else if (y === null) y = 50;
+        break;
+      default: {
+        const val = parseFloat(part);
+        if (!isNaN(val)) {
+          if (x === null) x = val;
+          else y = val;
+        }
+      }
+    }
+  });
+
+  return {
+    x: x ?? 50,
+    y: y ?? 50,
+  };
+}
+
+function interpolatePositions(from: string, to: string, progress: number): string {
+  const fromPos = parseGradientPosition(from);
+  const toPos = parseGradientPosition(to);
+
+  const x = fromPos.x + (toPos.x - fromPos.x) * progress;
+  const y = fromPos.y + (toPos.y - fromPos.y) * progress;
+
+  return `${x}% ${y}%`;
+}
+
 export function normalizeColorStops(stops: ColorStop[]): ColorStop[] {
   if (stops.length === 0) return [];
   if (stops.length === 1) return [{ ...stops[0], position: 50 }];
 
   const normalized: ColorStop[] = [];
 
-  // First stop defaults to 0% if no position
   normalized.push({
     ...stops[0],
     position: stops[0].position ?? 0,
   });
 
-  // Last stop defaults to 100% if no position
   const lastStop = stops[stops.length - 1];
   const lastPosition = lastStop.position ?? 100;
 
-  // Handle middle stops
   for (let i = 1; i < stops.length - 1; i++) {
     if (stops[i].position !== undefined) {
       normalized.push(stops[i] as Required<ColorStop>);
     } else {
-      // Find the next stop with a position
       let nextWithPosition = stops.length - 1;
       for (let j = i + 1; j < stops.length; j++) {
         if (stops[j].position !== undefined) {
@@ -352,7 +317,6 @@ export function normalizeColorStops(stops: ColorStop[]): ColorStop[] {
         }
       }
 
-      // Interpolate position evenly
       const prevPosition = normalized[normalized.length - 1].position!;
       const nextPosition = stops[nextWithPosition].position ?? lastPosition;
       const gap = nextPosition - prevPosition;
@@ -366,7 +330,6 @@ export function normalizeColorStops(stops: ColorStop[]): ColorStop[] {
     }
   }
 
-  // Add last stop
   normalized.push({
     ...lastStop,
     position: lastPosition,
@@ -375,38 +338,22 @@ export function normalizeColorStops(stops: ColorStop[]): ColorStop[] {
   return normalized;
 }
 
-/**
- * Interpolate angle with wraparound (shortest path)
- * Granim.js uses modulo arithmetic to avoid spinning through 359 degrees
- *
- * @example
- * interpolateAngle(350, 10, 0.5) // => 0 (via 360, not 180)
- * interpolateAngle(10, 350, 0.5) // => 0 (via 360, not 180)
- */
 export function interpolateAngle(from: number, to: number, progress: number): number {
-  // Normalize angles to [0, 360)
   const normalizeAngle = (angle: number) => ((angle % 360) + 360) % 360;
   const fromNorm = normalizeAngle(from);
   const toNorm = normalizeAngle(to);
 
-  // Calculate direct difference
   let diff = toNorm - fromNorm;
 
-  // Adjust for shortest path through 0/360 boundary
   if (diff > 180) {
     diff -= 360;
   } else if (diff < -180) {
     diff += 360;
   }
 
-  // Interpolate and normalize
   return normalizeAngle(fromNorm + diff * progress);
 }
 
-/**
- * Pad or resample color stops to match target count
- * When interpolating between gradients with different stop counts
- */
 export function matchColorStopCount(
   stops: ColorStop[],
   targetCount: number
@@ -414,7 +361,6 @@ export function matchColorStopCount(
   if (stops.length === targetCount) return stops;
 
   if (stops.length < targetCount) {
-    // Pad by duplicating last stop
     const padded = [...stops];
     while (padded.length < targetCount) {
       padded.push({ ...stops[stops.length - 1] });
@@ -422,7 +368,6 @@ export function matchColorStopCount(
     return padded;
   }
 
-  // Resample by evenly spacing
   const resampled: ColorStop[] = [];
   for (let i = 0; i < targetCount; i++) {
     const position = (i / (targetCount - 1)) * 100;
@@ -432,13 +377,9 @@ export function matchColorStopCount(
   return resampled;
 }
 
-/**
- * Get color at a specific position in a gradient
- */
 function interpolateColorAtPosition(stops: ColorStop[], position: number): string {
   const normalized = normalizeColorStops(stops);
 
-  // Find surrounding stops
   let beforeIndex = 0;
   let afterIndex = normalized.length - 1;
 
@@ -459,7 +400,6 @@ function interpolateColorAtPosition(stops: ColorStop[], position: number): strin
 
   const localProgress = (position - before.position!) / (after.position! - before.position!);
 
-  // Use culori Oklch interpolation
   try {
     const interpolator = culoriInterpolate([before.color, after.color], "oklch");
     const result = interpolator(localProgress);
@@ -469,10 +409,6 @@ function interpolateColorAtPosition(stops: ColorStop[], position: number): strin
   }
 }
 
-/**
- * Interpolate between two gradients
- * Core algorithm inspired by Granim.js gradient state transitions
- */
 export function interpolateGradients(
   from: ParsedGradient,
   to: ParsedGradient,
@@ -481,10 +417,8 @@ export function interpolateGradients(
 ): ParsedGradient {
   const easedProgress = easingFn ? easingFn(progress) : progress;
 
-  // Handle type transitions (linear → radial, etc.)
   const type = easedProgress < 0.5 ? from.type : to.type;
 
-  // Interpolate angle (for linear/conic)
   let angle: number | undefined;
   if (from.angle !== undefined && to.angle !== undefined) {
     angle = interpolateAngle(from.angle, to.angle, easedProgress);
@@ -494,13 +428,15 @@ export function interpolateGradients(
     angle = to.angle;
   }
 
-  // Interpolate shape (for radial) - discrete switch at 0.5
   const shape = easedProgress < 0.5 ? from.shape : to.shape;
 
-  // Interpolate position (for radial/conic) - discrete switch at 0.5
-  const position = easedProgress < 0.5 ? from.position : to.position;
+  let position: string | undefined;
+  if (from.position && to.position) {
+    position = interpolatePositions(from.position, to.position, easedProgress);
+  } else {
+    position = easedProgress < 0.5 ? from.position : to.position;
+  }
 
-  // Normalize and match color stop counts
   const fromStops = normalizeColorStops(from.stops);
   const toStops = normalizeColorStops(to.stops);
 
@@ -508,15 +444,12 @@ export function interpolateGradients(
   const fromMatched = matchColorStopCount(fromStops, maxStops);
   const toMatched = matchColorStopCount(toStops, maxStops);
 
-  // Interpolate each color stop
   const stops: ColorStop[] = fromMatched.map((fromStop, i) => {
     const toStop = toMatched[i];
 
-    // Interpolate position
     const position =
       fromStop.position! + (toStop.position! - fromStop.position!) * easedProgress;
 
-    // Interpolate color using culori Oklch
     let color: string;
     try {
       const interpolator = culoriInterpolate([fromStop.color, toStop.color], "oklch");
@@ -538,9 +471,6 @@ export function interpolateGradients(
   };
 }
 
-/**
- * Convert ParsedGradient back to CSS string
- */
 export function gradientToCSS(gradient: ParsedGradient): string {
   const stops = gradient.stops
     .map(stop => {
@@ -567,39 +497,28 @@ export function gradientToCSS(gradient: ParsedGradient): string {
   return "";
 }
 
-/**
- * Interpolate between multiple gradient keyframes
- * Matches the pattern of interpolateColorKeyframes from color.ts
- */
 export function interpolateGradientKeyframes(
   gradients: string[],
   progress: number,
   easingFn?: EasingFunction
 ): string {
-  // Handle edge cases
   if (gradients.length === 0) return "";
   if (gradients.length === 1) return gradients[0];
 
-  // Clamp progress to [0, 1]
   const clampedProgress = Math.min(Math.max(progress, 0), 1);
 
-  // Calculate which segment we're in
   const segments = gradients.length - 1;
   const segmentProgress = clampedProgress * segments;
   const segmentIndex = Math.min(Math.floor(segmentProgress), segments - 1);
   const localProgress = segmentProgress - segmentIndex;
 
-  // Parse gradients
   const fromGradient = parseGradient(gradients[segmentIndex]);
   const toGradient = parseGradient(gradients[segmentIndex + 1]);
 
-  // Handle parse failures
   if (!fromGradient) return gradients[segmentIndex];
   if (!toGradient) return gradients[segmentIndex + 1];
 
-  // Interpolate
   const interpolated = interpolateGradients(fromGradient, toGradient, localProgress, easingFn);
 
-  // Convert back to CSS
   return gradientToCSS(interpolated);
 }

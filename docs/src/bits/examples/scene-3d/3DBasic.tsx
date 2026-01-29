@@ -26,34 +26,30 @@ export const Component: React.FC = () => {
         x={0}
         y={0}
         z={0}
-        transition={{ opacity: [1, 1] }}
-        exitTransition={{ opacity: [1, 0.5] }}
-      >
-        <h1 style={{ fontSize }}>Hello</h1>
-      </Step>
-      <Step
-        id="2"
-        x={-100}
-        y={0}
-        z={-200}
-        rotateZ={90}
-        scale={0.3}
         transition={{ opacity: [0, 1] }}
         exitTransition={{ opacity: [1, 0] }}
       >
-        <h1 style={{ fontSize, background: 'white', color: 'black', padding: `${rect.vmin * 1}px ${rect.vmin * 4}px` }}>Hello</h1>
+        <h1 style={{ fontSize }}>Control</h1>
+      </Step>
+      <Step
+        id="2"
+        x={0}
+        y={rect.vmin * 10}
+        z={rect.vmin * 200}
+        transition={{ opacity: [0, 1] }}
+        exitTransition={{ opacity: [1, 0] }}
+      >
+        <h1 style={{ fontSize, background: 'white', color: 'black', padding: `${rect.vmin * 1}px ${rect.vmin * 4}px` }}>Camera</h1>
       </Step>
       <Step
         id="3"
-        x={140}
-        y={0}
-        z={-300}
-        rotateZ={90}
-        scale={0.3}
+        x={0}
+        y={rect.vmin * 20}
+        z={rect.vmin * 400}
         transition={{ opacity: [0, 1] }}
-        exitTransition={{ opacity: [1, 1] }}
+        exitTransition={{ opacity: [1, 0] }}
       >
-        <h1 style={{ fontSize }}>Hello</h1>
+        <h1 style={{ fontSize }}>Action</h1>
       </Step>
     </Scene3D>
   );
