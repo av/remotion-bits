@@ -5,6 +5,7 @@ tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'todo']
 You will aid me in releasing a new version of remotion-bits. Follow these steps:
 
 - In ./package.json - bump the version number to the new version. Bump patch unless I tell you otherwise.
+- Update CHANGELOG.md with release notes for the new version (see CHANGELOG format below).
 - Run `npm run registry:build` to build the registry
 - When build is done, commit current changes with the message: `chore: vX.Y.Z`
 - Push the commit to the master branch
@@ -62,3 +63,22 @@ npm publish
 ```
 
 Ensure you're authenticated with npm before publishing. The authentication token should be configured in your environment.
+
+### CHANGELOG Format
+
+The CHANGELOG.md should follow this structure:
+
+```markdown
+### vX.Y.Z
+
+- Feature: Brief description of new feature
+- Fix: Brief description of bug fix
+- Improvement: Brief description of enhancement
+- Docs: Brief description of documentation change
+```
+
+When updating the CHANGELOG.md:
+1. Add a new version section at the top (after the existing latest version)
+2. List changes in categories: Feature, Fix, Improvement, Docs
+3. Keep entries concise and user-focused
+4. Reference git commits and PRs from recent changes
