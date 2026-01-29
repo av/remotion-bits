@@ -136,6 +136,7 @@ const compileUserCode = (
         randomInt,
         randomFloat,
         anyElement,
+        ImagePlaceholder,
       } = RemotionBits;
 
       ${cleanedTranspiled}

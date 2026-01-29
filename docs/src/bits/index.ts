@@ -128,4 +128,5 @@ export const ParticlesFountain = bits.ParticlesFountain;
 export const ParticlesGrid = bits.ParticlesGrid;
 export const Scene3DPresentation = bits.Scene3DPresentation;
 export const FlyingThroughWords = bits.FlyingThroughWords;
+export const ScrollingColumns = bits.ScrollingColumns;
 export const Elements3D = bits.Elements3D;

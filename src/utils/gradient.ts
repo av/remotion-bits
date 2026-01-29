@@ -338,17 +338,24 @@ export function normalizeColorStops(stops: ColorStop[]): ColorStop[] {
   return normalized;
 }
 
-export function interpolateAngle(from: number, to: number, progress: number): number {
+export function interpolateAngle(
+  from: number,
+  to: number,
+  progress: number,
+  useShortestAngle: boolean = true
+): number {
   const normalizeAngle = (angle: number) => ((angle % 360) + 360) % 360;
   const fromNorm = normalizeAngle(from);
   const toNorm = normalizeAngle(to);
 
   let diff = toNorm - fromNorm;
 
-  if (diff > 180) {
-    diff -= 360;
-  } else if (diff < -180) {
-    diff += 360;
+  if (useShortestAngle) {
+    if (diff > 180) {
+      diff -= 360;
+    } else if (diff < -180) {
+      diff += 360;
+    }
   }
 
   return normalizeAngle(fromNorm + diff * progress);
@@ -413,7 +420,8 @@ export function interpolateGradients(
   from: ParsedGradient,
   to: ParsedGradient,
   progress: number,
-  easingFn?: EasingFunction
+  easingFn?: EasingFunction,
+  useShortestAngle: boolean = true
 ): ParsedGradient {
   const easedProgress = easingFn ? easingFn(progress) : progress;
 
@@ -421,7 +429,7 @@ export function interpolateGradients(
 
   let angle: number | undefined;
   if (from.angle !== undefined && to.angle !== undefined) {
-    angle = interpolateAngle(from.angle, to.angle, easedProgress);
+    angle = interpolateAngle(from.angle, to.angle, easedProgress, useShortestAngle);
   } else if (from.angle !== undefined) {
     angle = from.angle;
   } else if (to.angle !== undefined) {
@@ -500,7 +508,8 @@ export function gradientToCSS(gradient: ParsedGradient): string {
 export function interpolateGradientKeyframes(
   gradients: string[],
   progress: number,
-  easingFn?: EasingFunction
+  easingFn?: EasingFunction,
+  useShortestAngle: boolean = true
 ): string {
   if (gradients.length === 0) return "";
   if (gradients.length === 1) return gradients[0];
@@ -518,7 +527,7 @@ export function interpolateGradientKeyframes(
   if (!fromGradient) return gradients[segmentIndex];
   if (!toGradient) return gradients[segmentIndex + 1];
 
-  const interpolated = interpolateGradients(fromGradient, toGradient, localProgress, easingFn);
+  const interpolated = interpolateGradients(fromGradient, toGradient, localProgress, easingFn, useShortestAngle);
 
   return gradientToCSS(interpolated);
 }

@@ -62,6 +62,14 @@ export type GradientTransitionProps = {
    * Children to render on top of the gradient background
    */
   children?: React.ReactNode;
+
+  /**
+   * Whether to use shortest angle interpolation for gradient angles
+   * When true, angles interpolate via shortest path (e.g., 350° → 10° goes through 0°)
+   * When false, angles interpolate linearly
+   * Default: true
+   */
+  shortestAngle?: boolean;
 };
 
 // ============================================================================
@@ -133,6 +141,7 @@ export const GradientTransition: React.FC<GradientTransitionProps> = ({
   className,
   style,
   children,
+  shortestAngle = true,
 }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
@@ -149,7 +158,7 @@ export const GradientTransition: React.FC<GradientTransitionProps> = ({
   const progress = Math.min(Math.max((relativeFrame - startFrame) / totalDuration, 0), 1);
 
   // Interpolate gradient
-  const interpolatedGradient = interpolateGradientKeyframes(gradient, progress, easingFn);
+  const interpolatedGradient = interpolateGradientKeyframes(gradient, progress, easingFn, shortestAngle);
 
   return (
     <div
