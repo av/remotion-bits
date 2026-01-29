@@ -1,7 +1,7 @@
-export { TextTransition } from "./TextTransition";
-export { BackgroundTransition } from "./BackgroundTransition";
-export { MotionTransition } from "./MotionTransition";
-export { Particles, Spawner, Behavior } from "./Particles";
+export { AnimatedText } from "./AnimatedText";
+export { GradientTransition } from "./GradientTransition";
+export { StaggeredMotion } from "./StaggeredMotion";
+export { Particles, Spawner, Behavior } from "./ParticleSystem";
 export {
   Scene3D,
   Step,

@@ -55,22 +55,22 @@ export default defineConfig({
     },
     items: [
       {
-        name: "text-transition",
-        title: "Text Transition",
-        description: "Animated text transitions for Remotion compositions.",
+        name: "animated-text",
+        title: "Animated Text",
+        description: "Character-by-character, word-by-word, or full text animations with staggering, easing, and transform controls.",
         type: "component",
         add: "when-added",
         dependencyResolution: "manual",
         registryDependencies: ["interpolate", "color"],
         files: [
           {
-            path: "src/components/TextTransition.tsx",
+            path: "src/components/AnimatedText.tsx",
           },
         ],
       },
       {
-        name: "background-transition",
-        title: "Background Transition",
+        name: "gradient-transition",
+        title: "Gradient Transition",
         description: "Smooth CSS gradient transitions with intelligent interpolation (linear, radial, conic).",
         type: "component",
         add: "when-added",
@@ -79,44 +79,44 @@ export default defineConfig({
         dependencies: ["culori"],
         files: [
           {
-            path: "src/components/BackgroundTransition.tsx",
+            path: "src/components/GradientTransition.tsx",
           },
         ],
       },
       {
-        name: "motion-transition",
-        title: "Motion Transition",
-        description: "Advanced motion and transform animations with stagger effects and easing control.",
+        name: "staggered-motion",
+        title: "Staggered Motion",
+        description: "Advanced motion and transform animations for child elements with stagger effects, directional timing, and easing control.",
         type: "component",
         add: "when-added",
         dependencyResolution: "manual",
         registryDependencies: ["interpolate", "motion"],
         files: [
           {
-            path: "src/components/MotionTransition.tsx",
+            path: "src/components/StaggeredMotion.tsx",
           },
         ],
       },
       {
-        name: "particles",
-        title: "Particles System",
-        description: "Particle effect system with spawners, behaviors (gravity, drag, wiggle, scale, opacity), and deterministic simulation.",
+        name: "particle-system",
+        title: "Particle System",
+        description: "Complete particle effect system with spawners, behaviors (gravity, drag, wiggle, scale, opacity), and deterministic simulation.",
         type: "component",
         add: "when-added",
         dependencyResolution: "manual",
         registryDependencies: ["random", "particles-utilities"],
         files: [
           {
-            path: "src/components/Particles/Particles.tsx",
+            path: "src/components/ParticleSystem/Particles.tsx",
           },
           {
-            path: "src/components/Particles/Spawner.tsx",
+            path: "src/components/ParticleSystem/Spawner.tsx",
           },
           {
-            path: "src/components/Particles/Behavior.tsx",
+            path: "src/components/ParticleSystem/Behavior.tsx",
           },
           {
-            path: "src/components/Particles/index.ts",
+            path: "src/components/ParticleSystem/index.ts",
           },
         ],
       },

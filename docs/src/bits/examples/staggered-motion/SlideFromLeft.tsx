@@ -1,5 +1,5 @@
 import React from "react";
-import { TextTransition } from "remotion-bits";
+import { AnimatedText } from "remotion-bits";
 
 export const metadata = {
   name: "Slide from Left",
@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 export const Component: React.FC = () => (
-  <TextTransition
+  <AnimatedText
     transition={{
       opacity: [0, 1],
       x: [-400, 0],
@@ -19,7 +19,7 @@ export const Component: React.FC = () => (
     }}
   >
     Sliding Text
-  </TextTransition>
+  </AnimatedText>
 );
 
 

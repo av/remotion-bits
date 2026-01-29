@@ -3,16 +3,16 @@ title: BackgroundTransition
 description: Smoothly transition between CSS gradients.
 ---
 
-The `BackgroundTransition` component enables smooth, high-quality transitions between CSS gradients. It handles interpolation of colors (using Oklch for perceptually uniform results), angles, and positions.
+The `GradientTransition` component enables smooth, high-quality transitions between CSS gradients. It handles interpolation of colors (using Oklch for perceptually uniform results), angles, and positions.
 
 ## Usage
 
 ```tsx
-import { BackgroundTransition } from "remotion-bits";
+import { GradientTransition } from "remotion-bits";
 
 export const MyComposition = () => {
     return (
-        <BackgroundTransition
+        <GradientTransition
             gradient={[
                 "linear-gradient(90deg, #ff0000, #0000ff)",
                 "linear-gradient(180deg, #00ff00, #ffff00)",
@@ -20,7 +20,7 @@ export const MyComposition = () => {
             duration={60}
         >
             <div style={{ color: "white" }}>Content on top</div>
-        </BackgroundTransition>
+        </GradientTransition>
     );
 };
 ```

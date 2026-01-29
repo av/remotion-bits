@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, interpolate } from "remotion";
-import { Particles, Spawner, Behavior, useViewportRect, resolvePoint, MotionTransition } from "remotion-bits";
+import { Particles, Spawner, Behavior, useViewportRect, resolvePoint, StaggeredMotion } from "remotion-bits";
 
 export const metadata = {
   name: "Flying Through Words",
@@ -36,7 +36,7 @@ export const Component: React.FC = () => {
         }}
       >
         {WORDS.map((word, i) => (
-          <MotionTransition
+          <StaggeredMotion
             key={i}
             style={{
               color: "white",
@@ -48,7 +48,7 @@ export const Component: React.FC = () => {
             }}
           >
             {word}
-          </MotionTransition>
+          </StaggeredMotion>
         ))}
       </Spawner>
 

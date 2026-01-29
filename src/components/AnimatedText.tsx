@@ -17,7 +17,7 @@ import {
 
 export type { AnimatedValue };
 
-export type TransitionProps = TransformProps & VisualProps & TimingProps & {
+export type AnimatedTextTransitionProps = TransformProps & VisualProps & TimingProps & {
   // Split configuration
   split?: string;
   splitStagger?: number;
@@ -29,8 +29,8 @@ export type TransitionProps = TransformProps & VisualProps & TimingProps & {
   };
 };
 
-export type TextTransitionProps = {
-  transition: TransitionProps;
+export type AnimatedTextProps = {
+  transition: AnimatedTextTransitionProps;
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -53,7 +53,7 @@ function splitText(text: string, mode: string): string[] {
 // COMPONENT
 // ============================================================================
 
-export const TextTransition: React.FC<TextTransitionProps> = ({
+export const AnimatedText: React.FC<AnimatedTextProps> = ({
   transition,
   children,
   className,

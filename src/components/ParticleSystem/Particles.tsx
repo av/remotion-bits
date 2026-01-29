@@ -4,7 +4,7 @@ import { simulateParticles } from "../../utils/particles/simulator";
 import { getBehaviorHandlersFromProps, Behavior, type BehaviorProps } from "./Behavior";
 import { Spawner, type SpawnerProps } from "./Spawner";
 import type { SpawnerConfig, BehaviorConfig } from "../../utils/particles/types";
-import { MotionTransition } from "../MotionTransition";
+import { StaggeredMotion } from "../StaggeredMotion";
 
 export interface ParticlesProps {
   children?: React.ReactNode;
@@ -134,7 +134,7 @@ export const Particles: React.FC<ParticlesProps> = ({
 
         let content = childToRender;
 
-        if (React.isValidElement(content) && content.type === MotionTransition) {
+        if (React.isValidElement(content) && content.type === StaggeredMotion) {
           const props = content.props as any;
           content = React.cloneElement(content, {
             cycleOffset: age,
@@ -147,9 +147,9 @@ export const Particles: React.FC<ParticlesProps> = ({
 
         if (spawner.transition) {
           content = (
-            <MotionTransition transition={spawner.transition} cycleOffset={age}>
+            <StaggeredMotion transition={spawner.transition} cycleOffset={age}>
               {content}
-            </MotionTransition>
+            </StaggeredMotion>
           );
         }
 

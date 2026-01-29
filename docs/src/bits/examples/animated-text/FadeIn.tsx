@@ -1,5 +1,5 @@
 import React from "react";
-import { TextTransition } from "remotion-bits";
+import { AnimatedText } from "remotion-bits";
 
 export const metadata = {
   name: "Fade In",
@@ -11,9 +11,9 @@ export const metadata = {
 };
 
 export const Component: React.FC = () => (
-  <TextTransition transition={{ opacity: [0, 1] }}>
+  <AnimatedText transition={{ opacity: [0, 1] }}>
     Hello World
-  </TextTransition>
+  </AnimatedText>
 );
 
 

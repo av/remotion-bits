@@ -1,5 +1,5 @@
 import React from "react";
-import { BackgroundTransition } from "remotion-bits";
+import { GradientTransition } from "remotion-bits";
 
 export const metadata = {
   name: "Conic Gradient",
@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 export const Component: React.FC = () => (
-  <BackgroundTransition
+  <GradientTransition
     gradient={[
       "conic-gradient(from 0deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)",
       "conic-gradient(from 180deg, #ff00ff, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000, #ff00ff)",
@@ -31,5 +31,5 @@ export const Component: React.FC = () => (
     }}>
       Conic Rainbow
     </div>
-  </BackgroundTransition>
+  </GradientTransition>
 );

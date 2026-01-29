@@ -1,5 +1,5 @@
 import React from "react";
-import { BackgroundTransition } from "remotion-bits";
+import { GradientTransition } from "remotion-bits";
 
 export const metadata = {
   name: "Radial Gradient",
@@ -11,14 +11,14 @@ export const metadata = {
 };
 
 export const Component: React.FC = () => (
-  <BackgroundTransition
+  <GradientTransition
     gradient={[
       "radial-gradient(circle at center, #000000 0%, #ffffff 100%)",
       "radial-gradient(circle at top right, #96eb03 0%, #f5576c 100%)",
     ]}
     duration={90}
   >
-  </BackgroundTransition>
+  </GradientTransition>
 );
 
 

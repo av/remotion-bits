@@ -1,5 +1,5 @@
 import React from "react";
-import { TextTransition } from "remotion-bits";
+import { AnimatedText } from "remotion-bits";
 
 export const metadata = {
   name: "Blur Slide Word",
@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 export const Component: React.FC = () => (
-  <TextTransition
+  <AnimatedText
     transition={{
       y: [40, 0],
       blur: [10, 0],
@@ -26,5 +26,5 @@ export const Component: React.FC = () => (
     }}
   >
     Text Transition
-  </TextTransition>
+  </AnimatedText>
 );

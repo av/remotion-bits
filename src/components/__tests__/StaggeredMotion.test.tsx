@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { MotionTransition } from "../MotionTransition";
+import { StaggeredMotion } from "../StaggeredMotion";
 
 let currentFrame = 0;
 
@@ -23,15 +23,15 @@ vi.mock("remotion", () => ({
   },
 }));
 
-describe("MotionTransition", () => {
+describe("StaggeredMotion", () => {
   it("renders multiple children", () => {
     currentFrame = 0;
     const { container } = render(
-      <MotionTransition transition={{ opacity: [0, 1] }}>
+      <StaggeredMotion transition={{ opacity: [0, 1] }}>
         <div data-testid="child1">Child 1</div>
         <div data-testid="child2">Child 2</div>
         <div data-testid="child3">Child 3</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     expect(container.querySelector('[data-testid="child1"]')).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe("MotionTransition", () => {
   it("applies animated styles to children", () => {
     currentFrame = 15; // Mid-animation
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
           y: [50, 0],
@@ -50,7 +50,7 @@ describe("MotionTransition", () => {
         }}
       >
         <div data-testid="child">Child</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const child = container.querySelector('[data-testid="child"]') as HTMLElement;
@@ -62,7 +62,7 @@ describe("MotionTransition", () => {
   it("merges styles with existing child styles", () => {
     currentFrame = 0;
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
         }}
@@ -70,7 +70,7 @@ describe("MotionTransition", () => {
         <div data-testid="child" style={{ color: "red", fontSize: "20px" }}>
           Child
         </div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const child = container.querySelector('[data-testid="child"]') as HTMLElement;
@@ -82,7 +82,7 @@ describe("MotionTransition", () => {
   it("applies stagger in forward direction", () => {
     currentFrame = 10;
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
           duration: 30,
@@ -93,7 +93,7 @@ describe("MotionTransition", () => {
         <div data-testid="child1">Child 1</div>
         <div data-testid="child2">Child 2</div>
         <div data-testid="child3">Child 3</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const child1 = container.querySelector('[data-testid="child1"]') as HTMLElement;
@@ -112,7 +112,7 @@ describe("MotionTransition", () => {
   it("applies stagger in reverse direction", () => {
     currentFrame = 10;
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
           duration: 30,
@@ -123,7 +123,7 @@ describe("MotionTransition", () => {
         <div data-testid="child1">Child 1</div>
         <div data-testid="child2">Child 2</div>
         <div data-testid="child3">Child 3</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const child1 = container.querySelector('[data-testid="child1"]') as HTMLElement;
@@ -142,7 +142,7 @@ describe("MotionTransition", () => {
   it("applies stagger in center direction", () => {
     currentFrame = 10;
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
           duration: 30,
@@ -153,7 +153,7 @@ describe("MotionTransition", () => {
         <div data-testid="child1">Child 1</div>
         <div data-testid="child2">Child 2</div>
         <div data-testid="child3">Child 3</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const child1 = container.querySelector('[data-testid="child1"]') as HTMLElement;
@@ -172,7 +172,7 @@ describe("MotionTransition", () => {
   it("applies stagger in random direction", () => {
     currentFrame = 10;
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
           duration: 30,
@@ -183,7 +183,7 @@ describe("MotionTransition", () => {
         <div data-testid="child1">Child 1</div>
         <div data-testid="child2">Child 2</div>
         <div data-testid="child3">Child 3</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const child1 = container.querySelector('[data-testid="child1"]') as HTMLElement;
@@ -211,7 +211,7 @@ describe("MotionTransition", () => {
 
     // First render
     const { container: container1 } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
           duration: 30,
@@ -222,7 +222,7 @@ describe("MotionTransition", () => {
         <div data-testid="child1">Child 1</div>
         <div data-testid="child2">Child 2</div>
         <div data-testid="child3">Child 3</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const opacity1_render1 = parseFloat((container1.querySelector('[data-testid="child1"]') as HTMLElement).style.opacity);
@@ -231,7 +231,7 @@ describe("MotionTransition", () => {
 
     // Second render with same setup
     const { container: container2 } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
           duration: 30,
@@ -242,7 +242,7 @@ describe("MotionTransition", () => {
         <div data-testid="child1">Child 1</div>
         <div data-testid="child2">Child 2</div>
         <div data-testid="child3">Child 3</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const opacity1_render2 = parseFloat((container2.querySelector('[data-testid="child1"]') as HTMLElement).style.opacity);
@@ -258,11 +258,11 @@ describe("MotionTransition", () => {
   it("handles non-React element children", () => {
     currentFrame = 0;
     const { container } = render(
-      <MotionTransition transition={{ opacity: [0, 1] }}>
+      <StaggeredMotion transition={{ opacity: [0, 1] }}>
         <div>Element Child</div>
         Plain text child
         {42}
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     expect(container.textContent).toContain("Element Child");
@@ -273,7 +273,7 @@ describe("MotionTransition", () => {
   it("supports transform properties", () => {
     currentFrame = 15;
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           x: [100, 0],
           y: [50, 0],
@@ -283,7 +283,7 @@ describe("MotionTransition", () => {
         }}
       >
         <div data-testid="child">Child</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const child = container.querySelector('[data-testid="child"]') as HTMLElement;
@@ -298,7 +298,7 @@ describe("MotionTransition", () => {
   it("supports keyframe arrays", () => {
     currentFrame = 15;
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1, 0.5],
           y: [100, 0, 50],
@@ -306,7 +306,7 @@ describe("MotionTransition", () => {
         }}
       >
         <div data-testid="child">Child</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const child = container.querySelector('[data-testid="child"]') as HTMLElement;
@@ -324,14 +324,14 @@ describe("MotionTransition", () => {
 
     currentFrame = 15;
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
           duration: 30,
         }}
       >
         <CustomComponent>Custom Child</CustomComponent>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const customElement = container.querySelector('[data-testid="custom"]') as HTMLElement;
@@ -342,13 +342,13 @@ describe("MotionTransition", () => {
   it("applies className and style to container", () => {
     currentFrame = 0;
     const { container } = render(
-      <MotionTransition
+      <StaggeredMotion
         transition={{ opacity: [0, 1] }}
         className="test-class"
         style={{ padding: "20px" }}
       >
         <div>Child</div>
-      </MotionTransition>
+      </StaggeredMotion>
     );
 
     const wrapper = container.firstElementChild as HTMLElement;

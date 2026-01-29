@@ -3,16 +3,16 @@ title: MotionTransition
 description: Animate elements with transform properties.
 ---
 
-The `MotionTransition` component applies interpolate-based animations to `transform`, `opacity`, and `filter` properties. It supports standard distinct properties like `x`, `y`, `scale`, `rotate`, as well as staggered animations for children.
+The `StaggeredMotion` component applies interpolate-based animations to `transform`, `opacity`, and `filter` properties. It supports standard distinct properties like `x`, `y`, `scale`, `rotate`, as well as staggered animations for children.
 
 ## Usage
 
 ```tsx
-import { MotionTransition } from "remotion-bits";
+import { StaggeredMotion } from "remotion-bits";
 
 export const MyComponent = () => {
     return (
-        <MotionTransition
+        <StaggeredMotion
             transition={{
                 y: [50, 0],       // Slide up
                 opacity: [0, 1],  // Fade in
@@ -22,7 +22,7 @@ export const MyComponent = () => {
             }}
         >
             <h1>Hello World</h1>
-        </MotionTransition>
+        </StaggeredMotion>
     );
 };
 ```

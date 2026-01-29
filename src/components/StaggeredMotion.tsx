@@ -19,14 +19,14 @@ export type { AnimatedValue };
 
 export type StaggerDirection = "forward" | "reverse" | "center" | "random";
 
-export type MotionTransitionProps = TransformProps & VisualProps & TimingProps & {
+export type StaggeredMotionTransitionProps = TransformProps & VisualProps & TimingProps & {
   // Stagger configuration
   stagger?: number;
   staggerDirection?: StaggerDirection;
 };
 
-export type MotionTransitionComponentProps = {
-  transition: MotionTransitionProps;
+export type StaggeredMotionProps = {
+  transition: StaggeredMotionTransitionProps;
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -79,7 +79,7 @@ function calculateStaggerIndex(
 // COMPONENT
 // ============================================================================
 
-export const MotionTransition: React.FC<MotionTransitionComponentProps> = ({
+export const StaggeredMotion: React.FC<StaggeredMotionProps> = ({
   transition,
   children,
   className,

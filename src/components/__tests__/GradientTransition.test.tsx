@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { BackgroundTransition } from "../BackgroundTransition";
+import { GradientTransition } from "../GradientTransition";
 
 let currentFrame = 0;
 
@@ -10,11 +10,11 @@ vi.mock("remotion", () => ({
   useVideoConfig: () => ({ fps: 30, durationInFrames: 300 }),
 }));
 
-describe("BackgroundTransition", () => {
+describe("GradientTransition", () => {
   it("renders gradient at frame 0", () => {
     currentFrame = 0;
     const { container } = render(
-      <BackgroundTransition
+      <GradientTransition
         gradient={[
           "linear-gradient(0deg, red, blue)",
           "linear-gradient(180deg, green, yellow)",
@@ -30,7 +30,7 @@ describe("BackgroundTransition", () => {
   it("applies custom className and style", () => {
     currentFrame = 0;
     const { container } = render(
-      <BackgroundTransition
+      <GradientTransition
         gradient={["linear-gradient(90deg, red, blue)"]}
         className="custom-class"
         style={{ zIndex: 10 }}
@@ -45,9 +45,9 @@ describe("BackgroundTransition", () => {
   it("renders children on top of gradient", () => {
     currentFrame = 0;
     const { getByText } = render(
-      <BackgroundTransition gradient={["linear-gradient(90deg, red, blue)"]}>
+      <GradientTransition gradient={["linear-gradient(90deg, red, blue)"]}>
         <p>Content</p>
-      </BackgroundTransition>
+      </GradientTransition>
     );
 
     expect(getByText("Content")).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe("BackgroundTransition", () => {
   it("handles frame-based duration", () => {
     currentFrame = 30;
     const { container } = render(
-      <BackgroundTransition
+      <GradientTransition
         gradient={[
           "linear-gradient(0deg, red, blue)",
           "linear-gradient(180deg, green, yellow)",
@@ -73,7 +73,7 @@ describe("BackgroundTransition", () => {
   it("respects delay prop", () => {
     currentFrame = 10;
     const { container } = render(
-      <BackgroundTransition
+      <GradientTransition
         gradient={[
           "linear-gradient(0deg, red, blue)",
           "linear-gradient(180deg, green, yellow)",
@@ -90,7 +90,7 @@ describe("BackgroundTransition", () => {
   it("handles single gradient (no interpolation)", () => {
     currentFrame = 50;
     const { container } = render(
-      <BackgroundTransition gradient={["linear-gradient(90deg, red, blue)"]} />
+      <GradientTransition gradient={["linear-gradient(90deg, red, blue)"]} />
     );
 
     const div = container.querySelector("div");
@@ -100,7 +100,7 @@ describe("BackgroundTransition", () => {
   it("uses full composition duration by default", () => {
     currentFrame = 150; // Halfway through 300 frame composition
     const { container } = render(
-      <BackgroundTransition
+      <GradientTransition
         gradient={[
           "linear-gradient(0deg, red, blue)",
           "linear-gradient(180deg, green, yellow)",
@@ -117,7 +117,7 @@ describe("BackgroundTransition", () => {
   it("handles frame range prop", () => {
     currentFrame = 40;
     const { container } = render(
-      <BackgroundTransition
+      <GradientTransition
         gradient={[
           "linear-gradient(0deg, red, blue)",
           "linear-gradient(180deg, green, yellow)",
@@ -134,7 +134,7 @@ describe("BackgroundTransition", () => {
   it("applies absolute positioning", () => {
     currentFrame = 0;
     const { container } = render(
-      <BackgroundTransition gradient={["linear-gradient(90deg, red, blue)"]} />
+      <GradientTransition gradient={["linear-gradient(90deg, red, blue)"]} />
     );
 
     const div = container.querySelector("div");

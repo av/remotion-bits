@@ -1,18 +1,18 @@
 ---
-title: TextTransition
-description: Animate text content with splitting capabilities.
+title: Animated Text
+description: Character-by-character, word-by-word, or full text animations with staggering, easing, and transform controls.
 ---
 
-The `TextTransition` component specializes in animating text, allowing you to split text by characters, words, or lines, and animate them individually with staggering.
+The `AnimatedText` component specializes in animating text, allowing you to split text by characters, words, or lines, and animate them individually with staggering.
 
 ## Usage
 
 ```tsx
-import { TextTransition } from "remotion-bits";
+import { AnimatedText } from "remotion-bits";
 
 export const MyTitle = () => {
     return (
-        <TextTransition
+        <AnimatedText
             transition={{
                 split: "word",      // Split by words
                 y: [20, 0],         // Slide up
@@ -23,7 +23,7 @@ export const MyTitle = () => {
             className="text-4xl font-bold"
         >
             Animated Text Title
-        </TextTransition>
+        </AnimatedText>
     );
 };
 ```
@@ -54,7 +54,7 @@ Inline styles for the container.
 
 ## Transition Configuration
 
-Inherits all properties from [MotionTransition Configuration](/docs/reference/motion-transition#motion-configuration) (transforms, visual, timing), plus:
+Inherits all properties from [Staggered Motion Configuration](/docs/reference/staggered-motion#motion-configuration) (transforms, visual, timing), plus:
 
 ### Text Properties
 

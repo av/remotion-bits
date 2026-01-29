@@ -4,10 +4,10 @@ category: Particles
 description: Words spawning and flying past the camera
 ---
 import { BitPlayground } from '@components/BitPlayground';
-import * as Bits from '@bits/FlyingThroughWords';
+import { FlyingThroughWords as Bit } from '@/bits';
 
 Words spawning in the distance and flying past the camera, creating a 3D tunnel effect.
 
-**Tags:** {Bits.metadata.tags.join(', ')}
+**Tags:** {Bit.metadata.tags.join(', ')}
 
 <BitPlayground client:only="react" bitName="FlyingThroughWords" />

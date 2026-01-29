@@ -1,5 +1,5 @@
 import React from "react";
-import { TextTransition } from "remotion-bits";
+import { AnimatedText } from "remotion-bits";
 
 export const metadata = {
   name: "Word by Word",
@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 export const Component: React.FC = () => (
-  <TextTransition
+  <AnimatedText
     transition={{
       y: [20, 0],
       opacity: [0, 1],
@@ -21,7 +21,7 @@ export const Component: React.FC = () => (
     }}
   >
     This appears word by word
-  </TextTransition>
+  </AnimatedText>
 );
 
 

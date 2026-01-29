@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { TextTransition } from "../TextTransition";
+import { AnimatedText } from "../AnimatedText";
 
 let currentFrame = 0;
 
@@ -13,13 +13,13 @@ vi.mock("remotion", () => ({
   useVideoConfig: () => ({ fps: 30 }),
 }));
 
-describe("TextTransition", () => {
+describe("AnimatedText", () => {
   it("renders text from children", () => {
     currentFrame = 0;
     render(
-      <TextTransition transition={{ opacity: [0, 1] }}>
+      <AnimatedText transition={{ opacity: [0, 1] }}>
         Hello World
-      </TextTransition>
+      </AnimatedText>
     );
 
     expect(screen.getByText("Hello World")).toBeInTheDocument();
@@ -28,7 +28,7 @@ describe("TextTransition", () => {
   it("renders cycling text at the start", () => {
     currentFrame = 0;
     render(
-      <TextTransition
+      <AnimatedText
         transition={{
           opacity: [0, 1],
           cycle: {
@@ -45,7 +45,7 @@ describe("TextTransition", () => {
   it("renders next cycling text after item duration", () => {
     currentFrame = 31;
     render(
-      <TextTransition
+      <AnimatedText
         transition={{
           opacity: [0, 1],
           cycle: {
@@ -62,14 +62,14 @@ describe("TextTransition", () => {
   it("splits text by words", () => {
     currentFrame = 0;
     const { container } = render(
-      <TextTransition
+      <AnimatedText
         transition={{
           opacity: [0, 1],
           split: "word",
         }}
       >
         Hello World
-      </TextTransition>
+      </AnimatedText>
     );
 
     const spans = container.querySelectorAll("span span");
@@ -79,14 +79,14 @@ describe("TextTransition", () => {
   it("splits text by characters", () => {
     currentFrame = 0;
     const { container } = render(
-      <TextTransition
+      <AnimatedText
         transition={{
           opacity: [0, 1],
           split: "character",
         }}
       >
         Hi
-      </TextTransition>
+      </AnimatedText>
     );
 
     const spans = container.querySelectorAll("span span");
@@ -96,14 +96,14 @@ describe("TextTransition", () => {
   it("splits text by custom separator", () => {
     currentFrame = 0;
     const { container } = render(
-      <TextTransition
+      <AnimatedText
         transition={{
           opacity: [0, 1],
           split: "|",
         }}
       >
         One|Two|Three
-      </TextTransition>
+      </AnimatedText>
     );
 
     const spans = container.querySelectorAll("span span");
@@ -113,14 +113,14 @@ describe("TextTransition", () => {
   it("splits text by newline using custom separator", () => {
     currentFrame = 0;
     const { container } = render(
-      <TextTransition
+      <AnimatedText
         transition={{
           opacity: [0, 1],
           split: "\n",
         }}
       >
         Line1{"\n"}Line2
-      </TextTransition>
+      </AnimatedText>
     );
 
     const spans = container.querySelectorAll("span span");

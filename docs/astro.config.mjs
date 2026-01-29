@@ -118,10 +118,10 @@ export default defineConfig({
                         {
                             label: 'Components',
                             items: [
-                                { label: 'BackgroundTransition', link: '/docs/reference/background-transition' },
-                                { label: 'MotionTransition', link: '/docs/reference/motion-transition' },
-                                { label: 'TextTransition', link: '/docs/reference/text-transition' },
-                                { label: 'Particles', link: '/docs/reference/particles' },
+                                { label: 'Animated Text', link: '/docs/reference/animated-text' },
+                                { label: 'Staggered Motion', link: '/docs/reference/staggered-motion' },
+                                { label: 'Gradient Transition', link: '/docs/reference/gradient-transition' },
+                                { label: 'Particle System', link: '/docs/reference/particle-system' },
                                 { label: 'Scene3D', link: '/docs/reference/scene3d' },
                                 { label: 'Step', link: '/docs/reference/step' },
                                 { label: 'Element3D', link: '/docs/reference/element3d' },

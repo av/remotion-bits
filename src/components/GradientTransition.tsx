@@ -11,7 +11,7 @@ import {
 // TYPE DEFINITIONS
 // ============================================================================
 
-export type BackgroundTransitionProps = {
+export type GradientTransitionProps = {
   /**
    * Array of CSS gradient strings to transition between
    * Supports linear-gradient, radial-gradient, and conic-gradient
@@ -79,7 +79,7 @@ function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction
 // ============================================================================
 
 /**
- * BackgroundTransition - Smooth gradient transitions for Remotion compositions
+ * GradientTransition - Smooth gradient transitions for Remotion compositions
  *
  * Intelligently interpolates between CSS gradients using:
  * - Perceptually uniform Oklch color interpolation (via culori)
@@ -95,7 +95,7 @@ function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction
  *
  * @example
  * // Simple linear gradient transition
- * <BackgroundTransition
+ * <GradientTransition
  *   gradient={[
  *     "linear-gradient(0deg, #ff0000, #0000ff)",
  *     "linear-gradient(180deg, #00ff00, #ffff00)",
@@ -105,7 +105,7 @@ function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction
  *
  * @example
  * // Radial to linear transition
- * <BackgroundTransition
+ * <GradientTransition
  *   gradient={[
  *     "radial-gradient(circle, red, blue)",
  *     "linear-gradient(90deg, green, yellow)",
@@ -115,7 +115,7 @@ function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction
  *
  * @example
  * // Multi-keyframe with conic gradients
- * <BackgroundTransition
+ * <GradientTransition
  *   gradient={[
  *     "conic-gradient(from 0deg, red, yellow, green)",
  *     "conic-gradient(from 180deg, blue, purple, pink)",
@@ -124,7 +124,7 @@ function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction
  *   frames={[0, 120]}
  * />
  */
-export const BackgroundTransition: React.FC<BackgroundTransitionProps> = ({
+export const GradientTransition: React.FC<GradientTransitionProps> = ({
   gradient,
   frames,
   duration,

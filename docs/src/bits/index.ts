@@ -1,33 +1,33 @@
-import * as FadeInModule from './FadeIn';
-import FadeInSource from './FadeIn.tsx?raw';
-import * as WordByWordModule from './WordByWord';
-import WordByWordSource from './WordByWord.tsx?raw';
-import * as LinearGradientModule from './LinearGradient';
-import LinearGradientSource from './LinearGradient.tsx?raw';
-import * as SlideFromLeftModule from './SlideFromLeft';
-import SlideFromLeftSource from './SlideFromLeft.tsx?raw';
-import * as RadialGradientModule from './RadialGradient';
-import RadialGradientSource from './RadialGradient.tsx?raw';
-import * as CharByCharModule from './CharByChar';
-import CharByCharSource from './CharByChar.tsx?raw';
-import * as ConicGradientModule from './ConicGradient';
-import ConicGradientSource from './ConicGradient.tsx?raw';
-import * as ParticlesSnowModule from './ParticlesSnow';
-import ParticlesSnowSource from './ParticlesSnow.tsx?raw';
-import * as ParticlesFountainModule from './ParticlesFountain';
-import ParticlesFountainSource from './ParticlesFountain.tsx?raw';
-import * as ParticlesGridModule from './ParticlesGrid';
-import ParticlesGridSource from './ParticlesGrid.tsx?raw';
-import * as StaggeredFadeInModule from './StaggeredFadeIn';
-import StaggeredFadeInSource from './StaggeredFadeIn.tsx?raw';
-import * as BlurSlideWordModule from './BlurSlideWord';
-import BlurSlideWordSource from './BlurSlideWord.tsx?raw';
-import * as Scene3DPresentationModule from './3DBasic';
-import Scene3DPresentationSource from './3DBasic.tsx?raw';
-import * as FlyingThroughWordsModule from './FlyingThroughWords';
-import FlyingThroughWordsSource from './FlyingThroughWords.tsx?raw';
-import * as Elements3DModule from './3DElements';
-import Elements3DSource from './3DElements.tsx?raw';
+import * as FadeInModule from './examples/animated-text/FadeIn';
+import FadeInSource from './examples/animated-text/FadeIn.tsx?raw';
+import * as WordByWordModule from './examples/animated-text/WordByWord';
+import WordByWordSource from './examples/animated-text/WordByWord.tsx?raw';
+import * as CharByCharModule from './examples/animated-text/CharByChar';
+import CharByCharSource from './examples/animated-text/CharByChar.tsx?raw';
+import * as BlurSlideWordModule from './examples/animated-text/BlurSlideWord';
+import BlurSlideWordSource from './examples/animated-text/BlurSlideWord.tsx?raw';
+import * as StaggeredFadeInModule from './examples/staggered-motion/StaggeredFadeIn';
+import StaggeredFadeInSource from './examples/staggered-motion/StaggeredFadeIn.tsx?raw';
+import * as SlideFromLeftModule from './examples/staggered-motion/SlideFromLeft';
+import SlideFromLeftSource from './examples/staggered-motion/SlideFromLeft.tsx?raw';
+import * as LinearGradientModule from './examples/gradient-transition/LinearGradient';
+import LinearGradientSource from './examples/gradient-transition/LinearGradient.tsx?raw';
+import * as RadialGradientModule from './examples/gradient-transition/RadialGradient';
+import RadialGradientSource from './examples/gradient-transition/RadialGradient.tsx?raw';
+import * as ConicGradientModule from './examples/gradient-transition/ConicGradient';
+import ConicGradientSource from './examples/gradient-transition/ConicGradient.tsx?raw';
+import * as ParticlesSnowModule from './examples/particle-system/ParticlesSnow';
+import ParticlesSnowSource from './examples/particle-system/ParticlesSnow.tsx?raw';
+import * as ParticlesFountainModule from './examples/particle-system/ParticlesFountain';
+import ParticlesFountainSource from './examples/particle-system/ParticlesFountain.tsx?raw';
+import * as ParticlesGridModule from './examples/particle-system/ParticlesGrid';
+import ParticlesGridSource from './examples/particle-system/ParticlesGrid.tsx?raw';
+import * as Scene3DBasicModule from './examples/scene-3d/3DBasic';
+import Scene3DBasicSource from './examples/scene-3d/3DBasic.tsx?raw';
+import * as FlyingThroughWordsModule from './examples/scene-3d/FlyingThroughWords';
+import FlyingThroughWordsSource from './examples/scene-3d/FlyingThroughWords.tsx?raw';
+import * as Elements3DModule from './examples/scene-3d/3DElements';
+import Elements3DSource from './examples/scene-3d/3DElements.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -86,17 +86,17 @@ const extractSource = (raw: string): string => {
 export const bits = {
   FadeIn: { ...FadeInModule, sourceCode: extractSource(FadeInSource) },
   WordByWord: { ...WordByWordModule, sourceCode: extractSource(WordByWordSource) },
-  LinearGradient: { ...LinearGradientModule, sourceCode: extractSource(LinearGradientSource) },
-  SlideFromLeft: { ...SlideFromLeftModule, sourceCode: extractSource(SlideFromLeftSource) },
-  RadialGradient: { ...RadialGradientModule, sourceCode: extractSource(RadialGradientSource) },
   CharByChar: { ...CharByCharModule, sourceCode: extractSource(CharByCharSource) },
+  BlurSlideWord: { ...BlurSlideWordModule, sourceCode: extractSource(BlurSlideWordSource) },
+  StaggeredFadeIn: { ...StaggeredFadeInModule, sourceCode: extractSource(StaggeredFadeInSource) },
+  SlideFromLeft: { ...SlideFromLeftModule, sourceCode: extractSource(SlideFromLeftSource) },
+  LinearGradient: { ...LinearGradientModule, sourceCode: extractSource(LinearGradientSource) },
+  RadialGradient: { ...RadialGradientModule, sourceCode: extractSource(RadialGradientSource) },
   ConicGradient: { ...ConicGradientModule, sourceCode: extractSource(ConicGradientSource) },
   ParticlesSnow: { ...ParticlesSnowModule, sourceCode: extractSource(ParticlesSnowSource) },
   ParticlesFountain: { ...ParticlesFountainModule, sourceCode: extractSource(ParticlesFountainSource) },
   ParticlesGrid: { ...ParticlesGridModule, sourceCode: extractSource(ParticlesGridSource) },
-  StaggeredFadeIn: { ...StaggeredFadeInModule, sourceCode: extractSource(StaggeredFadeInSource) },
-  BlurSlideWord: { ...BlurSlideWordModule, sourceCode: extractSource(BlurSlideWordSource) },
-  Scene3DPresentation: { ...Scene3DPresentationModule, sourceCode: extractSource(Scene3DPresentationSource) },
+  Scene3DPresentation: { ...Scene3DBasicModule, sourceCode: extractSource(Scene3DBasicSource) },
   FlyingThroughWords: { ...FlyingThroughWordsModule, sourceCode: extractSource(FlyingThroughWordsSource) },
   Elements3D: { ...Elements3DModule, sourceCode: extractSource(Elements3DSource) },
 } as const;
@@ -109,3 +109,20 @@ export const getAllBits = (): Bit[] => Object.values(bits);
 
 export const getBitsByTag = (tag: string): Bit[] =>
   getAllBits().filter(bit => bit.metadata.tags.includes(tag));
+
+// Export individual bits for MDX imports
+export const FadeIn = bits.FadeIn;
+export const WordByWord = bits.WordByWord;
+export const CharByChar = bits.CharByChar;
+export const BlurSlideWord = bits.BlurSlideWord;
+export const StaggeredFadeIn = bits.StaggeredFadeIn;
+export const SlideFromLeft = bits.SlideFromLeft;
+export const LinearGradient = bits.LinearGradient;
+export const RadialGradient = bits.RadialGradient;
+export const ConicGradient = bits.ConicGradient;
+export const ParticlesSnow = bits.ParticlesSnow;
+export const ParticlesFountain = bits.ParticlesFountain;
+export const ParticlesGrid = bits.ParticlesGrid;
+export const Scene3DPresentation = bits.Scene3DPresentation;
+export const FlyingThroughWords = bits.FlyingThroughWords;
+export const Elements3D = bits.Elements3D;

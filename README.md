@@ -49,13 +49,13 @@ npx jsrepo init https://unpkg.com/remotion-bits/registry.json
 ### Add components
 
 ```bash
-npx jsrepo add text-transition
+npx jsrepo add animated-text
 ```
 
 ### One-off add without init
 
 ```bash
-npx jsrepo add --registry https://unpkg.com/remotion-bits/registry.json text-transition
+npx jsrepo add --registry https://unpkg.com/remotion-bits/registry.json animated-text
 ```
 
 ## Local registry usage (this repo)
@@ -84,13 +84,13 @@ npx jsrepo init fs:///home/everlier/code/remotion-bits/registry.json
 ```
 
 ```bash
-npx jsrepo add text-transition
+npx jsrepo add animated-text
 ```
 
 ## Available components
 
-- `text-transition`
-- `background-transition`
+- `animated-text`
+- `gradient-transition`
 
 ## Demo Playground
 

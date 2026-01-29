@@ -1,5 +1,5 @@
 import React from "react";
-import { Scene3D, Step, Element3D, useViewportRect, MotionTransition, randomFloat, anyElement } from "remotion-bits";
+import { Scene3D, Step, Element3D, useViewportRect, StaggeredMotion, randomFloat, anyElement } from "remotion-bits";
 
 export const metadata = {
   name: "Basic 3D Scene",
@@ -49,13 +49,13 @@ export const Component: React.FC = () => {
           y={y}
           z={z}
         >
-          <MotionTransition
+          <StaggeredMotion
             transition={{
               opacity: [0, 0.2],
             }}
           >
             <div style={{ background: 'white', width: size(), height: size() }}></div>
-          </MotionTransition>
+          </StaggeredMotion>
         </Element3D>
       )
     })

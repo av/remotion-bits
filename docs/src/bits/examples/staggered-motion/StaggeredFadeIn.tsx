@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import { MotionTransition } from "remotion-bits";
+import { StaggeredMotion } from "remotion-bits";
 
 export const metadata = {
   name: "Staggered Fade In",
@@ -20,7 +20,7 @@ const boxStyle: React.CSSProperties = {
 
 export const Component: React.FC = () => (
   <AbsoluteFill style={{ backgroundColor: "#0f172a", justifyContent: 'center', alignItems: 'center' }}>
-      <MotionTransition
+      <StaggeredMotion
         transition={{
           opacity: [0, 1],
           y: [100, 0],
@@ -39,6 +39,6 @@ export const Component: React.FC = () => (
         <div style={{ ...boxStyle, backgroundColor: "#10b981" }} />
         <div style={{ ...boxStyle, backgroundColor: "#f59e0b" }} />
         <div style={{ ...boxStyle, backgroundColor: "#8b5cf6" }} />
-      </MotionTransition>
+      </StaggeredMotion>
   </AbsoluteFill>
 );

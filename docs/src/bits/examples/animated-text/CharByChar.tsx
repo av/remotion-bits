@@ -1,5 +1,5 @@
 import React from "react";
-import { TextTransition } from "remotion-bits";
+import { AnimatedText } from "remotion-bits";
 
 export const metadata = {
   name: "Staggered Char Animation",
@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 export const Component: React.FC = () => (
-  <TextTransition
+  <AnimatedText
     transition={{
       opacity: [0, 1],
       scale: [0.7, 1],
@@ -23,7 +23,7 @@ export const Component: React.FC = () => (
     }}
   >
     Character Animation
-  </TextTransition>
+  </AnimatedText>
 );
 
 

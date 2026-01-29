@@ -1,5 +1,5 @@
 import React from "react";
-import { BackgroundTransition } from "remotion-bits";
+import { GradientTransition } from "remotion-bits";
 
 export const metadata = {
   name: "Linear Gradient",
@@ -29,14 +29,14 @@ export const controls = [
 ];
 
 export const Component: React.FC = () => (
-  <BackgroundTransition
+  <GradientTransition
     gradient={[
       `linear-gradient(${props.angle1}deg, ${props.color1Start} 0%, ${props.color1End} 100%)`,
       `linear-gradient(${props.angle2}deg, ${props.color2Start} 0%, ${props.color2End} 100%)`,
     ]}
     duration={90}
   >
-  </BackgroundTransition>
+  </GradientTransition>
 );
 
 

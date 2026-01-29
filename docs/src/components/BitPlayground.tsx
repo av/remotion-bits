@@ -87,9 +87,9 @@ const compileUserCode = (
       // Destructure common exports for convenience
       const { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, random } = Remotion;
       const {
-        TextTransition,
-        MotionTransition,
-        BackgroundTransition,
+        AnimatedText,
+        StaggeredMotion,
+        GradientTransition,
         Particles,
         Spawner,
         Behavior,
@@ -177,7 +177,7 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
       : '';
 
     const generated = `import React from "react";
-import { BackgroundTransition } from "remotion-bits";
+import { GradientTransition } from "remotion-bits";
 
 export const metadata = ${JSON.stringify(bit.metadata, null, 2)};
 
