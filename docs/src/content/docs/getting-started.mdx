@@ -1,54 +1,93 @@
 ---
 title: Getting Started
-description: Get up and running with Remotion Bits in minutes
+description: Get up and running with Remotion Bits in minutes with production-ready animation components
 ---
 
-Remotion Bits is a collection of beautiful, production-ready animation components for [Remotion](https://remotion.dev). Get started in minutes and create stunning video animations with minimal code.
+import { Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import { HeroShowcase } from '@showcases/HeroShowcase';
+
+Remotion Bits is a collection of beautiful, production-ready animation components for [Remotion](https://remotion.dev). Build complex video animations with elegant React components, pre-built effects, and a powerful utility library.
 
 ## Installation
 
-### Via npm
-
-Install the package using your preferred package manager:
-
-```bash
-npm install remotion-bits
-```
-
-```bash
-pnpm add remotion-bits
-```
-
-```bash
-yarn add remotion-bits
-```
-
-### Via jsrepo
-
-Alternatively, copy individual components directly into your project:
-
-```bash
-npx jsrepo add text-transition
-npx jsrepo add background-transition
-```
+<Tabs>
+  <TabItem label="jsrepo">
+    Copy individual components directly into your project:
+    ```bash
+    npx jsrepo add animated-text
+    npx jsrepo add gradient-transition
+    ```
+  </TabItem>
+  <TabItem label="npm">
+    ```bash
+    npm install remotion-bits
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```bash
+    pnpm add remotion-bits
+    ```
+  </TabItem>
+  <TabItem label="yarn">
+    ```bash
+    yarn add remotion-bits
+    ```
+  </TabItem>
+</Tabs>
 
 ## Prerequisites
 
-Remotion Bits requires the following peer dependencies:
+Remotion Bits requires the following peer dependencies to already be installed:
 
 - `remotion` >= 4.0.0
 - `react` >= 18.0.0
 - `react-dom` >= 18.0.0
 
-If you haven't already set up a Remotion project, follow the [Remotion quickstart guide](https://www.remotion.dev/docs/).
+<Aside>
+Don't have Remotion set up yet? Follow the [Remotion quickstart guide](https://www.remotion.dev/docs/) to get started.
+</Aside>
 
-## Quick Example
+## Core Components
 
-Here's a simple example to get you started with a text animation:
+Remotion Bits provides five powerful animation components:
 
-```tsx
+### Text Animations
+
+[**AnimatedText**](/docs/reference/animated-text) lets you animate text character-by-character, word-by-word, or by line with configurable staggering and easing.
+
+<HeroShowcase client:only="react" bitNames={["FadeIn", "WordByWord", "CharByChar"]} layout="row" />
+
+### Motion Effects
+
+[**StaggeredMotion**](/docs/reference/staggered-motion) applies coordinated animations across multiple child elements with directional timing control.
+
+<HeroShowcase client:only="react" bitNames={["BlurSlideWord", "SlideFromLeft"]} layout="row" />
+
+### Gradient Transitions
+
+[**GradientTransition**](/docs/reference/gradient-transition) smoothly interpolates between CSS gradients with support for linear, radial, and conic gradients.
+
+<HeroShowcase client:only="react" bitNames={["LinearGradient", "RadialGradient", "ConicGradient"]} layout="row" />
+
+### Particles
+
+[**ParticleSystem**](/docs/reference/particle-system) creates complex particle effects with customizable behaviors like gravity, drag, and wiggle animations.
+
+<HeroShowcase client:only="react" bitNames={["ParticlesSnow", "ParticlesFountain", "ParticlesGrid"]} layout="row" />
+
+### 3D Scenes
+
+[**Scene3D**](/docs/reference/scene3d) renders interactive 3D scenes with camera controls, sequential animations via steps, and 3D element transformations.
+
+<HeroShowcase client:only="react" bitNames={["Scene3DPresentation", "Elements3D", "FlyingThroughWords"]} layout="row" />
+
+## Quick Start
+
+Here's a simple example animating text with fade and slide effects:
+
+```tsx title="src/MyComposition.tsx"
 import { Composition } from 'remotion';
-import { TextTransition } from 'remotion-bits';
+import { AnimatedText } from 'remotion-bits';
 
 export const MyComposition = () => {
   return (
@@ -60,11 +99,13 @@ export const MyComposition = () => {
       alignItems: 'center',
       justifyContent: 'center'
     }}>
-      <TextTransition
+      <AnimatedText
         transition={{
+          split: 'word',
           opacity: [0, 1],
           y: [50, 0],
-          easing: "easeOutQuad"
+          stagger: 3,
+          duration: 30
         }}
         style={{
           fontSize: '4rem',
@@ -72,8 +113,8 @@ export const MyComposition = () => {
           fontWeight: 'bold'
         }}
       >
-        Hello Remotion!
-      </TextTransition>
+        Hello Remotion Bits!
+      </AnimatedText>
     </div>
   );
 };
@@ -84,7 +125,7 @@ export const Root = () => {
     <Composition
       id="MyComposition"
       component={MyComposition}
-      durationInFrames={90}
+      durationInFrames={120}
       fps={30}
       width={1920}
       height={1080}
@@ -93,36 +134,66 @@ export const Root = () => {
 };
 ```
 
-## What's Next?
+## Using Utilities
 
-Now that you have Remotion Bits installed, explore the components:
+Remotion Bits includes powerful utility functions for advanced animations:
 
-- **[TextTransition](/docs/components/text-transition)** - Animate text with fade, slide, word-by-word, and character effects
-- **[BackgroundTransition](/docs/components/background-transition)** - Smooth gradient transitions between any CSS gradients
-- **[MotionTransition](/docs/components/motion-transition)** - Flexible motion wrapper for any element
+```tsx title="Using interpolation utilities"
+import { interpolate } from 'remotion-bits';
 
-Or check out the [examples](/docs/examples/text-animations) to see real-world use cases.
+// Interpolate with easing functions
+const scale = interpolate(frame, 0, 60, 0.5, 1.5, {
+  easing: 'easeOutBounce'
+});
+```
 
-## Need Help?
-
-- Browse the [component documentation](/docs/components/text-transition)
-- Check out [utilities](/docs/utilities/interpolate) for advanced customization
-- View [examples](/docs/examples/text-animations) for inspiration
+<Aside type="tip">
+Check out the [Utilities Reference](/docs/reference/utils-interpolation) for color interpolation, geometry handling, motion calculations, and more.
+</Aside>
 
 ## TypeScript Support
 
-Remotion Bits is built with TypeScript and provides full type definitions out of the box. Your IDE will provide autocomplete and type checking for all component props.
+Remotion Bits is built with TypeScript and provides full type definitions out of the box:
 
-```tsx
-import type { TextTransitionProps } from 'remotion-bits';
+```tsx title="Full type safety"
+import type { AnimatedText } from 'remotion-bits';
+import { AnimatedText as AnimatedTextComponent } from 'remotion-bits';
 
-// Full TypeScript support
-const props: TextTransitionProps = {
-  transition: {
-    opacity: [0, 1],
-    y: [50, 0],
-    split: "word", // TypeScript knows valid values
-    splitStagger: 3,
-  }
+const MyText: React.FC = () => {
+  return (
+    <AnimatedTextComponent
+      transition={{
+        split: 'character',
+        opacity: [0, 1],
+        rotate: [45, 0],
+        duration: 40,
+        easing: 'easeOutQuad'
+      }}
+    >
+      Fully typed!
+    </AnimatedTextComponent>
+  );
 };
 ```
+
+## Explore Examples
+
+Visit the [Bits Catalog](/docs/bits-catalog) to see all available animation bits organized by category:
+
+- **Text Animations** - Fade in, blur-slide, word-by-word, character-by-character animations
+- **Background Effects** - Linear, radial, and conic gradient transitions
+- **Particles** - Snow, fountain, and grid particle effects
+- **3D Scenes** - Flying through text, 3D element transforms, and camera movements
+
+Each example includes interactive playgrounds where you can see the animations in action.
+
+## Next Steps
+
+1. **Explore Components** - Browse the [Reference Documentation](/docs/reference/animated-text) for detailed component APIs
+2. **View Examples** - Check out the [Bits Catalog](/docs/bits-catalog) for real-world animation patterns
+3. **Learn Utilities** - Master the [utility functions](/docs/reference/utils-interpolation) for custom animations
+4. **Build** - Combine components and hooks to create your own custom animations
+
+<Aside type="note">
+Having issues? Make sure all peer dependencies are installed and you're using compatible versions of React and Remotion.
+</Aside>

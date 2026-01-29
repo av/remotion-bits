@@ -95,7 +95,7 @@ export const ShowcasePlayer: React.FC<ShowcasePlayerProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`showcase-player ${className}`}
+      className={`showcase-player not-content ${className}`}
       style={{ width: '100%', height: '100%' }}
     >
       <Player

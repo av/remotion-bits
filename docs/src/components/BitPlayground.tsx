@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
-import { oneDark } from '@codemirror/theme-one-dark';
+import { flexoki } from '../lib/editor-theme';
 import { getBit, type BitName } from '@bits';
 import { ShowcasePlayer, withShowcaseFill } from './ShowcasePlayer';
 import { transform } from 'sucrase';
@@ -11,6 +11,24 @@ import * as Remotion from 'remotion';
 interface BitPlaygroundProps {
   bitName: BitName;
 }
+
+const Badge: React.FC<{ label: string }> = ({ label }) => (
+  <span className="sl-badge default small">{label}</span>
+);
+
+const CopyIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.75"
+    style={{ width: '1.25em', height: '1.25em' }}
+  >
+    <path d="M3 19a2 2 0 0 1-1-2V2a2 2 0 0 1 1-1h13a2 2 0 0 1 2 1" />
+    <rect x="6" y="5" width="16" height="18" rx="1.5" ry="1.5" />
+  </svg>
+);
 
 // Helper function to compile and evaluate user code
 const compileUserCode = (
@@ -153,6 +171,8 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
 
   const ActiveComponent = withShowcaseFill(BaseComponent);
 
+  const isModified = editedCode !== bit.sourceCode;
+
   const handleCodeChange = useCallback((value: string) => {
     setEditedCode(value);
   }, []);
@@ -279,7 +299,7 @@ export const Component: React.FC = () => {${propsDeclaration}
                 fps={30}
                 controls={true}
                 loop={true}
-                autoPlay={false}
+                autoPlay={true}
                 autoResize={true}
               />
             </div>
@@ -295,7 +315,7 @@ export const Component: React.FC = () => {${propsDeclaration}
           <CodeMirror
             value={editedCode}
             height="200px"
-            theme={oneDark}
+            theme={flexoki}
             extensions={[javascript({ jsx: true, typescript: true })]}
             onChange={handleCodeChange}
             basicSetup={{
@@ -322,21 +342,23 @@ export const Component: React.FC = () => {${propsDeclaration}
             }}
           />
 
-          <button
-            className="bit-playground-action-btn"
-            onClick={handleReset}
-            type="button"
-            title="Reset to original code"
-          >
-            ↺
-          </button>
+          {isModified && (
+            <button
+              className="bit-playground-action-btn"
+              onClick={handleReset}
+              type="button"
+              title="Reset to original code"
+            >
+              ↺
+            </button>
+          )}
           <button
             className="bit-playground-action-btn"
             onClick={handleCopyBit}
             type="button"
             title="Copy full Bit code"
           >
-            📋
+            <CopyIcon />
           </button>
         </div>
       </div>
@@ -346,7 +368,18 @@ export const Component: React.FC = () => {${propsDeclaration}
           <strong>Duration:</strong> {duration} frames ({(duration / 30).toFixed(1)}s at 30fps)
         </div>
         <div className="bit-playground-meta-item">
-          <strong>Tags:</strong> {bit.metadata.tags.join(', ')}
+          <strong>Tags:</strong>
+          <span className="bit-playground-badges">
+            {bit.metadata.tags.map((tag) => (
+              <a
+                key={tag}
+                href={`/docs/bits-catalog?tag=${encodeURIComponent(tag)}`}
+                className="bit-playground-tag-link"
+              >
+                <Badge label={tag} />
+              </a>
+            ))}
+          </span>
         </div>
       </div>
 
@@ -468,8 +501,8 @@ export const Component: React.FC = () => {${propsDeclaration}
         }
 
         .bit-playground-content {
-          display: grid;
-          grid-template-rows: 3fr 1fr;
+          display: flex;
+          flex-direction: column;
           gap: 0;
           background: var(--sl-color-bg);
         }
@@ -479,7 +512,6 @@ export const Component: React.FC = () => {${propsDeclaration}
           position: relative;
           display: flex;
           flex-direction: column;
-          height: 100%;
           min-width: 0;
           min-height: 0;
         }
@@ -491,6 +523,7 @@ export const Component: React.FC = () => {${propsDeclaration}
 
         .bit-playground-preview-section {
           overflow: hidden;
+          aspect-ratio: 16 / 9;
         }
 
         .bit-playground-code-header,
@@ -576,6 +609,34 @@ export const Component: React.FC = () => {${propsDeclaration}
         .bit-playground-meta-item strong {
           color: var(--sl-color-white);
           margin-right: 0.5rem;
+        }
+
+        .bit-playground-tag-link {
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .bit-playground-tag-link:hover {
+          opacity: 0.8;
+          text-decoration: none;
+        }
+
+        .bit-playground-badges {
+          display: inline-flex;
+          flex-wrap: wrap;
+          gap: 0.375rem;
+        }
+
+        .bit-playground-badge {
+          display: inline-flex;
+          align-items: center;
+          padding: 0.1rem 0.5rem;
+          border-radius: 999px;
+          border: 1px solid var(--sl-color-gray-4);
+          background: var(--sl-color-gray-5);
+          color: var(--sl-color-gray-2);
+          font-size: 0.75rem;
+          font-weight: 600;
         }
 
         /* Responsive: Stack vertically on mobile */
