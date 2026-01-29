@@ -15,6 +15,7 @@
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
       "@showcases/*": ["./src/components/showcases/*"],
+      "@bits": ["./src/bits"],
       "remotion-bits": ["../src/index.ts"],
       "remotion-bits/*": ["../src/*"]
     }

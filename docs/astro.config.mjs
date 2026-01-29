@@ -70,7 +70,7 @@ function getBitsSidebar() {
 export default defineConfig({
     vite: {
         resolve: {
-            dedupe: ['react', 'react-dom', 'remotion', '@remotion/player', 'remotion-bits'],
+            dedupe: ['react', 'react-dom', 'remotion', '@remotion/player', 'remotion-bits', '@codemirror/state', '@codemirror/view', '@codemirror/lang-javascript'],
             alias: {
                 '@': path.resolve(__dirname, './src'),
                 '@components': path.resolve(__dirname, './src/components'),
@@ -83,7 +83,7 @@ export default defineConfig({
             noExternal: ['remotion', '@remotion/player', 'remotion-bits'],
         },
         optimizeDeps: {
-            include: ['react', 'react-dom', 'remotion', '@remotion/player'],
+            include: ['react', 'react-dom', 'remotion', '@remotion/player', '@uiw/react-codemirror', '@codemirror/state', '@codemirror/view', '@codemirror/lang-javascript', '@codemirror/theme-one-dark'],
             exclude: ['remotion-bits'],
         },
 

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { oneDark } from '@codemirror/theme-one-dark';
-import { getBit, type BitName } from '../bits';
+import { getBit, type BitName } from '@bits';
 import { ShowcasePlayer, withShowcaseFill } from './ShowcasePlayer';
 import { transform } from 'sucrase';
 import * as RemotionBits from 'remotion-bits';

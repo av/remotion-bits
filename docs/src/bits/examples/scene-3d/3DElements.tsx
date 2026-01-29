@@ -23,7 +23,7 @@ export const Component: React.FC = () => {
 
 
   const els = React.useMemo(() => {
-    const sizes = [4, 16];
+    const sizes = [16, 32];
     const cellSize = rect.vmin * 2;
 
     return Array(20).fill(0).map((_, i) => {
@@ -48,13 +48,57 @@ export const Component: React.FC = () => {
           x={x}
           y={y}
           z={z}
+          rotateZ={0.0001}
         >
           <StaggeredMotion
             transition={{
               opacity: [0, 0.2],
             }}
           >
-            <div style={{ background: 'white', width: size(), height: size() }}></div>
+            {(() => {
+              const shapes = ["circle", "triangle", "diamond"];
+              const shape = anyElement(`el3d-shape-${i}-${probes++}`, shapes);
+              const color = `hsl(${randomFloat(`el3d-color-${i}-${probes++}`, 0, 360)}, 80%, 60%)`;
+              const dimension = size() * 1.25;
+
+              if (shape === "triangle") {
+          return (
+            <div
+              style={{
+          width: 0,
+          height: 0,
+          borderLeft: `${dimension / 2}px solid transparent`,
+          borderRight: `${dimension / 2}px solid transparent`,
+          borderBottom: `${dimension}px solid ${color}`,
+              }}
+            />
+          );
+              }
+
+              if (shape === "diamond") {
+          return (
+            <div
+              style={{
+          background: color,
+          width: dimension,
+          height: dimension,
+          transform: "rotate(45deg)",
+              }}
+            />
+          );
+              }
+
+              return (
+          <div
+            style={{
+              background: color,
+              width: dimension,
+              height: dimension,
+              borderRadius: "50%",
+            }}
+          />
+              );
+            })()}
           </StaggeredMotion>
         </Element3D>
       )
@@ -78,6 +122,7 @@ export const Component: React.FC = () => {
             x={i * rect.vmin * 50}
             y={0}
             z={0}
+            rotateZ={-i * 15}
             style={{
               width: '250px'
             }}

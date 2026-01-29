@@ -21,12 +21,12 @@ export const Component: React.FC = () => {
         burst={20}
         position={resolvePoint(rect, { x: "center", y: "110%" })}
         area={{ width: rect.width * 0.1, height: 0 }}
-        velocity={{ x: 0, y: -rect.height * 0.1, varianceX: rect.width * 0.1, varianceY: rect.height * 0.1, }}
+        velocity={{ x: 0, y: -rect.height * 0.05, varianceX: rect.width * 0.1, varianceY: rect.height * 0.01, }}
         lifespan={100}
         max={200}
         transition={{
           opacity: [0, 1],
-          duration: 20,
+          duration: 10,
         }}
       >
         <div style={{
