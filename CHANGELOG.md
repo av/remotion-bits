@@ -1,3 +1,8 @@
+### v0.1.5
+
+- Feature: Added all component bits to the registry for easier installation
+- Docs: Enhanced skill documentation with better examples and patterns
+
 ### v0.1.4
 
 - Improvement: Cleaned up README documentation

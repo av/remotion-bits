@@ -1,6 +1,6 @@
 {
   "name": "remotion-bits",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Remotion component bits with a shadcn-like installer",
   "type": "module",
   "exports": {
