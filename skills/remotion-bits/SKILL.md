@@ -149,14 +149,19 @@ const rect = useViewportRect();
 
 ### Scene3D
 
-3D scene with camera following steps. This component has very specific requirements to function correctly.
-- `Scene3D` must contain one or more `Step` components as direct children to define camera positions.
-- Each `Step` is a 2d plane in 3D space where the camera will focus. `Step` may have its own children that will be as the content at that step.
-- `Scene3D` may contain `Element3D` components as direct children to place 3D positioned elements in the scene.
-- The camera will transition between `Step` positions based on the current frame and the defined `transitionDuration` and `easing`.
+3D scene with camera following steps. This component has very specific requirements to function correctly:
+1. `Scene3D` MUST contain one or more `Step` components as direct children to define camera positions.
+2. `Scene3D` MAY contain `Element3D` components as direct children to place 3D positioned elements in the scene.
+3. `Step` SHOULD have its own children that will be as the content at that step.
+4. Each `Step` is a 2d plane in 3D space where the camera will focus, and the camera will transition between these steps based on the current frame easing.
+5. Both `Step` and `Element3D` COULD contain any valid React children, including other Motion components.
+
+**Behavior:**
 - `Element3D` components can be placed anywhere in 3D space and will remain static as the camera moves.
 - Both `Step` and `Element3D` accept `x`, `y`, `z` props to define their position in 3D space, as well as rotation props like `rotateX`, `rotateY`, and `rotateZ`.
-- Both `Step` and `Element3D` can contain any valid React children, including other Motion components.
+- `Element3D` inside `Step` will be positioned relative to that step's coordinate system, not the global 3D space.
+- `Step`, `Element3D`, and `Scene3D` must be imported from `remotion-bits`, not from `remotion`.
+- `Step` has `transition` and `exitTransition` props to define how the content enters and exits the view when the camera moves to/from that step.
 
 ```tsx
 import { Scene3D, Step, Element3D, useViewportRect } from "remotion-bits";
