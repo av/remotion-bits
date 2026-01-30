@@ -57,10 +57,6 @@ import Logo from "@/components/Logo.astro";
                 class="hover:text-primary transition-colors"
                 href="/docs/getting-started">Documentation</a
               >
-              <a
-                class="hover:text-primary transition-colors"
-                href="/docs/examples/text-animations">Examples</a
-              >
             </div>
             <div class="flex items-center gap-4">
               <a
@@ -329,17 +325,16 @@ import Logo from "@/components/Logo.astro";
                 <span class="font-semibold text-white">Remotion Bits</span>
               </div>
               <p class="text-gray-500 text-sm mb-6 max-w-xs">
-                High-performance, composable animation components for Remotion.
-                Built by developers, for developers.
+                Composable animation components for Remotion.
               </p>
               <div class="flex gap-4">
                 <a
                   class="text-gray-500 hover:text-white transition-colors"
-                  href="#"
-                  ><span class="sr-only">Twitter</span>
+                  href="https://x.com/Everlier"
+                  ><span class="sr-only">X</span>
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"
                     ><path
-                      d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
+                      d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.694l-5.195-6.791-5.963 6.791H2.882l7.605-8.696-8.212-10.804h6.888l4.784 6.335 5.592-6.335zM16.369 20.033h1.83L7.923 4.14h-1.95l9.396 15.893z"
                     ></path></svg
                   >
                 </a>
@@ -361,23 +356,18 @@ import Logo from "@/components/Logo.astro";
               <h3 class="text-white font-semibold mb-4 text-sm">Library</h3>
               <ul class="space-y-2 text-sm text-gray-500">
                 <li>
-                  <a class="hover:text-primary transition-colors" href="#"
+                  <a class="hover:text-primary transition-colors" href="/docs/reference/staggered-motion"
                     >Components</a
                   >
                 </li>
                 <li>
-                  <a class="hover:text-primary transition-colors" href="#"
+                  <a class="hover:text-primary transition-colors" href="/docs/reference/use-viewport-rect"
                     >Hooks</a
                   >
                 </li>
                 <li>
-                  <a class="hover:text-primary transition-colors" href="#"
+                  <a class="hover:text-primary transition-colors" href="/docs/reference/utils-interpolation"
                     >Utils</a
-                  >
-                </li>
-                <li>
-                  <a class="hover:text-primary transition-colors" href="#"
-                    >Presets</a
                   >
                 </li>
               </ul>
@@ -387,22 +377,7 @@ import Logo from "@/components/Logo.astro";
               <ul class="space-y-2 text-sm text-gray-500">
                 <li>
                   <a class="hover:text-primary transition-colors" href="#"
-                    >GitHub Discussions</a
-                  >
-                </li>
-                <li>
-                  <a class="hover:text-primary transition-colors" href="#"
-                    >Discord</a
-                  >
-                </li>
-                <li>
-                  <a class="hover:text-primary transition-colors" href="#"
-                    >Showcase</a
-                  >
-                </li>
-                <li>
-                  <a class="hover:text-primary transition-colors" href="#"
-                    >Contributing</a
+                    >GitHub</a
                   >
                 </li>
               </ul>
@@ -412,19 +387,19 @@ import Logo from "@/components/Logo.astro";
             class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4"
           >
             <p class="text-gray-600 text-xs">
-              © 2024 Remotion Bits. Open source software.
+              © <span id="year"></span> Remotion Bits. Open source software.
             </p>
-            <div class="flex items-center gap-2">
-              <span
-                class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"
-              ></span>
-              <span class="text-gray-500 text-xs">v2.1.0 Stable</span>
-            </div>
           </div>
         </div>
       </footer>
     </div>
     <script>
+      // Set current year dynamically
+      const yearElement = document.getElementById("year");
+      if (yearElement) {
+        yearElement.textContent = new Date().getFullYear().toString();
+      }
+
       const copyButton = document.getElementById("copy-npm-install");
       if (copyButton) {
         copyButton.addEventListener("click", async () => {

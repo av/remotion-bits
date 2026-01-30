@@ -117,7 +117,15 @@ const compileUserCode = (
       const props = { ...__BIT_DEFAULT_PROPS__, ...__BIT_PROPS__ };
 
       // Destructure common exports for convenience
-      const { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, random } = Remotion;
+      const {
+        AbsoluteFill,
+        useCurrentFrame,
+        interpolate,
+        spring,
+        useVideoConfig,
+        random,
+        Sequence,
+      } = Remotion;
       const {
         AnimatedText,
         StaggeredMotion,

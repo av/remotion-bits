@@ -30,6 +30,8 @@ import * as FlyingThroughWordsModule from './examples/scene-3d/FlyingThroughWord
 import FlyingThroughWordsSource from './examples/scene-3d/FlyingThroughWords.tsx?raw';
 import * as Elements3DModule from './examples/scene-3d/3DElements';
 import Elements3DSource from './examples/scene-3d/3DElements.tsx?raw';
+import * as FeatureShowcaseModule from './examples/showcase/FeatureShowcase';
+import FeatureShowcaseSource from './examples/showcase/FeatureShowcase.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -102,6 +104,7 @@ export const bits = {
   Scene3DPresentation: { ...Scene3DBasicModule, sourceCode: extractSource(Scene3DBasicSource) },
   FlyingThroughWords: { ...FlyingThroughWordsModule, sourceCode: extractSource(FlyingThroughWordsSource) },
   Elements3D: { ...Elements3DModule, sourceCode: extractSource(Elements3DSource) },
+  FeatureShowcase: { ...FeatureShowcaseModule, sourceCode: extractSource(FeatureShowcaseSource) },
 } as const;
 
 export type BitName = keyof typeof bits;

@@ -1,6 +1,6 @@
 ![Splash Image](./docs/public/splash.png)
 
-## Overview
+
 
 Remotion Bits is a comprehensive collection of animation components and utilities designed specifically for Remotion video projects. It provides ready-made, composable components for common animation needs: text effects, gradient transitions, particle systems, 3D scenes, and more. It also includes lower-level utilities for advanced motion and color handling.
 
