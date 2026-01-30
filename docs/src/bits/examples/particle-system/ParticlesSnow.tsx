@@ -9,6 +9,20 @@ export const metadata = {
   duration: 300,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-particles-snow",
+    title: "Falling Snow Particles",
+    description: "Falling snow particles effect",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["particle-system", "use-viewport-rect"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/particle-system/ParticlesSnow.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => {

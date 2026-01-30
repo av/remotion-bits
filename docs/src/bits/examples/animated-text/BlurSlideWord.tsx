@@ -8,6 +8,20 @@ export const metadata = {
   duration: 90,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-blur-slide-word",
+    title: "Blur Slide Word Animation",
+    description: "Text that fades, unblurs and slides up word by word",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["animated-text"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/animated-text/BlurSlideWord.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => (

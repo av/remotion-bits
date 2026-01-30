@@ -8,6 +8,20 @@ export const metadata = {
   duration: 200,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-3d-elements",
+    title: "3D Elements Scene",
+    description: "3D Scene allows placing arbitrary elements in 3D space",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["scene-3d", "staggered-motion", "use-viewport-rect", "random"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/scene-3d/3DElements.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => {

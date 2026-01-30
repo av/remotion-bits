@@ -9,6 +9,20 @@ export const metadata = {
   duration: 60,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-particles-fountain",
+    title: "Fountain Burst Particles",
+    description: "Bursting fountain particles effect",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["particle-system", "use-viewport-rect"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/particle-system/ParticlesFountain.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => {

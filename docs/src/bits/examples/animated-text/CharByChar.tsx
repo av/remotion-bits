@@ -8,6 +8,20 @@ export const metadata = {
   duration: 120,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-char-by-char",
+    title: "Character by Character Animation",
+    description: "Text that appears character by character with staggered timing",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["animated-text"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/animated-text/CharByChar.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => (

@@ -9,6 +9,20 @@ export const metadata = {
   duration: 200,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-particles-grid",
+    title: "Grid Snap Particles",
+    description: "Particles snapping to a grid",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["particle-system", "use-viewport-rect"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/particle-system/ParticlesGrid.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => {

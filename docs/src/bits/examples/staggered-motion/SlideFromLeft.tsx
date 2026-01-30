@@ -8,6 +8,20 @@ export const metadata = {
   duration: 90,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-slide-from-left",
+    title: "Slide from Left Text",
+    description: "Text that slides in from the left with fade-in effect",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["animated-text"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/staggered-motion/SlideFromLeft.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => (

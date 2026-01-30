@@ -8,6 +8,20 @@ export const metadata = {
   duration: 90,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-linear-gradient",
+    title: "Linear Gradient Transition",
+    description: "Smooth transition between linear gradients",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["gradient-transition"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/gradient-transition/LinearGradient.tsx",
+      },
+    ],
+  },
 };
 
 export const props = {

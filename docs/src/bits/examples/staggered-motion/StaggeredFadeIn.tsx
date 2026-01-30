@@ -9,6 +9,20 @@ export const metadata = {
   duration: 90,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-staggered-fade-in",
+    title: "Staggered Fade In Elements",
+    description: "Elements fading in sequentially",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["staggered-motion"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/staggered-motion/StaggeredFadeIn.tsx",
+      },
+    ],
+  },
 };
 
 const boxStyle: React.CSSProperties = {

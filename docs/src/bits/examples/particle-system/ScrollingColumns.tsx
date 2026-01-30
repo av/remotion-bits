@@ -9,6 +9,20 @@ export const metadata = {
   duration: 300,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-scrolling-columns",
+    title: "Scrolling Columns in 3D",
+    description: "Four columns of images scrolling with different speeds in a panning 3D scene",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["particle-system", "scene-3d", "use-viewport-rect"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/particle-system/ScrollingColumns.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => {

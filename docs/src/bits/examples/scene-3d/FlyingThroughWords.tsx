@@ -8,6 +8,20 @@ export const metadata = {
   duration: 300,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-flying-through-words",
+    title: "Flying Through Words",
+    description: "Words spawning and flying past the camera",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["particle-system", "staggered-motion", "use-viewport-rect"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/scene-3d/FlyingThroughWords.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => {

@@ -21,6 +21,20 @@ export const metadata = {
   duration: 160,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-feature-showcase",
+    title: "Feature Showcase",
+    description: "A comprehensive showcase of Remotion Bits features.",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["animated-text", "gradient-transition", "staggered-motion", "particle-system", "scene-3d", "use-viewport-rect"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/showcase/FeatureShowcase.tsx",
+      },
+    ],
+  },
 };
 
 
