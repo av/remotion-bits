@@ -132,12 +132,12 @@ const rect = useViewportRect();
   >
     {/* Single child = all particles look the same */}
     <div style={{ width: 10, height: 10, background: "white", borderRadius: "50%" }} />
-    
+
     {/* Multiple children = random variant per particle */}
     <div style={{ width: 5, background: "red" }} />
     <div style={{ width: 10, background: "blue" }} />
   </Spawner>
-  
+
   <Behavior gravity={{ y: 0.1 }} />
   <Behavior drag={0.98} />
   <Behavior wiggle={{ magnitude: 1, frequency: 0.5 }} />
@@ -148,7 +148,7 @@ const rect = useViewportRect();
 ```
 
 ### Scene3D
-3D scene with camera following steps.
+3D scene with camera following steps. `Step` components must always be present as direct descendants of `Scene3D`, otherwise the camera will have no reference points to follow. You put content inside each `Step` and the camera will center on that content automatically. You put other 3D positioned elements in the scene using `Element3D`.
 
 ```tsx
 import { Scene3D, Step, Element3D, useViewportRect } from "remotion-bits";
@@ -156,9 +156,13 @@ import { Scene3D, Step, Element3D, useViewportRect } from "remotion-bits";
 const rect = useViewportRect();
 
 <Scene3D perspective={1000} transitionDuration={30} easing="easeInOutCubic">
-  <Step x={0} y={0} z={0} />
-  <Step x={rect.cx} y={rect.cy} z={500} rotateY={45} />
-  
+  <Step x={0} y={0} z={0}>
+    <h1>Hello in 3D</h1>
+  </Step>
+  <Step x={rect.cx} y={rect.cy} z={500} rotateY={45}>
+    <h1>Camera moves here</h1>
+  </Step>
+
   <Element3D x={100} y={100} z={0}>
     <div>3D positioned element</div>
   </Element3D>

@@ -231,53 +231,106 @@ const rect = useViewportRect();
 
 ## 3D Scenes
 
-### Presentation Steps
+### Camera Transitions Between Steps
+
+Steps define camera positions. The camera moves between them automatically:
 
 ```tsx
 const rect = useViewportRect();
+const fontSize = rect.vmin * 8;
 
-<Scene3D perspective={1000} transitionDuration={30}>
-  {/* Each step defines a camera position */}
-  <Step x={0} y={0} z={0} id="intro" />
-  <Step x={rect.cx} y={0} z={300} rotateY={-15} id="section1" />
-  <Step x={rect.cx} y={rect.cy} z={500} rotateX={10} id="section2" />
-  
-  {/* Elements positioned in 3D space */}
-  <Element3D x={0} y={0} z={0}>
-    <h1>Welcome</h1>
-  </Element3D>
-  <Element3D x={rect.cx} y={0} z={300}>
-    <h2>Section 1</h2>
-  </Element3D>
-  <Element3D x={rect.cx} y={rect.cy} z={500}>
-    <h2>Section 2</h2>
-  </Element3D>
+<Scene3D
+  perspective={1000}
+  transitionDuration={50}
+  stepDuration={50}
+  easing="easeInOutCubic"
+>
+  <Step
+    id="1"
+    x={0}
+    y={0}
+    z={0}
+    transition={{ opacity: [0, 1] }}
+    exitTransition={{ opacity: [1, 0] }}
+  >
+    <h1 style={{ fontSize }}>Control</h1>
+  </Step>
+  <Step
+    id="2"
+    x={0}
+    y={rect.vmin * 10}
+    z={rect.vmin * 200}
+    transition={{ opacity: [0, 1] }}
+    exitTransition={{ opacity: [1, 0] }}
+  >
+    <h1 style={{ fontSize, background: 'white', color: 'black' }}>Camera</h1>
+  </Step>
+  <Step
+    id="3"
+    x={0}
+    y={rect.vmin * 20}
+    z={rect.vmin * 400}
+    transition={{ opacity: [0, 1] }}
+    exitTransition={{ opacity: [1, 0] }}
+  >
+    <h1 style={{ fontSize }}>Action</h1>
+  </Step>
 </Scene3D>
 ```
 
-### Card Stack
+### 3D Elements with Staggered Animations
+
+Place elements in 3D space and animate them independently:
 
 ```tsx
 const rect = useViewportRect();
 
-<Scene3D perspective={1200}>
-  <Step z={0} />
-  
-  {[0, 1, 2].map(i => (
-    <Element3D
+<Scene3D
+  perspective={rect.width > 500 ? 1000 : 500}
+  transitionDuration={20}
+  stepDuration={20}
+  easing="easeInOutCubic"
+>
+  {Array(20).fill(0).map((_, i) => {
+    const x = randomFloat(`x-${i}`, -rect.width, rect.width * 2);
+    const y = randomFloat(`y-${i}`, -rect.height, rect.height);
+    const z = randomFloat(`z-${i}`, -rect.vmin * 200, rect.vmin * 20);
+    
+    return (
+      <Element3D
+        key={i}
+        x={x}
+        y={y}
+        z={z}
+        rotateZ={0.0001}
+      >
+        <StaggeredMotion
+          transition={{
+            opacity: [0, 0.2],
+          }}
+        >
+          <div style={{
+            width: rect.vmin * 2,
+            height: rect.vmin * 2,
+            borderRadius: "50%",
+            background: `hsl(${randomFloat(`color-${i}`, 0, 360)}, 80%, 60%)`
+          }} />
+        </StaggeredMotion>
+      </Element3D>
+    );
+  })}
+
+  {/* Camera flies through positioned steps */}
+  {["Fly", "Your", "Camera", "Through", "Space"].map((word, i) => (
+    <Step
       key={i}
-      x={rect.cx - 150}
-      y={rect.cy - 100}
-      z={-i * 50}
-      rotateY={i * 5}
+      x={i * rect.vmin * 50}
+      y={0}
+      z={0}
+      rotateZ={-i * 15}
     >
-      <div style={{
-        width: 300,
-        height: 200,
-        background: `hsl(${i * 40}, 70%, 60%)`,
-        borderRadius: 12
-      }} />
-    </Element3D>
+      <h1 style={{ fontSize: rect.vmin * 8, color: 'white' }}>{word}</h1>
+    </Step>
   ))}
 </Scene3D>
 ```
@@ -371,14 +424,14 @@ const isSmall = rect.width < 500;
 ```tsx
 <Scene3D perspective={1000}>
   <Step z={0} />
-  
+
   <Particles>
     <Spawner rate={2} lifespan={60} position={{ x: rect.cx, y: rect.cy }}>
       <div style={{ width: 10, height: 10, background: "white" }} />
     </Spawner>
     <Behavior gravity={{ y: 0.05 }} />
   </Particles>
-  
+
   <Element3D x={rect.cx} y={rect.cy} z={0}>
     <AnimatedText transition={{ opacity: [0, 1], duration: 30 }}>
       3D Text with Particles
