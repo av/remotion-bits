@@ -184,3 +184,6 @@
   padding: 0.225rem 0.45rem;
 }
 
+.squircle {
+  corner-shape: squircle;
+}

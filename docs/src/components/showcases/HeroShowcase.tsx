@@ -36,7 +36,7 @@ const ShowcaseItem: React.FC<{ bitName: BitName; className?: string }> = ({ bitN
     return (
         <a
             href={`/docs/bits/${slug}`}
-            className={`group relative block overflow-hidden rounded-xl border border-white/10 bg-gray-900 shadow-lg transition-all hover:border-primary hover:shadow-primary/20 aspect-video ${className || ''}`}
+            className={`group relative block overflow-hidden rounded-xl squircle border border-white/10 bg-gray-900 shadow-lg transition-all hover:border-primary hover:shadow-primary/20 aspect-video ${className || ''}`}
         >
             <div className="absolute inset-0 w-full h-full">
                 <ShowcasePlayer
