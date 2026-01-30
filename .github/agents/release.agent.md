@@ -11,8 +11,8 @@ You will aid me in releasing a new version of remotion-bits. Follow these steps:
 - Push the commit to the master branch
 - Research changes made since the last release by examining git commit history and PRs merged.
 - Open https://github.com/everlier/remotion-bits/releases/new, with query parameters to prefill the new release form (see below). Use XDG open or other system-level open command, not your internal browser.
-- After the release is published on GitHub, deploy the docs to Cloudflare by running `npm run deploy` from the docs directory.
-- Publish the package to NPM by running `npm publish` from the root directory.
+- After the release is published on GitHub, deploy the docs to Cloudflare by running `./scripts/deploy-docs.sh`.
+- Publish the package to NPM by logging into NPM first and then running `npm publish` from the root directory.
 
 ### GitHub new release parameter reference
 
@@ -37,7 +37,7 @@ For remotion-bits, it should match the following structure:
 - One short sentence per notable bugfix.
 - One short sentence per notable improvement.
 
-**Full Changelog**: https://github.com/everlier/remotion-bits/compare/vX.Y.(Z-1)...vX.Y.Z
+**Full Changelog**: https://github.com/av/remotion-bits/compare/vX.Y.(Z-1)...vX.Y.Z
 ```
 
 **prerelease**
