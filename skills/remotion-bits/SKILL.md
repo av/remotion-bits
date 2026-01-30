@@ -1,217 +1,59 @@
 ---
 name: remotion-bits
-description: Animation components and utilities for Remotion video projects. Use when building Remotion compositions with text animations (AnimatedText), gradient transitions (GradientTransition), particle effects (Particles, Spawner, Behavior), 3D scenes (Scene3D, Step, Element3D), or staggered motion effects (StaggeredMotion). Also use when working with remotion-bits utilities like interpolate, color, gradient, geometry, or the useViewportRect hook.
+description: Animation components and utilities for Remotion video projects. Use when building Remotion compositions with text animations, gradient transitions, particle effects, 3D scenes, or staggered motion effects. Provides example bits (complete compositions) and reusable components that can be installed via jsrepo.
 ---
 
 # Remotion Bits
 
-Collection of animation components for Remotion. Install components via jsrepo or import from `remotion-bits`.
+Remotion Bits provides animation components and complete example compositions (bits) for building Remotion videos. The workflow is: discover bits that match your needs, install them, customize, and compose into sequences.
 
 ## Installation
 
 ```bash
-# jsrepo (recommended - copies source for customization)
+# Initialize jsrepo registry
 npx jsrepo init https://unpkg.com/remotion-bits/registry.json
+
+# Install components (reusable building blocks)
 npx jsrepo add animated-text particle-system scene-3d
 
-# npm (library usage)
+# Install bits (complete example compositions)
+npx jsrepo add bit-3d-basic
+
+# Or install from npm (library usage without customization)
 npm install remotion-bits
 ```
 
+Components install to `src/components/`, utilities to `src/utils/`, bits to `src/compositions/`.
+
 ## Core Concepts
 
-### AnimatedValue Type
-Components use `AnimatedValue` for animated properties:
-- Single value: `opacity: 1` (static)
-- Two values: `opacity: [0, 1]` (from → to)
-- Multiple values: `opacity: [0, 1, 0.5, 0]` (keyframes over duration)
+### 1. Bits vs Components
+- **Bits**: Complete, ready-to-use Remotion compositions demonstrating specific patterns (e.g., `bit-3d-basic`, `bit-particles-snow`)
+- **Components**: Reusable building blocks used inside bits and custom compositions (e.g., `AnimatedText`, `Particles`, `Scene3D`)
 
-### Responsive Sizing with useViewportRect
-Never hardcode font sizes. Use viewport-relative units:
+Install bits as starting points for your video. Install components when building custom compositions.
 
+### 2. AnimatedValue Pattern
+Most components accept `AnimatedValue` for animated properties:
 ```tsx
-import { useViewportRect } from "remotion-bits";
-
-const rect = useViewportRect();
-// rect.vmin = min(width, height) / 100
-// rect.vmax = max(width, height) / 100
-// rect.vw = width / 100
-// rect.vh = height / 100
-
-<div style={{ fontSize: rect.vmin * 5 }}>Responsive text</div>
+opacity: 1              // Static value
+opacity: [0, 1]         // Animate from 0 to 1
+opacity: [0, 1, 0.5, 0] // Keyframes over duration
 ```
 
-### Easing Functions
-All components accept `easing` as string name or function:
-`"linear"`, `"easeIn"`, `"easeOut"`, `"easeInOut"`, `"easeInCubic"`, `"easeOutCubic"`, `"easeInOutCubic"`, `"easeInSine"`, `"easeOutSine"`, `"easeInOutSine"`, `"easeInQuart"`, `"easeOutQuart"`, `"easeInOutQuart"`
-
-## Components
-
-### AnimatedText
-Text animation with character/word/line splitting and staggered timing.
-
+### 3. Responsive Sizing
+Never hardcode pixel values. Use `useViewportRect()` for responsive scaling:
 ```tsx
-import { AnimatedText } from "remotion-bits";
-
-<AnimatedText
-  transition={{
-    split: "word",           // "none" | "word" | "character" | "line"
-    splitStagger: 3,         // frames between each unit
-    opacity: [0, 1],
-    y: [20, 0],
-    duration: 30,
-    easing: "easeOutCubic"
-  }}
->
-  Hello World
-</AnimatedText>
+const rect = useViewportRect(); // { width, height, vmin, vmax, vw, vh, cx, cy }
+<div style={{ fontSize: rect.vmin * 5 }}>Scales with viewport</div>
 ```
 
-For cycling text:
-```tsx
-<AnimatedText transition={{
-  cycle: { texts: ["First", "Second", "Third"], itemDuration: 60 },
-  opacity: [0, 1, 1, 0],
-  duration: 60
-}} />
-```
-
-### StaggeredMotion
-Applies animations to child elements with stagger and direction control.
-
-```tsx
-import { StaggeredMotion } from "remotion-bits";
-
-<StaggeredMotion
-  transition={{
-    stagger: 5,
-    staggerDirection: "forward",  // "forward" | "reverse" | "center" | "random"
-    opacity: [0, 1],
-    x: [-50, 0],
-    duration: 20
-  }}
->
-  <div>First</div>
-  <div>Second</div>
-  <div>Third</div>
-</StaggeredMotion>
-```
-
-### GradientTransition
-Smooth transitions between CSS gradients using Oklch color interpolation.
-
-```tsx
-import { GradientTransition } from "remotion-bits";
-
-<GradientTransition
-  gradient={[
-    "linear-gradient(0deg, #ff0000, #0000ff)",
-    "linear-gradient(180deg, #00ff00, #ffff00)"
-  ]}
-  duration={90}
-  easing="easeInOut"
-/>
-```
-
-Supports `linear-gradient`, `radial-gradient`, `conic-gradient`.
-
-### Particle System
-Declarative particle effects with spawners and behaviors.
-
-```tsx
-import { Particles, Spawner, Behavior, useViewportRect, resolvePoint } from "remotion-bits";
-
-const rect = useViewportRect();
-
-<Particles startFrame={100}> {/* Pre-simulate 100 frames */}
-  <Spawner
-    rate={2}                    // particles per frame
-    lifespan={120}              // frames each particle lives
-    area={{ width: rect.width, height: 0 }}
-    position={resolvePoint(rect, { x: "center", y: 0 })}
-    velocity={{ y: 2, varianceX: 1 }}
-  >
-    {/* Single child = all particles look the same */}
-    <div style={{ width: 10, height: 10, background: "white", borderRadius: "50%" }} />
-
-    {/* Multiple children = random variant per particle */}
-    <div style={{ width: 5, background: "red" }} />
-    <div style={{ width: 10, background: "blue" }} />
-  </Spawner>
-
-  <Behavior gravity={{ y: 0.1 }} />
-  <Behavior drag={0.98} />
-  <Behavior wiggle={{ magnitude: 1, frequency: 0.5 }} />
-  <Behavior scale={{ start: 1, end: 0 }} />
-  <Behavior opacity={[1, 0.5, 0]} />
-  <Behavior handler={(p) => { p.velocity.x += 0.01; }} /> {/* Custom handler */}
-</Particles>
-```
-
-### Scene3D
-
-3D scene with camera following steps. This component has very specific requirements to function correctly:
-- `Scene3D` MUST contain one or more `Step` components as direct children to define camera positions.
-- `Scene3D` MAY contain `Element3D` components as direct children to place 3D positioned elements in the scene. When placing `Element3D` inside a `Step`, the position is relative to that step, you MUST NOT use global coordinates there.
--  You MUST NOT nest `Scene3D` components inside each other.
--  `Step` SHOULD have its own children that will be as the content at that step.
--  Each `Step` is a 2d plane in 3D space where the camera will focus, and the camera will transition between these steps based on the current frame easing.
--  Both `Step` and `Element3D` COULD contain any valid React children, including other Motion components.
-
-**Behavior:**
-- `Element3D` components can be placed anywhere in 3D space and will remain static as the camera moves.
-- Both `Step` and `Element3D` accept `x`, `y`, `z` props to define their position in 3D space, as well as rotation props like `rotateX`, `rotateY`, and `rotateZ`.
-- `Element3D` inside `Step` will be positioned relative to that step's coordinate system, not the global 3D space.
-- `Step`, `Element3D`, and `Scene3D` must be imported from `remotion-bits`, not from `remotion`.
-- `Step` has `transition` and `exitTransition` props to define how the content enters and exits the view when the camera moves to/from that step.
-
-```tsx
-import { Scene3D, Step, Element3D, useViewportRect } from "remotion-bits";
-
-const rect = useViewportRect();
-
-<Scene3D perspective={1000} transitionDuration={30} easing="easeInOutCubic">
-  <Step x={0} y={0} z={0}>
-    <h1>Hello in 3D</h1>
-  </Step>
-  <Step x={rect.cx} y={rect.cy} z={500} rotateY={45}>
-    <h1>Camera moves here</h1>
-  </Step>
-
-  <Element3D x={100} y={100} z={0}>
-    <div>3D positioned element</div>
-  </Element3D>
-</Scene3D>
-```
-See [3D Scene Patterns](references/patterns.md#3d-scene) for more examples.
-
-## Utilities
-
-### interpolate
-Supports non-monotonic ranges and easing:
-```tsx
-import { interpolate } from "remotion-bits";
-
-// Hold value: input [0, 30, 30, 60] output [0, 0, 100, 100]
-const value = interpolate(frame, [0, 30, 30, 60], [0, 0, 100, 100]);
-```
-
-### Color interpolation
-Perceptually uniform Oklch color transitions:
-```tsx
-import { interpolateColorKeyframes } from "remotion-bits";
-
-const color = interpolateColorKeyframes(["#ff0000", "#00ff00", "#0000ff"], progress);
-```
-
-### Geometry helpers
-```tsx
-import { Rect, resolvePoint, createRect } from "remotion-bits";
-
-const rect = createRect(1920, 1080);
-const center = resolvePoint(rect, "center");
-const custom = resolvePoint(rect, { x: "50%", y: 100 });
-```
+### 4. Component Categories
+- **Text**: `AnimatedText` - character/word/line animations with stagger
+- **Motion**: `StaggeredMotion` - animate multiple elements with timing offsets
+- **Visual**: `GradientTransition` - smooth gradient morphing
+- **Particles**: `Particles`, `Spawner`, `Behavior` - declarative particle systems
+- **3D**: `Scene3D`, `Step`, `Element3D` - camera-based 3D presentations
 
 ## Discovering Bits
 
@@ -231,9 +73,202 @@ jq 'if type == "object" then .items else . end | .[] | select(.type == "bit" and
 
 After discovering a bit in the registry, read its source file to understand implementation details.
 
+## Using Bits and Components
+
+### Installing from Registry
+
+```bash
+# Install a bit (copies source to src/compositions/)
+npx jsrepo add bit-3d-basic
+
+# Install a component (copies source to src/components/)
+npx jsrepo add animated-text
+
+# Dependencies are auto-installed via registryDependencies
+```
+
+### Customizing Installed Bits
+
+Bits are **starting points**, not rigid templates:
+1. Read the bit source in `src/compositions/` after installing
+2. Modify timing, styling, content, and animations as needed
+3. The source is yours to customize freely
+
+### Assembling Compositions
+
+Use Remotion's `<Sequence>` to combine bits and custom scenes:
+
+```tsx
+import { AbsoluteFill, Sequence } from "remotion";
+import { Bit3DBasic } from "./compositions/3DBasic";
+import { CustomScene } from "./CustomScene";
+
+export const FinalVideo = () => (
+  <AbsoluteFill>
+    <Sequence from={0} durationInFrames={150}>
+      <Bit3DBasic />
+    </Sequence>
+    <Sequence from={150} durationInFrames={180}>
+      <CustomScene />
+    </Sequence>
+  </AbsoluteFill>
+);
+```
+
+### Building Custom Compositions
+
+When bits don't fit, build with components directly:
+
+```tsx
+import { AnimatedText, useViewportRect } from "remotion-bits";
+
+export const CustomTitle = () => {
+  const rect = useViewportRect();
+
+  return (
+    <AnimatedText
+      transition={{
+        split: "character",
+        splitStagger: 2,
+        opacity: [0, 1],
+        y: [rect.vmin * 10, 0],
+        duration: 30,
+        easing: "easeOutCubic"
+      }}
+      style={{ fontSize: rect.vmin * 8 }}
+    >
+      Your Title
+    </AnimatedText>
+  );
+};
+```
+
+## Finding Examples
+
+- **Installed bits**: `src/compositions/` - Full working compositions
+- **Bit source files**: Query registry for `files[].relativePath` to locate originals
+- **Reference patterns**: [references/patterns.md](references/patterns.md) - Common recipes
+- **Component APIs**: [references/components.md](references/components.md) - Props and usage
+
 ## Reference Files
 
 For detailed API documentation:
 - [references/components.md](references/components.md) - Full component props reference
 - [references/utilities.md](references/utilities.md) - Utility functions reference
 - [references/patterns.md](references/patterns.md) - Common animation patterns
+and Using Bits
+
+### Finding Bits
+
+Bits are discoverable via the jsrepo registry. Use `jq` to query `registry.json`:
+
+```bash
+# List all available bits
+jq 'if type == "object" then .items else . end | .[] | select(.type == "bit") | {name, title, description}' registry.json
+
+# Find bits using specific components (e.g., Scene3D)
+jq 'if type == "object" then .items else . end | .[] | select(.type == "bit" and (.registryDependencies | contains(["scene-3d"])))' registry.json
+
+# Get installation details for a specific bit
+jq 'if type == "object" then .items else . end | .[] | select(.name == "bit-3d-basic")' registry.json
+```
+
+After finding a bit in the registry, **read its source file** to understand the implementation before installing.
+
+### Installing Bits
+
+```bash
+# Install a bit (copies source to src/compositions/)
+npx jsrepo add bit-3d-basic
+
+# Dependencies are auto-installed (e.g., scene-3d component)
+```
+
+### Customizing Bits
+
+Bits are **starting points for customization**, not rigid templates:
+
+1. Read the bit source file to understand its structure
+2. Install the bit via jsrepo (copies source code to your project)
+3. Modify the composition in `src/compositions/` to fit your needs
+4. Adjust timing, styling, content, animations as needed
+
+### Common Bit Patterns
+
+When reviewing bit source files, look for:
+- **`metadata.registry.registryDependencies`**: Which components the bit uses
+- **`useViewportRect()`**: How it handles responsive sizing
+- **Timing**: `duration`, `transitionDuration`, stagger values
+- **Animation patterns**: How `AnimatedValue` arrays create motion
+- **Component composition**: How multiple components work together
+
+## Assembling Remotion Videos
+
+### Sequencing with Remotion
+
+Use `<Sequence>` to combine bits and custom scenes:
+
+```tsx
+import { AbsoluteFill, Sequence } from "remotion";
+import { Bit3DBasic } from "./compositions/3DBasic";
+import { BitParticlesSnow } from "./compositions/ParticlesSnow";
+
+export const FinalVideo = () => (
+  <AbsoluteFill>
+    <Sequence from={0} durationInFrames={150}>
+      <Bit3DBasic />
+    </Sequence>
+    <Sequence from={150} durationInFrames={180}>
+      <BitParticlesSnow />
+    </Sequence>
+  </AbsoluteFill>
+);
+```
+
+### Building Custom Compositions
+
+When bits don't fit your needs, build custom compositions with components:
+
+```tsx
+import { AnimatedText, useViewportRect } from "remotion-bits";
+import { useCurrentFrame } from "remotion";
+
+export const CustomTitle = () => {
+  const rect = useViewportRect();
+
+  return (
+    <AnimatedText
+      transition={{
+        split: "character",
+        splitStagger: 2,
+        opacity: [0, 1],
+        y: [rect.vmin * 10, 0],
+        duration: 30,
+        easing: "easeOutCubic"
+      }}
+      style={{ fontSize: rect.vmin * 8 }}
+    >
+      Your Title Here
+    </AnimatedText>
+  );
+};
+```
+
+## Key Components Overview
+
+For detailed API documentation, see reference files below. Quick reference:
+
+- **AnimatedText**: Text with character/word/line splitting, stagger, and transitions
+- **StaggeredMotion**: Animate child elements with stagger and directional timing
+- **GradientTransition**: Smooth gradient morphing with Oklch interpolation
+- **Particles + Spawner + Behavior**: Declarative particle systems with physics
+- **Scene3D + Step + Element3D**: Camera-based 3D presentations (impress.js style)
+
+Import from `remotion-bits` or from installed component files in `src/components/`.
+
+## Reference Documentation
+
+For comprehensive API details:
+- [references/components.md](references/components.md) - Complete component props and examples
+- [references/utilities.md](references/utilities.md) - Utility functions (interpolate, color, geometry)
+- [references/patterns.md](references/patterns.md) - Common animation patterns and recipe
