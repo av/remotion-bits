@@ -183,6 +183,7 @@ const rect = useViewportRect();
   </Element3D>
 </Scene3D>
 ```
+See [3D Scene Patterns](references/patterns.md#3d-scene) for more examples.
 
 ## Utilities
 
