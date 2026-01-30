@@ -148,7 +148,15 @@ const rect = useViewportRect();
 ```
 
 ### Scene3D
-3D scene with camera following steps. `Step` components must always be present as direct descendants of `Scene3D`, otherwise the camera will have no reference points to follow. You put content inside each `Step` and the camera will center on that content automatically. You put other 3D positioned elements in the scene using `Element3D`.
+
+3D scene with camera following steps. This component has very specific requirements to function correctly.
+- `Scene3D` must contain one or more `Step` components as direct children to define camera positions.
+- Each `Step` is a 2d plane in 3D space where the camera will focus. `Step` may have its own children that will be as the content at that step.
+- `Scene3D` may contain `Element3D` components as direct children to place 3D positioned elements in the scene.
+- The camera will transition between `Step` positions based on the current frame and the defined `transitionDuration` and `easing`.
+- `Element3D` components can be placed anywhere in 3D space and will remain static as the camera moves.
+- Both `Step` and `Element3D` accept `x`, `y`, `z` props to define their position in 3D space, as well as rotation props like `rotateX`, `rotateY`, and `rotateZ`.
+- Both `Step` and `Element3D` can contain any valid React children, including other Motion components.
 
 ```tsx
 import { Scene3D, Step, Element3D, useViewportRect } from "remotion-bits";
