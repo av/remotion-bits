@@ -1,0 +1,1 @@
+Please read [AGENTS.md](./AGENTS.md) for important guidelines on how to act as a coding agent.
