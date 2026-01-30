@@ -11,6 +11,7 @@ Collection of animation components for Remotion. Install components via jsrepo o
 
 ```bash
 # jsrepo (recommended - copies source for customization)
+npx jsrepo init https://unpkg.com/remotion-bits/registry.json
 npx jsrepo add animated-text particle-system scene-3d
 
 # npm (library usage)
@@ -150,11 +151,12 @@ const rect = useViewportRect();
 ### Scene3D
 
 3D scene with camera following steps. This component has very specific requirements to function correctly:
-1. `Scene3D` MUST contain one or more `Step` components as direct children to define camera positions.
-2. `Scene3D` MAY contain `Element3D` components as direct children to place 3D positioned elements in the scene.
-3. `Step` SHOULD have its own children that will be as the content at that step.
-4. Each `Step` is a 2d plane in 3D space where the camera will focus, and the camera will transition between these steps based on the current frame easing.
-5. Both `Step` and `Element3D` COULD contain any valid React children, including other Motion components.
+- `Scene3D` MUST contain one or more `Step` components as direct children to define camera positions.
+- `Scene3D` MAY contain `Element3D` components as direct children to place 3D positioned elements in the scene. When placing `Element3D` inside a `Step`, the position is relative to that step, you MUST NOT use global coordinates there.
+-  You MUST NOT nest `Scene3D` components inside each other.
+-  `Step` SHOULD have its own children that will be as the content at that step.
+-  Each `Step` is a 2d plane in 3D space where the camera will focus, and the camera will transition between these steps based on the current frame easing.
+-  Both `Step` and `Element3D` COULD contain any valid React children, including other Motion components.
 
 **Behavior:**
 - `Element3D` components can be placed anywhere in 3D space and will remain static as the camera moves.

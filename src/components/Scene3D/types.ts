@@ -1,6 +1,6 @@
 import type { EasingFunction, EasingName } from "../../utils";
 import type { AnimatedValue, TransformProps, VisualProps, TimingProps } from "../../utils/motion";
-import type { StaggerDirection } from "../MotionTransition";
+import type { StaggerDirection } from "../StaggeredMotion";
 
 export type RotateOrder = "xyz" | "xzy" | "yxz" | "yzx" | "zxy" | "zyx";
 

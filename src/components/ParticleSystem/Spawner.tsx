@@ -1,6 +1,5 @@
 import React from "react";
-import type { MotionTransitionProps } from "../MotionTransition";
-import type { SpawnerConfig, SpawnerShape } from "../../utils/particles/types";
+import type { SpawnerConfig } from "../../utils/particles/types";
 
 // We exclude 'id' from props because the Particles container will assign it or use index
 export interface SpawnerProps extends Omit<SpawnerConfig, "id" | "childrenVariants"> {

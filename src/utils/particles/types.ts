@@ -1,4 +1,4 @@
-import type { MotionTransitionProps } from "../../components/MotionTransition";
+import type { StaggeredMotionTransitionProps } from "../../components/StaggeredMotion";
 
 // ============================================================================
 // CORE DATA STRUCTURES
@@ -68,7 +68,7 @@ export interface SpawnerConfig {
   lifespanVariance?: number;
 
   // Render
-  transition?: MotionTransitionProps;
+  transition?: StaggeredMotionTransitionProps;
   children: React.ReactNode;
   childrenVariants?: React.ReactNode[]; // Array of child variants for random selection
 }

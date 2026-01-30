@@ -1,0 +1,30 @@
+# Development files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+__tests__/
+.vscode/
+.idea/
+
+# Config files that shouldn't be published
+tsconfig.json
+vite.config.ts
+vitest.config.ts
+vitest.setup.ts
+eslint.config.js
+jsrepo.config.ts
+
+# Build artifacts to ignore
+node_modules/
+.DS_Store
+*.log
+*.tsbuildinfo
+.jsrepo/
+.turbo/
+.vite/
+.env
+.env.local
+
+# Explicitly DON'T ignore dist (override .gitignore)
+!dist/

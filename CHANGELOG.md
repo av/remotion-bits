@@ -1,3 +1,11 @@
+### v0.1.3
+
+- Improvement: Refined Scene3D mechanics and usage patterns
+- Feature: Added skill maintenance to agent instructions
+- Improvement: Landing page cleanups with squircle design elements
+- Docs: Updated skill info related to 3D scenes
+- Docs: CLAUDE.md now references AGENTS.md for better organization
+
 ### v0.1.2
 
 - Feature: Added scrolling columns bit component
