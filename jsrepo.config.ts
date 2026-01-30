@@ -2,6 +2,23 @@ import { defineConfig } from "jsrepo";
 import { repository } from "jsrepo/outputs";
 import type { Transform } from "jsrepo";
 import { InvalidImportWarning } from "jsrepo/warnings";
+import { readFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
+
+// Load extracted bits if available
+function loadExtractedBits() {
+  const extractedBitsPath = join(process.cwd(), "extracted-bits.json");
+  if (existsSync(extractedBitsPath)) {
+    try {
+      const content = readFileSync(extractedBitsPath, "utf-8");
+      return JSON.parse(content);
+    } catch (error) {
+      console.warn("Failed to load extracted bits:", error);
+      return [];
+    }
+  }
+  return [];
+}
 
 // Transform to rewrite barrel imports to direct file imports
 function rewriteUtilsImports(): Transform {
@@ -42,6 +59,7 @@ export default defineConfig({
     defaultPaths: {
       component: "src/components",
       util: "src/utils",
+      bit: "src/compositions",
     },
     onwarn: (warning, handler) => {
       // Suppress warnings for barrel imports that will be transformed
@@ -271,6 +289,8 @@ export default defineConfig({
           },
         ],
       },
+      // Dynamically loaded bits from extracted-bits.json
+      ...loadExtractedBits(),
     ],
   },
 });

@@ -1,3 +1,9 @@
+### v0.1.4
+
+- Improvement: Cleaned up README documentation
+- Docs: Added Scene3D examples reference to skill file
+- Fix: Linter fixes and code quality improvements
+
 ### v0.1.3
 
 - Improvement: Refined Scene3D mechanics and usage patterns

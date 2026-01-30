@@ -8,6 +8,20 @@ export const metadata = {
   duration: 150,
   width: 1920,
   height: 1080,
+  registry: {
+    name: "bit-3d-basic",
+    title: "3D Basic Scene",
+    description: "3D camera transitions between positioned steps, impress.js style",
+    type: "bit" as const,
+    add: "when-needed" as const,
+    registryDependencies: ["scene-3d"],
+    dependencies: [],
+    files: [
+      {
+        path: "docs/src/bits/examples/scene-3d/3DBasic.tsx",
+      },
+    ],
+  },
 };
 
 export const Component: React.FC = () => {

@@ -1,5 +1,4 @@
 import React from "react";
-import { AbsoluteFill, interpolate } from "remotion";
 import { Particles, Spawner, Behavior, useViewportRect, resolvePoint, StaggeredMotion } from "remotion-bits";
 
 export const metadata = {

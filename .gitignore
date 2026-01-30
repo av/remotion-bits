@@ -18,3 +18,4 @@ coverage/
 .env
 .env.local
 .env.*.local
+extracted-bits.json

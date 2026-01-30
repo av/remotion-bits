@@ -213,6 +213,24 @@ const center = resolvePoint(rect, "center");
 const custom = resolvePoint(rect, { x: "50%", y: 100 });
 ```
 
+## Discovering Bits
+
+Bits are complete composition examples that demonstrate component usage. The registry includes bits alongside components and utilities.
+
+To discover available bits:
+```bash
+# List all bits
+jq 'if type == "object" then .items else . end | .[] | select(.type == "bit") | {name, title, description}' registry.json
+
+# Get full details for a specific bit
+jq 'if type == "object" then .items else . end | .[] | select(.name == "bit-3d-basic")' registry.json
+
+# Filter by registry dependencies (e.g., bits using scene-3d)
+jq 'if type == "object" then .items else . end | .[] | select(.type == "bit" and (.registryDependencies | contains(["scene-3d"])))' registry.json
+```
+
+After discovering a bit in the registry, read its source file to understand implementation details.
+
 ## Reference Files
 
 For detailed API documentation:
