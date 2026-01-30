@@ -47,33 +47,33 @@ export const Particles: React.FC<ParticlesProps> = ({
       // Identify Spawners
       // @ts-ignore - Check for type name or specific prop
       if (child.type === Spawner) {
-         const props = child.props as SpawnerProps;
+        const props = child.props as SpawnerProps;
 
-         // Extract children as variants
-         const childrenArray = React.Children.toArray(props.children);
-         const hasMultipleVariants = childrenArray.length > 1;
+        // Extract children as variants
+        const childrenArray = React.Children.toArray(props.children);
+        const hasMultipleVariants = childrenArray.length > 1;
 
-         extractedSpawners.push({
-             ...props,
-             id: props.id || `spawner-${spawnerCount++}`,
-             // Merge startFrame: spawner's startFrame takes precedence over Particles' startFrame
-             startFrame: props.startFrame !== undefined ? props.startFrame : startFrame,
-             children: props.children, // Keep original for single child case
-             childrenVariants: hasMultipleVariants ? childrenArray : undefined
-         } as SpawnerConfig);
+        extractedSpawners.push({
+          ...props,
+          id: props.id || `spawner-${spawnerCount++}`,
+          // Merge startFrame: spawner's startFrame takes precedence over Particles' startFrame
+          startFrame: props.startFrame !== undefined ? props.startFrame : startFrame,
+          children: props.children, // Keep original for single child case
+          childrenVariants: hasMultipleVariants ? childrenArray : undefined
+        } as SpawnerConfig);
       }
 
       // Identify Behaviors
       // @ts-ignore
       else if (child.type === Behavior) {
-         const props = child.props as BehaviorProps;
-         const handlers = getBehaviorHandlersFromProps(props);
-         handlers.forEach(h => {
-             extractedBehaviors.push({
-                 id: `behavior-${behaviorCount++}`,
-                 handler: h
-             });
-         });
+        const props = child.props as BehaviorProps;
+        const handlers = getBehaviorHandlersFromProps(props);
+        handlers.forEach(h => {
+          extractedBehaviors.push({
+            id: `behavior-${behaviorCount++}`,
+            handler: h
+          });
+        });
       }
     });
 
@@ -140,7 +140,7 @@ export const Particles: React.FC<ParticlesProps> = ({
             cycleOffset: age,
             transition: {
               duration: p.lifespan,
-              ...(props.transition || {}),
+              ...props.transition,
             },
           } as any);
         }
