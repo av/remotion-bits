@@ -75,6 +75,30 @@ When creating bits, keep the following in mind:
 - Do not hardcode font sizes; use the `useViewportRect` and fractional sizing instead
 - Use `rect.vmin`, `rect.vmax` for responsive sizing of the Bit elements
 
+### Maintaining the Skill File
+
+The skill file at `skills/remotion-bits/SKILL.md` serves as a concise reference for AI agents working with remotion-bits. Keep it synchronized when making changes:
+
+**When to update:**
+- Adding new components (AnimatedText, GradientTransition, Particles, etc.)
+- Adding new utilities (interpolate, color helpers, geometry functions)
+- Changing component APIs or prop interfaces
+- Updating core concepts (AnimatedValue patterns, responsive sizing patterns)
+- Adding new easing functions or animation patterns
+
+**What to maintain:**
+- Component examples with current API
+- Utility function signatures and usage
+- Installation instructions
+- Core concepts and best practices
+- Links to reference documentation
+
+**Keep it concise:**
+- Focus on practical examples and common use cases
+- Include prop types and return values
+- Show representative code snippets, not exhaustive API docs
+- Defer detailed documentation to reference files (components.md, utilities.md, patterns.md)
+
 ### Additional context
 
 Refer to [COMPAL_LOG.md](./COMPAL_LOG.md) for additional technical context.
