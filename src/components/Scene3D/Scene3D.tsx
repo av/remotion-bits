@@ -94,7 +94,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({
 
     stepChildren.forEach((child, index) => {
       const props = child.props;
-      const duration = stepDuration ?? Math.floor(durationInFrames / stepChildren.length);
+      const duration = props.duration ?? stepDuration ?? Math.floor(durationInFrames / stepChildren.length);
       const enterFrame = currentFrame;
       const exitFrame = currentFrame + duration;
 

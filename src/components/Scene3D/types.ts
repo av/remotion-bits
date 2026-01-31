@@ -75,6 +75,7 @@ export interface Scene3DProps {
 
 export interface StepProps extends Transform3DProps {
   id?: string;
+  duration?: number;
   transition?: TransitionConfig;
   exitTransition?: TransitionConfig;
   className?: string;

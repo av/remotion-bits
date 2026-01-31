@@ -161,6 +161,7 @@ const StaggeredChild: React.FC<StaggeredChildProps> = ({
 
 const StepComponent: React.FC<StepProps> = ({
   id,
+  duration,
   x = 0,
   y = 0,
   z = 0,

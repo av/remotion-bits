@@ -124,7 +124,7 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({
     // Build animated styles using motion framework
     const unitStyle = buildMotionStyles({
       progress,
-      transforms: { x, y, z, scale, scaleX, scaleY, rotate, rotateX, rotateY, rotateZ, skew, skewX, skewY },
+      transforms: transition,
       styles: { opacity, color, backgroundColor, blur },
       easing: easingFn,
       baseStyle: {
