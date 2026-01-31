@@ -170,6 +170,7 @@ Defines a camera position/target.
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `id` | `string?` | auto-generated | Step identifier |
+| `duration` | `number?` | auto | Override duration for this step |
 | `x`, `y`, `z` | `AnimatedValue?` | `0` | Camera target position |
 | `scale`, `scaleX`, `scaleY` | `AnimatedValue?` | `1` | Camera zoom |
 | `rotateX`, `rotateY`, `rotateZ` | `AnimatedValue?` | `0` | Camera rotation |

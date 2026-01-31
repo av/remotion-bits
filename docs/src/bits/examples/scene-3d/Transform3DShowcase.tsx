@@ -8,6 +8,7 @@ import {
   Vector3,
   interpolateTransform,
   StaggeredMotion,
+  Matrix4,
 } from "remotion-bits";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
 
@@ -75,26 +76,24 @@ export const Component: React.FC = () => {
     exitTransition: { blur: [0, 20] },
   }
 
-  const chainedTransform = Transform3D.identity()
-    .translate(rect.vmin * 45, rect.vmin * -15, 0)
-    .rotateZ(30)
-    .scaleBy(1.5, 1.5, 1.5);
-
   const relativeStep = Transform3D.identity()
     .translate(rect.vmin * 200, rect.vmin * 20, rect.vmin * -50)
     .rotateX(10)
     .scaleBy(0.5, 0.5, 0.5);
 
   const relativeTransform = Transform3D.identity()
-    .translate(rect.vmin * 25, 0, 0)
+    .translate(rect.vmin * 25, rect.vmin * -7, 0)
     .rotateX(-5)
 
   const nestedTransform = Transform3D.identity()
-    .translate(0, 0, 0)
-    .rotateX(frame * 0.25)
+    .translate(rect.vmin * 10, 0, 0)
+    .rotateX(frame * 0.05)
     // .rotateY(frame * 0.25)
-    .rotateZ(frame * 0.25)
+    // .rotateZ(frame * 0.25)
     .scaleBy(1.1);
+
+  const chainableBase = Transform3D.identity()
+    .translate(rect.vmin * 40, -rect.vmin * 35, 0);
 
   return (
     <AbsoluteFill
@@ -130,13 +129,15 @@ export const Component: React.FC = () => {
         <Step id="chainable"
           {...baseTransform.translate(rect.vmin * 100, 0, 0).rotateY(-15).toProps()}
           {...enterExit}
+          duration={120}
         >
           <div style={{
             background: "rgba(0,0,0,0.15)",
             padding: `${rect.vmin * 3}px`,
             borderRadius: `${rect.vmin * 1}px`,
             border: `${rect.vmin * 0.3}px solid var(--color-border-light)`,
-            width: rect.vmin * 60,
+            width: rect.vmin * 45,
+            transform: "translateX(-50%)",
           }}>
             <h2 style={{ fontSize, color: "var(--color-primary-hover)", margin: `0 0 ${rect.vmin * 2}px` }}>
               Chainable Transforms
@@ -154,25 +155,27 @@ export const Component: React.FC = () => {
             </pre>
           </div>
 
-          {/* Show the actual transformed cube */}
-          <Element3D
-            {...chainedTransform.toProps()}
+          <StaggeredMotion
+            transition={{
+              delay: 20,
+              duration: 80,
+              transform: [
+                chainableBase,
+                chainableBase.translate(rect.vmin * 20, 0, 0).rotateZ(90),
+                chainableBase.translate(rect.vmin * 20, rect.vmin * 20, 0).scaleBy(0.5),
+                chainableBase.translate(0, rect.vmin * 20, 0).rotateY(180),
+                chainableBase,
+              ],
+              easing: "easeInOutCubic",
+            }}
           >
-            <StaggeredMotion
-              transition={{
-                rotate: [0, 90],
-                delay: 20,
-                easing: "easeInOutCubic",
-              }}
-            >
-              <div style={{
-                width: cubeSize,
-                height: cubeSize,
-                border: `${rect.vmin * 0.3}px solid var(--color-primary-hover)`,
-                transformStyle: "preserve-3d",
-              }} />
-            </StaggeredMotion>
-          </Element3D>
+            <div style={{
+              width: cubeSize,
+              height: cubeSize,
+              border: `${rect.vmin * 1}px solid var(--color-primary-hover)`,
+              transformStyle: "preserve-3d",
+            }} />
+          </StaggeredMotion>
         </Step>
 
         <Step id="relative"
@@ -180,7 +183,7 @@ export const Component: React.FC = () => {
           {...enterExit}
           style={{
             position: 'absolute',
-            perspective: '800px',
+            perspective: '1000px',
           }}
         >
           <div style={{
@@ -213,7 +216,7 @@ const orbit = Transform3D.identity()
             <div style={{
               width: cubeSize,
               height: cubeSize,
-              border: `${rect.vmin * 0.3}px solid var(--color-primary-hover)`,
+              border: `${rect.vmin}px solid var(--color-primary-hover)`,
             }} />
           </Element3D>
 
@@ -225,7 +228,7 @@ const orbit = Transform3D.identity()
               position: "absolute",
               width: orbitSize,
               height: orbitSize,
-              border: `${rect.vmin * 0.2}px solid var(--color-primary-hover)`,
+              border: `${rect.vmin}px solid var(--color-primary-hover)`,
               borderRadius: "50%",
               transform: orbit1.toCSSMatrix3D(),
             }} />
@@ -238,7 +241,7 @@ const orbit = Transform3D.identity()
               position: "absolute",
               width: orbitSize,
               height: orbitSize,
-              border: `${rect.vmin * 0.2}px solid var(--color-primary-hover)`,
+              border: `${rect.vmin}px solid var(--color-primary-hover)`,
               borderRadius: "50%",
               transform: orbit2.toCSSMatrix3D(),
             }} />
@@ -251,7 +254,7 @@ const orbit = Transform3D.identity()
               position: "absolute",
               width: orbitSize,
               height: orbitSize,
-              border: `${rect.vmin * 0.2}px solid var(--color-primary-hover)`,
+              border: `${rect.vmin}px solid var(--color-primary-hover)`,
               borderRadius: "50%",
               transform: orbit3.toCSSMatrix3D(),
             }} />
@@ -325,7 +328,7 @@ const worldPos = transform
           </div>
 
           <Element3D
-            x={rect.vmin * 35}
+            x={rect.vmin * -10}
             scale={1.5}
           >
             <Element3D
