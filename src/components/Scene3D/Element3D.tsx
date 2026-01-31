@@ -8,6 +8,8 @@ import {
   getEasingFunction,
   interpolateKeyframes,
 } from "../../utils/motion";
+import { Transform3D, Vector3 } from "../../utils/transform3d";
+import { transformToCSS } from "../../utils/interpolate3d";
 
 const ELEMENT3D_SYMBOL = Symbol("Scene3D.Element3D");
 
@@ -177,28 +179,34 @@ const Element3DComponent: React.FC<Element3DProps> = ({
   const rotateYVal = interpolateKeyframes(rotateY, 1);
   const rotateZVal = interpolateKeyframes(rotateZ, 1);
 
-  const rotationTransforms: Record<string, string> = {
-    x: `rotateX(${rotateXVal}deg)`,
-    y: `rotateY(${rotateYVal}deg)`,
-    z: `rotateZ(${rotateZVal}deg)`,
-  };
+  const degreesToRadians = Math.PI / 180;
 
-  const rotationString = rotateOrder
-    .split("")
-    .map((axis) => rotationTransforms[axis])
-    .join(" ");
+  const elementTransform = Transform3D.fromEuler(
+    rotateXVal * degreesToRadians,
+    rotateYVal * degreesToRadians,
+    rotateZVal * degreesToRadians,
+    new Vector3(xVal, yVal, zVal),
+    new Vector3(scaleVal * scaleXVal, scaleVal * scaleYVal, scaleVal),
+    rotateOrder.toUpperCase() as any
+  );
 
-  let transformString: string;
+  let finalTransform: Transform3D;
 
   if (fixed) {
-    const inverseRotation = `rotateZ(${camera.rotateZ}deg) rotateY(${camera.rotateY}deg) rotateX(${camera.rotateX}deg)`;
-    const inverseTranslate = `translate3d(${camera.x}px, ${camera.y}px, ${camera.z}px)`;
-    const inverseScale = `scale(${camera.scale}) scaleX(${camera.scaleX}) scaleY(${camera.scaleY})`;
-
-    transformString = `${inverseTranslate} ${inverseRotation} ${inverseScale} translate3d(${xVal}px, ${yVal}px, ${zVal}px) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
+    const cameraTransform = Transform3D.fromEuler(
+      camera.rotateX * degreesToRadians,
+      camera.rotateY * degreesToRadians,
+      camera.rotateZ * degreesToRadians,
+      new Vector3(camera.x, camera.y, camera.z),
+      new Vector3(camera.scale * camera.scaleX, camera.scale * camera.scaleY, camera.scale)
+    );
+    
+    finalTransform = cameraTransform.multiply(elementTransform);
   } else {
-    transformString = `translate3d(${xVal}px, ${yVal}px, ${zVal}px) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
+    finalTransform = elementTransform;
   }
+
+  const transformString = transformToCSS(finalTransform);
 
   const childArray = React.Children.toArray(children);
   const totalChildren = childArray.length;

@@ -1,0 +1,81 @@
+---
+title: Transform3D Showcase
+category: 3D Scenes
+description: Demonstrates chainable Transform3D API with matrix-based interpolation, relative transforms, and smooth quaternion rotations
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+Showcases the power of the Transform3D API with chainable operations, relative positioning, and smooth matrix-based interpolation using quaternion SLERP.
+
+<BitPlayground client:only="react" bitName="Transform3DShowcase" />
+
+## Overview
+
+The `Transform3D` class provides a mathematically correct way to compose 3D transformations using matrix operations and quaternions. This eliminates common issues like gimbal lock and provides smooth, natural interpolation paths.
+
+## Key Features
+
+### Chainable API
+
+Build complex transformations step-by-step:
+
+```tsx
+const transform = Transform3D.identity()
+  .translate(x, y, z)
+  .rotateZ(Math.PI / 8)
+  .scaleBy(1.5, 1.5, 1.5);
+```
+
+### Relative Positioning
+
+Create hierarchical transforms with proper composition:
+
+```tsx
+// Satellites orbit around parent
+const orbit = Transform3D.identity()
+  .translate(x, y, z)
+  .rotateY(angle);
+  
+// Apply to CSS
+element.style.transform = orbit.toCSSMatrix3D();
+```
+
+### Smooth Interpolation
+
+Matrix-based interpolation with quaternion SLERP prevents gimbal lock:
+
+```tsx
+const interpolated = interpolateTransform(
+  from, 
+  to, 
+  progress, 
+  easing
+);
+```
+
+Benefits:
+- ✓ Natural rotation paths
+- ✓ No gimbal lock artifacts  
+- ✓ Single matrix operation
+- ✓ Proper transform composition
+
+### Transform Composition
+
+Combine transforms hierarchically:
+
+```tsx
+// Combine parent and child
+const worldTransform = parent.multiply(child);
+
+// Apply to points
+const worldPos = transform.apply(localPos);
+
+// Invert transform
+const inverse = transform.inverse();
+```
+
+## Reference
+
+- [Transform3D](/docs/reference/transform3d) - Matrix-based transform class
+- [Scene3D](/docs/reference/scene3d) - 3D scene with camera system
+- [Element3D](/docs/reference/element3d) - 3D positioned elements

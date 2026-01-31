@@ -30,6 +30,8 @@ import * as FlyingThroughWordsModule from './examples/scene-3d/FlyingThroughWord
 import FlyingThroughWordsSource from './examples/scene-3d/FlyingThroughWords.tsx?raw';
 import * as Elements3DModule from './examples/scene-3d/3DElements';
 import Elements3DSource from './examples/scene-3d/3DElements.tsx?raw';
+import * as Transform3DShowcaseModule from './examples/scene-3d/Transform3DShowcase';
+import Transform3DShowcaseSource from './examples/scene-3d/Transform3DShowcase.tsx?raw';
 import * as FeatureShowcaseModule from './examples/showcase/FeatureShowcase';
 import FeatureShowcaseSource from './examples/showcase/FeatureShowcase.tsx?raw';
 
@@ -104,6 +106,7 @@ export const bits = {
   Scene3DPresentation: { ...Scene3DBasicModule, sourceCode: extractSource(Scene3DBasicSource) },
   FlyingThroughWords: { ...FlyingThroughWordsModule, sourceCode: extractSource(FlyingThroughWordsSource) },
   Elements3D: { ...Elements3DModule, sourceCode: extractSource(Elements3DSource) },
+  Transform3DShowcase: { ...Transform3DShowcaseModule, sourceCode: extractSource(Transform3DShowcaseSource) },
   FeatureShowcase: { ...FeatureShowcaseModule, sourceCode: extractSource(FeatureShowcaseSource) },
 } as const;
 
@@ -133,3 +136,4 @@ export const Scene3DPresentation = bits.Scene3DPresentation;
 export const FlyingThroughWords = bits.FlyingThroughWords;
 export const ScrollingColumns = bits.ScrollingColumns;
 export const Elements3D = bits.Elements3D;
+export const Transform3DShowcase = bits.Transform3DShowcase;

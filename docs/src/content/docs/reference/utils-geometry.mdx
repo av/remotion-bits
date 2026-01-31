@@ -30,3 +30,85 @@ Resolves relative coordinates (percentages or numbers) to absolute points within
 // 50% of width, 20% of height
 const point = rect.relative("50%", "20%");
 ```
+
+## Rect3D
+
+The `Rect3D` class extends `Rect` with depth and 3D positioning capabilities.
+
+```tsx
+import { Rect3D, createRect3D } from "remotion-bits";
+
+const rect3D = new Rect3D(1920, 1080, 500, 0, 0, 0);
+// or
+const rect3D = createRect3D(1920, 1080, 500);
+```
+
+### Properties
+
+Inherits all `Rect` properties plus:
+
+- `depth`: The Z dimension
+- `z`: Front face Z coordinate
+- `front` / `near`: Front face Z coordinate (same as `z`)
+- `back` / `far`: Back face Z coordinate (`z + depth`)
+- `centerZ`: Center Z coordinate
+- `center3D`: Vector3 center point
+- `volume`: Width × height × depth
+
+### Methods
+
+#### `resolvePoint3D(descriptor)`
+
+Resolves 3D position descriptors to Vector3 points.
+
+```tsx
+import { Vector3 } from "remotion-bits";
+
+// Keyword strings
+const center = rect3D.resolvePoint3D('center');
+const topLeftFront = rect3D.resolvePoint3D('topLeftFront');
+const back = rect3D.resolvePoint3D('back');
+
+// Tuples with percentages
+const point = rect3D.resolvePoint3D(['50%', '50%', '50%']);
+
+// Objects
+const point = rect3D.resolvePoint3D({ x: 100, y: 200, z: 300 });
+
+// Vector3 directly (returns clone)
+const point = rect3D.resolvePoint3D(new Vector3(10, 20, 30));
+```
+
+**Supported keyword strings:**
+- 2D positions: `'center'`, `'top'`, `'bottom'`, `'left'`, `'right'`, `'topLeft'`, etc.
+- 3D positions: `'front'`, `'back'`
+- 3D corners: `'topLeftFront'`, `'topRightFront'`, `'bottomLeftBack'`, etc.
+
+## 3D Types
+
+### `Point3D`
+
+Type alias for `Vector3` from three.js.
+
+```tsx
+import { Point3D, Vector3 } from "remotion-bits";
+
+const point: Point3D = new Vector3(10, 20, 30);
+```
+
+### `Position3DDescriptor`
+
+Union type for 3D position specifications:
+
+```tsx
+type Position3DDescriptor = 
+  | PositionObject3D      // { x?: number, y?: number, z?: number }
+  | PositionString3D      // 'center' | 'topLeftFront' | etc.
+  | PositionTuple3D       // [x, y, z]
+  | Point3D;              // Vector3
+```
+
+## See Also
+
+- [Transform3D](/docs/reference/transform3d) - Matrix-based 3D transformations
+- [Scene3D](/docs/reference/scene3d) - 3D scene system

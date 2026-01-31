@@ -18,7 +18,7 @@ export type {
   Scene3DProps,
   StepProps,
   Element3DProps,
-  Transform3D,
+  Transform3DProps,
   Position3D,
   Rotation3D,
   Scale3D,

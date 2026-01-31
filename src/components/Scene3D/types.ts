@@ -23,7 +23,7 @@ export interface Scale3D {
   scaleY?: AnimatedValue;
 }
 
-export interface Transform3D extends Position3D, Rotation3D, Scale3D {}
+export interface Transform3DProps extends Position3D, Rotation3D, Scale3D {}
 
 export type TransitionConfig = TransformProps &
   VisualProps &
@@ -32,7 +32,7 @@ export type TransitionConfig = TransformProps &
     staggerDirection?: StaggerDirection;
   };
 
-export interface StepConfig extends Transform3D {
+export interface StepConfig extends Transform3DProps {
   id?: string;
   index: number;
   enterFrame: number;
@@ -73,7 +73,7 @@ export interface Scene3DProps {
   children?: React.ReactNode;
 }
 
-export interface StepProps extends Transform3D {
+export interface StepProps extends Transform3DProps {
   id?: string;
   transition?: TransitionConfig;
   exitTransition?: TransitionConfig;
@@ -82,7 +82,7 @@ export interface StepProps extends Transform3D {
   children?: React.ReactNode;
 }
 
-export interface Element3DProps extends Transform3D {
+export interface Element3DProps extends Transform3DProps {
   fixed?: boolean;
   transition?: TransitionConfig;
   className?: string;
@@ -93,7 +93,7 @@ export interface Element3DProps extends Transform3D {
 export type StepReference = string | number;
 export type StepRange = string; // e.g., "step-1..step-3"
 
-export interface StepResponsiveTransform extends Transform3D {
+export interface StepResponsiveTransform extends Transform3DProps {
   opacity?: AnimatedValue;
 }
 

@@ -177,56 +177,37 @@ export function buildMotionStyles(config: MotionStyleConfig): React.CSSPropertie
 
   const result: React.CSSProperties = { ...baseStyle };
 
-  // Apply transform
   const transformString = buildTransformString(transforms, progress, easingFn);
   if (transformString) {
     result.transform = transformString;
   }
 
-  // Apply opacity
   if (styles.opacity !== undefined) {
     result.opacity = interpolateKeyframes(styles.opacity, progress, easingFn);
   }
 
-  // Apply color
   if (styles.color) {
     result.color = interpolateColorKeyframes(styles.color, progress, easingFn);
   }
 
-  // Apply backgroundColor
   if (styles.backgroundColor) {
     result.backgroundColor = interpolateColorKeyframes(styles.backgroundColor, progress, easingFn);
   }
 
-  // Apply blur
   if (styles.blur !== undefined) {
     const blurVal = interpolateKeyframes(styles.blur, progress, easingFn);
-    result.filter = `blur(${blurVal}px)`;
+
+    if (Number.isFinite(blurVal) && blurVal > 0) {
+      result.filter = `blur(${blurVal}px)`;
+    }
   }
 
   return result;
 }
 
-// ============================================================================
-// HOOKS
-// ============================================================================
-
-/**
- * Hook that calculates animation progress (0-1) based on timing configuration
- *
- * When used within a Scene3D.Step component, automatically aligns animation
- * frames with the Step's enterFrame/exitFrame boundaries.
- *
- * Frame calculation precedence:
- * 1. Explicit `frames` prop (highest priority - overrides everything)
- * 2. Step context boundaries (if inside a Step and no explicit frames)
- * 3. Duration-based calculation (default fallback)
- */
 export function useMotionTiming(config: MotionTimingConfig): number {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-
-  // Try to access Step context (undefined if not in a Step)
   const stepTiming = useStepTiming();
 
   const {
@@ -238,39 +219,28 @@ export function useMotionTiming(config: MotionTimingConfig): number {
     cycleOffset,
   } = config;
 
-  // Calculate timing boundaries with three-tier precedence
   let startFrame: number;
   let endFrame: number;
 
   if (frames) {
-    // Tier 1: Explicit frames always take precedence
     startFrame = frames[0];
     endFrame = frames[1];
   } else if (stepTiming?.stepConfig) {
-    // Tier 2: Use Step context boundaries when available and no explicit frames
     const computedDelay = delay + (unitIndex * stagger);
     startFrame = stepTiming.stepConfig.enterFrame + computedDelay;
     const computedDuration = duration ?? 30;
     endFrame = startFrame + computedDuration;
   } else {
-    // Tier 3: Fallback to original behavior
     startFrame = 0;
     endFrame = duration ?? fps;
   }
 
   const totalDuration = endFrame - startFrame;
-
-  // Calculate base frame (with cycle support)
   const baseFrame = cycleOffset !== undefined ? cycleOffset : Math.max(0, frame - delay);
-
-  // Apply stagger offset
   const relativeFrame = baseFrame - (unitIndex * stagger);
-
-  // Convert to progress and clamp to [0, 1]
   const progress = Math.min(Math.max((relativeFrame - startFrame) / totalDuration, 0), 1);
 
   return progress;
 }
 
-// Re-export Step timing utilities for convenience
 export { useStepTiming, StepTimingContext } from "../StepContext";

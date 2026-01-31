@@ -1,21 +1,36 @@
+import { Vector3 } from 'three';
 
 export type Point = { x: number; y: number };
+export type Point3D = Vector3;
 export type Size = { width: number; height: number };
+export type Size3D = { width: number; height: number; depth: number };
 
 export interface RectLike extends Point, Size {}
 
 export type RelativeValue = number | string; // 100 or "50%"
 
 export type PositionObject = { x?: RelativeValue; y?: RelativeValue };
+export type PositionObject3D = { x?: RelativeValue; y?: RelativeValue; z?: RelativeValue };
+
 export type PositionString =
   | 'center'
   | 'top' | 'bottom' | 'left' | 'right'
   | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
+export type PositionString3D =
+  | 'center'
+  | 'top' | 'bottom' | 'left' | 'right'
+  | 'front' | 'back'
+  | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'
+  | 'topLeftFront' | 'topRightFront' | 'bottomLeftFront' | 'bottomRightFront'
+  | 'topLeftBack' | 'topRightBack' | 'bottomLeftBack' | 'bottomRightBack';
+
 // Also support [x, y] tuple
 export type PositionTuple = [RelativeValue, RelativeValue];
+export type PositionTuple3D = [RelativeValue, RelativeValue, RelativeValue];
 
 export type PositionDescriptor = PositionObject | PositionString | PositionTuple | Point;
+export type Position3DDescriptor = PositionObject3D | PositionString3D | PositionTuple3D | Point3D;
 
 export class Rect implements RectLike {
   constructor(
@@ -69,6 +84,106 @@ export class Rect implements RectLike {
 
   get vmax(): number {
     return Math.max(this.vw, this.vh);
+  }
+}
+
+export class Rect3D extends Rect {
+  constructor(
+    width: number,
+    height: number,
+    public depth: number,
+    x: number = 0,
+    y: number = 0,
+    public z: number = 0
+  ) {
+    super(width, height, x, y);
+  }
+
+  get front(): number {
+    return this.z;
+  }
+
+  get back(): number {
+    return this.z + this.depth;
+  }
+
+  get near(): number {
+    return this.z;
+  }
+
+  get far(): number {
+    return this.z + this.depth;
+  }
+
+  get centerZ(): number {
+    return this.z + this.depth / 2;
+  }
+
+  get center3D(): Point3D {
+    return new Vector3(this.cx, this.cy, this.centerZ);
+  }
+
+  get volume(): number {
+    return this.width * this.height * this.depth;
+  }
+
+  resolvePoint3D(pos: Position3DDescriptor): Point3D {
+    const { x, y, z, width, height, depth } = this;
+
+    if (typeof pos === 'string') {
+      const cx = x + width / 2;
+      const cy = y + height / 2;
+      const cz = z + depth / 2;
+
+      switch (pos) {
+        case 'center': return new Vector3(cx, cy, cz);
+        case 'top': return new Vector3(cx, y, cz);
+        case 'bottom': return new Vector3(cx, y + height, cz);
+        case 'left': return new Vector3(x, cy, cz);
+        case 'right': return new Vector3(x + width, cy, cz);
+        case 'front': return new Vector3(cx, cy, z);
+        case 'back': return new Vector3(cx, cy, z + depth);
+        case 'topLeft': return new Vector3(x, y, cz);
+        case 'topRight': return new Vector3(x + width, y, cz);
+        case 'bottomLeft': return new Vector3(x, y + height, cz);
+        case 'bottomRight': return new Vector3(x + width, y + height, cz);
+        case 'topLeftFront': return new Vector3(x, y, z);
+        case 'topRightFront': return new Vector3(x + width, y, z);
+        case 'bottomLeftFront': return new Vector3(x, y + height, z);
+        case 'bottomRightFront': return new Vector3(x + width, y + height, z);
+        case 'topLeftBack': return new Vector3(x, y, z + depth);
+        case 'topRightBack': return new Vector3(x + width, y, z + depth);
+        case 'bottomLeftBack': return new Vector3(x, y + height, z + depth);
+        case 'bottomRightBack': return new Vector3(x + width, y + height, z + depth);
+        default: return new Vector3(x, y, z);
+      }
+    }
+
+    if (Array.isArray(pos)) {
+      return new Vector3(
+        x + parseRelativeValue(pos[0], width),
+        y + parseRelativeValue(pos[1], height),
+        z + parseRelativeValue(pos[2], depth)
+      );
+    }
+
+    if (pos instanceof Vector3) {
+      return pos.clone();
+    }
+
+    if (typeof pos === 'object') {
+      const pX = 'x' in pos ? pos.x : 0;
+      const pY = 'y' in pos ? pos.y : 0;
+      const pZ = 'z' in pos ? pos.z : 0;
+
+      return new Vector3(
+        x + parseRelativeValue(pX ?? 0, width),
+        y + parseRelativeValue(pY ?? 0, height),
+        z + parseRelativeValue(pZ ?? 0, depth)
+      );
+    }
+
+    return new Vector3(x, y, z);
   }
 }
 
@@ -159,4 +274,18 @@ export function resolvePoint(rect: RectLike, pos: PositionDescriptor): Point {
  */
 export function createRect(width: number, height: number, x: number = 0, y: number = 0): Rect {
   return new Rect(width, height, x, y);
+}
+
+/**
+ * Creates a 3D rectangular region from absolute coordinates or size
+ */
+export function createRect3D(
+  width: number,
+  height: number,
+  depth: number,
+  x: number = 0,
+  y: number = 0,
+  z: number = 0
+): Rect3D {
+  return new Rect3D(width, height, depth, x, y, z);
 }

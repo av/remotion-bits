@@ -34,6 +34,79 @@ const color = interpolateColorKeyframes(
 );
 ```
 
+## 3D Transform Interpolation
+
+### `interpolateTransform`
+
+Interpolates between two `Transform3D` instances using quaternion SLERP for smooth rotation.
+
+```tsx
+import { interpolateTransform, Transform3D } from "remotion-bits";
+
+const from = Transform3D.identity();
+const to = Transform3D.fromEuler(Math.PI, 0, 0);
+
+const interpolated = interpolateTransform(
+  from,
+  to,
+  progress,
+  Easing.easeInOutCubic
+);
+```
+
+**Benefits:**
+- Smooth spherical interpolation for rotations (SLERP)
+- Linear interpolation for position and scale
+- Optional easing function
+- No gimbal lock artifacts
+
+### `interpolateTransformKeyframes`
+
+Interpolates through multiple `Transform3D` keyframes.
+
+```tsx
+import { interpolateTransformKeyframes, Transform3D, Vector3 } from "remotion-bits";
+
+const keyframes = [
+  Transform3D.identity(),
+  Transform3D.fromEuler(Math.PI / 2, 0, 0, new Vector3(100, 0, 0)),
+  Transform3D.fromEuler(Math.PI, Math.PI / 2, 0, new Vector3(200, 100, 0)),
+];
+
+const current = interpolateTransformKeyframes(
+  keyframes,
+  progress // 0 to 1
+);
+```
+
+### `lerpVector3`
+
+Linear interpolation between two `Vector3` instances.
+
+```tsx
+import { lerpVector3, Vector3 } from "remotion-bits";
+
+const from = new Vector3(0, 0, 0);
+const to = new Vector3(100, 100, 100);
+
+const mid = lerpVector3(from, to, 0.5);
+```
+
+### `slerpQuaternion`
+
+Spherical linear interpolation between two `Quaternion` rotations.
+
+```tsx
+import { slerpQuaternion, Quaternion } from "remotion-bits";
+
+const from = new Quaternion(0, 0, 0, 1);
+const to = new Quaternion(0, 0.707, 0, 0.707);
+
+const mid = slerpQuaternion(from, to, 0.5);
+```
+
+See [Transform3D reference](/docs/reference/transform3d) for more details.
+
 ## Easing
 
 The `Easing` object contains standard easing functions.

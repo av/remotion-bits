@@ -146,6 +146,9 @@ const compileUserCode = (
         randomFloat,
         anyElement,
         ImagePlaceholder,
+        Transform3D,
+        Vector3,
+        interpolateTransform,
       } = RemotionBits;
 
       ${cleanedTranspiled}
@@ -338,7 +341,7 @@ export const Component: React.FC = () => {${propsDeclaration}
           )}
           <CodeMirror
             value={editedCode}
-            height="200px"
+            height="300px"
             theme={flexoki}
             extensions={[javascript({ jsx: true, typescript: true })]}
             onChange={handleCodeChange}

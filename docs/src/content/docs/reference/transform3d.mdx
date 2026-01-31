@@ -1,0 +1,331 @@
+---
+title: Transform3D
+description: Matrix-based 3D transformations with quaternion interpolation.
+---
+
+The `Transform3D` class provides a mathematically correct way to compose 3D transformations using matrix operations and quaternions. This eliminates gimbal lock and provides smooth interpolation for 3D animations.
+
+## Import
+
+```tsx
+import { Transform3D, Vector3, Quaternion } from "remotion-bits";
+```
+
+## Construction
+
+### `new Transform3D(options?)`
+
+Creates a new transform from position, rotation, and scale.
+
+```tsx
+const transform = new Transform3D({
+  position: new Vector3(10, 20, 30),
+  rotation: new Quaternion(0, 0, 0, 1),
+  scale: new Vector3(1, 1, 1),
+});
+```
+
+### `Transform3D.identity()`
+
+Creates an identity transform (no transformation).
+
+```tsx
+const identity = Transform3D.identity();
+```
+
+### `Transform3D.fromEuler(x, y, z, position?, scale?, order?)`
+
+Creates a transform from Euler angles (in radians).
+
+```tsx
+const transform = Transform3D.fromEuler(
+  Math.PI / 2, // 90° X rotation
+  0,
+  0,
+  new Vector3(10, 20, 30), // position
+  new Vector3(1, 1, 1),    // scale
+  'XYZ'                     // rotation order
+);
+```
+
+**Parameters:**
+- `x`, `y`, `z`: Rotation in radians around each axis
+- `position`: Optional Vector3 for position (default: origin)
+- `scale`: Optional Vector3 for scale (default: 1,1,1)
+- `order`: Rotation order ('XYZ', 'XZY', 'YXZ', 'YZX', 'ZXY', 'ZYX')
+
+### `Transform3D.fromMatrix(matrix)`
+
+Creates a transform by decomposing a Matrix4.
+
+```tsx
+import { Matrix4 } from "remotion-bits";
+
+const matrix = new Matrix4();
+const transform = Transform3D.fromMatrix(matrix);
+```
+
+## Chainable Operations
+
+All operations return a new transform, leaving the original unchanged.
+
+### `translate(x, y, z)`
+
+Adds a translation offset.
+
+```tsx
+const moved = transform.translate(10, 20, 30);
+```
+
+### `rotate(quaternion)`
+
+Applies a rotation quaternion.
+
+```tsx
+import { Quaternion, Vector3 } from "remotion-bits";
+
+const q = new Quaternion().setFromAxisAngle(
+  new Vector3(0, 1, 0), // Y axis
+  Math.PI / 4           // 45° rotation
+);
+const rotated = transform.rotate(q);
+```
+
+### `rotateX(radians)`, `rotateY(radians)`, `rotateZ(radians)`
+
+Rotates around a specific axis.
+
+```tsx
+const rotated = transform
+  .rotateX(Math.PI / 4)
+  .rotateY(Math.PI / 6)
+  .rotateZ(Math.PI / 8);
+```
+
+### `scaleBy(sx, sy, sz)`
+
+Multiplies the scale.
+
+```tsx
+const scaled = transform.scaleBy(2, 2, 2);
+```
+
+### `multiply(other)`
+
+Combines two transforms (matrix multiplication).
+
+```tsx
+const parent = Transform3D.fromEuler(0, Math.PI / 4, 0);
+const child = Transform3D.identity().translate(10, 0, 0);
+
+// Combine transforms
+const world = parent.multiply(child);
+```
+
+### `inverse()`
+
+Returns the inverse transformation.
+
+```tsx
+const inverted = transform.inverse();
+const identity = transform.multiply(inverted);
+```
+
+## Interpolation
+
+### `lerp(target, alpha)`
+
+Interpolates between two transforms with proper quaternion SLERP.
+
+```tsx
+const from = Transform3D.identity();
+const to = Transform3D.fromEuler(Math.PI, 0, 0);
+
+const halfway = from.lerp(to, 0.5);
+```
+
+**Benefits:**
+- Smooth rotation paths (spherical interpolation)
+- No gimbal lock artifacts
+- Mathematically correct scaling
+
+### `interpolateTransform(from, to, progress, easing?)`
+
+Helper function for transform interpolation with optional easing.
+
+```tsx
+import { interpolateTransform } from "remotion-bits";
+
+const interpolated = interpolateTransform(
+  transformA,
+  transformB,
+  frame / 100,
+  (t) => t * t // easing function
+);
+```
+
+### `interpolateTransformKeyframes(keyframes, progress, easing?)`
+
+Interpolates through multiple keyframe transforms.
+
+```tsx
+import { interpolateTransformKeyframes } from "remotion-bits";
+
+const keyframes = [
+  Transform3D.identity(),
+  Transform3D.fromEuler(Math.PI / 2, 0, 0),
+  Transform3D.fromEuler(Math.PI, Math.PI / 2, 0),
+];
+
+const current = interpolateTransformKeyframes(
+  keyframes,
+  frame / 200
+);
+```
+
+## Point Transformation
+
+### `apply(point)`
+
+Transforms a Vector3 point.
+
+```tsx
+import { Vector3 } from "remotion-bits";
+
+const point = new Vector3(10, 0, 0);
+const transformed = transform.apply(point);
+```
+
+## Conversion
+
+### `toMatrix4()`
+
+Converts to a three.js Matrix4.
+
+```tsx
+const matrix = transform.toMatrix4();
+```
+
+### `toCSSMatrix3D()`
+
+Converts to a CSS `matrix3d()` string.
+
+```tsx
+const css = transform.toCSSMatrix3D();
+// "matrix3d(1,0,0,0,0,1,0,0,0,0,1,0,10,20,30,1)"
+
+element.style.transform = css;
+```
+
+### `toEuler(order?)`
+
+Converts rotation to Euler angles.
+
+```tsx
+const euler = transform.toEuler('XYZ');
+console.log(euler.x, euler.y, euler.z); // radians
+```
+
+### `decompose()`
+
+Returns the transform components.
+
+```tsx
+const { position, rotation, scale } = transform.decompose();
+```
+
+## Properties
+
+- `position`: Vector3 - The translation component
+- `rotation`: Quaternion - The rotation component
+- `scale`: Vector3 - The scale component
+
+## Usage with Scene3D
+
+While `Scene3D` components accept numeric props, you can use Transform3D for advanced use cases:
+
+```tsx
+import { Scene3D, Element3D, Transform3D } from "remotion-bits";
+
+// Build transform with chainable API
+const transform = Transform3D.identity()
+  .translate(100, 50, -200)
+  .rotateY(Math.PI / 4)
+  .scaleBy(1.5, 1.5, 1.5);
+
+// Apply to element
+<Element3D>
+  <div style={{
+    transform: transform.toCSSMatrix3D(),
+    transformStyle: "preserve-3d"
+  }}>
+    Content
+  </div>
+</Element3D>
+```
+
+## Common Patterns
+
+### Hierarchical Transforms
+
+```tsx
+// Parent transform
+const parent = Transform3D.fromEuler(0, Math.PI / 4, 0)
+  .translate(100, 0, 0);
+
+// Child relative to parent
+const child = Transform3D.identity()
+  .translate(50, 0, 0);
+
+// Combine for world position
+const worldTransform = parent.multiply(child);
+```
+
+### Orbiting Objects
+
+```tsx
+const orbitTransform = (angle: number, radius: number) => {
+  const x = Math.cos(angle) * radius;
+  const z = Math.sin(angle) * radius;
+  
+  return Transform3D.identity()
+    .translate(x, 0, z)
+    .rotateY(angle + Math.PI / 2);
+};
+
+// Use in animation
+const angle = (frame / 60) * Math.PI * 2;
+const transform = orbitTransform(angle, 200);
+```
+
+### Smooth Camera Paths
+
+```tsx
+// Define camera keyframes
+const keyframes = [
+  Transform3D.identity(),
+  Transform3D.fromEuler(0, Math.PI / 2, 0, new Vector3(200, 0, 0)),
+  Transform3D.fromEuler(0, Math.PI, 0, new Vector3(200, 0, 200)),
+];
+
+// Interpolate smoothly
+const cameraTransform = interpolateTransformKeyframes(
+  keyframes,
+  frame / durationInFrames
+);
+```
+
+## Benefits Over Component-Based Transforms
+
+1. **No Gimbal Lock**: Quaternion-based rotation eliminates gimbal lock artifacts
+2. **Smooth Interpolation**: Natural spherical interpolation paths
+3. **Composable**: Proper matrix multiplication for hierarchical transforms
+4. **Mathematically Correct**: Single matrix operation vs. multiple CSS transforms
+5. **Type-Safe**: Full TypeScript support with three.js types
+6. **Chainable**: Build complex transforms step-by-step
+
+## See Also
+
+- [Scene3D](/docs/reference/scene3d) - 3D scene with camera system
+- [Element3D](/docs/reference/element3d) - 3D positioned elements
+- [Transform3D Showcase](/docs/bits/transform3d-showcase) - Live examples

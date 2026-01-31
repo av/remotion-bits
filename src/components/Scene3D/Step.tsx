@@ -9,6 +9,8 @@ import {
   interpolateKeyframes,
   StepTimingContext,
 } from "../../utils/motion";
+import { Transform3D, Vector3 } from "../../utils/transform3d";
+import { transformToCSS } from "../../utils/interpolate3d";
 
 const STEP_SYMBOL = Symbol("Scene3D.Step");
 
@@ -209,20 +211,22 @@ const StepComponent: React.FC<StepProps> = ({
   const rotateYVal = interpolateKeyframes(rotateY, 1);
   const rotateZVal = interpolateKeyframes(rotateZ, 1);
 
-  const rotationTransforms: Record<string, string> = {
-    x: `rotateX(${rotateXVal}deg)`,
-    y: `rotateY(${rotateYVal}deg)`,
-    z: `rotateZ(${rotateZVal}deg)`,
-  };
+  const degreesToRadians = Math.PI / 180;
 
-  const rotationString = rotateOrder
-    .split("")
-    .map((axis) => rotationTransforms[axis])
-    .join(" ");
+  const stepTransform = Transform3D.fromEuler(
+    rotateXVal * degreesToRadians,
+    rotateYVal * degreesToRadians,
+    rotateZVal * degreesToRadians,
+    new Vector3(xVal, yVal, zVal),
+    new Vector3(scaleVal * scaleXVal, scaleVal * scaleYVal, scaleVal),
+    rotateOrder.toUpperCase() as any
+  );
 
-  const toCss = (val: number | string) => typeof val === 'number' ? `${val}px` : val;
+  const centerTransform = Transform3D.identity()
+    .translate(-0.5, -0.5, 0)
+    .rotateZ(0.01 * degreesToRadians);
 
-  const positionTransform = `translate(-50%, -50%) rotate(0.01deg) translate3d(${toCss(xVal)}, ${toCss(yVal)}, ${toCss(zVal)}) ${rotationString} scale(${scaleVal}) scaleX(${scaleXVal}) scaleY(${scaleYVal})`;
+  const positionTransform = `translate(-50%, -50%) rotate(0.01deg) ${transformToCSS(stepTransform)}`;
 
   const stepConfig = steps[stepIndex];
 

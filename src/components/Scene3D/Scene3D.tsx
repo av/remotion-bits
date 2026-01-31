@@ -1,26 +1,39 @@
-import React, { useMemo, useCallback, useRef } from "react";
+import React, { useMemo, useCallback, useRef, useEffect } from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
 import type { Scene3DProps, StepConfig, CameraState } from "./types";
 import { Scene3DContext } from "./context";
 import { isStepElement } from "./Step";
 import { getEasingFunction, interpolateKeyframes } from "../../utils/motion";
+import { Transform3D, Vector3 } from "../../utils/transform3d";
+import { interpolateTransform, transformToCSS } from "../../utils/interpolate3d";
 
-function interpolateCameraState(
-  from: CameraState,
-  to: CameraState,
-  progress: number
-): CameraState {
-  return {
-    x: from.x + (to.x - from.x) * progress,
-    y: from.y + (to.y - from.y) * progress,
-    z: from.z + (to.z - from.z) * progress,
-    rotateX: from.rotateX + (to.rotateX - from.rotateX) * progress,
-    rotateY: from.rotateY + (to.rotateY - from.rotateY) * progress,
-    rotateZ: from.rotateZ + (to.rotateZ - from.rotateZ) * progress,
-    scale: from.scale + (to.scale - from.scale) * progress,
-    scaleX: from.scaleX + (to.scaleX - from.scaleX) * progress,
-    scaleY: from.scaleY + (to.scaleY - from.scaleY) * progress,
-  };
+function stepConfigToCameraTransform(step: StepConfig, fitScale: number): Transform3D {
+  const x = interpolateKeyframes(step.x ?? 0, 1);
+  const y = interpolateKeyframes(step.y ?? 0, 1);
+  const z = interpolateKeyframes(step.z ?? 0, 1);
+  const rotateX = interpolateKeyframes(step.rotateX ?? 0, 1);
+  const rotateY = interpolateKeyframes(step.rotateY ?? 0, 1);
+  const rotateZ = interpolateKeyframes(step.rotateZ ?? 0, 1);
+  const scale = interpolateKeyframes(step.scale ?? 1, 1);
+  const scaleX = interpolateKeyframes(step.scaleX ?? 1, 1);
+  const scaleY = interpolateKeyframes(step.scaleY ?? 1, 1);
+
+  const degreesToRadians = Math.PI / 180;
+
+  const forward = Transform3D.fromEuler(
+    rotateX * degreesToRadians,
+    rotateY * degreesToRadians,
+    rotateZ * degreesToRadians,
+    new Vector3(x, y, z),
+    new Vector3(scale * scaleX, scale * scaleY, scale),
+    (step.rotateOrder?.toUpperCase() as any) ?? 'XYZ'
+  );
+
+  const inverse = forward.inverse();
+  inverse.position.multiplyScalar(fitScale);
+  inverse.scale.multiplyScalar(fitScale);
+
+  return inverse;
 }
 
 function stepConfigToCameraTarget(step: StepConfig): CameraState {
@@ -35,13 +48,6 @@ function stepConfigToCameraTarget(step: StepConfig): CameraState {
     scaleX: interpolateKeyframes(step.scaleX ?? 1, 1),
     scaleY: interpolateKeyframes(step.scaleY ?? 1, 1),
   };
-}
-
-function getCameraTransformString(camera: CameraState, fitScale: number): string {
-  const inverseScale = (1 / camera.scale) * fitScale;
-  const inverseScaleX = 1 / camera.scaleX;
-  const inverseScaleY = 1 / camera.scaleY;
-  return `scale(${inverseScale}) scaleX(${inverseScaleX}) scaleY(${inverseScaleY}) rotateZ(${-camera.rotateZ}deg) rotateY(${-camera.rotateY}deg) rotateX(${-camera.rotateX}deg) translate3d(${-camera.x}px, ${-camera.y}px, ${-camera.z}px)`;
 }
 
 export const Scene3D: React.FC<Scene3DProps> = ({
@@ -122,12 +128,13 @@ export const Scene3D: React.FC<Scene3DProps> = ({
     return index;
   }, []);
 
-  const { activeStepIndex, transitionProgress, camera } = useMemo(() => {
+  const { activeStepIndex, transitionProgress, camera, cameraTransform } = useMemo(() => {
     if (steps.length === 0) {
       return {
         activeStepIndex: 0,
         transitionProgress: 0,
         camera: { x: 0, y: 0, z: 0, rotateX: 0, rotateY: 0, rotateZ: 0, scale: 1, scaleX: 1, scaleY: 1 },
+        cameraTransform: Transform3D.identity(),
       };
     }
 
@@ -168,21 +175,45 @@ export const Scene3D: React.FC<Scene3DProps> = ({
     const easedProgress = easingFn ? easingFn(progress) : progress;
 
     const targetCamera = stepConfigToCameraTarget(currentStep);
+    const targetTransform = stepConfigToCameraTransform(currentStep, fitScale);
 
     let cameraState: CameraState;
+    let cameraTransformState: Transform3D;
+
     if (prevStep && progress < 1) {
       const fromCamera = stepConfigToCameraTarget(prevStep);
-      cameraState = interpolateCameraState(fromCamera, targetCamera, easedProgress);
+      const fromTransform = stepConfigToCameraTransform(prevStep, fitScale);
+
+      cameraTransformState = interpolateTransform(
+        fromTransform,
+        targetTransform,
+        easedProgress,
+        easingFn
+      );
+
+      cameraState = {
+        x: fromCamera.x + (targetCamera.x - fromCamera.x) * easedProgress,
+        y: fromCamera.y + (targetCamera.y - fromCamera.y) * easedProgress,
+        z: fromCamera.z + (targetCamera.z - fromCamera.z) * easedProgress,
+        rotateX: fromCamera.rotateX + (targetCamera.rotateX - fromCamera.rotateX) * easedProgress,
+        rotateY: fromCamera.rotateY + (targetCamera.rotateY - fromCamera.rotateY) * easedProgress,
+        rotateZ: fromCamera.rotateZ + (targetCamera.rotateZ - fromCamera.rotateZ) * easedProgress,
+        scale: fromCamera.scale + (targetCamera.scale - fromCamera.scale) * easedProgress,
+        scaleX: fromCamera.scaleX + (targetCamera.scaleX - fromCamera.scaleX) * easedProgress,
+        scaleY: fromCamera.scaleY + (targetCamera.scaleY - fromCamera.scaleY) * easedProgress,
+      };
     } else {
       cameraState = targetCamera;
+      cameraTransformState = targetTransform;
     }
 
     return {
       activeStepIndex: currentStepIndex,
       transitionProgress: easedProgress,
       camera: cameraState,
+      cameraTransform: cameraTransformState,
     };
-  }, [steps, frame, activeStep, transitionDuration, easing]);
+  }, [steps, frame, activeStep, transitionDuration, easing, fitScale]);
 
   const activeStepId = steps[activeStepIndex]?.id;
 
@@ -212,7 +243,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({
     width: "100%",
     height: "100%",
     transformStyle: "preserve-3d",
-    transform: getCameraTransformString(camera, fitScale),
+    transform: transformToCSS(cameraTransform),
     transformOrigin: "center center",
   };
 
@@ -222,6 +253,31 @@ export const Scene3D: React.FC<Scene3DProps> = ({
     top: "50%",
     transformStyle: "preserve-3d",
   };
+
+  const doFrame = () => {
+    if (!scheduled) return;
+
+    document.querySelectorAll('[data-scene3d-canvas] *').forEach((el) => {
+      const hel = el as HTMLElement;
+
+      // Multiple aggressive reflow triggers
+      hel.style.contain = 'strict';
+      hel.style.isolation = 'isolate';
+      hel.style.textRendering = 'optimizeElegibility';
+      
+
+      // Force multiple layout calculations
+      hel.offsetHeight;
+      hel.offsetWidth;
+      hel.getBoundingClientRect();
+      hel.getClientRects();
+
+      // Reset for next frame
+      hel.style.imageRendering = 'crisp-edges';
+    });
+
+    requestAnimationFrame(doFrame);
+  }
 
   return (
     <Scene3DContext.Provider value={contextValue}>
