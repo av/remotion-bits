@@ -254,31 +254,6 @@ export const Scene3D: React.FC<Scene3DProps> = ({
     transformStyle: "preserve-3d",
   };
 
-  const doFrame = () => {
-    if (!scheduled) return;
-
-    document.querySelectorAll('[data-scene3d-canvas] *').forEach((el) => {
-      const hel = el as HTMLElement;
-
-      // Multiple aggressive reflow triggers
-      hel.style.contain = 'strict';
-      hel.style.isolation = 'isolate';
-      hel.style.textRendering = 'optimizeElegibility';
-      
-
-      // Force multiple layout calculations
-      hel.offsetHeight;
-      hel.offsetWidth;
-      hel.getBoundingClientRect();
-      hel.getClientRects();
-
-      // Reset for next frame
-      hel.style.imageRendering = 'crisp-edges';
-    });
-
-    requestAnimationFrame(doFrame);
-  }
-
   return (
     <Scene3DContext.Provider value={contextValue}>
       <div className={className} style={containerStyle} data-scene3d>
