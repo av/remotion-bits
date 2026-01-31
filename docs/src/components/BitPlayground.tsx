@@ -137,6 +137,7 @@ const compileUserCode = (
         resolvePoint,
         Scene3D,
         Step,
+        StepResponsive,
         Element3D,
         useScene3D,
         useCamera,

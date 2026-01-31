@@ -6,9 +6,11 @@ export {
   Scene3D,
   Step,
   Element3D,
+  StepResponsive,
   useScene3D,
   useCamera,
   useActiveStep,
+  useStepResponsive,
   isStepElement,
   isElement3D,
 } from "./Scene3D";
@@ -25,5 +27,9 @@ export type {
   StepConfig,
   CameraState,
   Scene3DContextValue,
+  StepResponsiveProps,
+  StepResponsiveMap,
+  StepResponsiveTransform,
+  StepResponsiveTransition,
 } from "./Scene3D";
 

@@ -89,3 +89,28 @@ export interface Element3DProps extends Transform3D {
   style?: React.CSSProperties;
   children?: React.ReactNode;
 }
+
+export type StepReference = string | number;
+export type StepRange = string; // e.g., "step-1..step-3"
+
+export interface StepResponsiveTransform extends Transform3D {
+  opacity?: AnimatedValue;
+}
+
+export type StepResponsiveMap =
+  | Record<StepReference | StepRange, StepResponsiveTransform>
+  | StepResponsiveTransform[];
+
+export interface StepResponsiveTransition {
+  duration?: number;
+  delay?: number;
+  easing?: EasingFunction | EasingName;
+}
+
+export interface StepResponsiveProps {
+  steps: StepResponsiveMap;
+  transition?: StepResponsiveTransition;
+  children: React.ReactElement;
+  defaultProps?: StepResponsiveTransform;
+  animate?: boolean;
+}

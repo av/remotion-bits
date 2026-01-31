@@ -26,7 +26,7 @@ export type StaggeredMotionTransitionProps = TransformProps & VisualProps & Timi
 };
 
 export type StaggeredMotionProps = {
-  transition: StaggeredMotionTransitionProps;
+  transition?: StaggeredMotionTransitionProps;
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -110,7 +110,7 @@ export const StaggeredMotion: React.FC<StaggeredMotionProps> = ({
     stagger = 0,
     staggerDirection = "forward",
     easing,
-  } = transition;
+  } = transition ?? {};
 
   const easingFn = getEasingFunction(easing);
 

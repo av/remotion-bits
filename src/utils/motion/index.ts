@@ -1,6 +1,7 @@
 import { useCurrentFrame, useVideoConfig } from "remotion";
 import { Easing, type EasingName, type EasingFunction } from "../interpolate";
 import { interpolateColorKeyframes } from "../color";
+import { useStepTiming } from "../StepContext";
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -212,10 +213,21 @@ export function buildMotionStyles(config: MotionStyleConfig): React.CSSPropertie
 
 /**
  * Hook that calculates animation progress (0-1) based on timing configuration
+ *
+ * When used within a Scene3D.Step component, automatically aligns animation
+ * frames with the Step's enterFrame/exitFrame boundaries.
+ *
+ * Frame calculation precedence:
+ * 1. Explicit `frames` prop (highest priority - overrides everything)
+ * 2. Step context boundaries (if inside a Step and no explicit frames)
+ * 3. Duration-based calculation (default fallback)
  */
 export function useMotionTiming(config: MotionTimingConfig): number {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+
+  // Try to access Step context (undefined if not in a Step)
+  const stepTiming = useStepTiming();
 
   const {
     frames,
@@ -226,9 +238,26 @@ export function useMotionTiming(config: MotionTimingConfig): number {
     cycleOffset,
   } = config;
 
-  // Calculate timing boundaries
-  const startFrame = frames ? frames[0] : 0;
-  const endFrame = frames ? frames[1] : (duration ?? fps);
+  // Calculate timing boundaries with three-tier precedence
+  let startFrame: number;
+  let endFrame: number;
+
+  if (frames) {
+    // Tier 1: Explicit frames always take precedence
+    startFrame = frames[0];
+    endFrame = frames[1];
+  } else if (stepTiming?.stepConfig) {
+    // Tier 2: Use Step context boundaries when available and no explicit frames
+    const computedDelay = delay + (unitIndex * stagger);
+    startFrame = stepTiming.stepConfig.enterFrame + computedDelay;
+    const computedDuration = duration ?? 30;
+    endFrame = startFrame + computedDuration;
+  } else {
+    // Tier 3: Fallback to original behavior
+    startFrame = 0;
+    endFrame = duration ?? fps;
+  }
+
   const totalDuration = endFrame - startFrame;
 
   // Calculate base frame (with cycle support)
@@ -242,3 +271,6 @@ export function useMotionTiming(config: MotionTimingConfig): number {
 
   return progress;
 }
+
+// Re-export Step timing utilities for convenience
+export { useStepTiming, StepTimingContext } from "../StepContext";

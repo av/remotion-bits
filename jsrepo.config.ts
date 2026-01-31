@@ -233,10 +233,23 @@ export default defineConfig({
           "Utilities for keyframe interpolation, easing, transform and style building, and motion timing calculations.",
         type: "util",
         add: "when-needed",
-        registryDependencies: ["interpolate"],
+        registryDependencies: ["interpolate", "step-context"],
         files: [
           {
             path: "src/utils/motion/index.ts",
+          },
+        ],
+      },
+      {
+        name: "step-context",
+        title: "Step Context Utilities",
+        description:
+          "Context and hooks for accessing Scene3D Step timing information in nested components.",
+        type: "util",
+        add: "when-needed",
+        files: [
+          {
+            path: "src/utils/StepContext.ts",
           },
         ],
       },

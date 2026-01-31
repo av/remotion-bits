@@ -403,7 +403,7 @@ export const motion: BitMetadata = {
   componentPath: 'src/utils/motion/index.ts',
 
   registryName: 'motion',
-  registryDependencies: ['interpolate'],
+  registryDependencies: ['interpolate', 'step-context'],
 
   apiReference: 'docs/src/content/docs/reference/motion.mdx',
 };
@@ -440,6 +440,22 @@ export const random: BitMetadata = {
   apiReference: 'docs/src/content/docs/reference/random.mdx',
 };
 
+export const step_context: BitMetadata = {
+  id: 'step-context',
+  name: 'Step Context Utilities',
+  description: 'Context and hooks for accessing Scene3D Step timing information in nested components.',
+  category: 'utilities',
+  tags: ['utility', 'context', 'step', '3d', 'timing'],
+
+  componentName: 'StepContext',
+  componentPath: 'src/utils/StepContext.ts',
+
+  registryName: 'step-context',
+  registryDependencies: [],
+
+  apiReference: 'docs/src/content/docs/reference/step-context.mdx',
+};
+
 export const particles_utilities: BitMetadata = {
   id: 'particles-utilities',
   name: 'Particles Utilities',
@@ -473,6 +489,7 @@ export const bits = {
   'motion': motion,
   'geometry': geometry,
   'random': random,
+  'step-context': step_context,
   'particles-utilities': particles_utilities,
 } as const;
 

@@ -19,7 +19,7 @@ export type { AnimatedValue };
 
 export type AnimatedTextTransitionProps = TransformProps & VisualProps & TimingProps & {
   // Split configuration
-  split?: string;
+  split?: "none" | "word" | "character" | "line" | string;
   splitStagger?: number;
 
   // Text cycling (backward compatibility)
@@ -30,7 +30,7 @@ export type AnimatedTextTransitionProps = TransformProps & VisualProps & TimingP
 };
 
 export type AnimatedTextProps = {
-  transition: AnimatedTextTransitionProps;
+  transition?: AnimatedTextTransitionProps;
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -86,7 +86,7 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({
     splitStagger = 0,
     easing,
     cycle,
-  } = transition;
+  } = transition ?? {};
 
   const easingFn = getEasingFunction(easing);
 

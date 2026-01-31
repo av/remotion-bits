@@ -1,3 +1,14 @@
+### v0.1.6
+
+- Feature: Added `StepResponsive` component for responsive 3D element transformations based on active step
+- Feature: Added `StepTimingContext` and `useStepTiming` hook for accessing Step timing information
+- Feature: Enhanced `useMotionTiming` to auto-align with Step boundaries when used inside a Step
+- Improvement: Made `transition` prop optional in `AnimatedText` and `StaggeredMotion` components
+- Improvement: Enhanced `AnimatedText` split prop with predefined options ("none", "word", "character", "line")
+- Docs: Updated 3D Elements example with better formatting and showcase of new StepResponsive features
+- Fix: StepResponsive animation logic to match Scene3D camera transition, preventing instant jumps
+- Fix: StepResponsive now correctly respects `transition.duration` and `transition.delay` overrides
+
 ### v0.1.5
 
 - Feature: Added all component bits to the registry for easier installation

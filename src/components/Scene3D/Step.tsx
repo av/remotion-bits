@@ -7,6 +7,7 @@ import {
   buildMotionStyles,
   getEasingFunction,
   interpolateKeyframes,
+  StepTimingContext,
 } from "../../utils/motion";
 
 const STEP_SYMBOL = Symbol("Scene3D.Step");
@@ -294,7 +295,9 @@ const StepComponent: React.FC<StepProps> = ({
 
   return (
     <div className={className} style={stepStyle} data-step-id={id} data-step-active={isActive}>
-      {renderChildren()}
+      <StepTimingContext.Provider value={{ stepConfig }}>
+        {renderChildren()}
+      </StepTimingContext.Provider>
     </div>
   );
 };
