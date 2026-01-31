@@ -133,29 +133,6 @@ export const Component: React.FC = () => {
       stepDuration={20}
       easing="easeInOutCubic"
     >
-      <StepResponsive
-        steps={{
-          "step-0": { x: 0, y: 0, z: 0, rotateZ: 0 },
-          "step-1": { x: rect.vmin * 50, y: 0, z: 0, rotateZ: -30 },
-          "step-2": { x: rect.vmin * 100, y: 0, z: 0, rotateZ: -60 },
-          "step-3": { x: rect.vmin * 150, y: 0, z: 0, rotateZ: -90 },
-          "step-4": { x: rect.vmin * 200, y: 0, z: 0, rotateZ: -120 },
-        }}
-        transition={{ duration: 20, easing: "easeInOutCubic" }}
-      >
-        <Element3D z={500}>
-          <div
-            style={{
-              width: 0,
-              height: 0,
-              borderLeft: `${rect.vmin * 10}px solid transparent`,
-              borderRight: `${rect.vmin * 10}px solid transparent`,
-              borderBottom: `${rect.vmin * 20}px solid red`,
-            }}
-          />
-        </Element3D>
-      </StepResponsive>
-
       {els}
 
       {words.map((word, i) => {
