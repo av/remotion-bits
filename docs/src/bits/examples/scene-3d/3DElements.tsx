@@ -131,7 +131,7 @@ export const Component: React.FC = () => {
       perspective={rect.width > 500 ? 1000 : 500}
       transitionDuration={20}
       stepDuration={20}
-      easing="easeInOutCubic"
+      easing="easeInOut"
     >
       {els}
 
