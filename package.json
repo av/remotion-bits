@@ -58,7 +58,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "npm run clean && tsc -p tsconfig.json",
+    "build": "npm run clean && tsc -p tsconfig.json && tsx scripts/add-extensions.ts",
     "registry:extract": "tsx scripts/extract-bit-registry.ts",
     "registry:build": "npm run registry:extract && jsrepo build",
     "prepublishOnly": "npm run build && npm run registry:build",
