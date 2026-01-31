@@ -1,3 +1,8 @@
+### v0.1.7
+
+- Fix: Packaged version fix and added extensions script for better build tooling
+- Improvement: Cleaned up 3D Elements example by removing unnecessary red triangle
+
 ### v0.1.6
 
 - Feature: Added `StepResponsive` component for responsive 3D element transformations based on active step
