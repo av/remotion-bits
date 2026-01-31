@@ -1,3 +1,11 @@
+### v0.1.8
+
+- Feature: Added duration prop to Step component for customizable step duration
+- Feature: Enhanced interpolation functions to support Transform3D and Matrix4
+- Feature: Added 3D interpolation utilities and transform handling
+- Improvement: Updated easing function to use 'easeInOut' for smoother transitions
+- Docs: Added Transform3D link to Bits sidebar in documentation
+
 ### v0.1.7
 
 - Fix: Packaged version fix and added extensions script for better build tooling

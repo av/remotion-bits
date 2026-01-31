@@ -25,7 +25,7 @@ export const metadata = {
     description: "Demonstrates chainable Transform3D API with matrix-based interpolation",
     type: "bit" as const,
     add: "when-needed" as const,
-    registryDependencies: ["scene-3d", "use-viewport-rect", "transform-3d"],
+    registryDependencies: ["scene-3d", "use-viewport-rect", "transform3d"],
     dependencies: ["three"],
     files: [
       {

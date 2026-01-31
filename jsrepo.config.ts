@@ -187,9 +187,28 @@ export default defineConfig({
           "Custom interpolate function with easing support and non-monotonic input ranges.",
         type: "util",
         add: "when-needed",
+        registryDependencies: ["transform3d"],
+        dependencies: ["three"],
         files: [
           {
             path: "src/utils/interpolate.ts",
+          },
+        ],
+      },
+      {
+        name: "transform3d",
+        title: "Transform3D",
+        description:
+          "Chainable 3D transform API with matrix operations, quaternion interpolation, and CSS matrix conversion.",
+        type: "util",
+        add: "when-needed",
+        dependencies: ["three"],
+        files: [
+          {
+            path: "src/utils/transform3d.ts",
+          },
+          {
+            path: "src/utils/interpolate3d.ts",
           },
         ],
       },
