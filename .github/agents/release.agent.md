@@ -48,11 +48,10 @@ Whether the Release should be tagged as a pre-release; valid values are "1" or "
 After creating the GitHub release, deploy the updated docs to Cloudflare:
 
 ```bash
-cd docs
-npm run deploy
+./scripts/deploy-docs.sh
 ```
 
-This deploys the documentation site to Cloudflare Pages using Wrangler.
+This script deploys the documentation site to Cloudflare Pages using Wrangler.
 
 ### NPM Publishing
 
