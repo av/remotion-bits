@@ -144,6 +144,7 @@ export default defineConfig({
                         {
                             label: 'Utilities',
                             items: [
+                                { label: 'Transform3D', link: '/docs/reference/transform3d' },
                                 { label: 'Interpolation', link: '/docs/reference/utils-interpolation' },
                                 { label: 'Geometry', link: '/docs/reference/utils-geometry' },
                                 { label: 'Motion', link: '/docs/reference/utils-motion' },
