@@ -1,3 +1,7 @@
+import { Matrix4 } from 'three';
+import { interpolateMatrix4 } from './interpolate3d';
+import { Transform3D } from './transform3d';
+
 /**
  * Easing functions for non-linear interpolation
  */
@@ -25,6 +29,12 @@ export const Easing = {
 export type EasingName = keyof typeof Easing;
 export type EasingFunction = (t: number) => number;
 
+export interface InterpolateOptions {
+  extrapolateLeft?: 'clamp' | 'extend' | 'identity';
+  extrapolateRight?: 'clamp' | 'extend' | 'identity';
+  easing?: EasingFunction | EasingName;
+}
+
 /**
  * Custom interpolate function that supports non-monotonic input ranges.
  * Compatible with Remotion's interpolate signature but handles cases like:
@@ -35,19 +45,33 @@ export function interpolate(
   input: number,
   inputRange: number[],
   outputRange: number[],
-  options?: {
-    extrapolateLeft?: 'clamp' | 'extend' | 'identity';
-    extrapolateRight?: 'clamp' | 'extend' | 'identity';
-    easing?: EasingFunction | EasingName;
-  }
-): number {
+  options?: InterpolateOptions
+): number;
+
+export function interpolate(
+  input: number,
+  inputRange: number[],
+  outputRange: Matrix4[],
+  options?: InterpolateOptions
+): Matrix4;
+
+export function interpolate(
+  input: number,
+  inputRange: number[],
+  outputRange: (number | Matrix4 | Transform3D)[],
+  options?: InterpolateOptions
+): number | Matrix4 {
   const {
     extrapolateLeft = 'extend',
     extrapolateRight = 'extend',
     easing
   } = options || {};
 
-  if (inputRange.length !== outputRange.length) {
+  const normalizedOutputRange = outputRange.map((value) =>
+    value instanceof Transform3D ? value.toMatrix4() : value
+  );
+
+  if (inputRange.length !== normalizedOutputRange.length) {
     throw new Error('inputRange and outputRange must have the same length');
   }
 
@@ -62,21 +86,17 @@ export function interpolate(
     const start = inputRange[i];
     const end = inputRange[i + 1];
 
-    // Handle segment (including equal values for "hold" periods)
     if (start === end) {
-      // Zero-length segment - if input matches, use this segment
       if (input === start) {
         segmentIndex = i;
         break;
       }
     } else if (start < end) {
-      // Ascending segment
       if (input >= start && input <= end) {
         segmentIndex = i;
         break;
       }
     } else {
-      // Descending segment (non-monotonic)
       if (input <= start && input >= end) {
         segmentIndex = i;
         break;
@@ -89,7 +109,9 @@ export function interpolate(
     if (input < inputRange[0]) {
       // Extrapolate left
       if (extrapolateLeft === 'clamp') {
-        return outputRange[0];
+        return normalizedOutputRange[0] instanceof Matrix4
+          ? normalizedOutputRange[0].clone()
+          : normalizedOutputRange[0];
       } else if (extrapolateLeft === 'identity') {
         return input;
       } else {
@@ -99,7 +121,8 @@ export function interpolate(
     } else {
       // Extrapolate right (input > inputRange[last])
       if (extrapolateRight === 'clamp') {
-        return outputRange[outputRange.length - 1];
+        const last = normalizedOutputRange[normalizedOutputRange.length - 1];
+        return last instanceof Matrix4 ? last.clone() : last;
       } else if (extrapolateRight === 'identity') {
         return input;
       } else {
@@ -112,12 +135,12 @@ export function interpolate(
   // Interpolate within the segment
   const inputStart = inputRange[segmentIndex];
   const inputEnd = inputRange[segmentIndex + 1];
-  const outputStart = outputRange[segmentIndex];
-  const outputEnd = outputRange[segmentIndex + 1];
+  const outputStart = normalizedOutputRange[segmentIndex];
+  const outputEnd = normalizedOutputRange[segmentIndex + 1];
 
   // Handle zero-length segments (hold frames)
   if (inputStart === inputEnd) {
-    return outputStart;
+    return outputStart instanceof Matrix4 ? outputStart.clone() : outputStart;
   }
 
   // Calculate progress (0 to 1)
@@ -129,37 +152,38 @@ export function interpolate(
     progress = easingFn(progress);
   }
 
-  // Linear interpolation
-  return outputStart + (outputEnd - outputStart) * progress;
+  if (typeof outputStart === 'number' && typeof outputEnd === 'number') {
+    return outputStart + (outputEnd - outputStart) * progress;
+  }
+  
+  if (outputStart instanceof Matrix4 && outputEnd instanceof Matrix4) {
+    return interpolateMatrix4(outputStart, outputEnd, progress);
+  }
+
+  return outputStart instanceof Matrix4 ? outputStart.clone() : outputStart;
 }
 
 /**
  * Type for a value that can be either static or interpolated based on frame
  */
-export type InterpolateValue =
-  | number
+export type InterpolateValue<T = number> =
+  | T
   | [
       inputRange: number[],
-      outputRange: number[],
-      options?: {
-        extrapolateLeft?: 'clamp' | 'extend' | 'identity';
-        extrapolateRight?: 'clamp' | 'extend' | 'identity';
-        easing?: EasingFunction | EasingName;
-      }
+      outputRange: T[],
+      options?: InterpolateOptions
     ];
 
 /**
- * Resolves an InterpolateValue to a number.
- * If the value is a number, returns it as-is.
- * If it's an interpolate array, evaluates it at the given frame.
+ * Resolves an InterpolateValue.
  */
-export function resolveInterpolateValue(
-  value: InterpolateValue,
+export function resolveInterpolateValue<T = number>(
+  value: InterpolateValue<T>,
   frame: number
-): number {
-  if (typeof value === 'number') {
-    return value;
+): T {
+  if (Array.isArray(value)) {
+    const [inputRange, outputRange, options] = value as [number[], T[], InterpolateOptions?];
+    return interpolate(frame, inputRange, outputRange as any, options) as unknown as T;
   }
-  const [inputRange, outputRange, options] = value;
-  return interpolate(frame, inputRange, outputRange, options);
+  return value as T;
 }

@@ -205,5 +205,11 @@ describe('Interpolate3D', () => {
       const elements = css.match(/matrix3d\(([^)]+)\)/)?.[1].split(',');
       expect(elements).toHaveLength(16);
     });
+
+    it('should handle Transform3D in matrixToCSS', () => {
+      const transform = Transform3D.identity().translate(15, 25, 35);
+      const css = matrixToCSS(transform);
+      expect(css).toContain('matrix3d');
+    });
   });
 });

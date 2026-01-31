@@ -20,6 +20,30 @@ export function interpolateTransform(
   return from.lerp(to, t);
 }
 
+export function interpolateMatrix4(
+  from: Matrix4,
+  to: Matrix4,
+  progress: number
+): Matrix4 {
+  const pos1 = new Vector3();
+  const quat1 = new Quaternion();
+  const scale1 = new Vector3();
+  from.decompose(pos1, quat1, scale1);
+
+  const pos2 = new Vector3();
+  const quat2 = new Quaternion();
+  const scale2 = new Vector3();
+  to.decompose(pos2, quat2, scale2);
+
+  pos1.lerp(pos2, progress);
+  quat1.slerp(quat2, progress);
+  scale1.lerp(scale2, progress);
+
+  const result = new Matrix4();
+  result.compose(pos1, quat1, scale1);
+  return result;
+}
+
 export function interpolateTransformKeyframes(
   keyframes: Transform3D[],
   progress: number,
@@ -56,7 +80,10 @@ export function interpolateTransformKeyframes(
   return interpolateTransform(from, to, localProgress, easing);
 }
 
-export function matrixToCSS(matrix: Matrix4): string {
+export function matrixToCSS(matrix: Matrix4 | Transform3D): string {
+  if (matrix instanceof Transform3D) {
+    return matrix.toCSSMatrix3D();
+  }
   const elements = matrix.elements.map((x) => (Math.abs(x) < 1.0e-6 ? 0 : x));
   return `matrix3d(${elements.join(',')})`;
 }

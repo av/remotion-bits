@@ -1,13 +1,12 @@
 import { useCurrentFrame, useVideoConfig } from "remotion";
-import { Easing, type EasingName, type EasingFunction } from "../interpolate";
+import { Matrix4 } from "three";
+import { Easing, interpolate, type EasingName, type EasingFunction } from "../interpolate";
+import { matrixToCSS } from "../interpolate3d";
 import { interpolateColorKeyframes } from "../color";
 import { useStepTiming } from "../StepContext";
+import { Transform3D } from "../transform3d";
 
-// ============================================================================
-// TYPE DEFINITIONS
-// ============================================================================
-
-export type AnimatedValue = number | [number, number] | [number, number, number] | number[];
+export type AnimatedValue<T = number> = T | T[];
 
 export interface TransformProps {
   x?: AnimatedValue;
@@ -23,6 +22,7 @@ export interface TransformProps {
   skew?: AnimatedValue;
   skewX?: AnimatedValue;
   skewY?: AnimatedValue;
+  transform?: AnimatedValue<Matrix4 | Transform3D | string>;
 }
 
 export interface VisualProps {
@@ -39,7 +39,7 @@ export interface TimingProps {
   easing?: EasingFunction | EasingName;
 }
 
-export interface MotionConfig extends TransformProps, VisualProps, TimingProps {}
+export interface MotionConfig extends TransformProps, VisualProps, TimingProps { }
 
 export interface MotionTimingConfig {
   frames?: [number, number];
@@ -58,56 +58,46 @@ export interface MotionStyleConfig {
   easing?: EasingFunction;
   baseStyle?: React.CSSProperties;
 }
-
-// ============================================================================
-// UTILITY FUNCTIONS
-// ============================================================================
-
-/**
- * Interpolates between keyframe values based on progress (0-1)
- * Supports single values, tuples, or arrays of keyframes
- */
-export function interpolateKeyframes(
-  value: AnimatedValue,
+export function interpolateKeyframes<T = number>(
+  value: AnimatedValue<T>,
   progress: number,
   easingFn?: EasingFunction
-): number {
-  if (typeof value === "number") return value;
+): T {
+  if (!Array.isArray(value)) return value as T;
 
-  const keyframes = Array.isArray(value) ? value : [value];
-  if (keyframes.length === 0) return 0;
+  const keyframes = value as T[];
+  if (keyframes.length === 0) return 0 as unknown as T;
   if (keyframes.length === 1) return keyframes[0];
 
-  const segments = keyframes.length - 1;
-  const segmentProgress = progress * segments;
-  const segmentIndex = Math.min(Math.floor(segmentProgress), segments - 1);
-  const localProgress = segmentProgress - segmentIndex;
+  const inputRange = keyframes.map((_, i) => i / (keyframes.length - 1));
 
-  const from = keyframes[segmentIndex];
-  const to = keyframes[segmentIndex + 1];
-
-  const eased = easingFn ? easingFn(localProgress) : localProgress;
-  return from + (to - from) * eased;
+  return interpolate(progress, inputRange, keyframes as any[], { easing: easingFn }) as unknown as T;
 }
-
-/**
- * Resolves an easing name or function to an EasingFunction
- */
 export function getEasingFunction(easing?: EasingFunction | EasingName): EasingFunction | undefined {
   if (!easing) return undefined;
   if (typeof easing === "function") return easing;
   return Easing[easing];
 }
-
-/**
- * Builds a CSS transform string from transform properties and progress
- */
 export function buildTransformString(
   transforms: TransformProps,
   progress: number,
   easingFn?: EasingFunction
 ): string {
   const transformParts: string[] = [];
+
+  if (transforms.transform !== undefined) {
+    const rawVal = transforms.transform;
+    const isString = typeof rawVal === 'string' || (Array.isArray(rawVal) && rawVal.length > 0 && typeof rawVal[0] === 'string');
+
+    if (!isString) {
+      const matrixVal = interpolateKeyframes(transforms.transform as AnimatedValue<Matrix4>, progress, easingFn);
+      transformParts.push(matrixToCSS(matrixVal));
+    } else {
+      if (typeof rawVal === 'string') {
+        transformParts.push(rawVal);
+      }
+    }
+  }
 
   if (transforms.x !== undefined) {
     const xVal = interpolateKeyframes(transforms.x, progress, easingFn);
@@ -167,10 +157,6 @@ export function buildTransformString(
 
   return transformParts.join(" ");
 }
-
-/**
- * Builds a complete animated style object from motion configuration
- */
 export function buildMotionStyles(config: MotionStyleConfig): React.CSSProperties {
   const { progress, transforms = {}, styles = {}, easing, baseStyle = {} } = config;
   const easingFn = getEasingFunction(easing);
