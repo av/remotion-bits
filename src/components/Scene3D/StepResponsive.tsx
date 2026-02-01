@@ -175,6 +175,7 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
       "rotateX",
       "rotateY",
       "rotateZ",
+      "transform",
     ];
 
     transformKeys.forEach((key) => {
@@ -303,6 +304,7 @@ export function useStepResponsive(
       "rotateX",
       "rotateY",
       "rotateZ",
+      "transform",
     ];
 
     transformKeys.forEach((key) => {
