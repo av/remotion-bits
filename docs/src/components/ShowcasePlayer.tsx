@@ -34,10 +34,10 @@ export const withShowcaseFill = (
     return (
       <AbsoluteFill
         style={{
-          backgroundColor: options.backgroundColor ?? '#000000',
+          backgroundColor: options.backgroundColor ?? 'var(--color-background-dark)',
           fontSize,
           fontWeight: options.fontWeight ?? 700,
-          color: options.color ?? '#ffffff',
+          color: options.color ?? 'var(--color-primary-hover)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

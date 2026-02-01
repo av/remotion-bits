@@ -1,4 +1,5 @@
 export { AnimatedText } from "./AnimatedText";
+export { MatrixRain } from "./MatrixRain";
 export { GradientTransition } from "./GradientTransition";
 export { StaggeredMotion } from "./StaggeredMotion";
 export { Particles, Spawner, Behavior } from "./ParticleSystem";

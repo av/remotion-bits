@@ -34,6 +34,12 @@ import * as Transform3DShowcaseModule from './examples/scene-3d/Transform3DShowc
 import Transform3DShowcaseSource from './examples/scene-3d/Transform3DShowcase.tsx?raw';
 import * as FeatureShowcaseModule from './examples/showcase/FeatureShowcase';
 import FeatureShowcaseSource from './examples/showcase/FeatureShowcase.tsx?raw';
+import * as MatrixRainModule from './examples/animated-text/MatrixRain';
+import MatrixRainSource from './examples/animated-text/MatrixRain.tsx?raw';
+import * as GlitchInModule from './examples/animated-text/GlitchIn';
+import GlitchInSource from './examples/animated-text/GlitchIn.tsx?raw';
+import * as GlitchCycleModule from './examples/animated-text/GlitchCycle';
+import GlitchCycleSource from './examples/animated-text/GlitchCycle.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -105,9 +111,12 @@ export const bits = {
   ScrollingColumns: { ...ScrollingColumnsModule, sourceCode: extractSource(ScrollingColumnsSource) },
   Scene3DPresentation: { ...Scene3DBasicModule, sourceCode: extractSource(Scene3DBasicSource) },
   FlyingThroughWords: { ...FlyingThroughWordsModule, sourceCode: extractSource(FlyingThroughWordsSource) },
+  GlitchIn: { ...GlitchInModule, sourceCode: extractSource(GlitchInSource) },
+  GlitchCycle: { ...GlitchCycleModule, sourceCode: extractSource(GlitchCycleSource) },
   Elements3D: { ...Elements3DModule, sourceCode: extractSource(Elements3DSource) },
   Transform3DShowcase: { ...Transform3DShowcaseModule, sourceCode: extractSource(Transform3DShowcaseSource) },
   FeatureShowcase: { ...FeatureShowcaseModule, sourceCode: extractSource(FeatureShowcaseSource) },
+  MatrixRain: { ...MatrixRainModule, sourceCode: extractSource(MatrixRainSource) },
 } as const;
 
 export type BitName = keyof typeof bits;
@@ -137,3 +146,7 @@ export const FlyingThroughWords = bits.FlyingThroughWords;
 export const ScrollingColumns = bits.ScrollingColumns;
 export const Elements3D = bits.Elements3D;
 export const Transform3DShowcase = bits.Transform3DShowcase;
+export const GlitchIn = bits.GlitchIn;
+export const GlitchCycle = bits.GlitchCycle;
+export const FeatureShowcase = bits.FeatureShowcase;
+export const MatrixRain = bits.MatrixRain;

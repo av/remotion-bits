@@ -116,6 +116,14 @@ const compileUserCode = (
       // Inject magic props
       const props = { ...__BIT_DEFAULT_PROPS__, ...__BIT_PROPS__ };
 
+      const {
+        useState,
+        useEffect,
+        useRef,
+        useMemo,
+        useCallback,
+      } = React;
+
       // Destructure common exports for convenience
       const {
         AbsoluteFill,
@@ -128,6 +136,7 @@ const compileUserCode = (
       } = Remotion;
       const {
         AnimatedText,
+        MatrixRain,
         StaggeredMotion,
         GradientTransition,
         Particles,

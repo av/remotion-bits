@@ -2,7 +2,7 @@ import React from "react";
 import { AnimatedText } from "remotion-bits";
 
 export const metadata = {
-  name: "Blur Slide Word",
+  name: "Blur In",
   description: "Text that fades, unblurs and slides up word by word",
   tags: ["text", "word", "blur", "slide", "stagger"],
   duration: 90,
@@ -10,7 +10,7 @@ export const metadata = {
   height: 1080,
   registry: {
     name: "bit-blur-slide-word",
-    title: "Blur Slide Word Animation",
+    title: "Blur In Animation",
     description: "Text that fades, unblurs and slides up word by word",
     type: "bit" as const,
     add: "when-needed" as const,
