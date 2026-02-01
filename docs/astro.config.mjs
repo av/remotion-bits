@@ -125,6 +125,7 @@ export default defineConfig({
                             items: [
                                 { label: 'Motion', link: '/docs/reference/staggered-motion' },
                                 { label: 'Animated Text', link: '/docs/reference/animated-text' },
+                                { label: 'Typewriter', link: '/docs/reference/typewriter' },
                                 { label: 'Gradient Transition', link: '/docs/reference/gradient-transition' },
                                 { label: 'Particle System', link: '/docs/reference/particle-system' },
                                 { label: 'Scene3D', link: '/docs/reference/scene3d' },

@@ -42,6 +42,14 @@ import * as GlitchCycleModule from './examples/animated-text/GlitchCycle';
 import GlitchCycleSource from './examples/animated-text/GlitchCycle.tsx?raw';
 import * as BasicCounterModule from './examples/animated-counter/BasicCounter';
 import BasicCounterSource from './examples/animated-counter/BasicCounter.tsx?raw';
+import * as BasicTypewriterModule from './examples/typewriter/BasicTypewriter';
+import BasicTypewriterSource from './examples/typewriter/BasicTypewriter.tsx?raw';
+import * as MultiTextTypewriterModule from './examples/typewriter/MultiTextTypewriter';
+import MultiTextTypewriterSource from './examples/typewriter/MultiTextTypewriter.tsx?raw';
+import * as VariableSpeedTypewriterModule from './examples/typewriter/VariableSpeedTypewriter';
+import VariableSpeedTypewriterSource from './examples/typewriter/VariableSpeedTypewriter.tsx?raw';
+import * as CLISimulationModule from './examples/typewriter/CLISimulation';
+import CLISimulationSource from './examples/typewriter/CLISimulation.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -120,6 +128,10 @@ export const bits = {
   FeatureShowcase: { ...FeatureShowcaseModule, sourceCode: extractSource(FeatureShowcaseSource) },
   MatrixRain: { ...MatrixRainModule, sourceCode: extractSource(MatrixRainSource) },
   BasicCounter: { ...BasicCounterModule, sourceCode: extractSource(BasicCounterSource) },
+  BasicTypewriter: { ...BasicTypewriterModule, sourceCode: extractSource(BasicTypewriterSource) },
+  MultiTextTypewriter: { ...MultiTextTypewriterModule, sourceCode: extractSource(MultiTextTypewriterSource) },
+  VariableSpeedTypewriter: { ...VariableSpeedTypewriterModule, sourceCode: extractSource(VariableSpeedTypewriterSource) },
+  CLISimulation: { ...CLISimulationModule, sourceCode: extractSource(CLISimulationSource) },
 } as const;
 
 export type BitName = keyof typeof bits;
@@ -154,3 +166,7 @@ export const GlitchCycle = bits.GlitchCycle;
 export const FeatureShowcase = bits.FeatureShowcase;
 export const MatrixRain = bits.MatrixRain;
 export const BasicCounter = bits.BasicCounter;
+export const BasicTypewriter = bits.BasicTypewriter;
+export const MultiTextTypewriter = bits.MultiTextTypewriter;
+export const VariableSpeedTypewriter = bits.VariableSpeedTypewriter;
+export const CLISimulation = bits.CLISimulation;

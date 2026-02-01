@@ -49,7 +49,7 @@ const rect = useViewportRect(); // { width, height, vmin, vmax, vw, vh, cx, cy }
 ```
 
 ### 4. Component Categories
-- **Text**: `AnimatedText` - character/word/line animations with stagger
+- **Text**: `AnimatedText` - character/word/line animations; `TypeWriter` - typewriter effect with cursor/typos
 - **Numbers**: `AnimatedCounter` - interpolate numbers with prefix/postfix
 - **Motion**: `StaggeredMotion` - animate multiple elements with timing offsets
 - **Visual**: `GradientTransition` - smooth gradient morphing
@@ -260,6 +260,7 @@ export const CustomTitle = () => {
 For detailed API documentation, see reference files below. Quick reference:
 
 - **AnimatedText**: Text with character/word/line splitting, stagger, and transitions
+- **TypeWriter**: Classic typewriter effect with cursor blinking, typos simulation, and variable speeds
 - **AnimatedCounter**: Number interpolation with transition support
 - **StaggeredMotion**: Animate child elements with stagger and directional timing
 - **GradientTransition**: Smooth gradient morphing with Oklch interpolation

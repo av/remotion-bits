@@ -36,3 +36,6 @@ export type {
   StepResponsiveTransition,
 } from "./Scene3D";
 
+export { TypeWriter } from "./TypeWriter";
+export type { TypeWriterProps, TypeWriterTransitionProps } from "./TypeWriter";
+

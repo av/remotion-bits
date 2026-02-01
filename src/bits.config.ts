@@ -131,6 +131,65 @@ export const animated_text: BitMetadata = {
   apiReference: 'docs/src/content/docs/reference/animated-text.mdx',
 };
 
+export const type_writer: BitMetadata = {
+  id: 'type-writer',
+  name: 'Type Writer',
+  description: 'Classic typewriter effect with cursor blinking, typos simulation, and variable speeds.',
+  category: 'text-animation',
+  tags: ['text', 'typewriter', 'typing', 'cursor', 'animation'],
+
+  componentName: 'TypeWriter',
+  componentPath: 'src/components/TypeWriter.tsx',
+
+  registryName: 'type-writer',
+  registryDependencies: ['motion', 'random'],
+
+  examples: [
+    {
+      id: 'basic-typewriter',
+      name: 'Basic Typewriter',
+      description: 'Simple typing animation with cursor.',
+      tags: ['text', 'typewriter', 'basic'],
+      duration: 150,
+      width: 1920,
+      height: 1080,
+      sourceFile: 'examples/typewriter/BasicTypewriter.tsx',
+    },
+    {
+      id: 'multitext-typewriter',
+      name: 'Multi-Text Sequence',
+      description: 'Typing multiple sentences in sequence with deleting phase.',
+      tags: ['text', 'typewriter', 'sequence', 'loop'],
+      duration: 300,
+      width: 1920,
+      height: 1080,
+      sourceFile: 'examples/typewriter/MultiTextTypewriter.tsx',
+    },
+    {
+      id: 'variable-speed-typewriter',
+      name: 'Variable Speed & Typos',
+      description: 'Advanced typewriter with variable speed curves and error simulation.',
+      tags: ['text', 'typewriter', 'speed', 'errors'],
+      duration: 200,
+      width: 1920,
+      height: 1080,
+      sourceFile: 'examples/typewriter/VariableSpeedTypewriter.tsx',
+    },
+    {
+      id: 'cli-simulation',
+      name: 'CLI Simulation',
+      description: 'Simulates a command-line interface with user typing and system output.',
+      tags: ['text', 'typewriter', 'cli', 'terminal'],
+      duration: 450,
+      width: 1920,
+      height: 1080,
+      sourceFile: 'examples/typewriter/CLISimulation.tsx',
+    },
+  ],
+
+  apiReference: 'docs/src/content/docs/reference/typewriter.mdx',
+};
+
 export const staggered_motion: BitMetadata = {
   id: 'staggered-motion',
   name: 'Staggered Motion',
@@ -478,6 +537,7 @@ export const particles_utilities: BitMetadata = {
 
 export const bits = {
   'animated-text': animated_text,
+  'type-writer': type_writer,
   'staggered-motion': staggered_motion,
   'gradient-transition': gradient_transition,
   'particle-system': particle_system,

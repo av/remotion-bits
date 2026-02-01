@@ -2,6 +2,7 @@
 
 ## Table of Contents
 - [AnimatedText](#animatedtext)
+- [TypeWriter](#typewriter)
 - [StaggeredMotion](#staggeredmotion)
 - [GradientTransition](#gradienttransition)
 - [Particle System](#particle-system)
@@ -44,6 +45,31 @@
 - `duration`: `number` - Duration in frames (alternative to frames)
 - `delay`: `number` - Delay before animation starts
 - `easing`: `EasingName | EasingFunction` - Easing curve
+
+---
+
+## TypeWriter
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `text` | `string | string[]` | required | Text(s) to type |
+| `typeSpeed` | `AnimatedValue` | `3` | Frames per character |
+| `deleteSpeed` | `AnimatedValue` | `2` | Frames per backspace |
+| `pauseAfterType` | `number` | `30` | Frames to wait after typing |
+| `pauseAfterDelete` | `number` | `15` | Frames to wait after deleting |
+| `loop` | `boolean` | `false` | Loop sequence |
+| `deleteBeforeNext` | `boolean` | `true` | Delete text before next item |
+| `cursor` | `boolean | ReactNode` | `true` | Show cursor |
+| `blinkSpeed` | `number` | `30` | Cursor blink rate |
+| `errorRate` | `number` | `0` | Probability of typo (0-1) |
+| `errorCorrectDelay` | `number` | `5` | Frames to pause on error |
+| `transition` | `TypeWriterTransitionProps` | | Motion transition |
+
+### Transition Props
+
+Inherits all transform, visual, and timing props from AnimatedText.
 
 ---
 

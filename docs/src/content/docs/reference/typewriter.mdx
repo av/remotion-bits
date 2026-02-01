@@ -1,0 +1,115 @@
+---
+title: TypeWriter
+description: Classic typewriter effect with cursor blinking, typos simulation, and variable speeds.
+---
+
+The `TypeWriter` component simulates meaningful typing effects. It features realistic typing speeds, error simulation (typos and corrections), cursor blinking, and support for multi-step text sequences.
+
+## Usage
+
+```tsx
+import { TypeWriter } from "remotion-bits";
+
+export const MyTyping = () => {
+    return (
+        <TypeWriter
+            text="Hello, World!"
+            typeSpeed={3}
+            cursor={true}
+            style={{ fontSize: 60, fontFamily: 'monospace' }}
+        />
+    );
+};
+```
+
+## Props
+
+### `text`
+**Type:** `string | string[]`
+
+The content to type. Pass a single string for simple typing, or an array of strings to type them in sequence (type -> pause -> delete -> type next).
+
+### `typeSpeed`
+**Type:** `AnimatedValue<number>`
+**Default:** `3`
+
+Frames per character. Can be:
+- A number: Constant speed.
+- An array: Keyframes interpolated over the length of the string (beginning to end).
+
+### `deleteSpeed`
+**Type:** `AnimatedValue<number>`
+**Default:** `2`
+
+Frames per character when deleting (backspacing).
+
+### `errorRate`
+**Type:** `number`
+**Default:** `0`
+
+Probability (0 to 1) that a character will be typed incorrectly.
+
+### `errorCorrectDelay`
+**Type:** `number`
+**Default:** `5`
+
+Frames to wait after a typo before correcting it.
+
+### `seed`
+**Type:** `number | string`
+**Default:** `"typewriter"`
+
+Random seed for deterministic error generation.
+
+### `cursor`
+**Type:** `boolean | React.ReactNode`
+**Default:** `true`
+
+Whether to show a cursor.
+- `true`: Shows default `|`.
+- `ReactNode`: Custom cursor element.
+
+### `blinkSpeed`
+**Type:** `number`
+**Default:** `30`
+
+Frames for a full blink cycle.
+
+### `showCursorAfterComplete`
+**Type:** `boolean`
+**Default:** `true`
+
+Whether to keep the cursor visible (and blinking) after typing ends.
+
+### `loop`
+**Type:** `boolean`
+**Default:** `false`
+
+If `true`, loops the sequence of texts indefinitely.
+
+### Pauses
+
+#### `pauseAfterType`
+**Type:** `number`
+**Default:** `30`
+
+Frames to wait after finishing typing a string before deleting or stopping.
+
+#### `pauseAfterDelete`
+**Type:** `number`
+**Default:** `15`
+
+Frames to wait after deleting a string before typing the next one.
+
+### Styling
+
+#### `style`
+**Type:** `React.CSSProperties`
+
+#### `className`
+**Type:** `string`
+
+### `transition`
+**Type:** `TypeWriterTransitionProps`
+
+Animation configuration for the entire container (e.g., fade in the whole typewriter block). Supports standard motion properties (`opacity`, `scale`, `transform`, etc.).

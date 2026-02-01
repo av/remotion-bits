@@ -160,6 +160,7 @@ const compileUserCode = (
         interpolateTransform,
         hold,
         AnimatedCounter,
+        TypeWriter,
       } = RemotionBits;
 
       ${cleanedTranspiled}
