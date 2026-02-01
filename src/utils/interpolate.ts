@@ -29,9 +29,13 @@ export const Easing = {
 export type EasingName = keyof typeof Easing;
 export type EasingFunction = (t: number) => number;
 
+export type Hold = { type: 'hold'; frames: number };
+export const hold = (frames: number): Hold => ({ type: 'hold', frames });
+
 export interface InterpolateOptions {
   extrapolateLeft?: 'clamp' | 'extend' | 'identity';
   extrapolateRight?: 'clamp' | 'extend' | 'identity';
+
   easing?: EasingFunction | EasingName;
 }
 
@@ -162,6 +166,8 @@ export function interpolate(
 
   return outputStart instanceof Matrix4 ? outputStart.clone() : outputStart;
 }
+
+(interpolate as unknown as { hold: typeof hold }).hold = hold;
 
 /**
  * Type for a value that can be either static or interpolated based on frame

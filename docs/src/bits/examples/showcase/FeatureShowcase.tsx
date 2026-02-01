@@ -14,7 +14,8 @@ import {
   interpolate as interpolateUtil,
   Transform3D,
   Vector3,
-  StepResponsive
+  StepResponsive,
+  hold,
 } from 'remotion-bits';
 
 export const metadata = {
@@ -52,7 +53,7 @@ export const Component: React.FC = () => {
     const initialIconBase = base.translate(-rect.vmin * 12, -rect.vmin * 1, 0);
 
     const elementsBase = base.translate(0, -rect.vmin * 50, 0).rotateX(15);
-    const elementsIconBase = elementsBase.translate(-rect.vmin * 12, -rect.vmin * 1, 0);
+    const elementsIconBase = elementsBase.translate(-rect.vmin * 8, -rect.vmin * 0, 0);
 
     const triangleOffset = new Vector3(0, -rect.vmin * 2, 0);
     const squareOffset = new Vector3(-rect.vmin * 2, rect.vmin * 2, 0);
@@ -66,7 +67,7 @@ export const Component: React.FC = () => {
       triangleOffset,
       squareOffset,
       circleOffset,
-    } 
+    }
   }, []);
 
   const ShapeIcon = ({
@@ -123,8 +124,34 @@ export const Component: React.FC = () => {
 
         <Step
           id="elements"
+          duration={120}
           {...positions.elementsBase.toProps()}
-        ></Step>
+        >
+          <Element3D
+            centered
+            transition={{
+              delay: 20,
+              transform: [
+                Transform3D.identity().translate(0, -50, 0),
+                Transform3D.identity().translate(0, -50, 0).rotateZ(30),
+              ],
+            }}
+          >
+            <AnimatedText
+              style={{ width: 'max-content', fontSize }}
+              transition={{
+                delay: 10,
+                y: [10, 0],
+                opacity: [0, 1],
+                blur: [10, 0],
+                split: "character",
+                splitStagger: 1,
+              }}
+            >
+              Text Animations
+            </AnimatedText>
+          </Element3D>
+        </Step>
 
         <StepResponsive
           centered
@@ -161,7 +188,9 @@ export const Component: React.FC = () => {
             'elements': {
               transform: [
                 positions.elementsBase,
-                positions.elementsBase.translate(rect.vmin * 60, 0, 0),
+                positions.elementsBase.translate(rect.vmin * 23, 0, 0),
+                hold(20),
+                positions.elementsBase.translate(rect.vmin * 23, 0, 0).translate(0, -rect.vmin * 10, 0),
               ],
             }
           }}
@@ -182,7 +211,9 @@ export const Component: React.FC = () => {
             },
             'elements': {
               transform: [
-                positions.elementsIconBase.translate(positions.triangleOffset),
+                positions.elementsIconBase,
+                hold(20),
+                positions.elementsIconBase.translate(0, -rect.vmin * 10, 0),
               ]
             }
 

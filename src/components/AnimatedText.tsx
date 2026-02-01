@@ -1,8 +1,9 @@
 import React from "react";
-import { useCurrentFrame, random } from "remotion";
+import { useCurrentFrame, random, useVideoConfig } from "remotion";
 import type { EasingName, EasingFunction } from "../utils";
 import {
   useMotionTiming,
+  useStepTiming,
   buildMotionStyles,
   getEasingFunction,
   interpolateKeyframes,
@@ -92,6 +93,15 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({
     cycle,
   } = transition ?? {};
 
+  const { fps } = useVideoConfig();
+  const stepTiming = useStepTiming();
+
+  const totalDuration = React.useMemo(() => {
+    if (frames) return frames[1] - frames[0];
+    if (stepTiming?.stepConfig) return duration ?? 30;
+    return duration ?? fps;
+  }, [frames, stepTiming, duration, fps]);
+
   const easingFn = getEasingFunction(easing);
 
   // Handle text cycling
@@ -135,11 +145,12 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({
         display: "inline-block",
         whiteSpace: "pre",
       },
+      duration: totalDuration,
     });
 
     // Handle glitch effect
     const glitchVal = transition?.glitch !== undefined 
-      ? interpolateKeyframes(transition.glitch, progress, easingFn) 
+      ? interpolateKeyframes(transition.glitch, progress, easingFn, totalDuration) 
       : 0;
       
     let displayUnit = unit;
