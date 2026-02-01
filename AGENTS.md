@@ -69,9 +69,11 @@ You're not allowed to create markdown files with outline of what you did. You'll
 
 When adding new Bits to the documentation site, ensure that you:
 1. Create the Bit in the appropriate directory under `docs/src/bits`
-2. Create a new mdx file for the Bit with proper frontmatter and content structure
+2. Add `metadata` for Bit's representation in the jsrepo registry of this package, see other Bits and jsrepo for reference
+3. Create a new mdx file for the Bit with proper frontmatter and content structure
 
 When creating bits, keep the following in mind:
+- You don't need AbsoluteFill, bits are pre-wrapped for display
 - Do not hardcode font sizes; use the `useViewportRect` and fractional sizing instead
 - Use `rect.vmin`, `rect.vmax` for responsive sizing of the Bit elements
 

@@ -1,4 +1,6 @@
 export { AnimatedText } from "./AnimatedText";
+export { AnimatedCounter } from "./AnimatedCounter";
+export type { AnimatedCounterProps, AnimatedCounterTransitionProps } from "./AnimatedCounter";
 export { MatrixRain } from "./MatrixRain";
 export { GradientTransition } from "./GradientTransition";
 export { StaggeredMotion } from "./StaggeredMotion";

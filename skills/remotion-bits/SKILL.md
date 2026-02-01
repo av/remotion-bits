@@ -50,6 +50,7 @@ const rect = useViewportRect(); // { width, height, vmin, vmax, vw, vh, cx, cy }
 
 ### 4. Component Categories
 - **Text**: `AnimatedText` - character/word/line animations with stagger
+- **Numbers**: `AnimatedCounter` - interpolate numbers with prefix/postfix
 - **Motion**: `StaggeredMotion` - animate multiple elements with timing offsets
 - **Visual**: `GradientTransition` - smooth gradient morphing
 - **Particles**: `Particles`, `Spawner`, `Behavior` - declarative particle systems
@@ -259,6 +260,7 @@ export const CustomTitle = () => {
 For detailed API documentation, see reference files below. Quick reference:
 
 - **AnimatedText**: Text with character/word/line splitting, stagger, and transitions
+- **AnimatedCounter**: Number interpolation with transition support
 - **StaggeredMotion**: Animate child elements with stagger and directional timing
 - **GradientTransition**: Smooth gradient morphing with Oklch interpolation
 - **Particles + Spawner + Behavior**: Declarative particle systems with physics
