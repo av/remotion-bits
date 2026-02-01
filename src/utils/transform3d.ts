@@ -63,13 +63,19 @@ export class Transform3D {
     });
   }
 
-  translate(x: number, y: number, z: number): Transform3D {
+  translate(x: number | Vector3, y: number = 0, z: number = 0): Transform3D {
     const newTransform = this.clone();
-    newTransform.position.set(
-      newTransform.position.x + x,
-      newTransform.position.y + y,
-      newTransform.position.z + z
-    );
+
+    if (typeof x === 'number') {
+      newTransform.position.set(
+        newTransform.position.x + x,
+        newTransform.position.y + y,
+        newTransform.position.z + z
+      );
+    } else {
+      newTransform.position.add(x);
+    }
+
     newTransform._markDirty();
     return newTransform;
   }
