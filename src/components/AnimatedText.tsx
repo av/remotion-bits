@@ -1,10 +1,11 @@
 import React from "react";
-import { useCurrentFrame } from "remotion";
+import { useCurrentFrame, random } from "remotion";
 import type { EasingName, EasingFunction } from "../utils";
 import {
   useMotionTiming,
   buildMotionStyles,
   getEasingFunction,
+  interpolateKeyframes,
   type AnimatedValue,
   type TransformProps,
   type VisualProps,
@@ -21,6 +22,9 @@ export type AnimatedTextTransitionProps = TransformProps & VisualProps & TimingP
   // Split configuration
   split?: "none" | "word" | "character" | "line" | string;
   splitStagger?: number;
+  
+  // Glitch effect
+  glitch?: AnimatedValue;
 
   // Text cycling (backward compatibility)
   cycle?: {
@@ -133,9 +137,29 @@ export const AnimatedText: React.FC<AnimatedTextProps> = ({
       },
     });
 
+    // Handle glitch effect
+    const glitchVal = transition?.glitch !== undefined 
+      ? interpolateKeyframes(transition.glitch, progress, easingFn) 
+      : 0;
+      
+    let displayUnit = unit;
+    if (glitchVal > 0) {
+      const GLITCH_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/~`";
+      displayUnit = unit.split("").map((char, charIdx) => {
+        if (char === " " || char === "\n") return char;
+        const seed = `glitch-${frame}-${index}-${charIdx}`;
+        if (random(seed) < glitchVal) {
+           const charSeed = `char-${frame}-${index}-${charIdx}`;
+           const i = Math.floor(random(charSeed) * GLITCH_CHARS.length);
+           return GLITCH_CHARS[i];
+        }
+        return char;
+      }).join("");
+    }
+
     return (
       <span key={index} style={unitStyle}>
-        {unit}
+        {displayUnit}
       </span>
     );
   };
