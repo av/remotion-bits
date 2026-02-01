@@ -40,6 +40,8 @@ import * as GlitchInModule from './examples/animated-text/GlitchIn';
 import GlitchInSource from './examples/animated-text/GlitchIn.tsx?raw';
 import * as GlitchCycleModule from './examples/animated-text/GlitchCycle';
 import GlitchCycleSource from './examples/animated-text/GlitchCycle.tsx?raw';
+import * as BasicCounterModule from './examples/animated-counter/BasicCounter';
+import BasicCounterSource from './examples/animated-counter/BasicCounter.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -117,6 +119,7 @@ export const bits = {
   Transform3DShowcase: { ...Transform3DShowcaseModule, sourceCode: extractSource(Transform3DShowcaseSource) },
   FeatureShowcase: { ...FeatureShowcaseModule, sourceCode: extractSource(FeatureShowcaseSource) },
   MatrixRain: { ...MatrixRainModule, sourceCode: extractSource(MatrixRainSource) },
+  BasicCounter: { ...BasicCounterModule, sourceCode: extractSource(BasicCounterSource) },
 } as const;
 
 export type BitName = keyof typeof bits;
@@ -150,3 +153,4 @@ export const GlitchIn = bits.GlitchIn;
 export const GlitchCycle = bits.GlitchCycle;
 export const FeatureShowcase = bits.FeatureShowcase;
 export const MatrixRain = bits.MatrixRain;
+export const BasicCounter = bits.BasicCounter;

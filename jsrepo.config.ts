@@ -87,6 +87,34 @@ export default defineConfig({
         ],
       },
       {
+        name: "animated-counter",
+        title: "Animated Counter",
+        description: "Counter that interpolates between values with optional prefix, postfix and formatting.",
+        type: "component",
+        add: "when-added",
+        dependencyResolution: "manual",
+        registryDependencies: ["motion"],
+        files: [
+          {
+            path: "src/components/AnimatedCounter.tsx",
+          },
+        ],
+      },
+      {
+        name: "matrix-rain",
+        title: "Matrix Rain Effect",
+        description: "Matrix digital rain effect with customizable characters, density, and speed.",
+        type: "component",
+        add: "when-added",
+        dependencyResolution: "manual",
+        registryDependencies: ["use-viewport-rect"],
+        files: [
+          {
+            path: "src/components/MatrixRain.tsx",
+          },
+        ],
+      },
+      {
         name: "gradient-transition",
         title: "Gradient Transition",
         description: "Smooth CSS gradient transitions with intelligent interpolation (linear, radial, conic).",

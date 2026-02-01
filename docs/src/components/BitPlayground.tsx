@@ -159,6 +159,7 @@ const compileUserCode = (
         Vector3,
         interpolateTransform,
         hold,
+        AnimatedCounter,
       } = RemotionBits;
 
       ${cleanedTranspiled}
