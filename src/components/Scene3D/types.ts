@@ -115,4 +115,6 @@ export interface StepResponsiveProps {
   children: React.ReactElement;
   defaultProps?: StepResponsiveTransform;
   animate?: boolean;
+  centered?: boolean;
+  style?: React.CSSProperties;
 }
