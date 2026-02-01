@@ -31,7 +31,7 @@ export const Component: React.FC = () => {
                 fontFamily: 'monospace',
             }}
             transition={{
-                glitch: [1, 0, 0, 0, 1],
+                glitch: [1, 0, 0, 0.1, 0, 0, 1],
                 duration: 60,
                 cycle: {
                     texts: ["INITIALIZING", "LOADING ASSETS", "SYSTEM ONLINE", "WELCOME USER"],
