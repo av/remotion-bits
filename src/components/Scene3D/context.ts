@@ -18,6 +18,7 @@ const defaultContext: Scene3DContextValue = {
   activeStepIndex: 0,
   activeStepId: undefined,
   transitionProgress: 0,
+  transitionDuration: 30,
   steps: [],
   registerStep: () => 0,
 };

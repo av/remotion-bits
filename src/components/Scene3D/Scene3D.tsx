@@ -223,10 +223,11 @@ export const Scene3D: React.FC<Scene3DProps> = ({
       activeStepIndex,
       activeStepId,
       transitionProgress,
+      transitionDuration,
       steps,
       registerStep,
     }),
-    [camera, activeStepIndex, activeStepId, transitionProgress, steps, registerStep]
+    [camera, activeStepIndex, activeStepId, transitionProgress, transitionDuration, steps, registerStep]
   );
 
   const containerStyle: React.CSSProperties = {

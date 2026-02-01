@@ -60,6 +60,10 @@ function useTransitionStyle(
     return {};
   }
 
+  const duration = transition.frames 
+    ? transition.frames[1] - transition.frames[0] 
+    : (transition.duration ?? 30);
+
   return buildMotionStyles({
     progress,
     transforms: {
@@ -76,6 +80,7 @@ function useTransitionStyle(
       skew: transition.skew,
       skewX: transition.skewX,
       skewY: transition.skewY,
+      transform: transition.transform,
     },
     styles: {
       opacity: transition.opacity,
@@ -84,6 +89,7 @@ function useTransitionStyle(
       blur: transition.blur,
     },
     easing: getEasingFunction(transition.easing),
+    duration,
   });
 }
 
@@ -100,6 +106,10 @@ const StaggeredChild: React.FC<StaggeredChildProps> = ({
   staggerIndex,
   transition,
 }) => {
+  const duration = transition.frames 
+    ? transition.frames[1] - transition.frames[0] 
+    : (transition.duration ?? 30);
+
   const staggerProgress = useMotionTiming({
     frames: transition.frames,
     duration: transition.duration,
@@ -125,6 +135,7 @@ const StaggeredChild: React.FC<StaggeredChildProps> = ({
       skew: transition.skew,
       skewX: transition.skewX,
       skewY: transition.skewY,
+      transform: transition.transform,
     },
     styles: {
       opacity: transition.opacity,
@@ -133,6 +144,7 @@ const StaggeredChild: React.FC<StaggeredChildProps> = ({
       blur: transition.blur,
     },
     easing: getEasingFunction(transition.easing),
+    duration,
   });
 
   if (React.isValidElement(child)) {
@@ -162,6 +174,7 @@ const Element3DComponent: React.FC<Element3DProps> = ({
   rotateZ = 0,
   rotateOrder = "xyz",
   fixed = false,
+  centered = false,
   transition,
   className,
   style,
@@ -206,7 +219,11 @@ const Element3DComponent: React.FC<Element3DProps> = ({
     finalTransform = elementTransform;
   }
 
-  const transformString = transformToCSS(finalTransform);
+  let transformString = transformToCSS(finalTransform);
+  if (centered) {
+    const centerTransform = "translate(-50%, -50%) rotate(0.01deg)";
+    transformString = `${centerTransform} ${transformString}`;
+  }
 
   const childArray = React.Children.toArray(children);
   const totalChildren = childArray.length;

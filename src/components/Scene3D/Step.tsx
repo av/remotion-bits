@@ -49,7 +49,8 @@ function calculateStaggerIndex(
 
 function getTransitionStyles(
   transition: TransitionConfig,
-  progress: number
+  progress: number,
+  duration?: number
 ): React.CSSProperties {
   return buildMotionStyles({
     progress,
@@ -67,6 +68,7 @@ function getTransitionStyles(
       skew: transition.skew,
       skewX: transition.skewX,
       skewY: transition.skewY,
+      transform: transition.transform,
     },
     styles: {
       opacity: transition.opacity,
@@ -75,6 +77,7 @@ function getTransitionStyles(
       blur: transition.blur,
     },
     easing: getEasingFunction(transition.easing),
+    duration,
   });
 }
 
@@ -82,6 +85,10 @@ function useTransitionStyle(
   transition: TransitionConfig | undefined,
   shouldApply: boolean
 ): React.CSSProperties {
+  const duration = transition?.frames 
+    ? transition.frames[1] - transition.frames[0] 
+    : (transition?.duration ?? 30); // Default based on fallback logic logic
+
   const progress = useMotionTiming({
     frames: transition?.frames,
     duration: transition?.duration,
@@ -93,7 +100,7 @@ function useTransitionStyle(
     return {};
   }
 
-  return getTransitionStyles(transition, progress);
+  return getTransitionStyles(transition, progress, duration);
 }
 
 interface StaggeredChildProps {
@@ -109,6 +116,10 @@ const StaggeredChild: React.FC<StaggeredChildProps> = ({
   staggerIndex,
   transition,
 }) => {
+  const duration = transition.frames 
+    ? transition.frames[1] - transition.frames[0] 
+    : (transition.duration ?? 30);
+
   const staggerProgress = useMotionTiming({
     frames: transition.frames,
     duration: transition.duration,
@@ -134,6 +145,7 @@ const StaggeredChild: React.FC<StaggeredChildProps> = ({
       skew: transition.skew,
       skewX: transition.skewX,
       skewY: transition.skewY,
+      transform: transition.transform,
     },
     styles: {
       opacity: transition.opacity,
@@ -142,6 +154,7 @@ const StaggeredChild: React.FC<StaggeredChildProps> = ({
       blur: transition.blur,
     },
     easing: getEasingFunction(transition.easing),
+    duration,
   });
 
   if (React.isValidElement(child)) {

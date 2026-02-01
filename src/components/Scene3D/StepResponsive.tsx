@@ -159,7 +159,7 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
   style,
 }) => {
   const frame = useCurrentFrame();
-  const { activeStepIndex, transitionProgress, steps: sceneSteps } = useScene3D();
+  const { activeStepIndex, transitionProgress, steps: sceneSteps, transitionDuration } = useScene3D();
 
   // Normalize steps to a Map structure
   const stepsMap = React.useMemo(
@@ -220,6 +220,8 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
     return transitionProgress;
   }, [animate, transition, sceneSteps, activeStepIndex, frame, transitionProgress]);
 
+  const effectiveDuration = transition?.duration ?? transitionDuration;
+
   // Build animated styles using the motion system
   const motionStyle = React.useMemo(() => {
     const transforms: TransformProps = {};
@@ -269,6 +271,7 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
       transforms: Object.keys(transforms).length > 0 ? transforms : undefined,
       styles: Object.keys(styles).length > 0 ? styles : undefined,
       easing: easingFn,
+      duration: effectiveDuration,
     });
 
     if (centered) {
@@ -323,6 +326,7 @@ export function useStepResponsive(
   const frame = useCurrentFrame();
   const activeStepIndex = useScene3D().activeStepIndex;
   const transitionProgress = useScene3D().transitionProgress;
+  const transitionDuration = useScene3D().transitionDuration;
   const sceneSteps = useScene3D().steps;
 
   // Normalize steps to a Map structure
@@ -378,6 +382,8 @@ export function useStepResponsive(
     return transitionProgress;
   }, [config, sceneSteps, activeStepIndex, frame, transitionProgress]);
 
+  const effectiveDuration = config?.duration ?? transitionDuration;
+
   return React.useMemo(() => {
     const transforms: TransformProps = {};
     const styles: VisualProps = {};
@@ -423,6 +429,7 @@ export function useStepResponsive(
       transforms: Object.keys(transforms).length > 0 ? transforms : undefined,
       styles: Object.keys(styles).length > 0 ? styles : undefined,
       easing: easingFn,
+      duration: effectiveDuration,
     });
 
     if (centered) {

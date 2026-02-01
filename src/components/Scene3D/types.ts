@@ -56,6 +56,7 @@ export interface Scene3DContextValue {
   activeStepIndex: number;
   activeStepId: string | undefined;
   transitionProgress: number;
+  transitionDuration: number;
   steps: StepConfig[];
   registerStep: (config: Omit<StepConfig, "index">) => number;
 }
@@ -85,6 +86,7 @@ export interface StepProps extends Transform3DProps {
 
 export interface Element3DProps extends Transform3DProps {
   fixed?: boolean;
+  centered?: boolean;
   transition?: TransitionConfig;
   className?: string;
   style?: React.CSSProperties;
