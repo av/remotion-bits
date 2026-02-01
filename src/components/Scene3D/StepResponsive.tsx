@@ -65,18 +65,68 @@ function normalizeStepsMap(
 }
 
 /**
- * Resolve step props by ID (preferred) or index
+ * Resolve step props by accumulating all steps up to targetIndex.
+ * Handles inheritance of properties and flattens arrays from previous steps.
  */
-function resolveStepProps(
+function resolveCumulativeStepProps(
   stepsMap: Map<string | number, StepResponsiveTransform>,
-  stepId: string | undefined,
-  stepIndex: number
-): StepResponsiveTransform | undefined {
-  // Try ID first, then index
-  if (stepId && stepsMap.has(stepId)) {
-    return stepsMap.get(stepId);
+  targetIndex: number,
+  sceneSteps: any[],
+  defaultProps: StepResponsiveTransform
+): StepResponsiveTransform {
+  const accumulatedProps: any = { ...defaultProps };
+
+  // Iterate from 0 to targetIndex
+  for (let i = 0; i <= targetIndex; i++) {
+    // If we've moved past a step, finalize its values (flatten arrays to end state)
+    // This ensures inherited animations don't replay, but hold their final value
+    if (i > 0) {
+      for (const key in accumulatedProps) {
+        const val = accumulatedProps[key];
+        if (Array.isArray(val) && val.length > 0) {
+          accumulatedProps[key] = val[val.length - 1];
+        }
+      }
+    }
+
+    const step = sceneSteps?.[i];
+    const stepId = step?.id;
+
+    let stepProps: StepResponsiveTransform | undefined;
+
+    // 1. Try ID
+    if (stepId && stepsMap.has(stepId)) {
+      stepProps = stepsMap.get(stepId);
+    }
+    // 2. Try Index
+    else if (stepsMap.has(i)) {
+      stepProps = stepsMap.get(i);
+    }
+
+    if (stepProps) {
+      Object.assign(accumulatedProps, stepProps);
+    }
   }
-  return stepsMap.get(stepIndex);
+
+  return accumulatedProps;
+}
+
+/**
+ * Merges values from previous step and current step into a single animation sequence.
+ * optimization: If transition start matches previous end, squash duplicates to allow step animation to play fully.
+ */
+function mergeStepValues(fromVal: any, toVal: any) {
+  const effectiveFrom = Array.isArray(fromVal) ? fromVal[fromVal.length - 1] : fromVal;
+  let targetValues = Array.isArray(toVal) ? toVal : [toVal];
+  
+  if (effectiveFrom === targetValues[0]) {
+    targetValues = targetValues.slice(1);
+    if (targetValues.length === 0) {
+        return [effectiveFrom];
+    }
+  }
+  
+  return [effectiveFrom, ...targetValues];
 }
 
 // ============================================================================
@@ -105,9 +155,11 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
   children,
   defaultProps = {},
   animate = true,
+  centered = false,
+  style,
 }) => {
   const frame = useCurrentFrame();
-  const { activeStepId, activeStepIndex, transitionProgress, steps: sceneSteps } = useScene3D();
+  const { activeStepIndex, transitionProgress, steps: sceneSteps } = useScene3D();
 
   // Normalize steps to a Map structure
   const stepsMap = React.useMemo(
@@ -118,18 +170,27 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
   // Get target (current active) props
   const targetStepProps = React.useMemo(
     () =>
-      resolveStepProps(stepsMap, activeStepId, activeStepIndex) || defaultProps,
-    [stepsMap, activeStepId, activeStepIndex, defaultProps]
+      resolveCumulativeStepProps(
+        stepsMap,
+        activeStepIndex,
+        sceneSteps,
+        defaultProps
+      ),
+    [stepsMap, activeStepIndex, sceneSteps, defaultProps]
   );
 
   // Get previous step props for interpolation
   const prevStepIndex = activeStepIndex - 1;
-  const prevStepId = sceneSteps?.[prevStepIndex]?.id;
 
   const prevStepProps = React.useMemo(
     () =>
-      resolveStepProps(stepsMap, prevStepId, prevStepIndex) || defaultProps,
-    [stepsMap, prevStepId, prevStepIndex, defaultProps]
+      resolveCumulativeStepProps(
+        stepsMap,
+        prevStepIndex,
+        sceneSteps,
+        defaultProps
+      ),
+    [stepsMap, prevStepIndex, sceneSteps, defaultProps]
   );
 
   // Get easing function if specified
@@ -184,7 +245,7 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
       const toVal = (targetStepProps as any)[key];
 
       if (fromVal !== undefined && toVal !== undefined) {
-        (transforms as any)[key] = [fromVal, toVal];
+        (transforms as any)[key] = mergeStepValues(fromVal, toVal);
       } else if (toVal !== undefined) {
         (transforms as any)[key] = toVal;
       } else if (fromVal !== undefined) {
@@ -196,29 +257,38 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
     const opacityFrom = (prevStepProps as any).opacity;
     const opacityTo = (targetStepProps as any).opacity;
     if (opacityFrom !== undefined && opacityTo !== undefined) {
-      styles.opacity = [opacityFrom, opacityTo];
+      styles.opacity = mergeStepValues(opacityFrom, opacityTo);
     } else if (opacityTo !== undefined) {
       styles.opacity = opacityTo;
     } else if (opacityFrom !== undefined) {
       styles.opacity = opacityFrom;
     }
 
-    return buildMotionStyles({
+    const calculatedStyle = buildMotionStyles({
       progress,
       transforms: Object.keys(transforms).length > 0 ? transforms : undefined,
       styles: Object.keys(styles).length > 0 ? styles : undefined,
       easing: easingFn,
     });
-  }, [targetStepProps, prevStepProps, progress, easingFn]);
+
+    if (centered) {
+      const centerTransform = "translate(-50%, -50%) rotate(0.01deg)";
+      calculatedStyle.transform = calculatedStyle.transform
+        ? `${centerTransform} ${calculatedStyle.transform}`
+        : centerTransform;
+    }
+
+    return calculatedStyle;
+  }, [targetStepProps, prevStepProps, progress, easingFn, centered]);
 
   if (!React.isValidElement(children)) {
     console.warn("StepResponsive: children must be a valid React element");
     return children;
   }
 
-  // Merge motion styles with existing child styles
+  // Merge motion styles with existing child and prop styles
   const childStyle = (children.props as any).style || {};
-  const mergedStyle = { ...childStyle, ...motionStyle };
+  const mergedStyle = { ...childStyle, ...style, ...motionStyle };
 
   return React.cloneElement(children, {
     style: mergedStyle,
@@ -251,22 +321,40 @@ export function useStepResponsive(
   config?: StepResponsiveTransition
 ): React.CSSProperties {
   const frame = useCurrentFrame();
-  const { activeStepId, activeStepIndex, transitionProgress, steps: sceneSteps } = useScene3D();
+  const activeStepIndex = useScene3D().activeStepIndex;
+  const transitionProgress = useScene3D().transitionProgress;
+  const sceneSteps = useScene3D().steps;
 
-  const stepsMap = React.useMemo(() => normalizeStepsMap(steps), [steps]);
+  // Normalize steps to a Map structure
+  const stepsMap = React.useMemo(
+    () => normalizeStepsMap(steps),
+    [steps]
+  );
+  
+  const centered = (config as any)?.centered;
 
   const targetStepProps = React.useMemo(
-    () => resolveStepProps(stepsMap, activeStepId, activeStepIndex) || {},
-    [stepsMap, activeStepId, activeStepIndex]
+    () =>
+      resolveCumulativeStepProps(
+        stepsMap,
+        activeStepIndex,
+        sceneSteps,
+        {}
+      ),
+    [stepsMap, activeStepIndex, sceneSteps]
   );
 
   const prevStepIndex = activeStepIndex - 1;
-  const prevStepId = sceneSteps?.[prevStepIndex]?.id;
 
   const prevStepProps = React.useMemo(
     () =>
-      resolveStepProps(stepsMap, prevStepId, prevStepIndex) || {},
-    [stepsMap, prevStepId, prevStepIndex]
+      resolveCumulativeStepProps(
+        stepsMap,
+        prevStepIndex,
+        sceneSteps,
+        {}
+      ),
+    [stepsMap, prevStepIndex, sceneSteps]
   );
 
   const easingFn = React.useMemo(
@@ -312,7 +400,7 @@ export function useStepResponsive(
       const toVal = (targetStepProps as any)[key];
 
       if (fromVal !== undefined && toVal !== undefined) {
-        (transforms as any)[key] = [fromVal, toVal];
+        (transforms as any)[key] = mergeStepValues(fromVal, toVal);
       } else if (toVal !== undefined) {
         (transforms as any)[key] = toVal;
       } else if (fromVal !== undefined) {
@@ -323,18 +411,27 @@ export function useStepResponsive(
     const opacityFrom = (prevStepProps as any).opacity;
     const opacityTo = (targetStepProps as any).opacity;
     if (opacityFrom !== undefined && opacityTo !== undefined) {
-      styles.opacity = [opacityFrom, opacityTo];
+      styles.opacity = mergeStepValues(opacityFrom, opacityTo);
     } else if (opacityTo !== undefined) {
       styles.opacity = opacityTo;
     } else if (opacityFrom !== undefined) {
       styles.opacity = opacityFrom;
     }
 
-    return buildMotionStyles({
+    const calculatedStyle = buildMotionStyles({
       progress,
       transforms: Object.keys(transforms).length > 0 ? transforms : undefined,
       styles: Object.keys(styles).length > 0 ? styles : undefined,
       easing: easingFn,
     });
-  }, [targetStepProps, prevStepProps, progress, easingFn]);
+
+    if (centered) {
+      const centerTransform = "translate(-50%, -50%) rotate(0.01deg)";
+      calculatedStyle.transform = calculatedStyle.transform
+        ? `${centerTransform} ${calculatedStyle.transform}`
+        : centerTransform;
+    }
+
+    return calculatedStyle;
+  }, [targetStepProps, prevStepProps, progress, easingFn, centered]);
 }
