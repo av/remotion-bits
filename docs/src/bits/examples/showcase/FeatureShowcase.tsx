@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react';
-import { AbsoluteFill, useVideoConfig, Sequence, interpolate, Easing } from 'remotion';
+import { AbsoluteFill, useVideoConfig, Sequence, interpolate, Easing, random } from 'remotion';
 import {
   AnimatedText,
+  AnimatedCounter,
+  TypeWriter,
+  CodeBlock,
   GradientTransition,
   StaggeredMotion,
   Particles,
@@ -16,13 +19,14 @@ import {
   Vector3,
   StepResponsive,
   hold,
+  anyElement,
 } from 'remotion-bits';
 
 export const metadata = {
   name: "RemotionBits",
   description: "Promotional showcase for the RemotionBits library.",
   tags: ["showcase", "promo", "library"],
-  duration: 240,
+  duration: 1200,
   width: 1920,
   height: 1080,
   registry: {
@@ -45,30 +49,170 @@ export const metadata = {
 export const Component: React.FC = () => {
   const { durationInFrames } = useVideoConfig();
   const rect = useViewportRect();
+  const { vmin, vmax } = rect;
 
-  const fontSize = rect.vmin * 10;
+  const revealBaseDelay = 20;
+  const revealStagger = 30;
+  const revealDuration = 20;
+
+  const fontSize = vmin * 10;
 
   const positions = useMemo(() => {
     const base = Transform3D.identity();
-    const initialIconBase = base.translate(-rect.vmin * 12, -rect.vmin * 1, 0);
+    const initialIconBase = base.translate(-vmin * 40, -vmin * 1, 0);
 
-    const elementsBase = base.translate(0, -rect.vmin * 50, 0).rotateX(15);
-    const elementsIconBase = elementsBase.translate(-rect.vmin * 8, -rect.vmin * 0, 0);
+    const elementsBase = base.translate(0, -vmin * 120, 0).rotateX(15);
+    const elementsIconBase = elementsBase.translate(0, 0, 0).scaleBy(2.0);
 
-    const triangleOffset = new Vector3(0, -rect.vmin * 2, 0);
-    const squareOffset = new Vector3(-rect.vmin * 2, rect.vmin * 2, 0);
-    const circleOffset = new Vector3(rect.vmin * 2, rect.vmin * 2, 0);
+    const transitionsBase = base.translate(vmin * 50, 0, 0).rotateY(-15);
+    const transitionsIconBase = transitionsBase.translate(-vmin * 8, 0, 0);
+
+    const scenesBase = base.translate(-vmin * 50, 0, 0).rotateY(15);
+    const scenesIconBase = scenesBase.translate(-vmin * 8, 0, 0);
+
+    const triangleOffset = new Vector3(0, -vmin * 2, 0);
+    const squareOffset = new Vector3(-vmin * 2, vmin * 2, 0);
+    const circleOffset = new Vector3(vmin * 2, vmin * 2, 0);
+
+    const titleTransforms = {
+      baseShift: base.translate(vmin * 7, 0, 0),
+      elementsShift: elementsBase.translate(vmin * 7, 0, 0),
+      transitionsShift: transitionsBase.translate(vmin * 23, 0, 0),
+      scenesShift: scenesBase.translate(vmin * 23, 0, 0),
+    };
+
+    const titleTransformsUp = {
+      elementsShift: titleTransforms.elementsShift.translate(0, -vmin * 10, 0),
+      transitionsShift: titleTransforms.transitionsShift.translate(0, -vmin * 10, 0),
+      scenesShift: titleTransforms.scenesShift.translate(0, -vmin * 10, 0),
+    };
+
+    const iconTransforms = {
+      triangle: {
+        introFrom: initialIconBase.translate(triangleOffset.clone().multiplyScalar(2.0)),
+        introTo: initialIconBase.translate(triangleOffset),
+        elementsUp: elementsIconBase.translate(0, -vmin * 10, 0),
+      },
+      square: {
+        introFrom: initialIconBase.translate(squareOffset.clone().multiplyScalar(2)),
+        introTo: initialIconBase.translate(squareOffset),
+        scenesUp: scenesIconBase.translate(0, -vmin * 10, 0),
+      },
+      circle: {
+        introFrom: initialIconBase.translate(circleOffset.clone().multiplyScalar(2)),
+        introTo: initialIconBase.translate(circleOffset),
+        transitionsUp: transitionsIconBase.translate(0, -vmin * 10, 0),
+      },
+    };
+
+    const cardW = vmin * 70;
+    const cardH = vmin * 40;
+
+    // Row 1
+    const elementsParticles = elementsBase.translate(-cardW, -cardH, 0).rotateY(15).rotateX(10);
+    const elementsAnimatedText = elementsBase.translate(0, -cardH - vmin * 10, vmin * 10).rotateX(10);
+    const elementsCounter = elementsBase.translate(cardW, -cardH, 0).rotateY(-15).rotateX(10);
+
+    // Row 2
+    const elementsTypeWriter = elementsBase.translate(-cardW, 0, vmin * 5).rotateY(15);
+    const elementsCodeBlock = elementsBase.translate(0, 0, vmin * 10);
+    const elementsGlitchCycle = elementsBase.translate(cardW, 0, vmin * 5).rotateY(-15);
+
+    // Row 3
+    const elementsSlideIn = elementsBase.translate(-cardW, cardH, 0).rotateY(15).rotateX(-10);
+    const elementsCarousel = elementsBase.translate(0, cardH + vmin * 10, vmin * 10).rotateX(-10);
+    const elementsTypewriterRewrite = elementsBase.translate(cardW, cardH, 0).rotateY(-15).rotateX(-10);
 
     return {
       base,
-      elementsBase,
-      elementsIconBase,
-      initialIconBase,
-      triangleOffset,
-      squareOffset,
-      circleOffset,
-    }
-  }, []);
+      offsets: {
+        triangle: triangleOffset,
+        square: squareOffset,
+        circle: circleOffset,
+      },
+      intro: {
+        title: [base, titleTransforms.baseShift],
+        icons: {
+          triangle: [iconTransforms.triangle.introFrom, iconTransforms.triangle.introTo],
+          square: [iconTransforms.square.introFrom, iconTransforms.square.introTo],
+          circle: [iconTransforms.circle.introFrom, iconTransforms.circle.introTo],
+        },
+      },
+      elements: {
+        base: elementsBase,
+        iconBase: elementsIconBase,
+        items: {
+          particles: elementsParticles,
+          animatedText: elementsAnimatedText,
+          counter: elementsCounter,
+          typeWriter: elementsTypeWriter,
+          codeBlock: elementsCodeBlock,
+          glitchCycle: elementsGlitchCycle,
+          slideIn: elementsSlideIn,
+          carousel: elementsCarousel,
+          typewriterRewrite: elementsTypewriterRewrite,
+        },
+        title: {
+          intro: [elementsBase.translate(0, vmin * 10, 0)],
+          elements: [elementsBase.translate(0, vmin * 10, 0)],
+          transitions: [elementsBase.translate(0, vmin * 10, 0)],
+        },
+        icons: {
+          triangle: {
+            elements: elementsIconBase.translate(0, vmin * -7, 0),
+          },
+        },
+      },
+      transitions: {
+        base: transitionsBase,
+        iconBase: transitionsIconBase,
+        title: {
+          intro: [transitionsBase],
+          elements: [transitionsBase],
+          transitions: [
+            transitionsBase,
+            titleTransforms.transitionsShift,
+            hold(20),
+            titleTransformsUp.transitionsShift,
+          ],
+          scenes: [titleTransformsUp.transitionsShift, transitionsBase],
+        },
+        icons: {
+          circle: {
+            transitions: [transitionsIconBase, hold(20), iconTransforms.circle.transitionsUp],
+          },
+        },
+      },
+      scenes: {
+        base: scenesBase,
+        iconBase: scenesIconBase,
+        title: {
+          intro: [scenesBase],
+          transitions: [scenesBase],
+          scenes: [
+            scenesBase,
+            titleTransforms.scenesShift,
+            hold(20),
+            titleTransformsUp.scenesShift,
+          ],
+          outro: [titleTransformsUp.scenesShift, scenesBase],
+        },
+        icons: {
+          square: {
+            scenes: [scenesIconBase, hold(20), iconTransforms.square.scenesUp],
+          },
+        },
+      },
+      outro: {
+        title: [titleTransforms.baseShift, base],
+        icons: {
+          triangle: [iconTransforms.triangle.elementsUp, iconTransforms.triangle.introTo],
+          square: [iconTransforms.square.scenesUp, iconTransforms.square.introTo],
+          circle: [iconTransforms.circle.transitionsUp, iconTransforms.circle.introTo],
+        },
+      },
+    };
+  }, [rect.width, rect.height]);
 
   const ShapeIcon = ({
     size,
@@ -104,6 +248,41 @@ export const Component: React.FC = () => {
     );
   };
 
+  const FloatingCard = ({ children }) => (
+    <div
+      style={{
+        position: 'relative',
+        width: vmin * 60,
+        height: vmin * 30,
+        background: 'rgba(20, 20, 30, 0.6)',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid var(--color-primary-hover)',
+        borderRadius: vmin * 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        boxShadow: '0 0 20px rgba(0,0,0,0.2)',
+        // transform: 'translate(-50%, -50%)',
+      }}
+    >
+      {children}
+    </div>
+  );
+
+  const mapElementSteps = (props: any) => ({
+    'elements': props,
+    'element-particles': props,
+    'element-animated-text': props,
+    'element-counter': props,
+    'element-type-writer': props,
+    'element-code-block': props,
+    'element-glitch-cycle': props,
+    'element-slide-in': props,
+    'element-carousel': props,
+    'element-typewriter-rewrite': props,
+  });
+
   return (
     <AbsoluteFill
       style={{
@@ -115,7 +294,7 @@ export const Component: React.FC = () => {
       <Scene3D
         perspective={1000}
         stepDuration={60}
-        transitionDuration={30}
+        transitionDuration={60}
       >
         <Step
           id="intro"
@@ -124,48 +303,371 @@ export const Component: React.FC = () => {
 
         <Step
           id="elements"
-          duration={120}
-          {...positions.elementsBase.toProps()}
+          {...positions.elements.base.toProps()}
+        ></Step>
+
+        <Step
+          id="element-particles"
+          {...positions.elements.items.particles.toProps()}
+          transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-          <Element3D
-            centered
-            transition={{
-              delay: 20,
-              transform: [
-                Transform3D.identity().translate(0, -50, 0),
-                Transform3D.identity().translate(0, -50, 0).rotateZ(30),
-              ],
-            }}
-          >
-            <AnimatedText
-              style={{ width: 'max-content', fontSize }}
-              transition={{
-                delay: 10,
-                y: [10, 0],
-                opacity: [0, 1],
-                blur: [10, 0],
-                split: "character",
-                splitStagger: 1,
-              }}
-            >
-              Text Animations
-            </AnimatedText>
+              <FloatingCard>
+                <Particles style={{ position: 'absolute', inset: 0, opacity: 0.6 }}>
+                  <Spawner
+                    rate={2}
+                    max={100}
+                    lifespan={80}
+                    velocity={{ x: 0, y: -0.6, varianceX: 0.4, varianceY: 0.2 }}
+                    area={{ width: rect.width, height: rect.height }}
+                  >
+                    <div
+                      style={{
+                        width: vmin * 2,
+                        height: vmin * 2,
+                        borderRadius: '50%',
+                        background: 'var(--color-primary-hover)',
+                      }}
+                    />
+                  </Spawner>
+                  <Behavior
+                    drag={0.96}
+                    wiggle={{ magnitude: 0.6, frequency: 0.25 }}
+                    opacity={[1, 0]}
+                    scale={{ start: 1, end: 0.4, startVariance: 0.2, endVariance: 0.1 }}
+                  />
+                </Particles>
+                <span style={{ position: 'relative', zIndex: 1, fontWeight: 'bold', fontSize: vmin * 3, fontFamily: 'monospace' }}>Particles</span>
+              </FloatingCard>
+        </Step>
+
+        <Step
+          id="element-animated-text"
+          {...positions.elements.items.animatedText.toProps()}
+          transition={{ opacity: [0, 1], blur: [10, 0] }}
+        >
+              <FloatingCard>
+                <AnimatedText
+                  style={{ fontSize: vmin * 3, fontWeight: 'bold', fontFamily: 'monospace' }}
+                  transition={{
+                    delay: 20,
+                    y: [10, 0],
+                    opacity: [0, 1],
+                    blur: [2, 0],
+                    split: 'character',
+                    splitStagger: 1,
+                    duration: 10,
+                    easing: 'easeInOutCubic',
+                  }}
+                >
+                  Text Effects
+                </AnimatedText>
+              </FloatingCard>
+        </Step>
+
+        <Step
+          id="element-counter"
+          {...positions.elements.items.counter.toProps()}
+          transition={{ opacity: [0, 1], blur: [10, 0] }}
+        >
+              <FloatingCard>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: vmin * 1 }}>
+                  <AnimatedCounter
+                    transition={{
+                      delay: 20,
+                      values: [0, 1000],
+                      duration: revealDuration,
+                    }}
+                    postfix="+"
+                    style={{ fontSize: vmin * 4, fontWeight: 'bold', fontFamily: 'monospace' }}
+                  />
+                  <span style={{ fontSize: vmin * 2, fontFamily: 'monospace', opacity: 0.8 }}>Counter</span>
+                </div>
+              </FloatingCard>
+        </Step>
+
+        <Step
+          id="element-type-writer"
+          {...positions.elements.items.typeWriter.toProps()}
+          transition={{ opacity: [0, 1], blur: [10, 0] }}
+        >
+              <FloatingCard>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: vmin * 2,
+                    fontFamily: 'monospace',
+                  }}
+                >
+                  <Sequence layout="none" from={20}>
+                  <TypeWriter
+                    text={
+                      "import { TypeWriter } from 'remotion-bits';\n\n<TypeWriter\n  text=\"Hello Remotion\"\n  typeSpeed={2}\n  pauseAfterType={20}\n/>"
+                    }
+                    typeSpeed={2}
+                    deleteSpeed={1}
+                    pauseAfterType={60}
+                    cursor="▋"
+                    style={{
+                      fontSize: vmin * 1.7,
+                      lineHeight: 1.25,
+                      whiteSpace: 'pre',
+                      opacity: 0.9,
+                    }}
+                  />
+                  </Sequence>
+                </div>
+              </FloatingCard>
+        </Step>
+
+        <Step
+          id="element-code-block"
+          {...positions.elements.items.codeBlock.toProps()}
+          transition={{ opacity: [0, 1], blur: [10, 0] }}
+        >
+              <FloatingCard>
+                <CodeBlock
+                  code={
+                    "import { AnimatedText, useViewportRect } from 'remotion-bits';\n\nconst rect = useViewportRect();\n\n<AnimatedText\n  style={{ fontSize: vmin * 4 }}\n  transition={{ split: 'character', splitStagger: 2 }}\n>\n  Remotion Bits\n</AnimatedText>"
+                  }
+                  language="tsx"
+                  showLineNumbers={false}
+                  fontSize={vmin * 1.15}
+                  padding={vmin * 1.2}
+                  transition={{
+                    duration: revealDuration,
+                    delay: 20,
+                    lineStagger: 2,
+                    opacity: [0, 1],
+                    y: [8, 0],
+                    blur: [10, 0],
+                  }}
+                />
+              </FloatingCard>
+        </Step>
+
+        <Step
+          id="element-glitch-cycle"
+          {...positions.elements.items.glitchCycle.toProps()}
+          transition={{ opacity: [0, 1], blur: [10, 0] }}
+        >
+              <FloatingCard>
+                <AnimatedText
+                  style={{
+                    fontFamily: 'monospace',
+                    fontSize: vmin * 2.5,
+                    fontWeight: 'bold',
+                  }}
+                  transition={{
+                    glitch: [0.6, 0],
+                    frames: [0, 180],
+                    duration: revealDuration,
+                    cycle: {
+                      texts: ["INITIALIZING", "LOADING", "ONLINE", "READY"],
+                      itemDuration: revealDuration * 2,
+                    },
+                    delay: 20,
+                  }}
+                />
+              </FloatingCard>
+        </Step>
+
+        <Step
+          id="element-slide-in"
+          {...positions.elements.items.slideIn.toProps()}
+          transition={{ opacity: [0, 1], blur: [10, 0] }}
+        >
+              <FloatingCard>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: vmin * 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: vmin * 2,
+                    fontSize: vmin * 2.5,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <AnimatedText
+                    transition={{
+                      delay: 20,
+                      y: [-30, 0],
+                      opacity: [0, 1],
+                      duration: revealDuration,
+                    }}
+                  >
+                    Top
+                  </AnimatedText>
+                  <AnimatedText
+                    transition={{
+                      delay: 25,
+                      x: [30, 0],
+                      opacity: [0, 1],
+                      duration: revealDuration,
+                    }}
+                  >
+                    Right
+                  </AnimatedText>
+                  <AnimatedText
+                    transition={{
+                      delay: 30,
+                      y: [30, 0],
+                      opacity: [0, 1],
+                      duration: revealDuration,
+                    }}
+                  >
+                    Bottom
+                  </AnimatedText>
+                  <AnimatedText
+                    transition={{
+                      delay: 35,
+                      x: [-30, 0],
+                      opacity: [0, 1],
+                      duration: revealDuration,
+                    }}
+                  >
+                    Left
+                  </AnimatedText>
+                </div>
+              </FloatingCard>
+        </Step>
+
+        <Step
+          id="element-carousel"
+          {...positions.elements.items.carousel.toProps()}
+          transition={{ opacity: [0, 1], blur: [10, 0] }}
+        >
+              <FloatingCard>
+                <AnimatedText
+                  style={{
+                    fontSize: vmin * 3,
+                    fontWeight: 'bold',
+                    fontFamily: 'monospace',
+                  }}
+                  transition={{
+                    delay: 20,
+                    opacity: [0, 1, 1, 0],
+                    y: [10, 0, 0, -10],
+                    duration: revealDuration,
+                    cycle: {
+                      texts: ["Design", "Build", "Animate", "Create"],
+                      itemDuration: revealDuration,
+                    },
+                  }}
+                />
+              </FloatingCard>
+        </Step>
+
+        <Step
+          id="element-typewriter-rewrite"
+          {...positions.elements.items.typewriterRewrite.toProps()}
+          transition={{ opacity: [0, 1], blur: [10, 0] }}
+        >
+              <FloatingCard>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: vmin * 2,
+                    fontFamily: 'monospace',
+                  }}
+                >
+                  <Sequence layout="none" from={20}>
+                  <TypeWriter
+                    text="Build amazing videos with Remotion"
+                    typeSpeed={2}
+                    deleteSpeed={3}
+                    pauseAfterType={40}
+                    pauseAfterDelete={10}
+                    loop
+                    cursor="▋"
+                    style={{
+                      fontSize: vmin * 2,
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                    }}
+                  />
+                  </Sequence>
+                </div>
+              </FloatingCard>
+        </Step>
+
+        <Step
+          id="transitions"
+          duration={120}
+          {...positions.transitions.base.toProps()}
+        >
+          <Element3D centered style={{ width: vmin * 60, height: vmin * 30 }}>
+            <GradientTransition
+              gradient={[
+                "linear-gradient(45deg, #9580ff, #80ffea)",
+                "linear-gradient(135deg, #80ffea, #ff80bf)",
+                "linear-gradient(225deg, #ff80bf, #9580ff)",
+                "linear-gradient(315deg, #9580ff, #80ffea)",
+                "linear-gradient(45deg, #9580ff, #80ffea)"
+              ]}
+              duration={120}
+            />
+            <AbsoluteFill style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <h2 style={{ fontSize: vmin * 6, color: '#000', mixBlendMode: 'overlay' }}>CSS Gradients</h2>
+            </AbsoluteFill>
           </Element3D>
         </Step>
+
+        <Step
+          id="scenes"
+          duration={120}
+          {...positions.scenes.base.toProps()}
+        >
+          <Element3D centered style={{ width: vmin * 60, height: vmin * 40 }}>
+            <Particles count={50}>
+              <Spawner />
+              <Behavior
+                movement={{
+                  x: [0, 10],
+                  y: [0, -20],
+                }}
+                opacity={[1, 0]}
+                scale={[1, 0.5]}
+              />
+            </Particles>
+            <StaggeredMotion
+              style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              index={(i) => i}
+            >
+              <div style={{ width: vmin * 10, height: vmin * 10, background: 'var(--color-primary)', borderRadius: '50%' }} />
+            </StaggeredMotion>
+          </Element3D>
+        </Step>
+
+        <Step
+          id="outro"
+          {...positions.base.toProps()}
+        />
+
+        {/* --- TITLES --- */}
 
         <StepResponsive
           centered
           style={{
             fontSize,
-            width: rect.vmin * 70,
+            width: vmin * 70,
             position: 'absolute',
           }}
           steps={{
             'intro': {
-              transform: [
-                positions.base,
-                positions.base.translate(rect.vmin * 20, 0, 0),
-              ],
+              transform: positions.intro.title,
+            },
+            'outro': {
+              transform: positions.outro.title,
             }
           }}
         >
@@ -176,22 +678,18 @@ export const Component: React.FC = () => {
           centered
           style={{
             fontSize,
-            width: rect.vmin * 70,
+            width: 'max-content',
             position: 'absolute',
           }}
           steps={{
             'intro': {
-              transform: [
-                positions.elementsBase
-              ],
+              transform: positions.elements.title.intro,
             },
-            'elements': {
-              transform: [
-                positions.elementsBase,
-                positions.elementsBase.translate(rect.vmin * 23, 0, 0),
-                hold(20),
-                positions.elementsBase.translate(rect.vmin * 23, 0, 0).translate(0, -rect.vmin * 10, 0),
-              ],
+            ...mapElementSteps({
+              transform: positions.elements.title.elements,
+            }),
+            'transitions': {
+              transform: positions.elements.title.transitions,
             }
           }}
         >
@@ -200,27 +698,69 @@ export const Component: React.FC = () => {
 
         <StepResponsive
           centered
+          style={{
+            fontSize,
+            width: vmin * 70,
+            position: 'absolute',
+          }}
+          steps={{
+            'intro': { transform: positions.transitions.title.intro },
+            ...mapElementSteps({
+               transform: positions.transitions.title.elements 
+            }),
+            'transitions': {
+              transform: positions.transitions.title.transitions,
+            },
+            'scenes': {
+              transform: positions.transitions.title.scenes,
+            }
+          }}
+        >
+          <h1>Transitions</h1>
+        </StepResponsive>
+
+        <StepResponsive
+          centered
+          style={{
+            fontSize,
+            width: vmin * 70,
+            position: 'absolute',
+          }}
+          steps={{
+            'intro': { transform: positions.scenes.title.intro },
+            'transitions': { transform: positions.scenes.title.transitions },
+            'scenes': {
+              transform: positions.scenes.title.scenes,
+            },
+            'outro': {
+              transform: positions.scenes.title.outro,
+            }
+          }}
+        >
+          <h1>Scenes</h1>
+        </StepResponsive>
+
+        {/* --- ICONS --- */}
+
+        <StepResponsive
+          centered
           style={{ position: 'absolute' }}
           steps={{
             'intro': {
               opacity: [0, 1],
-              transform: [
-                positions.initialIconBase.translate(positions.triangleOffset.clone().multiplyScalar(2.0)),
-                positions.initialIconBase.translate(positions.triangleOffset),
-              ],
+              transform: positions.intro.icons.triangle,
             },
-            'elements': {
-              transform: [
-                positions.elementsIconBase,
-                hold(20),
-                positions.elementsIconBase.translate(0, -rect.vmin * 10, 0),
-              ]
+            ...mapElementSteps({
+              transform: positions.elements.icons.triangle.elements,
+            }),
+            'outro': {
+              transform: positions.outro.icons.triangle,
             }
 
           }}
         >
           <ShapeIcon
-            size={rect.vmin * 10}
+            size={vmin * 10}
             variant="triangle"
           />
         </StepResponsive>
@@ -230,16 +770,19 @@ export const Component: React.FC = () => {
           steps={{
             'intro': {
               opacity: [0, 1],
-              transform: [
-                positions.initialIconBase.translate(positions.squareOffset.clone().multiplyScalar(2)),
-                positions.initialIconBase.translate(positions.squareOffset),
-              ],
+              transform: positions.intro.icons.square,
+            },
+            'scenes': {
+              transform: positions.scenes.icons.square.scenes,
+            },
+            'outro': {
+              transform: positions.outro.icons.square,
             }
 
           }}
         >
           <ShapeIcon
-            size={rect.vmin * 10}
+            size={vmin * 10}
             variant="square"
           />
         </StepResponsive>
@@ -249,16 +792,19 @@ export const Component: React.FC = () => {
           steps={{
             'intro': {
               opacity: [0, 1],
-              transform: [
-                positions.initialIconBase.translate(positions.circleOffset.clone().multiplyScalar(2)),
-                positions.initialIconBase.translate(positions.circleOffset),
-              ],
+              transform: positions.intro.icons.circle,
+            },
+            'transitions': {
+              transform: positions.transitions.icons.circle.transitions,
+            },
+            'outro': {
+              transform: positions.outro.icons.circle,
             }
 
           }}
         >
           <ShapeIcon
-            size={rect.vmin * 10}
+            size={vmin * 10}
             variant="circle"
           />
         </StepResponsive>

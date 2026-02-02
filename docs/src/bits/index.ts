@@ -50,6 +50,8 @@ import * as VariableSpeedTypewriterModule from './examples/typewriter/VariableSp
 import VariableSpeedTypewriterSource from './examples/typewriter/VariableSpeedTypewriter.tsx?raw';
 import * as CLISimulationModule from './examples/typewriter/CLISimulation';
 import CLISimulationSource from './examples/typewriter/CLISimulation.tsx?raw';
+import * as BasicCodeBlockModule from './examples/code-block/BasicCodeBlock';
+import BasicCodeBlockSource from './examples/code-block/BasicCodeBlock.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -132,6 +134,7 @@ export const bits = {
   MultiTextTypewriter: { ...MultiTextTypewriterModule, sourceCode: extractSource(MultiTextTypewriterSource) },
   VariableSpeedTypewriter: { ...VariableSpeedTypewriterModule, sourceCode: extractSource(VariableSpeedTypewriterSource) },
   CLISimulation: { ...CLISimulationModule, sourceCode: extractSource(CLISimulationSource) },
+  BasicCodeBlock: { ...BasicCodeBlockModule, sourceCode: extractSource(BasicCodeBlockSource) },
 } as const;
 
 export type BitName = keyof typeof bits;
@@ -170,3 +173,4 @@ export const BasicTypewriter = bits.BasicTypewriter;
 export const MultiTextTypewriter = bits.MultiTextTypewriter;
 export const VariableSpeedTypewriter = bits.VariableSpeedTypewriter;
 export const CLISimulation = bits.CLISimulation;
+export const BasicCodeBlock = bits.BasicCodeBlock;

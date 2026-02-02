@@ -27,6 +27,10 @@ export const withShowcaseFill = (
   Component: React.ComponentType,
   options: ShowcaseFillOptions = {}
 ): React.FC => {
+  if (!Component) {
+    return () => null;
+  }
+  
   const WrappedComponent: React.FC = () => {
     const config = useVideoConfig();
     const fontSize = `${config.width * (options.fontScale ?? 0.05)}px`;
