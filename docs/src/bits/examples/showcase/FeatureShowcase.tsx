@@ -44,12 +44,9 @@ export const metadata = {
 
 
 export const Component: React.FC = () => {
-  const { durationInFrames } = useVideoConfig();
   const rect = useViewportRect();
-  const { vmin, vmax } = rect;
+  const { vmin } = rect;
 
-  const revealBaseDelay = 20;
-  const revealStagger = 30;
   const revealDuration = 20;
 
   const fontSize = vmin * 10;
@@ -73,13 +70,6 @@ export const Component: React.FC = () => {
       notif: base.translate(vmin * -70, vmin * 0, vmin * 10),
       code: base.translate(vmin * 50, vmin * -30),
       player: base.translate(vmin * -17, vmin * 18),
-    };
-
-    const getScatteredTransform = (t: Transform3D, seed: string) => {
-      const r = 50 * vmin;
-      const x = (random(seed + 'x') - 0.5) * 2 * r;
-      const y = (random(seed + 'y') - 0.5) * 2 * r;
-      return t.translate(x, y, 0);
     };
 
     const triangleOffset = new Vector3(0, -vmin * 2, 0);
@@ -452,8 +442,8 @@ export const Component: React.FC = () => {
           <FloatingCard>
             <Particles style={{ position: 'absolute', inset: 0, opacity: 0.6 }}>
               <Spawner
-                rate={2}
-                max={100}
+                rate={1}
+                max={200}
                 lifespan={80}
                 velocity={{ x: 0, y: -0.6, varianceX: 0.4, varianceY: 0.2 }}
                 area={{ width: rect.width, height: rect.height }}
@@ -464,6 +454,14 @@ export const Component: React.FC = () => {
                     height: vmin * 2,
                     borderRadius: '50%',
                     background: 'var(--color-primary-hover)',
+                  }}
+                />
+                <div
+                  style={{
+                    width: vmin * 2,
+                    height: vmin * 2,
+                    borderRadius: '50%',
+                    background: 'var(--color-primary)',
                   }}
                 />
               </Spawner>
@@ -513,6 +511,8 @@ export const Component: React.FC = () => {
                 transition={{
                   delay: 20,
                   values: [0, 1000],
+                  color: ['#fb4934', '#8ec07c'],
+                  scale: [0.8, 1],
                   duration: revealDuration,
                 }}
                 postfix="+"
@@ -540,23 +540,22 @@ export const Component: React.FC = () => {
                 fontFamily: 'monospace',
               }}
             >
-              <Sequence layout="none" from={20}>
-                <TypeWriter
-                  text={
-                    "import { TypeWriter } from 'remotion-bits';\n\n<TypeWriter\n  text=\"Hello Remotion\"\n  typeSpeed={2}\n  pauseAfterType={20}\n/>"
-                  }
-                  typeSpeed={2}
-                  deleteSpeed={1}
-                  pauseAfterType={60}
-                  cursor="▋"
-                  style={{
-                    fontSize: vmin * 1.7,
-                    lineHeight: 1.25,
-                    whiteSpace: 'pre',
-                    opacity: 0.9,
-                  }}
-                />
-              </Sequence>
+              <TypeWriter
+                text={
+                  "import { TypeWriter } from 'remotion-bits';\n\n<TypeWriter\n  text=\"Hello Remotion\"\n  typeSpeed={2}\n  pauseAfterType={20}\n/>"
+                }
+                typeSpeed={2}
+                deleteSpeed={1}
+                pauseAfterType={60}
+                delay={330}
+                cursor="▋"
+                style={{
+                  fontSize: vmin * 1.7,
+                  lineHeight: 1.25,
+                  whiteSpace: 'pre',
+                  opacity: 0.9,
+                }}
+              />
             </div>
           </FloatingCard>
         </Step>
@@ -636,7 +635,8 @@ export const Component: React.FC = () => {
                   delay: 20,
                   y: [-30, 0],
                   opacity: [0, 1],
-                  duration: revealDuration,
+                  duration: revealDuration - 5,
+                  easing: 'easeOutCubic',
                 }}
               >
                 Top
@@ -646,7 +646,8 @@ export const Component: React.FC = () => {
                   delay: 25,
                   x: [30, 0],
                   opacity: [0, 1],
-                  duration: revealDuration,
+                  duration: revealDuration - 5,
+                  easing: 'easeOutCubic',
                 }}
               >
                 Right
@@ -656,7 +657,8 @@ export const Component: React.FC = () => {
                   delay: 30,
                   y: [30, 0],
                   opacity: [0, 1],
-                  duration: revealDuration,
+                  duration: revealDuration - 5,
+                  easing: 'easeOutCubic',
                 }}
               >
                 Bottom
@@ -666,7 +668,8 @@ export const Component: React.FC = () => {
                   delay: 35,
                   x: [-30, 0],
                   opacity: [0, 1],
-                  duration: revealDuration,
+                  duration: revealDuration - 5,
+                  easing: 'easeOutCubic',
                 }}
               >
                 Left
@@ -801,9 +804,9 @@ export const Component: React.FC = () => {
               borderRadius: vmin * 1.5,
               overflow: 'hidden',
             }}>
-              <div style={{ 
+              <div style={{
                 position: 'absolute',
-                bottom: vmin * 3, left: vmin * 2.5, right: vmin * 2.5 
+                bottom: vmin * 3, left: vmin * 2.5, right: vmin * 2.5
               }}>
                 <div style={{
                   background: 'white',
@@ -818,7 +821,7 @@ export const Component: React.FC = () => {
                 </div>
                 <AnimatedText
                   style={{ color: '#fff', fontSize: vmin * 4, lineHeight: 0.9, fontWeight: 900, textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
-                  transition={{ 
+                  transition={{
                     delay: 20, duration: 20, split: 'word', splitStagger: 5, y: [10, 0], opacity: [0, 1],
                     easing: 'easeInOutCubic',
                   }}
