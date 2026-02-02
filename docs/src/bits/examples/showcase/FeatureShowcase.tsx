@@ -26,7 +26,7 @@ export const metadata = {
   name: "RemotionBits",
   description: "Promotional showcase for the RemotionBits library.",
   tags: ["showcase", "promo", "library"],
-  duration: 1200,
+  duration: 1500,
   width: 1920,
   height: 1080,
   registry: {
@@ -62,13 +62,13 @@ export const Component: React.FC = () => {
     const initialIconBase = base.translate(-vmin * 40, -vmin * 1, 0);
 
     const elementsBase = base.translate(0, -vmin * 120, 0).rotateX(15);
-    const elementsIconBase = elementsBase.translate(0, 0, 0).scaleBy(2.0);
+    const elementsIconBase = elementsBase.translate(0, 0, 0).scaleBy(2.0).rotateZ(-240);
 
     const transitionsBase = base.translate(vmin * 200, vmin * 50, 0).rotateY(-15);
     const transitionsIconBase = transitionsBase.translate(0, vmin * -20, 0).scaleBy(2.0);
 
-    const scenesBase = base.translate(-vmin * 50, 0, 0).rotateY(15);
-    const scenesIconBase = scenesBase.translate(-vmin * 8, 0, 0);
+    const scenesBase = base.translate(-vmin * 120, vmin * 70, 0).rotateY(15);
+    const scenesIconBase = scenesBase.scaleBy(2.0);
 
     const triangleOffset = new Vector3(0, -vmin * 2, 0);
     const squareOffset = new Vector3(-vmin * 2, vmin * 2, 0);
@@ -89,17 +89,17 @@ export const Component: React.FC = () => {
 
     const iconTransforms = {
       triangle: {
-        introFrom: initialIconBase.translate(triangleOffset.clone().multiplyScalar(2.0)),
+        introFrom: initialIconBase.translate(triangleOffset.clone().multiplyScalar(4.0)),
         introTo: initialIconBase.translate(triangleOffset),
         elementsUp: elementsIconBase.translate(0, -vmin * 10, 0),
       },
       square: {
-        introFrom: initialIconBase.translate(squareOffset.clone().multiplyScalar(2)),
+        introFrom: initialIconBase.translate(squareOffset.clone().multiplyScalar(4)),
         introTo: initialIconBase.translate(squareOffset),
-        scenesUp: scenesIconBase.translate(0, -vmin * 10, 0),
+        scenesUp: scenesIconBase.translate(0, -vmin * 10, 0).rotateZ(180),
       },
       circle: {
-        introFrom: initialIconBase.translate(circleOffset.clone().multiplyScalar(2)),
+        introFrom: initialIconBase.translate(circleOffset.clone().multiplyScalar(4)),
         introTo: initialIconBase.translate(circleOffset),
         transitionsUp: transitionsIconBase.translate(0, -vmin * 10, 0),
       },
@@ -133,9 +133,21 @@ export const Component: React.FC = () => {
       intro: {
         title: [base, titleTransforms.baseShift],
         icons: {
-          triangle: [iconTransforms.triangle.introFrom, iconTransforms.triangle.introTo],
-          square: [iconTransforms.square.introFrom, iconTransforms.square.introTo],
-          circle: [iconTransforms.circle.introFrom, iconTransforms.circle.introTo],
+          triangle: [
+            initialIconBase.clone().rotateZ(0),
+            initialIconBase.clone().rotateZ(180),
+            initialIconBase.clone().translate(triangleOffset.multiplyScalar(2.5))
+          ],
+          square: [
+            initialIconBase.clone().rotateZ(0),
+            initialIconBase.clone().rotateZ(180),
+            initialIconBase.clone().translate(squareOffset.multiplyScalar(2.5))
+          ],
+          circle: [
+            initialIconBase.clone(),
+            initialIconBase.clone().rotateX(180),
+            initialIconBase.clone().translate(circleOffset.multiplyScalar(2.5))
+          ],
         },
       },
       elements: {
@@ -178,29 +190,54 @@ export const Component: React.FC = () => {
       scenes: {
         base: scenesBase,
         iconBase: scenesIconBase,
+        items: {
+          hero: base.translate(vmin * 22, vmin * -5, vmin * 5).rotateY(-10),
+          dash: base.translate(vmin * -18, vmin * -12, 0).rotateY(5),
+          notif: base.translate(vmin * -12, vmin * 14, vmin * 10).rotateZ(-2),
+          code: base.translate(vmin * 18, vmin * 15, vmin * -5).rotateX(-5).rotateY(-10),
+          player: base.translate(vmin * -22, vmin * 8, vmin * 5).rotateY(10),
+        },
         title: {
           intro: [scenesBase],
           transitions: [scenesBase],
           scenes: [
-            scenesBase,
-            titleTransforms.scenesShift,
-            hold(20),
-            titleTransformsUp.scenesShift,
+            scenesBase.translate(0, vmin * 5.0, 0),
           ],
-          outro: [titleTransformsUp.scenesShift, scenesBase],
+          outro: [
+            titleTransformsUp.scenesShift,
+            scenesBase
+          ],
         },
         icons: {
           square: {
-            scenes: [scenesIconBase, hold(20), iconTransforms.square.scenesUp],
+            scenes: [scenesIconBase, iconTransforms.square.scenesUp],
           },
         },
       },
       outro: {
-        title: [titleTransforms.baseShift, base],
+        title: [
+          titleTransforms.baseShift,
+          titleTransforms.baseShift,
+          titleTransforms.baseShift,
+          titleTransforms.baseShift,
+          base
+        ],
         icons: {
-          triangle: [iconTransforms.triangle.elementsUp, iconTransforms.triangle.introTo],
-          square: [iconTransforms.square.scenesUp, iconTransforms.square.introTo],
-          circle: [iconTransforms.circle.transitionsUp, iconTransforms.circle.introTo],
+          triangle: [
+            initialIconBase.clone().translate(triangleOffset.clone()),
+            initialIconBase.clone().rotateZ(180),
+            initialIconBase.clone().rotateZ(0),
+          ],
+          square: [
+            initialIconBase.clone().translate(squareOffset.clone()),
+            initialIconBase.clone().rotateZ(180),
+            initialIconBase.clone().rotateZ(0),
+          ],
+          circle: [
+            initialIconBase.clone().translate(circleOffset.clone()),
+            initialIconBase.clone().rotateX(180),
+            initialIconBase.clone().rotateX(0),
+          ],
         },
       },
     };
@@ -307,7 +344,7 @@ export const Component: React.FC = () => {
       () => ({ rotate: [-90, 0] }),
       () => ({ blur: [0, 0] }),
       () => ({ borderRadius: [size / 2, 4] }),
-      () => ({ color: ['#fe8019', '#d5c4a1'] }),
+      () => ({ duration: 30 }),
     ];
 
     for (let r = 0; r < rows; r++) {
@@ -680,6 +717,10 @@ export const Component: React.FC = () => {
         <Step
           id="transitions"
           duration={120}
+          exitTransition={{
+            blur: [0, 10],
+            opacity: [1, 0],
+          }}
           {...positions.transitions.base.toProps()}
         >
           <Element3D
@@ -699,40 +740,295 @@ export const Component: React.FC = () => {
                 transform: `translateZ(0px)`,
               }}
             >
-
             </div>
           </Element3D>
         </Step>
 
         <Step
           id="scenes"
-          duration={120}
+          duration={200}
           {...positions.scenes.base.toProps()}
         >
-          <Element3D centered style={{ width: vmin * 60, height: vmin * 40 }}>
-            <Particles count={50}>
-              <Spawner />
-              <Behavior
-                movement={{
-                  x: [0, 10],
-                  y: [0, -20],
-                }}
-                opacity={[1, 0]}
-                scale={[1, 0.5]}
-              />
-            </Particles>
-            <StaggeredMotion
-              style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              index={(i) => i}
-            >
-              <div style={{ width: vmin * 10, height: vmin * 10, background: 'var(--color-primary)', borderRadius: '50%' }} />
-            </StaggeredMotion>
+          {/* Scene 1: Marketing Hero (Top Right) */}
+          <Element3D
+            centered
+            style={{ width: vmin * 32, height: vmin * 40 }}
+            transition={{
+              delay: 10,
+              opacity: [0, 1],
+              duration: 35,
+              transform: [
+                positions.scenes.items.hero,
+              ]
+            }}
+          >
+            <div style={{
+              width: '100%',
+              height: '100%',
+              background: 'linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%)',
+              borderRadius: vmin * 1.5,
+              overflow: 'hidden',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+            }}>
+              <Particles style={{ position: 'absolute', inset: 0 }}>
+                <Spawner rate={10} velocity={{ x: 0, y: -0.5 }}>
+                  <span>Summer</span>
+                  <span>Vibes</span>
+                </Spawner>
+                <Behavior
+                  scale={[0.8, 0]}
+                  opacity={[0.6, 0]}
+                  wiggle={{ magnitude: 5, frequency: 0.1 }}
+                />
+              </Particles>
+              <div style={{ position: 'absolute', bottom: vmin * 3, left: vmin * 2.5, right: vmin * 2.5 }}>
+                <div style={{
+                  background: 'white',
+                  color: 'black',
+                  padding: '0.4em 0.8em',
+                  borderRadius: 99,
+                  display: 'inline-block',
+                  fontSize: vmin * 1.2,
+                  fontWeight: 'bold',
+                  marginBottom: vmin
+                }}>
+                  NEW ARRIVAL
+                </div>
+                <AnimatedText
+                  style={{ color: '#fff', fontSize: vmin * 4, lineHeight: 0.9, fontWeight: 900, textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
+                  transition={{ delay: 20, split: 'word', splitStagger: 5, y: [10, 0], opacity: [0, 1] }}
+                >
+                  SUMMER VIBES
+                </AnimatedText>
+              </div>
+            </div>
+          </Element3D>
+
+          {/* Scene 2: Dashboard/Data (Top Left) */}
+          <Element3D
+            centered
+            style={{ width: vmin * 36, height: vmin * 22 }}
+            transition={{
+              delay: 20,
+              opacity: [0, 1],
+              duration: 35,
+              transform: [
+                positions.scenes.items.dash,
+              ]
+            }}
+          >
+            <div style={{
+              width: '100%',
+              height: '100%',
+              background: '#1a1a2e',
+              borderRadius: vmin * 1.2,
+              padding: vmin * 2.5,
+              border: '1px solid rgba(255,255,255,0.1)',
+              boxShadow: '0 15px 35px rgba(0,0,0,0.4)',
+              display: 'flex',
+              flexDirection: 'column',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: vmin }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: vmin }}>
+                  <div style={{ width: vmin, height: vmin, borderRadius: '50%', background: '#e94560' }} />
+                  <span style={{ color: '#fff', fontWeight: 'bold', fontSize: vmin * 1.5 }}>Revenue</span>
+                </div>
+                <span style={{ color: '#ffffff66', fontSize: vmin * 1.2 }}>This Week</span>
+              </div>
+              <div style={{ marginBottom: vmin }}>
+                <AnimatedCounter
+                  transition={{ values: [0, 8492], duration: 45, easing: 'easeOutQuart' }}
+                  postfix="$"
+                  style={{ color: '#fff', fontSize: vmin * 4, fontWeight: 'bold' }}
+                />
+              </div>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: vmin }}>
+                {[0.4, 0.7, 0.5, 0.9, 0.3, 0.8, 0.6].map((h, i) => (
+                  <div key={i} style={{ flex: 1, height: '100%', display: 'flex', alignItems: 'flex-end' }}>
+                    <StaggeredMotion transition={{ delay: 35 + i * 3, height: [0, h * 100 + '%'], duration: 30, easing: 'easeOutCubic' }}>
+                      <div style={{ width: '100%', background: i === 3 ? '#e94560' : 'rgba(233, 69, 96, 0.3)', borderRadius: vmin / 3 }} />
+                    </StaggeredMotion>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Element3D>
+          {/* Scene 3: Notification (Bottom Left) */}
+          <Element3D
+            centered
+            style={{ width: vmin * 30 }}
+            transition={{
+              delay: 30,
+              opacity: [0, 1],
+              duration: 35,
+              transform: [
+                positions.scenes.items.notif
+              ]
+            }}
+          >
+            <div style={{
+              width: '100%',
+              background: 'rgba(255,255,255,0.95)',
+              borderRadius: vmin * 1.2,
+              padding: vmin * 1.5,
+              display: 'flex',
+              alignItems: 'center',
+              gap: vmin * 1.5,
+              boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+            }}>
+              <div style={{
+                width: vmin * 5,
+                height: vmin * 5,
+                background: '#10B981',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <svg width={vmin * 2.5} height={vmin * 2.5} viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <div style={{ color: '#111', fontWeight: 'bold', fontSize: vmin * 1.4, lineHeight: 1.2 }}>Render Complete</div>
+                <div style={{ color: '#666', fontSize: vmin * 1.1 }}>video_final_v2.mp4</div>
+              </div>
+            </div>
+          </Element3D>
+
+          {/* Scene 4: Code Editor (Bottom Right) */}
+          <Element3D
+            centered
+            style={{ width: vmin * 28, height: vmin * 18 }}
+            transition={{
+              delay: 40,
+              opacity: [0, 1],
+              duration: 35,
+              easing: 'easeOutCubic',
+              transform: [
+                positions.scenes.items.code,
+              ]
+            }}
+          >
+            <div style={{
+              width: '100%',
+              height: '100%',
+              background: '#282c34',
+              borderRadius: vmin * 1,
+              padding: vmin * 1.5,
+              boxShadow: '0 15px 30px rgba(0,0,0,0.4)',
+              border: '1px solid #3e4451',
+              fontFamily: 'monospace',
+              fontSize: vmin * 1.2,
+              color: '#abb2bf',
+              overflow: 'hidden'
+            }}>
+              <div style={{ display: 'flex', gap: vmin / 2, marginBottom: vmin }}>
+                <div style={{ width: vmin, height: vmin, borderRadius: '50%', background: '#e06c75' }} />
+                <div style={{ width: vmin, height: vmin, borderRadius: '50%', background: '#e5c07b' }} />
+                <div style={{ width: vmin, height: vmin, borderRadius: '50%', background: '#98c379' }} />
+              </div>
+              <div>
+                <span style={{ color: '#c678dd' }}>const</span> <span style={{ color: '#e5c07b' }}>Video</span> = () ={'>'} {'{'}
+              </div>
+              <div style={{ paddingLeft: vmin * 2 }}>
+                <span style={{ color: '#e06c75' }}>return</span> (
+              </div>
+              <div style={{ paddingLeft: vmin * 4 }}>
+                &lt;<span style={{ color: '#e5c07b' }}>Composition</span> /&gt;
+              </div>
+              <div style={{ paddingLeft: vmin * 2 }}>
+                );
+              </div>
+              <div>{'}'};</div>
+            </div>
+          </Element3D>
+          {/* Scene 5: Player (Left) */}
+          <Element3D
+            centered
+            style={{ width: vmin * 25, height: vmin * 15 }}
+            transition={{
+              delay: 25,
+              x: [vmin * 20, vmin * 15],
+              rotateY: [30, 0],
+              opacity: [0, 1],
+              duration: 35,
+              easing: 'easeOutCubic',
+              transform: [
+                positions.scenes.items.player
+              ]
+            }}
+          >
+            <div style={{
+              width: '100%',
+              height: '100%',
+              background: '#000',
+              borderRadius: vmin * 1,
+              overflow: 'hidden',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+              border: '1px solid #333',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}>
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(45deg, #111, #222)',
+                opacity: 0.5
+              }} />
+
+              {/* Play button */}
+              <div style={{
+                width: vmin * 6,
+                height: vmin * 6,
+                borderRadius: '50%',
+                background: 'rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(5px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '1px solid rgba(255,255,255,0.2)',
+                zIndex: 10
+              }}>
+                <div style={{
+                  width: 0,
+                  height: 0,
+                  borderTop: `${vmin * 1.5}px solid transparent`,
+                  borderBottom: `${vmin * 1.5}px solid transparent`,
+                  borderLeft: `${vmin * 2.5}px solid white`,
+                  marginLeft: vmin * 0.5
+                }} />
+              </div>
+
+              {/* Progress bar */}
+              <div style={{
+                position: 'absolute',
+                bottom: vmin * 1.5,
+                left: vmin * 1.5,
+                right: vmin * 1.5,
+                height: vmin * 0.5,
+                background: 'rgba(255,255,255,0.2)',
+                borderRadius: vmin
+              }}>
+                <div style={{
+                  width: '60%',
+                  height: '100%',
+                  background: 'var(--color-primary-hover)',
+                  borderRadius: vmin,
+                  boxShadow: '0 0 10px var(--color-primary-hover)'
+                }} />
+              </div>
+            </div>
           </Element3D>
         </Step>
 
         <Step
           id="outro"
           {...positions.base.toProps()}
+          duration={120}
         />
 
         {/* --- TITLES --- */}
@@ -750,6 +1046,7 @@ export const Component: React.FC = () => {
             },
             'outro': {
               transform: positions.outro.title,
+              duration: 'step',
             }
           }}
         >
@@ -808,7 +1105,7 @@ export const Component: React.FC = () => {
           centered
           style={{
             fontSize,
-            width: vmin * 70,
+            width: 'max-content',
             position: 'absolute',
           }}
           steps={{
@@ -819,6 +1116,7 @@ export const Component: React.FC = () => {
             },
             'outro': {
               transform: positions.scenes.title.outro,
+              duration: 'step',
             }
           }}
         >
@@ -840,6 +1138,9 @@ export const Component: React.FC = () => {
             }),
             'outro': {
               transform: positions.outro.icons.triangle,
+              opacity: [1, 1, 1, 0],
+              duration: "step",
+              easing: 'easeInOutCubic',
             }
 
           }}
@@ -862,8 +1163,10 @@ export const Component: React.FC = () => {
             },
             'outro': {
               transform: positions.outro.icons.square,
+              opacity: [1, 1, 1, 0],
+              duration: "step",
+              easing: 'easeInOutCubic',
             }
-
           }}
         >
           <ShapeIcon
@@ -884,8 +1187,10 @@ export const Component: React.FC = () => {
             },
             'outro': {
               transform: positions.outro.icons.circle,
+              opacity: [1, 1, 1, 0],
+              duration: "step",
+              easing: 'easeInOutCubic',
             }
-
           }}
         >
           <ShapeIcon

@@ -103,6 +103,11 @@ export interface StepResponsiveTransform extends Transform3DProps {
   color?: AnimatedValue;
   backgroundColor?: AnimatedValue;
   transform?: TransformProps["transform"];
+  
+  // Transition overrides for this step
+  duration?: number | "step";
+  delay?: number;
+  easing?: EasingFunction | EasingName;
 }
 
 export type StepResponsiveMap =

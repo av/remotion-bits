@@ -167,6 +167,14 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
     [steps]
   );
 
+  // Get current step props to check for config overrides (duration, etc)
+  const currentStepSpecificProps = React.useMemo(() => {
+    const step = sceneSteps?.[activeStepIndex];
+    if (step?.id && stepsMap.has(step.id)) return stepsMap.get(step.id);
+    if (stepsMap.has(activeStepIndex)) return stepsMap.get(activeStepIndex);
+    return undefined;
+  }, [stepsMap, activeStepIndex, sceneSteps]);
+
   // Get target (current active) props
   const targetStepProps = React.useMemo(
     () =>
@@ -193,22 +201,48 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
     [stepsMap, prevStepIndex, sceneSteps, defaultProps]
   );
 
+  // Resolve effective config values
+  const effectiveConfig = React.useMemo(() => {
+    const durationOverride = currentStepSpecificProps?.duration ?? transition?.duration;
+    
+    let duration = transitionDuration;
+    if (durationOverride === "step") {
+       const activeStep = sceneSteps[activeStepIndex];
+       if (activeStep) {
+          duration = activeStep.exitFrame - activeStep.enterFrame;
+       }
+    } else if (typeof durationOverride === "number") {
+       duration = durationOverride;
+    }
+
+    return {
+      duration,
+      delay: currentStepSpecificProps?.delay ?? transition?.delay ?? 0,
+      easing: currentStepSpecificProps?.easing ?? transition?.easing,
+    };
+  }, [currentStepSpecificProps, transition, transitionDuration, sceneSteps, activeStepIndex]);
+
   // Get easing function if specified
   const easingFn = React.useMemo(
-    () => getEasingFunction(transition?.easing),
-    [transition?.easing]
+    () => getEasingFunction(effectiveConfig.easing),
+    [effectiveConfig.easing]
   );
 
   // Use transitionProgress if animating, otherwise use 1 (end state)
   const progress = React.useMemo(() => {
     if (!animate) return 1;
 
-    if (transition?.duration !== undefined) {
+    // Check if we have an effective duration that differs from default flow
+    const isActiveDurationOverride = 
+        currentStepSpecificProps?.duration !== undefined || 
+        transition?.duration !== undefined;
+
+    if (isActiveDurationOverride) {
       const activeStep = sceneSteps[activeStepIndex];
       if (activeStep) {
         // Calculate local progress based on step entry and custom duration
-        const startFrame = activeStep.enterFrame + (transition.delay ?? 0);
-        const duration = transition.duration;
+        const startFrame = activeStep.enterFrame + effectiveConfig.delay;
+        const duration = effectiveConfig.duration;
 
         if (frame < startFrame) return 0;
         if (frame >= startFrame + duration) return 1;
@@ -218,9 +252,9 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
 
     // Fallback to scene transition progress (already eased by scene)
     return transitionProgress;
-  }, [animate, transition, sceneSteps, activeStepIndex, frame, transitionProgress]);
+  }, [animate, currentStepSpecificProps, transition, sceneSteps, activeStepIndex, frame, transitionProgress, effectiveConfig]);
 
-  const effectiveDuration = transition?.duration ?? transitionDuration;
+  const effectiveDuration = effectiveConfig.duration;
 
   // Build animated styles using the motion system
   const motionStyle = React.useMemo(() => {
@@ -344,6 +378,14 @@ export function useStepResponsive(
     [steps]
   );
   
+  // Get current step props to check for config overrides (duration, etc)
+  const currentStepSpecificProps = React.useMemo(() => {
+    const step = sceneSteps?.[activeStepIndex];
+    if (step?.id && stepsMap.has(step.id)) return stepsMap.get(step.id);
+    if (stepsMap.has(activeStepIndex)) return stepsMap.get(activeStepIndex);
+    return undefined;
+  }, [stepsMap, activeStepIndex, sceneSteps]);
+
   const centered = (config as any)?.centered;
 
   const targetStepProps = React.useMemo(
@@ -370,17 +412,43 @@ export function useStepResponsive(
     [stepsMap, prevStepIndex, sceneSteps]
   );
 
+  // Resolve effective config values
+  const effectiveConfig = React.useMemo(() => {
+    const durationOverride = currentStepSpecificProps?.duration ?? config?.duration;
+    
+    let duration = transitionDuration;
+    if (durationOverride === "step") {
+       const activeStep = sceneSteps[activeStepIndex];
+       if (activeStep) {
+          duration = activeStep.exitFrame - activeStep.enterFrame;
+       }
+    } else if (typeof durationOverride === "number") {
+       duration = durationOverride;
+    }
+
+    return {
+      duration,
+      delay: currentStepSpecificProps?.delay ?? config?.delay ?? 0,
+      easing: currentStepSpecificProps?.easing ?? config?.easing,
+    };
+  }, [currentStepSpecificProps, config, transitionDuration, sceneSteps, activeStepIndex]);
+
   const easingFn = React.useMemo(
-    () => getEasingFunction(config?.easing),
-    [config?.easing]
+    () => getEasingFunction(effectiveConfig.easing),
+    [effectiveConfig.easing]
   );
 
   const progress = React.useMemo(() => {
-    if (config?.duration !== undefined) {
+    // Check if we have an effective duration that differs from default flow
+    const isActiveDurationOverride = 
+        currentStepSpecificProps?.duration !== undefined || 
+        config?.duration !== undefined;
+
+    if (isActiveDurationOverride) {
       const activeStep = sceneSteps[activeStepIndex];
       if (activeStep) {
-        const startFrame = activeStep.enterFrame + (config.delay ?? 0);
-        const duration = config.duration;
+        const startFrame = activeStep.enterFrame + effectiveConfig.delay;
+        const duration = effectiveConfig.duration;
 
         if (frame < startFrame) return 0;
         if (frame >= startFrame + duration) return 1;
@@ -389,9 +457,9 @@ export function useStepResponsive(
     }
 
     return transitionProgress;
-  }, [config, sceneSteps, activeStepIndex, frame, transitionProgress]);
+  }, [config, currentStepSpecificProps, sceneSteps, activeStepIndex, frame, transitionProgress, effectiveConfig]);
 
-  const effectiveDuration = config?.duration ?? transitionDuration;
+  const effectiveDuration = effectiveConfig.duration;
 
   return React.useMemo(() => {
     const transforms: TransformProps = {};

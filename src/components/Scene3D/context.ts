@@ -11,6 +11,7 @@ const defaultCamera: CameraState = {
   scale: 1,
   scaleX: 1,
   scaleY: 1,
+  scaleZ: 1,
 };
 
 const defaultContext: Scene3DContextValue = {
