@@ -1,11 +1,13 @@
 https://github.com/user-attachments/assets/2a5760fe-1886-4490-9c2b-aceec24aff2f
 
+![Gallery](./docs/public/gallery.png)
 
+![Visitors](https://api.visitorbadge.io/api/combined?path=https%3A%2F%2Fgithub.com%2Fav%2Fremotion-bits&labelColor=%231c1b1a&countColor=%23ec8b49&style=flat-square)
 
+Remotion Bits is a comprehensive collection of animation components and utilities designed specifically for [Remotion](https://www.remotion.dev/) video projects. It provides ready-made, composable components for common animation needs: text effects, gradient transitions, particle systems, 3D scenes, and more. It also includes lower-level utilities for advanced motion and color handling.
 
-Remotion Bits is a comprehensive collection of animation components and utilities designed specifically for Remotion video projects. It provides ready-made, composable components for common animation needs: text effects, gradient transitions, particle systems, 3D scenes, and more. It also includes lower-level utilities for advanced motion and color handling.
-
-Using jsrepo, components are copied directly into your project so you can customize them, and updates are managed over time. This approach (similar to shadcn/ui) gives you full ownership of the code while maintaining the ability to receive improvements.
+> [!NOTE]
+> This project is not affiliated with or endorsed by the [Remotion](https://www.remotion.dev/) team.
 
 ## Installation
 
@@ -13,7 +15,7 @@ Using jsrepo, components are copied directly into your project so you can custom
 npm install remotion-bits
 ```
 
-## Install with jsrepo (recommended)
+## Install with jsrepo
 
 The registry is published as a jsrepo registry at:
 
