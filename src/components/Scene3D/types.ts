@@ -21,6 +21,7 @@ export interface Scale3D {
   scale?: AnimatedValue;
   scaleX?: AnimatedValue;
   scaleY?: AnimatedValue;
+  scaleZ?: AnimatedValue;
 }
 
 export interface Transform3DProps extends Position3D, Rotation3D, Scale3D {}
@@ -49,6 +50,7 @@ export interface CameraState {
   scale: number;
   scaleX: number;
   scaleY: number;
+  scaleZ: number;
 }
 
 export interface Scene3DContextValue {

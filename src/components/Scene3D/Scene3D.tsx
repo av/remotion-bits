@@ -7,7 +7,7 @@ import { getEasingFunction, interpolateKeyframes } from "../../utils/motion";
 import { Transform3D, Vector3 } from "../../utils/transform3d";
 import { interpolateTransform, transformToCSS } from "../../utils/interpolate3d";
 
-function stepConfigToCameraTransform(step: StepConfig, fitScale: number): Transform3D {
+function stepConfigToForwardTransform(step: StepConfig): Transform3D {
   const x = interpolateKeyframes(step.x ?? 0, 1);
   const y = interpolateKeyframes(step.y ?? 0, 1);
   const z = interpolateKeyframes(step.z ?? 0, 1);
@@ -17,17 +17,22 @@ function stepConfigToCameraTransform(step: StepConfig, fitScale: number): Transf
   const scale = interpolateKeyframes(step.scale ?? 1, 1);
   const scaleX = interpolateKeyframes(step.scaleX ?? 1, 1);
   const scaleY = interpolateKeyframes(step.scaleY ?? 1, 1);
+  const scaleZ = interpolateKeyframes(step.scaleZ ?? 1, 1);
 
   const degreesToRadians = Math.PI / 180;
 
-  const forward = Transform3D.fromEuler(
+  return Transform3D.fromEuler(
     rotateX * degreesToRadians,
     rotateY * degreesToRadians,
     rotateZ * degreesToRadians,
     new Vector3(x, y, z),
-    new Vector3(scale * scaleX, scale * scaleY, scale),
+    new Vector3(scale * scaleX, scale * scaleY, scale * scaleZ),
     (step.rotateOrder?.toUpperCase() as any) ?? 'XYZ'
   );
+}
+
+function stepConfigToCameraTransform(step: StepConfig, fitScale: number): Transform3D {
+  const forward = stepConfigToForwardTransform(step);
 
   const inverse = forward.inverse();
   inverse.position.multiplyScalar(fitScale);
@@ -47,6 +52,7 @@ function stepConfigToCameraTarget(step: StepConfig): CameraState {
     scale: interpolateKeyframes(step.scale ?? 1, 1),
     scaleX: interpolateKeyframes(step.scaleX ?? 1, 1),
     scaleY: interpolateKeyframes(step.scaleY ?? 1, 1),
+    scaleZ: interpolateKeyframes(step.scaleZ ?? 1, 1),
   };
 }
 
@@ -106,6 +112,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({
         z: props.z ?? 0,
         scale: props.scale ?? 1,
         scaleX: props.scaleX ?? 1,
+        scaleZ: props.scaleZ ?? 1,
         scaleY: props.scaleY ?? 1,
         rotateX: props.rotateX ?? 0,
         rotateY: props.rotateY ?? 0,
@@ -133,7 +140,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({
       return {
         activeStepIndex: 0,
         transitionProgress: 0,
-        camera: { x: 0, y: 0, z: 0, rotateX: 0, rotateY: 0, rotateZ: 0, scale: 1, scaleX: 1, scaleY: 1 },
+        camera: { x: 0, y: 0, z: 0, rotateX: 0, rotateY: 0, rotateZ: 0, scale: 1, scaleX: 1, scaleY: 1, scaleZ: 1 },
         cameraTransform: Transform3D.identity(),
       };
     }
@@ -182,14 +189,20 @@ export const Scene3D: React.FC<Scene3DProps> = ({
 
     if (prevStep && progress < 1) {
       const fromCamera = stepConfigToCameraTarget(prevStep);
-      const fromTransform = stepConfigToCameraTransform(prevStep, fitScale);
+      
+      const fromForward = stepConfigToForwardTransform(prevStep);
+      const targetForward = stepConfigToForwardTransform(currentStep);
 
-      cameraTransformState = interpolateTransform(
-        fromTransform,
-        targetTransform,
+      const currentForward = interpolateTransform(
+        fromForward,
+        targetForward,
         easedProgress,
         easingFn
       );
+
+      cameraTransformState = currentForward.inverse();
+      cameraTransformState.position.multiplyScalar(fitScale);
+      cameraTransformState.scale.multiplyScalar(fitScale);
 
       cameraState = {
         x: fromCamera.x + (targetCamera.x - fromCamera.x) * easedProgress,
@@ -201,6 +214,7 @@ export const Scene3D: React.FC<Scene3DProps> = ({
         scale: fromCamera.scale + (targetCamera.scale - fromCamera.scale) * easedProgress,
         scaleX: fromCamera.scaleX + (targetCamera.scaleX - fromCamera.scaleX) * easedProgress,
         scaleY: fromCamera.scaleY + (targetCamera.scaleY - fromCamera.scaleY) * easedProgress,
+        scaleZ: fromCamera.scaleZ + (targetCamera.scaleZ - fromCamera.scaleZ) * easedProgress,
       };
     } else {
       cameraState = targetCamera;

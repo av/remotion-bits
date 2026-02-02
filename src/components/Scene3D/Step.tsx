@@ -181,6 +181,7 @@ const StepComponent: React.FC<StepProps> = ({
   scale = 1,
   scaleX = 1,
   scaleY = 1,
+  scaleZ = 1,
   rotateX = 0,
   rotateY = 0,
   rotateZ = 0,
@@ -202,6 +203,7 @@ const StepComponent: React.FC<StepProps> = ({
       scale,
       scaleX,
       scaleY,
+      scaleZ,
       rotateX,
       rotateY,
       rotateZ,
@@ -220,6 +222,7 @@ const StepComponent: React.FC<StepProps> = ({
   const zVal = interpolateKeyframes(z, 1);
   const scaleVal = interpolateKeyframes(scale, 1);
   const scaleXVal = interpolateKeyframes(scaleX, 1);
+  const scaleZVal = interpolateKeyframes(scaleZ, 1);
   const scaleYVal = interpolateKeyframes(scaleY, 1);
   const rotateXVal = interpolateKeyframes(rotateX, 1);
   const rotateYVal = interpolateKeyframes(rotateY, 1);
@@ -232,7 +235,7 @@ const StepComponent: React.FC<StepProps> = ({
     rotateYVal * degreesToRadians,
     rotateZVal * degreesToRadians,
     new Vector3(xVal, yVal, zVal),
-    new Vector3(scaleVal * scaleXVal, scaleVal * scaleYVal, scaleVal),
+    new Vector3(scaleVal * scaleXVal, scaleVal * scaleYVal, scaleVal * scaleZVal),
     rotateOrder.toUpperCase() as any
   );
 
