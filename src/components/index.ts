@@ -1,4 +1,5 @@
 export { AnimatedText } from "./AnimatedText";
+export { TypeWriter } from "./TypeWriter";
 export { AnimatedCounter } from "./AnimatedCounter";
 export type { AnimatedCounterProps, AnimatedCounterTransitionProps } from "./AnimatedCounter";
 export { MatrixRain } from "./MatrixRain";
@@ -36,6 +37,11 @@ export type {
   StepResponsiveTransition,
 } from "./Scene3D";
 
-export { TypeWriter } from "./TypeWriter";
-export type { TypeWriterProps, TypeWriterTransitionProps } from "./TypeWriter";
+export { CodeBlock } from "./CodeBlock";
+export type {
+  CodeBlockProps,
+  CodeBlockHighlightRegion,
+  CodeBlockFocusRegion,
+  CodeBlockTransitionProps,
+} from "./CodeBlock";
 

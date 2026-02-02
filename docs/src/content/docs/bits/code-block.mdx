@@ -1,0 +1,18 @@
+---
+title: CodeBlock
+description: Syntax highlighted code with line-by-line reveal animation.
+---
+import { BitPlayground } from '../../../components/BitPlayground';
+import { BasicCodeBlock } from '../../../bits';
+
+The `CodeBlock` component provides beautiful, animated code snippets with syntax highlighting, line-by-line reveal, highlighting, and focus features.
+
+<BitPlayground bit={BasicCodeBlock} client:visible />
+
+## Features
+
+- **Syntax Highlighting**: Supports multiple languages using Prism.
+- **Line Reveal**: Staggered animation for revealing code line by line.
+- **Highlighting**: Highlight specific lines or ranges with custom colors and blur.
+- **Focus Mode**: Dim non-focused lines to draw attention to specific parts of the code.
+- **Responsive**: Automatically adjusts font size based on viewport width.
