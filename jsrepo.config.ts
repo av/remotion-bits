@@ -196,6 +196,49 @@ export default defineConfig({
         ],
       },
       {
+        name: "type-writer",
+        title: "TypeWriter",
+        description: "Typewriter text effect with customizable typing/deleting speed, error simulation, and cursor blinking.",
+        type: "component",
+        add: "when-added",
+        dependencyResolution: "manual",
+        registryDependencies: ["motion", "random"],
+        files: [
+          {
+            path: "src/components/TypeWriter.tsx",
+          },
+        ],
+      },
+      {
+        name: "code-block",
+        title: "CodeBlock",
+        description: "Syntax-highlighted code block with line-by-line reveal, focus, and highlight animations.",
+        type: "component",
+        add: "when-added",
+        dependencyResolution: "manual",
+        registryDependencies: ["motion", "use-viewport-rect"],
+        dependencies: ["prism-react-renderer"],
+        files: [
+          {
+            path: "src/components/CodeBlock.tsx",
+          },
+        ],
+      },
+      {
+        name: "scrolling-columns",
+        title: "Scrolling Columns",
+        description: "Infinitely scrolling columns of images with configurable speed and direction.",
+        type: "component",
+        add: "when-added",
+        dependencyResolution: "manual",
+        registryDependencies: ["use-viewport-rect"],
+        files: [
+          {
+            path: "src/components/ScrollingImages.tsx",
+          },
+        ],
+      },
+      {
         name: "use-viewport-rect",
         title: "useViewportRect Hook",
         description: "Hook to get the current video composition's viewport rectangle with responsive sizing utilities.",

@@ -1,3 +1,24 @@
+### v0.1.9
+
+- Feature: Added CodeBlock component for syntax highlighting and animations
+- Feature: Added TypeWriter component for typewriter text effects
+- Feature: Added MatrixRain component for Matrix-style falling character effects
+- Feature: Added GlitchCycle and GlitchIn components for glitch transition effects
+- Feature: Added ShapeIcon component for animated shape icons
+- Feature: Enhanced AnimatedCounter with step timing support
+- Feature: Added hold functionality to interpolation utilities
+- Feature: Added scaleZ support to Transform3D and Step components
+- Feature: Enhanced Transform3D with ID management, random operations, and Vector3 support for translate method
+- Feature: Enhanced StepResponsive with centered prop, style props, cumulative step property resolution, and transform key support
+- Feature: Enhanced Scene3D components with duration support and centered transformations
+- Feature: Enhanced AnimatedText with dynamic duration support
+- Improvement: Enhanced BitPlayground to handle bit props and improve error handling
+- Improvement: Updated dependencies and improved documentation for Bits
+- Improvement: Added gradient backgrounds and enhanced FeatureShowcase component
+- Docs: Completed showcase documentation
+- Docs: Added transitions scene documentation
+- Fix: Removed unused doFrame function causing TypeScript error
+
 ### v0.1.8
 
 - Feature: Added duration prop to Step component for customizable step duration
