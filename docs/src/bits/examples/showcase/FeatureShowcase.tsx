@@ -289,6 +289,14 @@ export const Component: React.FC = () => {
       '#d3869b', '#8ec07c', '#fe8019', '#d5c4a1'
     ];
 
+    const gradients = [
+      'linear-gradient(to right, #100f0f55, transparent)',
+      'linear-gradient(to left, #100f0f55, transparent)',
+      'linear-gradient(to bottom, #100f0f55, transparent)',
+      'linear-gradient(to top, #100f0f55, transparent)',
+      'radial-gradient(circle at 50% 50%, #100f0f33, transparent)',
+    ]
+
     const getVariants = () => [
       () => ({ scale: [0, 1] }),
       () => ({ x: [size, 0] }),
@@ -298,7 +306,7 @@ export const Component: React.FC = () => {
       () => ({ rotate: [90, 0] }),
       () => ({ rotate: [-90, 0] }),
       () => ({ blur: [0, 0] }),
-      () => ({ borderRadius: [size / 2, 0] }),
+      () => ({ borderRadius: [size / 2, 4] }),
       () => ({ color: ['#fe8019', '#d5c4a1'] }),
     ];
 
@@ -319,6 +327,7 @@ export const Component: React.FC = () => {
           duration,
           delay: delayBase,
           easing: 'easeOutCubic',
+          borderRadius: 4,
         };
 
         const count = Math.floor(random(seed + 'count') * 4) + 2; // 2 to 5
@@ -330,10 +339,12 @@ export const Component: React.FC = () => {
         }
 
         const colorIndex = Math.floor(random(seed + 'color') * palette.length);
+        const gradientIndex = Math.floor(random(seed + 'gradient') * gradients.length);
+
         const baseStyle: React.CSSProperties = {
           width: size,
           height: size,
-          backgroundColor: palette[colorIndex],
+          background: `${gradients[gradientIndex]}, ${palette[colorIndex]}`,
           borderRadius: 0,
         };
 
@@ -773,6 +784,7 @@ export const Component: React.FC = () => {
             fontSize,
             width: 'max-content',
             position: 'absolute',
+            textShadow: '0 0 10px rgba(0,0,0,0.5)',
           }}
           steps={{
             'intro': {
