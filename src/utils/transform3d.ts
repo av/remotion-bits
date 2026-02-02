@@ -1,4 +1,5 @@
 import { Matrix4, Quaternion, Vector3, Euler } from 'three';
+import { randomFloat } from './random';
 
 export interface TransformOptions {
   position?: Vector3;
@@ -6,14 +7,20 @@ export interface TransformOptions {
   scale?: Vector3 | number;
 }
 
+
+
 export class Transform3D {
+  private static _idCounter: number = 0;
+  id: number;
+
   position: Vector3;
   rotation: Quaternion;
   scale: Vector3;
   private _matrix: Matrix4;
   private _matrixDirty: boolean = true;
 
-  constructor(options: TransformOptions = {}) {
+  constructor(options: TransformOptions & { id?: number } = {}) {
+    this.id = options.id ?? Transform3D._idCounter++;
     this.position = options.position?.clone() ?? new Vector3(0, 0, 0);
     this.rotation = options.rotation?.clone() ?? new Quaternion(0, 0, 0, 1);
     if (typeof options.scale === 'number') {
@@ -24,13 +31,13 @@ export class Transform3D {
     this._matrix = new Matrix4();
   }
 
-  static fromMatrix(matrix: Matrix4): Transform3D {
+  static fromMatrix(matrix: Matrix4, id?: number): Transform3D {
     const position = new Vector3();
     const rotation = new Quaternion();
     const scale = new Vector3();
     matrix.decompose(position, rotation, scale);
 
-    return new Transform3D({ position, rotation, scale });
+    return new Transform3D({ position, rotation, scale, id });
   }
 
   static fromEuler(
@@ -57,10 +64,17 @@ export class Transform3D {
 
   clone(): Transform3D {
     return new Transform3D({
+      id: this.id,
       position: this.position.clone(),
       rotation: this.rotation.clone(),
       scale: this.scale.clone(),
     });
+  }
+
+  reseed(newId?: number): Transform3D {
+    const newTransform = this.clone();
+    newTransform.id = newId ?? Transform3D._idCounter++;
+    return newTransform;
   }
 
   translate(x: number | Vector3, y: number = 0, z: number = 0): Transform3D {
@@ -105,6 +119,24 @@ export class Transform3D {
     return this.rotate(q);
   }
 
+  rotateAround(origin: Vector3, axis: Vector3, angle: number | string): Transform3D {
+    const radians = Transform3D._parseAngle(angle);
+    const q = new Quaternion().setFromAxisAngle(axis.clone().normalize(), radians);
+
+    const newTransform = this.clone();
+
+    // Rotate position relative to origin
+    const relativePos = newTransform.position.clone().sub(origin);
+    relativePos.applyQuaternion(q);
+    newTransform.position.copy(origin).add(relativePos);
+
+    // Rotate orientation
+    newTransform.rotation.premultiply(q);
+    
+    newTransform._markDirty();
+    return newTransform;
+  }
+
   scaleBy(sx: number, sy?: number, sz?: number): Transform3D {
     const scaleY = sy ?? sx;
     const scaleZ = sz ?? sx;
@@ -119,15 +151,13 @@ export class Transform3D {
   }
 
   multiply(other: Transform3D): Transform3D {
-    const result = Transform3D.fromMatrix(
-      this.toMatrix4().multiply(other.toMatrix4())
-    );
-    return result;
+    const matrix = this.toMatrix4().multiply(other.toMatrix4());
+    return Transform3D.fromMatrix(matrix, this.id);
   }
 
   inverse(): Transform3D {
     const invMatrix = this.toMatrix4().clone().invert();
-    return Transform3D.fromMatrix(invMatrix);
+    return Transform3D.fromMatrix(invMatrix, this.id);
   }
 
   apply(point: Vector3): Vector3 {
@@ -139,7 +169,46 @@ export class Transform3D {
     const rotation = this.rotation.clone().slerp(target.rotation, alpha);
     const scale = this.scale.clone().lerp(target.scale, alpha);
 
-    return new Transform3D({ position, rotation, scale });
+    return new Transform3D({ id: this.id, position, rotation, scale });
+  }
+
+  randomTranslate(x: [number, number], y?: [number, number], z?: [number, number], seed?: number | string): Transform3D {
+    const actualSeed = seed ?? `transform-3d-${this.id}`;
+    const newTransform = this.clone();
+    
+    const dx = randomFloat(`${actualSeed}-x`, x[0], x[1]);
+    newTransform.position.x += dx;
+    
+    if (y) {
+      const dy = randomFloat(`${actualSeed}-y`, y[0], y[1]);
+      newTransform.position.y += dy;
+    }
+    
+    if (z) {
+      const dz = randomFloat(`${actualSeed}-z`, z[0], z[1]);
+      newTransform.position.z += dz;
+    }
+    
+    newTransform._markDirty();
+    return newTransform;
+  }
+
+  randomRotateX(angle: [number, number], seed?: number | string): Transform3D {
+    const actualSeed = seed ?? `transform-3d-${this.id}`;
+    const degrees = randomFloat(`${actualSeed}-rx`, angle[0], angle[1]);
+    return this.rotateX(degrees);
+  }
+
+  randomRotateY(angle: [number, number], seed?: number | string): Transform3D {
+    const actualSeed = seed ?? `transform-3d-${this.id}`;
+    const degrees = randomFloat(`${actualSeed}-ry`, angle[0], angle[1]);
+    return this.rotateY(degrees);
+  }
+
+  randomRotateZ(angle: [number, number], seed?: number | string): Transform3D {
+    const actualSeed = seed ?? `transform-3d-${this.id}`;
+    const degrees = randomFloat(`${actualSeed}-rz`, angle[0], angle[1]);
+    return this.rotateZ(degrees);
   }
 
   toMatrix4(): Matrix4 {

@@ -297,7 +297,10 @@ export function useMotionTiming(config: MotionTimingConfig): number {
   let startFrame: number;
   let endFrame: number;
 
-  if (frames) {
+  if (cycleOffset !== undefined) {
+    startFrame = 0;
+    endFrame = duration ?? 30;
+  } else if (frames) {
     startFrame = frames[0];
     endFrame = frames[1];
   } else if (stepTiming?.stepConfig) {

@@ -303,4 +303,139 @@ describe('Transform3D', () => {
       expect(modified.position.x).toBe(15);
     });
   });
+
+  describe('ID Management', () => {
+    it('should assign unique IDs to new transforms', () => {
+      const t1 = Transform3D.identity();
+      const t2 = Transform3D.identity();
+      const t3 = Transform3D.identity();
+
+      expect(t1.id).not.toBe(t2.id);
+      expect(t2.id).not.toBe(t3.id);
+      expect(t1.id).not.toBe(t3.id);
+    });
+
+    it('should preserve ID across chainable methods', () => {
+      const original = Transform3D.identity();
+      const originalId = original.id;
+
+      const transformed = original
+        .translate(10, 20, 30)
+        .rotateZ(Math.PI / 4)
+        .scaleBy(2, 2, 2);
+
+      expect(transformed.id).toBe(originalId);
+    });
+
+    it('should preserve ID in clone', () => {
+      const original = Transform3D.identity();
+      const clone = original.clone();
+
+      expect(clone.id).toBe(original.id);
+    });
+
+    it('should preserve ID in lerp', () => {
+      const t1 = Transform3D.identity();
+      const t2 = Transform3D.identity().translate(100, 0, 0);
+      
+      const mid = t1.lerp(t2, 0.5);
+
+      expect(mid.id).toBe(t1.id);
+    });
+  });
+
+  describe('Random Operations', () => {
+    it('should randomly translate within bounds using array notation', () => {
+      const transform = Transform3D.identity();
+      const randomized = transform.randomTranslate([-10, 10], [-5, 5], [0, 20]);
+
+      expect(randomized.position.x).toBeGreaterThanOrEqual(-10);
+      expect(randomized.position.x).toBeLessThanOrEqual(10);
+      expect(randomized.position.y).toBeGreaterThanOrEqual(-5);
+      expect(randomized.position.y).toBeLessThanOrEqual(5);
+      expect(randomized.position.z).toBeGreaterThanOrEqual(0);
+      expect(randomized.position.z).toBeLessThanOrEqual(20);
+    });
+
+    it('should randomly rotate within bounds using array notation', () => {
+      const transform = Transform3D.identity();
+      const randomized = transform
+        .randomRotateX([-45, 45])
+        .randomRotateY([-90, 90])
+        .randomRotateZ([0, 180]);
+
+      const euler = randomized.toEuler();
+      const xDeg = euler.x * (180 / Math.PI);
+      const yDeg = euler.y * (180 / Math.PI);
+      const zDeg = euler.z * (180 / Math.PI);
+
+      expect(xDeg).toBeGreaterThanOrEqual(-45);
+      expect(xDeg).toBeLessThanOrEqual(45);
+      expect(yDeg).toBeGreaterThanOrEqual(-90);
+      expect(yDeg).toBeLessThanOrEqual(90);
+      expect(zDeg).toBeGreaterThanOrEqual(0);
+      expect(zDeg).toBeLessThanOrEqual(180);
+    });
+
+    it('should use auto-namespaced seed based on transform ID', () => {
+      const t1 = Transform3D.identity();
+      const t2 = Transform3D.identity();
+
+      const r1a = t1.randomTranslate([0, 100]);
+      const r1b = t1.randomTranslate([0, 100]);
+      
+      const r2 = t2.randomTranslate([0, 100]);
+
+      expect(r1a.position.x).toBe(r1b.position.x);
+      expect(r1a.position.x).not.toBe(r2.position.x);
+    });
+
+    it('should accept custom seed override', () => {
+      const transform = Transform3D.identity();
+      
+      const r1 = transform.randomTranslate([0, 100], undefined, undefined, 'custom-seed');
+      const r2 = transform.randomTranslate([0, 100], undefined, undefined, 'custom-seed');
+      const r3 = transform.randomTranslate([0, 100], undefined, undefined, 'different-seed');
+
+      expect(r1.position.x).toBe(r2.position.x);
+      expect(r1.position.x).not.toBe(r3.position.x);
+    });
+
+    it('should preserve ID in random operations', () => {
+      const original = Transform3D.identity();
+      const originalId = original.id;
+
+      const randomized = original
+        .randomTranslate([-10, 10])
+        .randomRotateZ([-45, 45]);
+
+      expect(randomized.id).toBe(originalId);
+    });
+
+    it('should handle partial bounds in random translate', () => {
+      const transform = Transform3D.identity();
+      const randomized = transform.randomTranslate([-10, 10]);
+
+      expect(randomized.position.x).toBeGreaterThanOrEqual(-10);
+      expect(randomized.position.x).toBeLessThanOrEqual(10);
+      expect(randomized.position.y).toBe(0);
+      expect(randomized.position.z).toBe(0);
+    });
+
+    it('should support individual random rotation axes', () => {
+      const transform = Transform3D.identity();
+      
+      const rX = transform.randomRotateX([-45, 45]);
+      const rY = transform.randomRotateY([-90, 90]);
+      const rZ = transform.randomRotateZ([0, 180]);
+
+      const eulerX = rX.toEuler();
+      const eulerY = rY.toEuler();
+      const eulerZ = rZ.toEuler();
+
+      expect(Math.abs(eulerX.x * (180 / Math.PI))).toBeGreaterThan(0);
+      expect(Math.abs(eulerY.y * (180 / Math.PI))).toBeGreaterThan(0);
+      expect(Math.abs(eulerZ.z * (180 / Math.PI))).toBeGreaterThan(0);
+    });
+  });
 });
