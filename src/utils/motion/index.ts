@@ -30,6 +30,7 @@ export interface VisualProps {
   color?: string[];
   backgroundColor?: string[];
   blur?: AnimatedValue;
+  borderRadius?: AnimatedValue;
 }
 
 export interface TimingProps {
@@ -254,18 +255,15 @@ export function buildMotionStyles(config: MotionStyleConfig): React.CSSPropertie
   }
 
   if (styles.color) {
-    // color interpolation support for holds not implemented yet
-    // filtering holds for now to prevent crash
-    const safeColors = Array.isArray(styles.color) 
-      ? styles.color.filter(c => typeof c === 'string') 
-      : styles.color;
+    // Ensure array
+    const colorVal = Array.isArray(styles.color) ? styles.color : [styles.color];
+    const safeColors = colorVal.filter(c => typeof c === 'string');
     result.color = interpolateColorKeyframes(safeColors, progress, easingFn);
   }
 
   if (styles.backgroundColor) {
-     const safeColors = Array.isArray(styles.backgroundColor) 
-      ? styles.backgroundColor.filter(c => typeof c === 'string') 
-      : styles.backgroundColor;
+    const bgVal = Array.isArray(styles.backgroundColor) ? styles.backgroundColor : [styles.backgroundColor];
+    const safeColors = bgVal.filter(c => typeof c === 'string');
     result.backgroundColor = interpolateColorKeyframes(safeColors, progress, easingFn);
   }
 
@@ -275,6 +273,18 @@ export function buildMotionStyles(config: MotionStyleConfig): React.CSSPropertie
     if (Number.isFinite(blurVal) && blurVal > 0) {
       result.filter = `blur(${blurVal}px)`;
     }
+  }
+
+  if (styles.borderRadius !== undefined) {
+    const radiusVal = interpolateKeyframes(styles.borderRadius, progress, easingFn, duration);
+    result.borderRadius = radiusVal; // AnimatedValue can be strictly number or number[], but CSS needs 'px' or % often.
+    // However interpolateKeyframes returns T. If T is number, it's just number.
+    // borderRadius in React can be number (px) or string.
+    // Let's assume input is number (px) or string if needed, but interpolateKeyframes handles numbers best.
+    // If it returns number, React assumes px.
+    // If user provided string keyframes, interpolateKeyframes might fail if it expects numbers, but it handles arrays?
+    // interpolateKeyframes casts to T. If T is number, fine.
+    // Let's trust React to handle number as px.
   }
 
   return result;

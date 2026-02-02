@@ -255,16 +255,25 @@ export const StepResponsive: React.FC<StepResponsiveProps> = ({
       }
     });
 
-    // Handle opacity
-    const opacityFrom = (prevStepProps as any).opacity;
-    const opacityTo = (targetStepProps as any).opacity;
-    if (opacityFrom !== undefined && opacityTo !== undefined) {
-      styles.opacity = mergeStepValues(opacityFrom, opacityTo);
-    } else if (opacityTo !== undefined) {
-      styles.opacity = opacityTo;
-    } else if (opacityFrom !== undefined) {
-      styles.opacity = opacityFrom;
-    }
+    // Handle visual props: opacity, color, backgroundColor
+    const visualKeys: (keyof StepResponsiveTransform)[] = [
+      "opacity",
+      "color",
+      "backgroundColor",
+    ];
+
+    visualKeys.forEach((key) => {
+      const fromVal = (prevStepProps as any)[key];
+      const toVal = (targetStepProps as any)[key];
+
+      if (fromVal !== undefined && toVal !== undefined) {
+        (styles as any)[key] = mergeStepValues(fromVal, toVal);
+      } else if (toVal !== undefined) {
+        (styles as any)[key] = toVal;
+      } else if (fromVal !== undefined) {
+        (styles as any)[key] = fromVal;
+      }
+    });
 
     const calculatedStyle = buildMotionStyles({
       progress,
@@ -414,15 +423,25 @@ export function useStepResponsive(
       }
     });
 
-    const opacityFrom = (prevStepProps as any).opacity;
-    const opacityTo = (targetStepProps as any).opacity;
-    if (opacityFrom !== undefined && opacityTo !== undefined) {
-      styles.opacity = mergeStepValues(opacityFrom, opacityTo);
-    } else if (opacityTo !== undefined) {
-      styles.opacity = opacityTo;
-    } else if (opacityFrom !== undefined) {
-      styles.opacity = opacityFrom;
-    }
+    // Handle visual props: opacity, color, backgroundColor
+    const visualKeys: (keyof StepResponsiveTransform)[] = [
+      "opacity",
+      "color",
+      "backgroundColor",
+    ];
+
+    visualKeys.forEach((key) => {
+      const fromVal = (prevStepProps as any)[key];
+      const toVal = (targetStepProps as any)[key];
+
+      if (fromVal !== undefined && toVal !== undefined) {
+        (styles as any)[key] = mergeStepValues(fromVal, toVal);
+      } else if (toVal !== undefined) {
+        (styles as any)[key] = toVal;
+      } else if (fromVal !== undefined) {
+        (styles as any)[key] = fromVal;
+      }
+    });
 
     const calculatedStyle = buildMotionStyles({
       progress,

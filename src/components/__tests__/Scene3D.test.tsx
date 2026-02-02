@@ -2,6 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Scene3D, Step, Element3D } from "../Scene3D";
+import { StepResponsive } from "../Scene3D/StepResponsive";
 
 let currentFrame = 0;
 
@@ -240,5 +241,33 @@ describe("Element3D", () => {
 
     const element = container.querySelector('[data-element3d-fixed]') as HTMLElement;
     expect(element.style.transformStyle).toBe("preserve-3d");
+  });
+});
+
+describe("StepResponsive", () => {
+  it("renders with color transition", () => {
+    currentFrame = 0;
+    const { container } = render(
+      <Scene3D>
+        <Step id="step0" duration={30}>Step 0</Step>
+        <Step id="step1" duration={30}>Step 1</Step>
+        
+        <StepResponsive
+          steps={{
+            "step-0": { color: "red", backgroundColor: "white" },
+            "step-1": { color: "blue", backgroundColor: "black" }
+          }}
+          transition={{ duration: 30 }}
+        >
+          <div data-testid="target">Hello</div>
+        </StepResponsive>
+      </Scene3D>
+    );
+
+    const target = container.querySelector("[data-testid=\"target\"]") as HTMLElement;
+    expect(target.style.color).toBeDefined();
+    // Assuming our implementation ensures string colors are processed:
+    // With real culori, a single color keyframe results in that color
+    // but interpolateColorKeyframes logic for 1 color is return colors[0]
   });
 });

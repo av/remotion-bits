@@ -79,6 +79,7 @@ export const StaggeredMotion: React.FC<StaggeredMotionProps> = ({
     color,
     backgroundColor,
     blur,
+    borderRadius,
     frames,
     duration,
     delay = 0,
@@ -108,7 +109,7 @@ export const StaggeredMotion: React.FC<StaggeredMotionProps> = ({
     const motionStyle = buildMotionStyles({
       progress,
       transforms: transition,
-      styles: { opacity, color, backgroundColor, blur },
+      styles: { opacity, color, backgroundColor, blur, borderRadius },
       easing: easingFn,
     });
 

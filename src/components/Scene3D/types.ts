@@ -100,6 +100,8 @@ export type StepRange = string; // e.g., "step-1..step-3"
 
 export interface StepResponsiveTransform extends Transform3DProps {
   opacity?: AnimatedValue;
+  color?: AnimatedValue;
+  backgroundColor?: AnimatedValue;
   transform?: TransformProps["transform"];
 }
 

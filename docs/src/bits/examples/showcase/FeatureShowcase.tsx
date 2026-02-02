@@ -64,8 +64,8 @@ export const Component: React.FC = () => {
     const elementsBase = base.translate(0, -vmin * 120, 0).rotateX(15);
     const elementsIconBase = elementsBase.translate(0, 0, 0).scaleBy(2.0);
 
-    const transitionsBase = base.translate(vmin * 50, 0, 0).rotateY(-15);
-    const transitionsIconBase = transitionsBase.translate(-vmin * 8, 0, 0);
+    const transitionsBase = base.translate(vmin * 200, vmin * 50, 0).rotateY(-15);
+    const transitionsIconBase = transitionsBase.translate(0, vmin * -20, 0).scaleBy(2.0);
 
     const scenesBase = base.translate(-vmin * 50, 0, 0).rotateY(15);
     const scenesIconBase = scenesBase.translate(-vmin * 8, 0, 0);
@@ -171,16 +171,8 @@ export const Component: React.FC = () => {
           elements: [transitionsBase],
           transitions: [
             transitionsBase,
-            titleTransforms.transitionsShift,
-            hold(20),
-            titleTransformsUp.transitionsShift,
           ],
           scenes: [titleTransformsUp.transitionsShift, transitionsBase],
-        },
-        icons: {
-          circle: {
-            transitions: [transitionsIconBase, hold(20), iconTransforms.circle.transitionsUp],
-          },
         },
       },
       scenes: {
@@ -283,6 +275,80 @@ export const Component: React.FC = () => {
     'element-typewriter-rewrite': props,
   });
 
+  const gridData = useMemo(() => {
+    const items = [];
+    const rows = 10;
+    const cols = 25;
+    const size = 10 * vmin;
+    const gap = 1 * vmin;
+    const totalW = cols * size + (cols - 1) * gap;
+    const totalH = rows * size + (rows - 1) * gap;
+
+    const palette = [
+      '#fb4934', '#b8bb26', '#fabd2f', '#83a598',
+      '#d3869b', '#8ec07c', '#fe8019', '#d5c4a1'
+    ];
+
+    const getVariants = () => [
+      () => ({ scale: [0, 1] }),
+      () => ({ x: [size, 0] }),
+      () => ({ x: [-size, 0] }),
+      () => ({ y: [size, 0] }),
+      () => ({ y: [-size, 0] }),
+      () => ({ rotate: [90, 0] }),
+      () => ({ rotate: [-90, 0] }),
+      () => ({ blur: [0, 0] }),
+      () => ({ borderRadius: [size / 2, 0] }),
+      () => ({ color: ['#fe8019', '#d5c4a1'] }),
+    ];
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        // Procedural generation
+        const seed = `grid-${r}-${c}`;
+
+        // Wave from center
+        const cx = (cols - 1) / 2;
+        const cy = (rows - 1) / 2;
+        const dist = Math.sqrt(Math.pow(r - cy, 2) + Math.pow(c - cx, 2));
+        const delayBase = 30 + dist * 2;
+        const duration = 40;
+
+        const transitionProps: any = {
+          opacity: [0, 1],
+          duration,
+          delay: delayBase,
+          easing: 'easeOutCubic',
+        };
+
+        const count = Math.floor(random(seed + 'count') * 4) + 2; // 2 to 5
+        const variants = getVariants();
+
+        for (let i = 0; i < count; i++) {
+          const pick = Math.floor(random(seed + 'pick' + i) * variants.length);
+          Object.assign(transitionProps, variants[pick]());
+        }
+
+        const colorIndex = Math.floor(random(seed + 'color') * palette.length);
+        const baseStyle: React.CSSProperties = {
+          width: size,
+          height: size,
+          backgroundColor: palette[colorIndex],
+          borderRadius: 0,
+        };
+
+        items.push(
+          <div key={`${r}-${c}`} style={{ position: 'absolute', left: c * (size + gap), top: r * (size + gap), width: size, height: size, transformStyle: 'preserve-3d' }}>
+            <StaggeredMotion transition={transitionProps}>
+              <div style={{ width: '100%', height: '100%', ...baseStyle }} />
+            </StaggeredMotion>
+          </div>
+        );
+      }
+    }
+    return { items, width: totalW, height: totalH };
+  }, [vmin]);
+
   return (
     <AbsoluteFill
       style={{
@@ -311,33 +377,33 @@ export const Component: React.FC = () => {
           {...positions.elements.items.particles.toProps()}
           transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-              <FloatingCard>
-                <Particles style={{ position: 'absolute', inset: 0, opacity: 0.6 }}>
-                  <Spawner
-                    rate={2}
-                    max={100}
-                    lifespan={80}
-                    velocity={{ x: 0, y: -0.6, varianceX: 0.4, varianceY: 0.2 }}
-                    area={{ width: rect.width, height: rect.height }}
-                  >
-                    <div
-                      style={{
-                        width: vmin * 2,
-                        height: vmin * 2,
-                        borderRadius: '50%',
-                        background: 'var(--color-primary-hover)',
-                      }}
-                    />
-                  </Spawner>
-                  <Behavior
-                    drag={0.96}
-                    wiggle={{ magnitude: 0.6, frequency: 0.25 }}
-                    opacity={[1, 0]}
-                    scale={{ start: 1, end: 0.4, startVariance: 0.2, endVariance: 0.1 }}
-                  />
-                </Particles>
-                <span style={{ position: 'relative', zIndex: 1, fontWeight: 'bold', fontSize: vmin * 3, fontFamily: 'monospace' }}>Particles</span>
-              </FloatingCard>
+          <FloatingCard>
+            <Particles style={{ position: 'absolute', inset: 0, opacity: 0.6 }}>
+              <Spawner
+                rate={2}
+                max={100}
+                lifespan={80}
+                velocity={{ x: 0, y: -0.6, varianceX: 0.4, varianceY: 0.2 }}
+                area={{ width: rect.width, height: rect.height }}
+              >
+                <div
+                  style={{
+                    width: vmin * 2,
+                    height: vmin * 2,
+                    borderRadius: '50%',
+                    background: 'var(--color-primary-hover)',
+                  }}
+                />
+              </Spawner>
+              <Behavior
+                drag={0.96}
+                wiggle={{ magnitude: 0.6, frequency: 0.25 }}
+                opacity={[1, 0]}
+                scale={{ start: 1, end: 0.4, startVariance: 0.2, endVariance: 0.1 }}
+              />
+            </Particles>
+            <span style={{ position: 'relative', zIndex: 1, fontWeight: 'bold', fontSize: vmin * 3, fontFamily: 'monospace' }}>Particles</span>
+          </FloatingCard>
         </Step>
 
         <Step
@@ -345,23 +411,23 @@ export const Component: React.FC = () => {
           {...positions.elements.items.animatedText.toProps()}
           transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-              <FloatingCard>
-                <AnimatedText
-                  style={{ fontSize: vmin * 3, fontWeight: 'bold', fontFamily: 'monospace' }}
-                  transition={{
-                    delay: 20,
-                    y: [10, 0],
-                    opacity: [0, 1],
-                    blur: [2, 0],
-                    split: 'character',
-                    splitStagger: 1,
-                    duration: 10,
-                    easing: 'easeInOutCubic',
-                  }}
-                >
-                  Text Effects
-                </AnimatedText>
-              </FloatingCard>
+          <FloatingCard>
+            <AnimatedText
+              style={{ fontSize: vmin * 3, fontWeight: 'bold', fontFamily: 'monospace' }}
+              transition={{
+                delay: 20,
+                y: [10, 0],
+                opacity: [0, 1],
+                blur: [2, 0],
+                split: 'character',
+                splitStagger: 1,
+                duration: 10,
+                easing: 'easeInOutCubic',
+              }}
+            >
+              Text Effects
+            </AnimatedText>
+          </FloatingCard>
         </Step>
 
         <Step
@@ -369,20 +435,20 @@ export const Component: React.FC = () => {
           {...positions.elements.items.counter.toProps()}
           transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-              <FloatingCard>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: vmin * 1 }}>
-                  <AnimatedCounter
-                    transition={{
-                      delay: 20,
-                      values: [0, 1000],
-                      duration: revealDuration,
-                    }}
-                    postfix="+"
-                    style={{ fontSize: vmin * 4, fontWeight: 'bold', fontFamily: 'monospace' }}
-                  />
-                  <span style={{ fontSize: vmin * 2, fontFamily: 'monospace', opacity: 0.8 }}>Counter</span>
-                </div>
-              </FloatingCard>
+          <FloatingCard>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: vmin * 1 }}>
+              <AnimatedCounter
+                transition={{
+                  delay: 20,
+                  values: [0, 1000],
+                  duration: revealDuration,
+                }}
+                postfix="+"
+                style={{ fontSize: vmin * 4, fontWeight: 'bold', fontFamily: 'monospace' }}
+              />
+              <span style={{ fontSize: vmin * 2, fontFamily: 'monospace', opacity: 0.8 }}>Counter</span>
+            </div>
+          </FloatingCard>
         </Step>
 
         <Step
@@ -390,37 +456,37 @@ export const Component: React.FC = () => {
           {...positions.elements.items.typeWriter.toProps()}
           transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-              <FloatingCard>
-                <div
+          <FloatingCard>
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: vmin * 2,
+                fontFamily: 'monospace',
+              }}
+            >
+              <Sequence layout="none" from={20}>
+                <TypeWriter
+                  text={
+                    "import { TypeWriter } from 'remotion-bits';\n\n<TypeWriter\n  text=\"Hello Remotion\"\n  typeSpeed={2}\n  pauseAfterType={20}\n/>"
+                  }
+                  typeSpeed={2}
+                  deleteSpeed={1}
+                  pauseAfterType={60}
+                  cursor="▋"
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: vmin * 2,
-                    fontFamily: 'monospace',
+                    fontSize: vmin * 1.7,
+                    lineHeight: 1.25,
+                    whiteSpace: 'pre',
+                    opacity: 0.9,
                   }}
-                >
-                  <Sequence layout="none" from={20}>
-                  <TypeWriter
-                    text={
-                      "import { TypeWriter } from 'remotion-bits';\n\n<TypeWriter\n  text=\"Hello Remotion\"\n  typeSpeed={2}\n  pauseAfterType={20}\n/>"
-                    }
-                    typeSpeed={2}
-                    deleteSpeed={1}
-                    pauseAfterType={60}
-                    cursor="▋"
-                    style={{
-                      fontSize: vmin * 1.7,
-                      lineHeight: 1.25,
-                      whiteSpace: 'pre',
-                      opacity: 0.9,
-                    }}
-                  />
-                  </Sequence>
-                </div>
-              </FloatingCard>
+                />
+              </Sequence>
+            </div>
+          </FloatingCard>
         </Step>
 
         <Step
@@ -428,25 +494,25 @@ export const Component: React.FC = () => {
           {...positions.elements.items.codeBlock.toProps()}
           transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-              <FloatingCard>
-                <CodeBlock
-                  code={
-                    "import { AnimatedText, useViewportRect } from 'remotion-bits';\n\nconst rect = useViewportRect();\n\n<AnimatedText\n  style={{ fontSize: vmin * 4 }}\n  transition={{ split: 'character', splitStagger: 2 }}\n>\n  Remotion Bits\n</AnimatedText>"
-                  }
-                  language="tsx"
-                  showLineNumbers={false}
-                  fontSize={vmin * 1.15}
-                  padding={vmin * 1.2}
-                  transition={{
-                    duration: revealDuration,
-                    delay: 20,
-                    lineStagger: 2,
-                    opacity: [0, 1],
-                    y: [8, 0],
-                    blur: [10, 0],
-                  }}
-                />
-              </FloatingCard>
+          <FloatingCard>
+            <CodeBlock
+              code={
+                "import { AnimatedText, useViewportRect } from 'remotion-bits';\n\nconst rect = useViewportRect();\n\n<AnimatedText\n  style={{ fontSize: vmin * 4 }}\n  transition={{ split: 'character', splitStagger: 2 }}\n>\n  Remotion Bits\n</AnimatedText>"
+              }
+              language="tsx"
+              showLineNumbers={false}
+              fontSize={vmin * 1.15}
+              padding={vmin * 1.2}
+              transition={{
+                duration: revealDuration,
+                delay: 20,
+                lineStagger: 2,
+                opacity: [0, 1],
+                y: [8, 0],
+                blur: [10, 0],
+              }}
+            />
+          </FloatingCard>
         </Step>
 
         <Step
@@ -454,25 +520,25 @@ export const Component: React.FC = () => {
           {...positions.elements.items.glitchCycle.toProps()}
           transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-              <FloatingCard>
-                <AnimatedText
-                  style={{
-                    fontFamily: 'monospace',
-                    fontSize: vmin * 2.5,
-                    fontWeight: 'bold',
-                  }}
-                  transition={{
-                    glitch: [0.6, 0],
-                    frames: [0, 180],
-                    duration: revealDuration,
-                    cycle: {
-                      texts: ["INITIALIZING", "LOADING", "ONLINE", "READY"],
-                      itemDuration: revealDuration * 2,
-                    },
-                    delay: 20,
-                  }}
-                />
-              </FloatingCard>
+          <FloatingCard>
+            <AnimatedText
+              style={{
+                fontFamily: 'monospace',
+                fontSize: vmin * 2.5,
+                fontWeight: 'bold',
+              }}
+              transition={{
+                glitch: [0.6, 0],
+                frames: [0, 180],
+                duration: revealDuration,
+                cycle: {
+                  texts: ["INITIALIZING", "LOADING", "ONLINE", "READY"],
+                  itemDuration: revealDuration * 2,
+                },
+                delay: 20,
+              }}
+            />
+          </FloatingCard>
         </Step>
 
         <Step
@@ -480,61 +546,61 @@ export const Component: React.FC = () => {
           {...positions.elements.items.slideIn.toProps()}
           transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-              <FloatingCard>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: vmin * 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: vmin * 2,
-                    fontSize: vmin * 2.5,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  <AnimatedText
-                    transition={{
-                      delay: 20,
-                      y: [-30, 0],
-                      opacity: [0, 1],
-                      duration: revealDuration,
-                    }}
-                  >
-                    Top
-                  </AnimatedText>
-                  <AnimatedText
-                    transition={{
-                      delay: 25,
-                      x: [30, 0],
-                      opacity: [0, 1],
-                      duration: revealDuration,
-                    }}
-                  >
-                    Right
-                  </AnimatedText>
-                  <AnimatedText
-                    transition={{
-                      delay: 30,
-                      y: [30, 0],
-                      opacity: [0, 1],
-                      duration: revealDuration,
-                    }}
-                  >
-                    Bottom
-                  </AnimatedText>
-                  <AnimatedText
-                    transition={{
-                      delay: 35,
-                      x: [-30, 0],
-                      opacity: [0, 1],
-                      duration: revealDuration,
-                    }}
-                  >
-                    Left
-                  </AnimatedText>
-                </div>
-              </FloatingCard>
+          <FloatingCard>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: vmin * 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: vmin * 2,
+                fontSize: vmin * 2.5,
+                fontWeight: 'bold',
+              }}
+            >
+              <AnimatedText
+                transition={{
+                  delay: 20,
+                  y: [-30, 0],
+                  opacity: [0, 1],
+                  duration: revealDuration,
+                }}
+              >
+                Top
+              </AnimatedText>
+              <AnimatedText
+                transition={{
+                  delay: 25,
+                  x: [30, 0],
+                  opacity: [0, 1],
+                  duration: revealDuration,
+                }}
+              >
+                Right
+              </AnimatedText>
+              <AnimatedText
+                transition={{
+                  delay: 30,
+                  y: [30, 0],
+                  opacity: [0, 1],
+                  duration: revealDuration,
+                }}
+              >
+                Bottom
+              </AnimatedText>
+              <AnimatedText
+                transition={{
+                  delay: 35,
+                  x: [-30, 0],
+                  opacity: [0, 1],
+                  duration: revealDuration,
+                }}
+              >
+                Left
+              </AnimatedText>
+            </div>
+          </FloatingCard>
         </Step>
 
         <Step
@@ -542,25 +608,25 @@ export const Component: React.FC = () => {
           {...positions.elements.items.carousel.toProps()}
           transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-              <FloatingCard>
-                <AnimatedText
-                  style={{
-                    fontSize: vmin * 3,
-                    fontWeight: 'bold',
-                    fontFamily: 'monospace',
-                  }}
-                  transition={{
-                    delay: 20,
-                    opacity: [0, 1, 1, 0],
-                    y: [10, 0, 0, -10],
-                    duration: revealDuration,
-                    cycle: {
-                      texts: ["Design", "Build", "Animate", "Create"],
-                      itemDuration: revealDuration,
-                    },
-                  }}
-                />
-              </FloatingCard>
+          <FloatingCard>
+            <AnimatedText
+              style={{
+                fontSize: vmin * 3,
+                fontWeight: 'bold',
+                fontFamily: 'monospace',
+              }}
+              transition={{
+                delay: 20,
+                opacity: [0, 1, 1, 0],
+                y: [10, 0, 0, -10],
+                duration: revealDuration,
+                cycle: {
+                  texts: ["Design", "Build", "Animate", "Create"],
+                  itemDuration: revealDuration,
+                },
+              }}
+            />
+          </FloatingCard>
         </Step>
 
         <Step
@@ -568,36 +634,36 @@ export const Component: React.FC = () => {
           {...positions.elements.items.typewriterRewrite.toProps()}
           transition={{ opacity: [0, 1], blur: [10, 0] }}
         >
-              <FloatingCard>
-                <div
+          <FloatingCard>
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: vmin * 2,
+                fontFamily: 'monospace',
+              }}
+            >
+              <Sequence layout="none" from={20}>
+                <TypeWriter
+                  text="Build amazing videos with Remotion"
+                  typeSpeed={2}
+                  deleteSpeed={3}
+                  pauseAfterType={40}
+                  pauseAfterDelete={10}
+                  loop
+                  cursor="▋"
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: vmin * 2,
-                    fontFamily: 'monospace',
+                    fontSize: vmin * 2,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
                   }}
-                >
-                  <Sequence layout="none" from={20}>
-                  <TypeWriter
-                    text="Build amazing videos with Remotion"
-                    typeSpeed={2}
-                    deleteSpeed={3}
-                    pauseAfterType={40}
-                    pauseAfterDelete={10}
-                    loop
-                    cursor="▋"
-                    style={{
-                      fontSize: vmin * 2,
-                      fontWeight: 'bold',
-                      textAlign: 'center',
-                    }}
-                  />
-                  </Sequence>
-                </div>
-              </FloatingCard>
+                />
+              </Sequence>
+            </div>
+          </FloatingCard>
         </Step>
 
         <Step
@@ -605,20 +671,25 @@ export const Component: React.FC = () => {
           duration={120}
           {...positions.transitions.base.toProps()}
         >
-          <Element3D centered style={{ width: vmin * 60, height: vmin * 30 }}>
-            <GradientTransition
-              gradient={[
-                "linear-gradient(45deg, #9580ff, #80ffea)",
-                "linear-gradient(135deg, #80ffea, #ff80bf)",
-                "linear-gradient(225deg, #ff80bf, #9580ff)",
-                "linear-gradient(315deg, #9580ff, #80ffea)",
-                "linear-gradient(45deg, #9580ff, #80ffea)"
-              ]}
-              duration={120}
-            />
-            <AbsoluteFill style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <h2 style={{ fontSize: vmin * 6, color: '#000', mixBlendMode: 'overlay' }}>CSS Gradients</h2>
-            </AbsoluteFill>
+          <Element3D
+            centered
+            style={{ width: gridData.width, height: gridData.height }}
+          >
+            {gridData.items}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'radial-gradient(circle at 50% 50%, #100f0f88, transparent 30%)',
+                zIndex: 100,
+                transform: `translateZ(0px)`,
+              }}
+            >
+
+            </div>
           </Element3D>
         </Step>
 
@@ -700,19 +771,21 @@ export const Component: React.FC = () => {
           centered
           style={{
             fontSize,
-            width: vmin * 70,
+            width: 'max-content',
             position: 'absolute',
           }}
           steps={{
-            'intro': { transform: positions.transitions.title.intro },
+            'intro': {
+              transform: positions.transitions.title.intro,
+            },
             ...mapElementSteps({
-               transform: positions.transitions.title.elements 
+              transform: positions.transitions.title.elements,
             }),
             'transitions': {
               transform: positions.transitions.title.transitions,
             },
             'scenes': {
-              transform: positions.transitions.title.scenes,
+              transform: positions.transitions.title.transitions,
             }
           }}
         >
@@ -795,7 +868,7 @@ export const Component: React.FC = () => {
               transform: positions.intro.icons.circle,
             },
             'transitions': {
-              transform: positions.transitions.icons.circle.transitions,
+              transform: positions.transitions.iconBase,
             },
             'outro': {
               transform: positions.outro.icons.circle,
