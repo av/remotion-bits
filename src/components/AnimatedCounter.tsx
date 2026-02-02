@@ -1,7 +1,8 @@
 import React from "react";
-import { useCurrentFrame, useVideoConfig } from "remotion";
+import { useVideoConfig } from "remotion";
 import {
   useMotionTiming,
+  useStepTiming,
   buildMotionStyles,
   interpolateKeyframes,
   getEasingFunction,
@@ -72,6 +73,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   style,
 }) => {
   const { fps } = useVideoConfig();
+  const stepTiming = useStepTiming();
 
   const {
     values,
@@ -87,9 +89,11 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   } = transition;
 
   // Calculate total duration for interpolation context
-  const startFrame = frames ? frames[0] : 0;
-  const endFrame = frames ? frames[1] : (duration ?? fps);
-  const totalDuration = endFrame - startFrame;
+  const totalDuration = React.useMemo(() => {
+    if (frames) return frames[1] - frames[0];
+    if (stepTiming?.stepConfig) return duration ?? 30;
+    return duration ?? fps;
+  }, [frames, stepTiming, duration, fps]);
 
   const easingFn = getEasingFunction(easing);
 

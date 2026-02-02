@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react';
-import { AbsoluteFill, useVideoConfig, Sequence, interpolate, Easing, random } from 'remotion';
+import { AbsoluteFill, useVideoConfig, Sequence, random } from 'remotion';
 import {
   AnimatedText,
   AnimatedCounter,
   TypeWriter,
   CodeBlock,
-  GradientTransition,
   StaggeredMotion,
   Particles,
   Spawner,
@@ -18,15 +17,13 @@ import {
   Transform3D,
   Vector3,
   StepResponsive,
-  hold,
-  anyElement,
 } from 'remotion-bits';
 
 export const metadata = {
   name: "RemotionBits",
   description: "Promotional showcase for the RemotionBits library.",
   tags: ["showcase", "promo", "library"],
-  duration: 1500,
+  duration: 1140,
   width: 1920,
   height: 1080,
   registry: {
@@ -69,6 +66,21 @@ export const Component: React.FC = () => {
 
     const scenesBase = base.translate(-vmin * 120, vmin * 70, 0).rotateY(15);
     const scenesIconBase = scenesBase.scaleBy(2.0);
+
+    const sceneItems = {
+      hero: base.translate(vmin * 28, vmin * -5, vmin * 5).rotateY(-10),
+      dash: base.translate(vmin * -80, vmin * -30, 0).rotateY(5),
+      notif: base.translate(vmin * -70, vmin * 0, vmin * 10),
+      code: base.translate(vmin * 50, vmin * -30),
+      player: base.translate(vmin * -17, vmin * 18),
+    };
+
+    const getScatteredTransform = (t: Transform3D, seed: string) => {
+      const r = 50 * vmin;
+      const x = (random(seed + 'x') - 0.5) * 2 * r;
+      const y = (random(seed + 'y') - 0.5) * 2 * r;
+      return t.translate(x, y, 0);
+    };
 
     const triangleOffset = new Vector3(0, -vmin * 2, 0);
     const squareOffset = new Vector3(-vmin * 2, vmin * 2, 0);
@@ -191,11 +203,23 @@ export const Component: React.FC = () => {
         base: scenesBase,
         iconBase: scenesIconBase,
         items: {
-          hero: base.translate(vmin * 22, vmin * -5, vmin * 5).rotateY(-10),
-          dash: base.translate(vmin * -18, vmin * -12, 0).rotateY(5),
-          notif: base.translate(vmin * -12, vmin * 14, vmin * 10).rotateZ(-2),
-          code: base.translate(vmin * 18, vmin * 15, vmin * -5).rotateX(-5).rotateY(-10),
-          player: base.translate(vmin * -22, vmin * 8, vmin * 5).rotateY(10),
+          hero: [
+            sceneItems.hero.translate(0, vmin * 20, 0),
+            sceneItems.hero,
+          ],
+          dash: [
+            sceneItems.dash.translate(0, vmin * 15, 0),
+            sceneItems.dash,
+          ],
+          notif: [
+            sceneItems.notif.scaleBy(0).translate(0, vmin * 10, 0),
+            sceneItems.notif,
+          ],
+          code: [
+            sceneItems.code.translate(0, vmin * 15, 0),
+            sceneItems.code,
+          ],
+          player: [sceneItems.player],
         },
         title: {
           intro: [scenesBase],
@@ -746,20 +770,28 @@ export const Component: React.FC = () => {
 
         <Step
           id="scenes"
-          duration={200}
+          duration={120}
           {...positions.scenes.base.toProps()}
+          style={{
+            transformStyle: 'preserve-3d',
+          }}
+          exitTransition={{
+            transform: [
+              positions.scenes.base,
+              positions.scenes.base.translate(0, vmin * 20, 0),
+            ]
+          }}
         >
           {/* Scene 1: Marketing Hero (Top Right) */}
           <Element3D
             centered
-            style={{ width: vmin * 32, height: vmin * 40 }}
+            style={{ width: vmin * 32, height: vmin * 24 }}
             transition={{
               delay: 10,
               opacity: [0, 1],
               duration: 35,
-              transform: [
-                positions.scenes.items.hero,
-              ]
+              transform: positions.scenes.items.hero,
+              easing: 'easeInOutCubic',
             }}
           >
             <div style={{
@@ -768,20 +800,11 @@ export const Component: React.FC = () => {
               background: 'linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%)',
               borderRadius: vmin * 1.5,
               overflow: 'hidden',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
             }}>
-              <Particles style={{ position: 'absolute', inset: 0 }}>
-                <Spawner rate={10} velocity={{ x: 0, y: -0.5 }}>
-                  <span>Summer</span>
-                  <span>Vibes</span>
-                </Spawner>
-                <Behavior
-                  scale={[0.8, 0]}
-                  opacity={[0.6, 0]}
-                  wiggle={{ magnitude: 5, frequency: 0.1 }}
-                />
-              </Particles>
-              <div style={{ position: 'absolute', bottom: vmin * 3, left: vmin * 2.5, right: vmin * 2.5 }}>
+              <div style={{ 
+                position: 'absolute',
+                bottom: vmin * 3, left: vmin * 2.5, right: vmin * 2.5 
+              }}>
                 <div style={{
                   background: 'white',
                   color: 'black',
@@ -790,13 +813,15 @@ export const Component: React.FC = () => {
                   display: 'inline-block',
                   fontSize: vmin * 1.2,
                   fontWeight: 'bold',
-                  marginBottom: vmin
                 }}>
                   NEW ARRIVAL
                 </div>
                 <AnimatedText
                   style={{ color: '#fff', fontSize: vmin * 4, lineHeight: 0.9, fontWeight: 900, textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
-                  transition={{ delay: 20, split: 'word', splitStagger: 5, y: [10, 0], opacity: [0, 1] }}
+                  transition={{ 
+                    delay: 20, duration: 20, split: 'word', splitStagger: 5, y: [10, 0], opacity: [0, 1],
+                    easing: 'easeInOutCubic',
+                  }}
                 >
                   SUMMER VIBES
                 </AnimatedText>
@@ -807,14 +832,13 @@ export const Component: React.FC = () => {
           {/* Scene 2: Dashboard/Data (Top Left) */}
           <Element3D
             centered
-            style={{ width: vmin * 36, height: vmin * 22 }}
+            style={{ width: vmin * 36, height: vmin * 16 }}
             transition={{
               delay: 20,
               opacity: [0, 1],
               duration: 35,
-              transform: [
-                positions.scenes.items.dash,
-              ]
+              transform: positions.scenes.items.dash,
+              easing: 'easeInOutCubic',
             }}
           >
             <div style={{
@@ -827,6 +851,7 @@ export const Component: React.FC = () => {
               boxShadow: '0 15px 35px rgba(0,0,0,0.4)',
               display: 'flex',
               flexDirection: 'column',
+              lineHeight: '1rem',
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: vmin }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: vmin }}>
@@ -837,22 +862,14 @@ export const Component: React.FC = () => {
               </div>
               <div style={{ marginBottom: vmin }}>
                 <AnimatedCounter
-                  transition={{ values: [0, 8492], duration: 45, easing: 'easeOutQuart' }}
+                  transition={{ delay: 20, values: [0, 8492], duration: 45, easing: 'easeOutQuart' }}
                   postfix="$"
                   style={{ color: '#fff', fontSize: vmin * 4, fontWeight: 'bold' }}
                 />
               </div>
-              <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: vmin }}>
-                {[0.4, 0.7, 0.5, 0.9, 0.3, 0.8, 0.6].map((h, i) => (
-                  <div key={i} style={{ flex: 1, height: '100%', display: 'flex', alignItems: 'flex-end' }}>
-                    <StaggeredMotion transition={{ delay: 35 + i * 3, height: [0, h * 100 + '%'], duration: 30, easing: 'easeOutCubic' }}>
-                      <div style={{ width: '100%', background: i === 3 ? '#e94560' : 'rgba(233, 69, 96, 0.3)', borderRadius: vmin / 3 }} />
-                    </StaggeredMotion>
-                  </div>
-                ))}
-              </div>
             </div>
           </Element3D>
+
           {/* Scene 3: Notification (Bottom Left) */}
           <Element3D
             centered
@@ -860,10 +877,9 @@ export const Component: React.FC = () => {
             transition={{
               delay: 30,
               opacity: [0, 1],
-              duration: 35,
-              transform: [
-                positions.scenes.items.notif
-              ]
+              duration: 20,
+              transform: positions.scenes.items.notif,
+              easing: 'easeOutCubic',
             }}
           >
             <div style={{
@@ -906,9 +922,7 @@ export const Component: React.FC = () => {
               opacity: [0, 1],
               duration: 35,
               easing: 'easeOutCubic',
-              transform: [
-                positions.scenes.items.code,
-              ]
+              transform: positions.scenes.items.code
             }}
           >
             <div style={{
@@ -950,14 +964,10 @@ export const Component: React.FC = () => {
             style={{ width: vmin * 25, height: vmin * 15 }}
             transition={{
               delay: 25,
-              x: [vmin * 20, vmin * 15],
-              rotateY: [30, 0],
               opacity: [0, 1],
               duration: 35,
               easing: 'easeOutCubic',
-              transform: [
-                positions.scenes.items.player
-              ]
+              transform: positions.scenes.items.player
             }}
           >
             <div style={{
@@ -1047,6 +1057,7 @@ export const Component: React.FC = () => {
             'outro': {
               transform: positions.outro.title,
               duration: 'step',
+              easing: 'easeInOutCubic',
             }
           }}
         >
