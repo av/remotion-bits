@@ -1,10 +1,13 @@
 export { AnimatedText } from "./AnimatedText";
 export { TypeWriter } from "./TypeWriter";
+export type { TypeWriterProps, TypeWriterTransitionProps } from "./TypeWriter";
 export { AnimatedCounter } from "./AnimatedCounter";
 export type { AnimatedCounterProps, AnimatedCounterTransitionProps } from "./AnimatedCounter";
 export { MatrixRain } from "./MatrixRain";
 export { GradientTransition } from "./GradientTransition";
 export { StaggeredMotion } from "./StaggeredMotion";
+export { ScrollingColumns } from "./ScrollingImages";
+export type { ScrollingColumnsProps, ScrollingColumnConfig } from "./ScrollingImages";
 export { Particles, Spawner, Behavior } from "./ParticleSystem";
 export {
   Scene3D,
@@ -40,8 +43,4 @@ export type {
 export { CodeBlock } from "./CodeBlock";
 export type {
   CodeBlockProps,
-  CodeBlockHighlightRegion,
-  CodeBlockFocusRegion,
-  CodeBlockTransitionProps,
 } from "./CodeBlock";
-
