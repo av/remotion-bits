@@ -72,9 +72,9 @@ When adding new Bits to the documentation site, ensure that you:
 2. Add `metadata` for Bit's representation in the jsrepo registry of this package, see other Bits and jsrepo for reference
 3. Create a new mdx file for the Bit with proper frontmatter and content structure
 
-When creating bits, keep the following in mind:
-- You don't need AbsoluteFill, bits are pre-wrapped for display
-- Do not hardcode font sizes; use the `useViewportRect` and fractional sizing instead
+When working with Bits, always keep following in mind:
+- Do not wrap a Bit in the AutoFill, Bits are pre-wrapped for display
+- Use the `useViewportRect` and fractional sizing, do not use absolute values
 - Use `rect.vmin`, `rect.vmax` for responsive sizing of the Bit elements
 
 ### Maintaining the Skill File

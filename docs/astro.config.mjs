@@ -80,10 +80,10 @@ export default defineConfig({
             },
         },
         ssr: {
-            noExternal: ['remotion', '@remotion/player', 'remotion-bits'],
+            noExternal: ['remotion', '@remotion/player', 'remotion-bits', 'prism-react-renderer'],
         },
         optimizeDeps: {
-            include: ['react', 'react-dom', 'remotion', '@remotion/player', '@uiw/react-codemirror', '@codemirror/state', '@codemirror/view', '@codemirror/lang-javascript', '@codemirror/theme-one-dark'],
+            include: ['react', 'react-dom', 'remotion', '@remotion/player', '@uiw/react-codemirror', '@codemirror/state', '@codemirror/view', '@codemirror/lang-javascript', '@codemirror/theme-one-dark', 'prism-react-renderer'],
             exclude: ['remotion-bits'],
         },
 
