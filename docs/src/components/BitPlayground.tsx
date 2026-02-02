@@ -161,6 +161,7 @@ const compileUserCode = (
         hold,
         AnimatedCounter,
         TypeWriter,
+        CodeBlock,
       } = RemotionBits;
 
       ${cleanedTranspiled}
@@ -189,13 +190,20 @@ const compileUserCode = (
 };
 
 export const BitPlayground: React.FC<BitPlaygroundProps> = ({
-  bitName
+  bitName,
+  bit: bitProp,
 }) => {
-  // Get the bit from the registry using the name
-  const bit = getBit(bitName);
+  // Get the bit from the registry using the name or prop
+  const bit = useMemo(() => {
+    if (bitProp) return bitProp;
+    if (bitName) return getBit(bitName);
+    return null;
+  }, [bitName, bitProp]);
 
-  const [editedCode, setEditedCode] = useState(bit.sourceCode);
-  const [bitProps, setBitProps] = useState<Record<string, any>>(bit.props || {});
+  const [editedCode, setEditedCode] = useState(bit?.sourceCode || '');
+  const [bitProps, setBitProps] = useState<Record<string, any>>(bit?.props || {});
+
+  if (!bit) return <div className="bit-playground-error">Error: Bit not found</div>;
 
   const { Component: OriginalComponent } = bit;
   const { duration, width = 1920, height = 1080 } = bit.metadata;
@@ -208,7 +216,9 @@ export const BitPlayground: React.FC<BitPlaygroundProps> = ({
   // Use the live component if available, otherwise fall back to original
   const BaseComponent = LiveComponent || OriginalComponent;
 
-  const ActiveComponent = withShowcaseFill(BaseComponent);
+  const ActiveComponent = useMemo(() => {
+    return BaseComponent ? withShowcaseFill(BaseComponent) : null;
+  }, [BaseComponent]);
 
   const isModified = editedCode !== bit.sourceCode;
 
@@ -330,17 +340,23 @@ export const Component: React.FC = () => {${propsDeclaration}
             <div
               className="bit-playground-player-container"
             >
-              <ShowcasePlayer
-                component={ActiveComponent}
-                duration={duration}
-                width={width}
-                height={height}
-                fps={30}
-                controls={true}
-                loop={true}
-                autoPlay={true}
-                autoResize={true}
-              />
+              {ActiveComponent ? (
+                <ShowcasePlayer
+                  component={ActiveComponent}
+                  duration={duration}
+                  width={width}
+                  height={height}
+                  fps={30}
+                  controls={true}
+                  loop={true}
+                  autoPlay={true}
+                  autoResize={true}
+                />
+              ) : (
+                <div className="text-red-400 p-4 text-center">
+                  Component failed to render. Reference the compilation error or logs.
+                </div>
+              )}
             </div>
           </div>
         </div>
