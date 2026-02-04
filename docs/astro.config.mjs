@@ -41,7 +41,7 @@ function getBitsSidebar() {
     });
 
     // Define preferred order for categories
-    const orderedCategories = ['Full Compositions', 'Text Animations', 'Background Effects', 'Particles', '3D Scenes'];
+    const orderedCategories = ['Full Compositions', 'Staggered Motion', 'Text Animations', 'Background Effects', 'Particles', '3D Scenes'];
     const sidebarItems = [{ label: 'Introduction', link: '/docs/bits-catalog' }];
 
     // Add ordered categories first

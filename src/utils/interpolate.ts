@@ -2,6 +2,30 @@ import { Matrix4 } from 'three';
 import { interpolateMatrix4 } from './interpolate3d';
 import { Transform3D } from './transform3d';
 
+export type SpringConfig = {
+  mass?: number;
+  stiffness?: number;
+  damping?: number;
+};
+
+const springFactory = (config: SpringConfig = {}) => {
+  const { mass = 1, stiffness = 100, damping = 10 } = config;
+  const w0 = Math.sqrt(stiffness / mass);
+  const zeta = damping / (2 * Math.sqrt(stiffness * mass));
+  
+  return (t: number) => {
+    if (t === 0) return 0;
+    if (t === 1) return 1;
+    
+    if (zeta < 1) {
+       const wd = w0 * Math.sqrt(1 - zeta * zeta);
+       return 1 - Math.exp(-zeta * w0 * t) * (Math.cos(wd * t) + (zeta * w0 / wd) * Math.sin(wd * t));
+    } else {
+       return 1 - Math.exp(-w0 * t) * (1 + w0 * t);
+    }
+  };
+};
+
 /**
  * Easing functions for non-linear interpolation
  */
@@ -24,10 +48,14 @@ export const Easing = {
   easeOutQuart: (t: number) => 1 - (--t) * t * t * t,
   easeInOutQuart: (t: number) =>
     t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t,
+  spring: springFactory(),
 } as const;
 
 export type EasingName = keyof typeof Easing;
 export type EasingFunction = (t: number) => number;
+
+export const steps = (steps: number) => (t: number) => Math.floor(t * steps) / steps;
+export const spring = springFactory;
 
 export type Hold = { type: 'hold'; frames: number };
 export const hold = (frames: number): Hold => ({ type: 'hold', frames });

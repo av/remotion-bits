@@ -10,6 +10,14 @@ import * as StaggeredFadeInModule from './examples/staggered-motion/StaggeredFad
 import StaggeredFadeInSource from './examples/staggered-motion/StaggeredFadeIn.tsx?raw';
 import * as SlideFromLeftModule from './examples/staggered-motion/SlideFromLeft';
 import SlideFromLeftSource from './examples/staggered-motion/SlideFromLeft.tsx?raw';
+import * as EasingsVisualizerModule from './examples/staggered-motion/EasingsVisualizer';
+import EasingsVisualizerSource from './examples/staggered-motion/EasingsVisualizer.tsx?raw';
+import * as GridStaggerModule from './examples/staggered-motion/GridStagger';
+import GridStaggerSource from './examples/staggered-motion/GridStagger.tsx?raw';
+import * as CardStackModule from './examples/staggered-motion/CardStack';
+import CardStackSource from './examples/staggered-motion/CardStack.tsx?raw';
+import * as ListRevealModule from './examples/staggered-motion/ListReveal';
+import ListRevealSource from './examples/staggered-motion/ListReveal.tsx?raw';
 import * as LinearGradientModule from './examples/gradient-transition/LinearGradient';
 import LinearGradientSource from './examples/gradient-transition/LinearGradient.tsx?raw';
 import * as RadialGradientModule from './examples/gradient-transition/RadialGradient';
@@ -114,6 +122,10 @@ export const bits = {
   BlurSlideWord: { ...BlurSlideWordModule, sourceCode: extractSource(BlurSlideWordSource) },
   StaggeredFadeIn: { ...StaggeredFadeInModule, sourceCode: extractSource(StaggeredFadeInSource) },
   SlideFromLeft: { ...SlideFromLeftModule, sourceCode: extractSource(SlideFromLeftSource) },
+  EasingsVisualizer: { ...EasingsVisualizerModule, sourceCode: extractSource(EasingsVisualizerSource) },
+  GridStagger: { ...GridStaggerModule, sourceCode: extractSource(GridStaggerSource) },
+  CardStack: { ...CardStackModule, sourceCode: extractSource(CardStackSource) },
+  ListReveal: { ...ListRevealModule, sourceCode: extractSource(ListRevealSource) },
   LinearGradient: { ...LinearGradientModule, sourceCode: extractSource(LinearGradientSource) },
   RadialGradient: { ...RadialGradientModule, sourceCode: extractSource(RadialGradientSource) },
   ConicGradient: { ...ConicGradientModule, sourceCode: extractSource(ConicGradientSource) },
@@ -153,6 +165,10 @@ export const CharByChar = bits.CharByChar;
 export const BlurSlideWord = bits.BlurSlideWord;
 export const StaggeredFadeIn = bits.StaggeredFadeIn;
 export const SlideFromLeft = bits.SlideFromLeft;
+export const EasingsVisualizer = bits.EasingsVisualizer;
+export const GridStagger = bits.GridStagger;
+export const CardStack = bits.CardStack;
+export const ListReveal = bits.ListReveal;
 export const LinearGradient = bits.LinearGradient;
 export const RadialGradient = bits.RadialGradient;
 export const ConicGradient = bits.ConicGradient;

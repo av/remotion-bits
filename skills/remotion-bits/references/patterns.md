@@ -80,6 +80,196 @@
 />
 ```
 
+### TypeWriter Effect
+
+```tsx
+const rect = useViewportRect();
+
+<TypeWriter
+  text={[
+    "Welcome to Remotion Bits",
+    "Create amazing videos",
+    "With elegant animations"
+  ]}
+  typeSpeed={3}
+  deleteSpeed={2}
+  pauseAfterType={30}
+  deleteBeforeNext={true}
+  errorRate={0.05}
+  style={{ fontSize: rect.vmin * 5, color: "white" }}
+/>
+```
+
+### Animated Counter
+
+```tsx
+<AnimatedCounter
+  transition={{
+    values: [0, 1000000],
+    duration: 90,
+    easing: "easeOutCubic",
+    scale: [0.8, 1],
+  }}
+  prefix="$"
+  toFixed={0}
+  style={{ fontSize: 64, fontWeight: "bold" }}
+/>
+
+// Multiple keyframes
+<AnimatedCounter
+  transition={{
+    values: [0, 100, 75, 150],
+    duration: 120,
+  }}
+  postfix="%"
+  toFixed={1}
+/>
+```
+
+### Code Block Reveal
+
+```tsx
+const rect = useViewportRect();
+
+<CodeBlock
+  code={`function createVideo() {
+  return <Composition
+    id="MyVideo"
+    component={MyComponent}
+    durationInFrames={150}
+    fps={30}
+  />;
+}`}
+  language="tsx"
+  theme="dark"
+  showLineNumbers
+  fontSize={rect.vmin * 2}
+  highlight={[
+    {
+      lines: [2, 6],
+      color: "rgba(59, 130, 246, 0.15)",
+      opacity: [0, 1],
+    },
+  ]}
+  transition={{
+    lineStagger: 4,
+    lineStaggerDirection: "forward",
+    opacity: [0, 1],
+    x: [-20, 0],
+    duration: 20,
+    easing: "easeOutCubic",
+  }}
+/>
+```
+
+### Matrix Rain Effect
+
+```tsx
+// Full screen matrix rain
+<MatrixRain
+  fontSize={18}
+  color="#00FF00"
+  speed={1.2}
+  density={0.8}
+  streamLength={20}
+/>
+
+// Slower, sparser effect
+<MatrixRain
+  fontSize={24}
+  color="#00FFFF"
+  speed={0.5}
+  density={0.3}
+  streamLength={15}
+  charset="01"  // Binary only
+/>
+```
+
+### Animated Counter
+
+```tsx
+<AnimatedCounter
+  transition={{
+    values: [0, 1000000],
+    duration: 90,
+    easing: "easeOutCubic",
+    scale: [0.8, 1],
+  }}
+  prefix="$"
+  toFixed={0}
+  style={{ fontSize: 64, fontWeight: "bold" }}
+/>
+
+// Multiple keyframes
+<AnimatedCounter
+  transition={{
+    values: [0, 100, 75, 150],
+    duration: 120,
+  }}
+  postfix="%"
+  toFixed={1}
+/>
+```
+
+### Code Block Reveal
+
+```tsx
+const rect = useViewportRect();
+
+<CodeBlock
+  code={`function createVideo() {
+  return <Composition
+    id="MyVideo"
+    component={MyComponent}
+    durationInFrames={150}
+    fps={30}
+  />;
+}`}
+  language="tsx"
+  theme="dark"
+  showLineNumbers
+  fontSize={rect.vmin * 2}
+  highlight={[
+    {
+      lines: [2, 6],
+      color: "rgba(59, 130, 246, 0.15)",
+      opacity: [0, 1],
+    },
+  ]}
+  transition={{
+    lineStagger: 4,
+    lineStaggerDirection: "forward",
+    opacity: [0, 1],
+    x: [-20, 0],
+    duration: 20,
+    easing: "easeOutCubic",
+  }}
+/>
+```
+
+### Matrix Rain Effect
+
+```tsx
+// Full screen matrix rain
+<MatrixRain
+  fontSize={18}
+  color="#00FF00"
+  speed={1.2}
+  density={0.8}
+  streamLength={20}
+/>
+
+// Slower, sparser effect
+<MatrixRain
+  fontSize={24}
+  color="#00FFFF"
+  speed={0.5}
+  density={0.3}
+  streamLength={15}
+  charset="01"  // Binary only
+/>
+```
+
 ---
 
 ## Particle Effects
@@ -227,6 +417,46 @@ const rect = useViewportRect();
 />
 ```
 
+### Scrolling Image Columns
+
+```tsx
+const rect = useViewportRect();
+
+<ScrollingColumns
+  columns={[
+    {
+      images: [
+        "/photos/img1.jpg",
+        "/photos/img2.jpg",
+        "/photos/img3.jpg",
+      ],
+      speed: 100,
+      direction: "up",
+    },
+    {
+      images: [
+        "/photos/img4.jpg",
+        "/photos/img5.jpg",
+        "/photos/img6.jpg",
+      ],
+      speed: 150,
+      direction: "down",
+    },
+    {
+      images: [
+        "/photos/img7.jpg",
+        "/photos/img8.jpg",
+      ],
+      speed: 80,
+      direction: "up",
+    },
+  ]}
+  height={rect.vmin * 40}
+  gap={rect.vmin * 2}
+  columnGap={rect.vmin * 3}
+/>
+```
+
 ---
 
 ## 3D Scenes
@@ -332,6 +562,82 @@ const rect = useViewportRect();
       <h1 style={{ fontSize: rect.vmin * 8, color: 'white' }}>{word}</h1>
     </Step>
   ))}
+</Scene3D>
+```
+
+### Step-Responsive Animations
+
+```tsx
+const rect = useViewportRect();
+
+<Scene3D
+  perspective={1000}
+  transitionDuration={30}
+  stepDuration={60}
+>
+  <Step id="intro" x={0} y={0} z={0} />
+  <Step id="main" x={0} y={0} z={rect.vmin * 100} />
+  <Step id="detail" x={rect.vmin * 50} y={0} z={rect.vmin * 200} />
+  <Step id="outro" x={0} y={rect.vmin * 50} z={rect.vmin * 300} />
+
+  {/* Element that responds to each step */}
+  <StepResponsive
+    steps={{
+      intro: { 
+        x: -rect.width, 
+        opacity: 0,
+        scale: 0.5 
+      },
+      main: { 
+        x: 0, 
+        opacity: 1,
+        scale: [1, 1.2, 1],  // Keyframes during this step
+        rotateZ: [0, 10, -10, 0]
+      },
+      detail: { 
+        x: rect.vmin * 20,
+        scale: 1.5,
+        rotateY: 45
+      },
+      outro: { 
+        opacity: 0,
+        scale: 0
+      },
+    }}
+    transition={{
+      duration: 25,
+      easing: "easeInOutCubic"
+    }}
+  >
+    <Element3D>
+      <div style={{
+        fontSize: rect.vmin * 8,
+        color: "white",
+        padding: rect.vmin * 3,
+        background: "rgba(0,0,0,0.8)",
+        borderRadius: rect.vmin * 2,
+      }}>
+        Step-Aware Content
+      </div>
+    </Element3D>
+  </StepResponsive>
+
+  {/* Another element with different step responses */}
+  <StepResponsive
+    steps={[
+      { y: rect.height, opacity: 0 },           // step 0
+      { y: rect.cy, opacity: 1 },               // step 1
+      { y: rect.cy, opacity: 1, rotateZ: 360 }, // step 2
+      { y: -rect.height, opacity: 0 },          // step 3
+    ]}
+    transition={{ duration: "step" }}  // Match step duration
+  >
+    <Element3D>
+      <div style={{ fontSize: rect.vmin * 5, color: "cyan" }}>
+        Following the camera
+      </div>
+    </Element3D>
+  </StepResponsive>
 </Scene3D>
 ```
 

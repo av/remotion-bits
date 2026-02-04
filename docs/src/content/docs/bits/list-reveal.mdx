@@ -1,0 +1,12 @@
+---
+title: List Reveal
+category: Staggered Motion
+description: A vertical list of items scaling and finding their place with a staggered delay.
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+A common UI pattern showing a list of items appearing one after another. This uses `delay` and `stagger` to create a smooth, cascading entrance effect.
+
+Uses two nested `StaggeredMotion` components: the outer one controls the vertical movement of each item, while the inner one applies a scaling effect for a more dynamic reveal.
+
+<BitPlayground client:only="react" bitName="ListReveal" />

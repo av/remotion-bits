@@ -1,3 +1,10 @@
+### v0.1.10
+
+- Fix: Added missing component exports for TypeWriter and ScrollingColumns
+- Docs: Updated README with new URL and removed splash image
+- Docs: Added skill documentation to getting-started guide
+- Improvement: General documentation and linting improvements
+
 ### v0.1.9
 
 - Feature: Added CodeBlock component for syntax highlighting and animations

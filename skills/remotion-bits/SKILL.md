@@ -9,6 +9,12 @@ Remotion Bits provides animation components and complete example compositions (b
 
 ## Installation
 
+Remotion Bits can be installed two ways:
+
+### 1. Via jsrepo (Recommended for Customization)
+
+Copy components directly into your project for full customization:
+
 ```bash
 # Initialize jsrepo registry
 npx jsrepo init https://unpkg.com/remotion-bits/registry.json
@@ -18,12 +24,26 @@ npx jsrepo add animated-text particle-system scene-3d
 
 # Install bits (complete example compositions)
 npx jsrepo add bit-3d-basic
-
-# Or install from npm (library usage without customization)
-npm install remotion-bits
 ```
 
 Components install to `src/components/`, utilities to `src/utils/`, bits to `src/compositions/`.
+
+### 2. Via npm (Library Usage)
+
+Install as a dependency without copying source:
+
+```bash
+npm install remotion-bits
+# or
+pnpm add remotion-bits
+# or
+yarn add remotion-bits
+```
+
+**Prerequisites:**
+- `remotion` >= 4.0.0
+- `react` >= 18.0.0
+- `react-dom` >= 18.0.0
 
 ## Core Concepts
 
@@ -52,9 +72,9 @@ const rect = useViewportRect(); // { width, height, vmin, vmax, vw, vh, cx, cy }
 - **Text**: `AnimatedText` - character/word/line animations; `TypeWriter` - typewriter effect with cursor/typos; `CodeBlock` - syntax highlighting with line reveals
 - **Numbers**: `AnimatedCounter` - interpolate numbers with prefix/postfix
 - **Motion**: `StaggeredMotion` - animate multiple elements with timing offsets
-- **Visual**: `GradientTransition` - smooth gradient morphing
+- **Visual Effects**: `GradientTransition` - smooth gradient morphing; `MatrixRain` - Matrix-style digital rain; `ScrollingColumns` - infinitely scrolling image columns
 - **Particles**: `Particles`, `Spawner`, `Behavior` - declarative particle systems
-- **3D**: `Scene3D`, `Step`, `Element3D` - camera-based 3D presentations
+- **3D**: `Scene3D`, `Step`, `Element3D`, `StepResponsive` - camera-based 3D presentations with step-aware animations
 
 ## Discovering Bits
 
@@ -260,13 +280,16 @@ export const CustomTitle = () => {
 For detailed API documentation, see reference files below. Quick reference:
 
 - **AnimatedText**: Text with character/word/line splitting, stagger, and transitions
+- **AnimatedCounter**: Number interpolation with prefix/postfix and formatting
 - **TypeWriter**: Classic typewriter effect with cursor blinking, typos simulation, and variable speeds
 - **CodeBlock**: Syntax highlighted code with line-by-line reveal, highlighting, and focus regions
-- **AnimatedCounter**: Number interpolation with transition support
+- **MatrixRain**: Matrix-style digital rain effect with configurable speed, density, and characters
 - **StaggeredMotion**: Animate child elements with stagger and directional timing
 - **GradientTransition**: Smooth gradient morphing with Oklch interpolation
+- **ScrollingColumns**: Infinitely scrolling columns of images with speed and direction control
 - **Particles + Spawner + Behavior**: Declarative particle systems with physics
 - **Scene3D + Step + Element3D**: Camera-based 3D presentations (impress.js style)
+- **StepResponsive**: Step-aware responsive transforms with property inheritance
 
 Import from `remotion-bits` or from installed component files in `src/components/`.
 

@@ -2,11 +2,16 @@
 
 ## Table of Contents
 - [AnimatedText](#animatedtext)
+- [AnimatedCounter](#animatedcounter)
 - [TypeWriter](#typewriter)
+- [CodeBlock](#codeblock)
+- [MatrixRain](#matrixrain)
+- [ScrollingColumns](#scrollingcolumns)
 - [StaggeredMotion](#staggeredmotion)
 - [GradientTransition](#gradienttransition)
 - [Particle System](#particle-system)
 - [Scene3D](#scene3d)
+- [StepResponsive](#stepresponsive)
 
 ---
 
@@ -48,6 +53,44 @@
 
 ---
 
+## AnimatedCounter
+
+Counter component that interpolates between numeric values with optional prefix/postfix.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `transition` | `AnimatedCounterTransitionProps` | required | Animation configuration |
+| `prefix` | `React.ReactNode` | | Content before the number |
+| `postfix` | `React.ReactNode` | | Content after the number |
+| `toFixed` | `number` | `0` | Decimal places to display |
+| `className` | `string?` | | CSS class names |
+| `style` | `React.CSSProperties?` | | Inline styles |
+
+### Transition Props
+
+Inherits all transform, visual, and timing props from AnimatedText, plus:
+
+- `values`: `AnimatedValue` - Number or array of numbers to interpolate
+
+### Example
+
+```tsx
+<AnimatedCounter
+  transition={{
+    values: [0, 100],
+    duration: 60,
+    easing: "easeOutCubic"
+  }}
+  toFixed={0}
+  prefix="$"
+  style={{ fontSize: 48 }}
+/>
+```
+
+---
+
 ## TypeWriter
 
 ### Props
@@ -70,6 +113,157 @@
 ### Transition Props
 
 Inherits all transform, visual, and timing props from AnimatedText.
+
+---
+
+## CodeBlock
+
+Syntax-highlighted code block with line-by-line reveal, highlighting, and focus animations.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `code` | `string` | required | Code to display |
+| `language` | `string` | `"tsx"` | Syntax highlighting language |
+| `theme` | `"dark" | "light" | "custom"` | `"dark"` | Color theme |
+| `customTheme` | `any` | | Custom prism theme object |
+| `highlight` | `HighlightRegion[]` | | Lines to highlight |
+| `focus` | `FocusRegion` | | Lines to focus (dims others) |
+| `transition` | `CodeBlockTransition` | | Line reveal animation |
+| `showLineNumbers` | `boolean` | `false` | Show line numbers |
+| `lineNumberColor` | `string` | `"#666"` | Line number color |
+| `fontSize` | `number` | auto | Font size (responsive) |
+| `lineHeight` | `number` | `1.5` | Line height multiplier |
+| `padding` | `number` | auto | Container padding |
+| `className` | `string?` | | CSS class names |
+| `style` | `React.CSSProperties?` | | Inline styles |
+
+### Highlight/Focus Region
+
+```ts
+type HighlightRegion = {
+  lines: number | [number, number];  // Line or range
+  color?: string;                     // Background color
+  opacity?: AnimatedValue;            // Highlight opacity
+  blur?: AnimatedValue;               // Blur effect
+};
+
+type FocusRegion = {
+  lines: number | [number, number];
+  dimOpacity?: number;                // Opacity of unfocused lines
+  dimBlur?: number;                   // Blur of unfocused lines
+};
+```
+
+### Transition Props
+
+- `lineStagger`: `number` - Frames between each line reveal
+- `lineStaggerDirection`: `"forward" | "reverse" | "center" | "random"` - Reveal order
+- `duration`: `number` - Duration per line
+- `delay`: `number` - Initial delay
+- `easing`: `EasingName | EasingFunction` - Easing curve
+- Inherits transform and visual props from AnimatedText
+
+### Example
+
+```tsx
+<CodeBlock
+  code={`function hello() {
+  console.log("Hello World");
+}`}
+  language="typescript"
+  showLineNumbers
+  highlight={[
+    { lines: 2, color: "rgba(255,255,0,0.2)", opacity: [0, 1] }
+  ]}
+  transition={{
+    lineStagger: 5,
+    opacity: [0, 1],
+    x: [-20, 0],
+    duration: 15
+  }}
+/>
+```
+
+---
+
+## MatrixRain
+
+Matrix-style digital rain effect with configurable characters, density, and speed.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `fontSize` | `number` | `20` | Character size in pixels |
+| `color` | `string` | `"#00FF00"` | Rain color |
+| `speed` | `number` | `1` | Speed multiplier |
+| `density` | `number` | `1` | Column density (0-1) |
+| `streamLength` | `number` | `20` | Characters per stream |
+| `charset` | `string` | alphanumeric | Characters to display |
+
+### Example
+
+```tsx
+<MatrixRain
+  fontSize={16}
+  color="#00FF00"
+  speed={1.5}
+  density={0.7}
+  streamLength={25}
+/>
+```
+
+---
+
+## ScrollingColumns
+
+Infinitely scrolling columns of images with configurable speed and direction.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `ScrollingColumnConfig[]` | required | Column configurations |
+| `height` | `number | string` | `300` | Image height |
+| `width` | `number | string` | `"100%"` | Column width |
+| `gap` | `number` | `20` | Gap between images |
+| `columnGap` | `number` | `20` | Gap between columns |
+| `imageStyle` | `React.CSSProperties?` | | Styles for images |
+| `className` | `string?` | | CSS class names |
+| `style` | `React.CSSProperties?` | | Inline styles |
+
+### ScrollingColumnConfig
+
+```ts
+type ScrollingColumnConfig = {
+  images: string[];              // Array of image URLs
+  speed?: number;                // Scroll speed in pixels/second
+  direction?: "up" | "down";    // Scroll direction
+};
+```
+
+### Example
+
+```tsx
+<ScrollingColumns
+  columns={[
+    {
+      images: ["/img1.jpg", "/img2.jpg", "/img3.jpg"],
+      speed: 100,
+      direction: "up"
+    },
+    {
+      images: ["/img4.jpg", "/img5.jpg"],
+      speed: 150,
+      direction: "down"
+    }
+  ]}
+  height={400}
+  gap={15}
+/>
+```
 
 ---
 
@@ -220,3 +414,110 @@ Positions content in 3D space.
 - `useScene3D()` - Returns `{ camera, activeStepId, registerStep, steps }`
 - `useCamera()` - Returns current camera state
 - `useActiveStep()` - Returns currently active step ID
+
+---
+
+## StepResponsive
+
+Wrapper component that animates elements based on the active Scene3D step. Enables step-aware responsive transforms with property inheritance.
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `steps` | `StepResponsiveMap` | required | Step-specific transforms |
+| `transition` | `StepResponsiveTransition?` | | Transition configuration |
+| `defaultProps` | `StepResponsiveTransform?` | `{}` | Default transform values |
+| `animate` | `boolean?` | `true` | Enable animations |
+| `centered` | `boolean?` | `false` | Center child element |
+| `style` | `React.CSSProperties?` | | Additional styles |
+| `children` | `React.ReactElement` | required | Single React element to wrap |
+
+### StepResponsiveMap
+
+Can be an array (indexed by step) or object (keyed by step ID or range):
+
+```ts
+// Array format (by index)
+steps={[
+  { x: 0, opacity: 1 },      // step 0
+  { x: 100, opacity: 0.5 },  // step 1
+]}
+
+// Object format (by ID)
+steps={{
+  "step-0": { x: 0, opacity: 1 },
+  "step-1": { x: 100, opacity: 0.5 },
+}}
+
+// Range format
+steps={{
+  "step-0..step-2": { x: 0 },  // steps 0-2
+  "step-3": { x: 100 },         // step 3 only
+}}
+```
+
+### StepResponsiveTransform
+
+Supports all Transform3D properties:
+- `x`, `y`, `z` - Position (AnimatedValue)
+- `scale`, `scaleX`, `scaleY` - Scale (AnimatedValue)
+- `rotateX`, `rotateY`, `rotateZ` - Rotation (AnimatedValue)
+- `opacity` - Opacity (AnimatedValue)
+- `color`, `backgroundColor` - Colors (string[])
+- `duration` - Override transition duration
+- `delay` - Delay before animation
+- `easing` - Easing function
+
+### Transition Props
+
+```ts
+type StepResponsiveTransition = {
+  duration?: number | "step";  // Frames or match step duration
+  delay?: number;              // Delay in frames
+  easing?: EasingName | EasingFunction;
+};
+```
+
+### Example
+
+```tsx
+<Scene3D>
+  <Step id="intro" />
+  <Step id="main" />
+  <Step id="outro" />
+
+  <StepResponsive
+    steps={{
+      intro: { x: -200, opacity: 0 },
+      main: { x: 0, opacity: 1, scale: [1, 1.2, 1] },
+      outro: { x: 200, opacity: 0 },
+    }}
+    transition={{ duration: 30, easing: "easeInOutCubic" }}
+  >
+    <Element3D>
+      <h1>Responsive to Steps</h1>
+    </Element3D>
+  </StepResponsive>
+</Scene3D>
+```
+
+### useStepResponsive Hook
+
+For more control, use the hook version:
+
+```tsx
+import { useStepResponsive } from "remotion-bits";
+
+function MyElement() {
+  const style = useStepResponsive({
+    "step-0": { x: 0, opacity: 1 },
+    "step-1": { x: 100, opacity: 0.5 },
+  }, {
+    duration: 20,
+    easing: "easeOutCubic"
+  });
+
+  return <div style={style}>Content</div>;
+}
+```

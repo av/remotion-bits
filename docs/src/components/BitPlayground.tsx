@@ -162,6 +162,8 @@ const compileUserCode = (
         AnimatedCounter,
         TypeWriter,
         CodeBlock,
+        EASINGS,
+        steps,
       } = RemotionBits;
 
       ${cleanedTranspiled}
