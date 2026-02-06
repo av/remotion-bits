@@ -5,7 +5,9 @@ description: Animation components and utilities for Remotion video projects. Use
 
 # Remotion Bits
 
-Animation components and utilities for building Remotion videos. Provides reusable components (AnimatedText, Particles, Scene3D, etc.) and complete example compositions (bits).
+Animation components and utilities for building Remotion videos. The library's most powerful feature is **Scene3D** — a camera-based 3D presentation system (like impress.js) that enables cinematic multi-section compositions with flying camera moves, step-aware element animations, and Transform3D position management.
+
+**When building any non-trivial composition, prefer Scene3D as your foundation.** It handles camera movement, timing, element positioning, and responsive layout all in one system. Individual components (AnimatedText, Particles, etc.) work best as content placed inside Scene3D steps.
 
 **Prerequisites:** `remotion` >= 4.0, `react` >= 18, `react-dom` >= 18
 
@@ -24,15 +26,17 @@ Everything is exported from `remotion-bits`:
 
 ```tsx
 import {
-  // Components
+  // 3D Scene System (primary workflow)
+  Scene3D, Step, Element3D, StepResponsive,
+  Transform3D, Vector3,
+  useScene3D, useCamera, useActiveStep,
+  // Animation Components
   AnimatedText, AnimatedCounter, TypeWriter, CodeBlock,
   StaggeredMotion, GradientTransition, MatrixRain, ScrollingColumns,
   Particles, Spawner, Behavior,
-  Scene3D, Step, Element3D, StepResponsive,
-  // Hooks
-  useViewportRect, useScene3D, useCamera, useActiveStep,
-  // Utilities
-  interpolate, Easing, Transform3D, Vector3,
+  // Core
+  useViewportRect,
+  interpolate, Easing,
   interpolateColorKeyframes, interpolateGradientKeyframes,
   random, resolvePoint, createRect,
 } from "remotion-bits";
@@ -68,12 +72,62 @@ const rect = useViewportRect();
 // rect.vmax    — max(vw, vh)
 // rect.cx, cy  — center coordinates
 const { vmin } = rect;
-
-<div style={{ fontSize: vmin * 5 }}>Scales with any resolution</div>
-<div style={{ width: vmin * 60, height: vmin * 30 }}>Responsive card</div>
 ```
 
 Use `vmin` for font sizes, element dimensions, spacing, and padding. This ensures compositions render identically at 1920×1080, 1080×1920, 3840×2160, etc.
+
+#### Understanding vmin at Common Resolutions
+
+`vmin` = `min(width, height) / 100`. **Always compute what vmin equals in pixels for your composition size before choosing multipliers.**
+
+| Composition Size | Aspect Ratio | vmin (px) | vmin * 8 | vmin * 10 | vmin * 5 |
+|------------------|-------------|-----------|----------|-----------|----------|
+| 1920×1080 | 16:9 landscape | **10.8** | 86px | 108px | 54px |
+| 1080×1920 | 9:16 portrait | **10.8** | 86px | 108px | 54px |
+| 1080×1080 | 1:1 square | **10.8** | 86px | 108px | 54px |
+| 3840×2160 | 16:9 4K | **21.6** | 173px | 216px | 108px |
+| 1280×720 | 16:9 720p | **7.2** | 58px | 72px | 36px |
+
+#### Font Size Reference (at 1920×1080, vmin = 10.8px)
+
+**Use these proven multipliers from production bits. Err on the side of LARGER, not smaller.**
+
+| Role | Multiplier | Pixels at 1080p | Example |
+|------|-----------|-----------------|---------|
+| Hero / main title | `vmin * 10–15` | 108–162px | Full-screen headline |
+| Section heading | `vmin * 6–8` | 65–86px | Scene3D step titles |
+| Subheading | `vmin * 4–5` | 43–54px | Card titles, counters |
+| Body / card label | `vmin * 2.5–3` | 27–32px | Feature labels, descriptions |
+| Code / small text | `vmin * 1.5–2` | 16–22px | Code blocks, captions |
+| Fine print | `vmin * 1–1.2` | 11–13px | Code font in dense blocks |
+
+**Common mistake: using `vmin * 3` for headings.** At 1080p that's only 32px — fine for body text but too small for any heading. For prominent headings, start at `vmin * 8` minimum.
+
+#### Aspect Ratio Awareness
+
+The aspect ratio determines which dimension is the "min" for vmin:
+
+- **Landscape (16:9, 1920×1080):** `vmin` is based on height (1080/100 = 10.8). Horizontal space is abundant; vertical space is limited.
+- **Portrait (9:16, 1080×1920):** `vmin` is based on width (1080/100 = 10.8). Vertical space is abundant; horizontal space is limited.
+- **Square (1:1, 1080×1080):** `vmin = vmax = vh = vw`. All directions equal.
+
+**Layout implications:**
+- In landscape, full-width text can be very long — consider `width: vmin * 70` or `maxWidth` constraints
+- In portrait, titles may need to wrap — use fewer words or smaller multipliers for width-constrained text
+- Use `vmin` for sizes that should scale uniformly regardless of orientation
+- Use `vw`/`vh` when sizing should follow a specific axis (e.g., full-width background: `rect.width`)
+
+#### Element Size Reference
+
+| Element | Multiplier | Description |
+|---------|-----------|-------------|
+| Card width | `vmin * 50–70` | Floating card, info panel |
+| Card height | `vmin * 25–40` | Match content needs |
+| Card border-radius | `vmin * 1–2` | Subtle rounding |
+| Spacing/gap | `vmin * 1–3` | Between elements |
+| Padding | `vmin * 2–4` | Inside containers |
+| Particle size | `vmin * 1–3` | Individual particle dot |
+| Icon size | `vmin * 8–12` | Decorative icons |
 
 ### 3. Transition Props Pattern
 
@@ -120,6 +174,122 @@ type EasingName =
 ```
 
 Most common: `"easeOutCubic"` for entries, `"easeInOutCubic"` for camera moves.
+
+### 5. Layout & Display Configuration
+
+**CRITICAL: Bits are pre-wrapped with a layout container when displayed in the docs.** The wrapper (`withShowcaseFill`) provides an `AbsoluteFill` with default styling. When building standalone compositions, you must provide this layout yourself.
+
+#### The Layout Wrapper
+
+Bits displayed in docs are automatically wrapped with:
+```tsx
+<AbsoluteFill style={{
+  backgroundColor: 'var(--color-background-dark)',  // #100f0f
+  fontSize: `${config.width * 0.05}px`,             // 5% of width
+  fontWeight: 700,
+  color: 'var(--color-primary-hover)',               // #fcc192
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}}>
+  <Component />
+</AbsoluteFill>
+```
+
+This means simple bits like `<AnimatedText>Hello</AnimatedText>` work because the wrapper centers them and provides background/color.
+
+#### Building Standalone Compositions
+
+When creating compositions for direct use (not displayed through the docs wrapper), you MUST provide your own layout:
+
+```tsx
+import { AbsoluteFill } from 'remotion';
+
+export const MyComposition: React.FC = () => {
+  const rect = useViewportRect();
+  const { vmin } = rect;
+
+  return (
+    <AbsoluteFill style={{
+      backgroundColor: '#100f0f',
+      color: '#fcc192',
+      fontFamily: 'system-ui, sans-serif',
+    }}>
+      {/* Your content here */}
+      <Scene3D perspective={1000} stepDuration={60} transitionDuration={60}>
+        {/* Steps... */}
+      </Scene3D>
+    </AbsoluteFill>
+  );
+};
+```
+
+#### CSS Variables (Theming)
+
+Bits use CSS variables for consistent theming. These are available when rendering within the docs but **must be defined or replaced with literal values** in standalone projects:
+
+| Variable | Default Value | Usage |
+|----------|---------------|-------|
+| `--color-primary` | `#ec8b49` | Accent orange |
+| `--color-primary-hover` | `#fcc192` | Light orange / text color |
+| `--color-background-dark` | `#100f0f` | Dark background |
+| `--color-surface-dark` | `#1c1b1a` | Surface/card background |
+| `--color-surface-light` | `#343331` | Lighter surface |
+| `--color-border-dark` | `#100f0f` | Dark borders |
+| `--color-border-light` | `#1c1b1a` | Light borders |
+
+**In standalone projects:** Replace `var(--color-*)` with literal hex values, or define these variables in your HTML/CSS.
+
+#### Common Layout Mistakes
+
+1. **Missing background:** Content renders on transparent/white background. Always set `backgroundColor` on the outermost container.
+2. **Missing AbsoluteFill:** Scene3D and full-viewport compositions need `<AbsoluteFill>` from remotion as their root.
+3. **Using CSS vars without defining them:** `var(--color-primary)` resolves to nothing in a bare Remotion project. Use literal colors.
+4. **Hardcoded pixel sizes:** Use `vmin`-based sizing from `useViewportRect()` instead.
+5. **Missing font settings:** Set `fontSize`, `fontWeight`, `fontFamily`, and `color` explicitly — there are no inherited defaults in Remotion.
+
+#### Three Layout Patterns
+
+**Simple (centered content, uses wrapper defaults):**
+```tsx
+// Relies on the outer wrapper for background, centering, font
+export const Component = () => (
+  <AnimatedText transition={{ opacity: [0, 1] }}>Hello</AnimatedText>
+);
+```
+
+**Self-contained (own background and layout):**
+```tsx
+export const Component = () => (
+  <div style={{
+    width: '100%', height: '100%',
+    backgroundColor: '#09090b',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+  }}>
+    <StaggeredMotion transition={{ scale: [0, 1], opacity: [0, 1] }}>
+      {items}
+    </StaggeredMotion>
+  </div>
+);
+```
+
+**Full 3D scene (recommended for complex work):**
+```tsx
+export const Component = () => {
+  const rect = useViewportRect();
+  return (
+    <AbsoluteFill style={{
+      background: '#100f0f',
+      color: '#fcc192',
+    }}>
+      <Scene3D perspective={1000} stepDuration={60} transitionDuration={60}>
+        <Step id="intro" {...positions.base.toProps()} />
+        {/* ... */}
+      </Scene3D>
+    </AbsoluteFill>
+  );
+};
+```
 
 ---
 
@@ -373,7 +543,7 @@ const mapToAllElementSteps = (props) => ({
 
 ## Building Complex Scenes (Architecture Guide)
 
-### Step 1: Plan the Scene Structure
+**This is the recommended approach for any non-trivial composition.** Scene3D provides camera management, step-based timing, 3D element positioning, and step-responsive animations — eliminating the need to manually manage `useCurrentFrame()`, `<Sequence>`, or CSS transforms.\n\n### Step 1: Plan the Scene Structure
 
 Decide on the major sections (acts) and what the camera shows in each:
 
