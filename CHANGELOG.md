@@ -1,3 +1,10 @@
+### v0.1.12
+
+- Feature: Added Terminal3D bit - animated 3D terminal display with Scene3D
+- Feature: Added KenBurns bit - Ken Burns photo panning and zooming effect using Scene3D
+- Improvement: Enhanced Scene3D and layout patterns in skill documentation
+- Docs: Updated skill reference documentation for components, patterns, and utilities
+
 ### v0.1.11
 
 - Feature: Added CounterConfetti bit - counter reaching 1000 with confetti particles bursting from sides

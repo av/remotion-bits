@@ -14,7 +14,7 @@ export const metadata = {
     description: 'A 3D scene with multiple terminal windows executing commands.',
     type: 'bit' as const,
     add: 'when-needed' as const,
-    registryDependencies: ['scene-3d', 'typewriter'],
+    registryDependencies: ['scene-3d'],
     dependencies: [],
     files: [
       {
