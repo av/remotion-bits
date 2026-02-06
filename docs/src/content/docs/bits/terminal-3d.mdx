@@ -1,0 +1,22 @@
+---
+title: 3D Terminal
+category: 3D Scenes
+description: Execute commands across multiple terminal windows in 3D space
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+Multiple terminal windows positioned in a 3D scene with a typewriter effect simulating command execution. The camera transitions between terminals to create a dynamic narrative flow.
+
+<BitPlayground client:only="react" bitName="Terminal3D" />
+
+## Overview
+
+This Bit demonstrates how to combine 3D positioning with 2D UI elements to create compelling narrative scenes. It uses:
+
+- **Scene3D**: To position terminal windows in 3D space and manage camera transitions.
+- **TypeWriter**: To simulate command execution and log output.
+- **Responsive Sizing**: Using `useViewportRect` to ensure terminals scale correctly on different screen sizes.
+
+## Usage
+
+You can use the `Scene3D` component to create sequences of actions, moving the camera from one terminal to another to highlight different parts of a system or workflow.

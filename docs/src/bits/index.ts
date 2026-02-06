@@ -68,6 +68,8 @@ import * as CursorFlyoverModule from './examples/scene-3d/CursorFlyover';
 import CursorFlyoverSource from './examples/scene-3d/CursorFlyover.tsx?raw';
 import * as KenBurnsModule from './examples/scene-3d/KenBurns';
 import KenBurnsSource from './examples/scene-3d/KenBurns.tsx?raw';
+import * as Terminal3DModule from './examples/scene-3d/Terminal3D';
+import Terminal3DSource from './examples/scene-3d/Terminal3D.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -157,6 +159,7 @@ export const bits = {
   VariableSpeedTypewriter: { ...VariableSpeedTypewriterModule, sourceCode: extractSource(VariableSpeedTypewriterSource) },
   CLISimulation: { ...CLISimulationModule, sourceCode: extractSource(CLISimulationSource) },
   KenBurns: { ...KenBurnsModule, sourceCode: extractSource(KenBurnsSource) },
+  Terminal3D: { ...Terminal3DModule, sourceCode: extractSource(Terminal3DSource) },
   BasicCodeBlock: { ...BasicCodeBlockModule, sourceCode: extractSource(BasicCodeBlockSource) },
   CursorFlyover: { ...CursorFlyoverModule, sourceCode: extractSource(CursorFlyoverSource) },
 } as const;
@@ -206,3 +209,4 @@ export const CLISimulation = bits.CLISimulation;
 export const BasicCodeBlock = bits.BasicCodeBlock;
 export const CursorFlyover = bits.CursorFlyover;
 export const KenBurns = bits.KenBurns;
+export const Terminal3D = bits.Terminal3D;
