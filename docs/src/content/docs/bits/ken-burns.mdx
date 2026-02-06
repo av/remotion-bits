@@ -1,0 +1,23 @@
+---
+title: Ken Burns Effect
+category: 3D Scenes
+description: Slow camera movement over images using Scene3D steps
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+Slow camera movement over images using Scene3D steps to create a Ken Burns effect.
+
+<BitPlayground client:only="react" bitName="KenBurns" />
+
+## Overview
+
+The "Ken Burns" effect is achieved by defining `Scene3D` steps with different Z-depths and transition durations. The camera smoothly moves between these steps, creating a fly-through or zoom effect.
+
+By animating the position properties (`x`, `y`, `z`) of each step, we can create complex camera movements over the images.
+
+## Reference
+
+Detailed API documentation for the 3D components:
+
+- [Scene3D](/docs/reference/scene3d) - The main scene container and hooks
+- [Step](/docs/reference/step) - Navigation steps

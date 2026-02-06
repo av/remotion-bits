@@ -133,6 +133,7 @@ const compileUserCode = (
         useVideoConfig,
         random,
         Sequence,
+        Img,
       } = Remotion;
       const {
         AnimatedText,
@@ -167,6 +168,7 @@ const compileUserCode = (
         isoDist,
         Matrix4,
         createRect,
+        useStepTiming,
       } = RemotionBits;
 
       ${cleanedTranspiled}
