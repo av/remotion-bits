@@ -32,8 +32,8 @@ export const Component: React.FC = () => {
                 values: [0, 10, 10, 50, 10],
                 duration: 120,
             }}
-            prefix={<span style={{ color: 'white'}}>width:&nbsp;</span>}
-            postfix={<span style={{ color: 'white'}}>px</span>}
+            prefix={<span style={{ color: 'currentColor'}}>width:&nbsp;</span>}
+            postfix={<span style={{ color: 'currentColor'}}>px</span>}
         />
     );
 };

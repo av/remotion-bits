@@ -36,7 +36,6 @@ export const Component: React.FC = () => (
     }}
     style={{
       fontWeight: "bold",
-      color: "white",
     }}
   >
     Text Transition

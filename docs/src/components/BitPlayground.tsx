@@ -164,6 +164,9 @@ const compileUserCode = (
         CodeBlock,
         EASINGS,
         steps,
+        isoDist,
+        Matrix4,
+        createRect,
       } = RemotionBits;
 
       ${cleanedTranspiled}

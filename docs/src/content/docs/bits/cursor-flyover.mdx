@@ -1,0 +1,27 @@
+---
+title: Cursor Flyover
+category: 3D Scenes
+description: Camera flies over an app screenshot while a cursor highlights different areas
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+Camera flies over an app screenshot while an animated cursor highlights different areas. Combines `Scene3D` camera movement with `StepResponsive` positioning.
+
+<BitPlayground client:only="react" bitName="CursorFlyover" />
+
+## Overview
+
+This example demonstrates how to combine `Scene3D` steps for camera movement with `StepResponsive` for independently animating an overlay element (the cursor). The camera flies to different regions of a screenshot while the cursor smoothly repositions itself at each step.
+
+Key techniques:
+- **Element3D** places the screenshot in 3D space
+- **Step** defines camera targets at different regions of the image
+- **StepResponsive** independently animates the cursor position, scale, and opacity per step
+
+## Reference
+
+Detailed API documentation:
+
+- [Scene3D](/docs/reference/scene3d)
+- [Step](/docs/reference/step)
+- [Element3D](/docs/reference/element3d)

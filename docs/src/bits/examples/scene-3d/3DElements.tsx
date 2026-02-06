@@ -161,7 +161,7 @@ export const Component: React.FC = () => {
               }}
               style={{ fontSize: rect.vmin * 10 }}
             >
-              <h1 style={{ fontSize, color: "white", textAlign: "center" }}>
+              <h1 style={{ fontSize, color: "currentColor", textAlign: "center" }}>
                 {word}
               </h1>
             </StaggeredMotion>

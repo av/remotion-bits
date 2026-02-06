@@ -40,6 +40,8 @@ import * as Elements3DModule from './examples/scene-3d/3DElements';
 import Elements3DSource from './examples/scene-3d/3DElements.tsx?raw';
 import * as Transform3DShowcaseModule from './examples/scene-3d/Transform3DShowcase';
 import Transform3DShowcaseSource from './examples/scene-3d/Transform3DShowcase.tsx?raw';
+import * as CubeNavigationModule from './examples/scene-3d/CubeNavigation';
+import CubeNavigationSource from './examples/scene-3d/CubeNavigation.tsx?raw';
 import * as FeatureShowcaseModule from './examples/showcase/FeatureShowcase';
 import FeatureShowcaseSource from './examples/showcase/FeatureShowcase.tsx?raw';
 import * as MatrixRainModule from './examples/animated-text/MatrixRain';
@@ -50,6 +52,8 @@ import * as GlitchCycleModule from './examples/animated-text/GlitchCycle';
 import GlitchCycleSource from './examples/animated-text/GlitchCycle.tsx?raw';
 import * as BasicCounterModule from './examples/animated-counter/BasicCounter';
 import BasicCounterSource from './examples/animated-counter/BasicCounter.tsx?raw';
+import * as CounterConfettiModule from './examples/animated-counter/CounterConfetti';
+import CounterConfettiSource from './examples/animated-counter/CounterConfetti.tsx?raw';
 import * as BasicTypewriterModule from './examples/typewriter/BasicTypewriter';
 import BasicTypewriterSource from './examples/typewriter/BasicTypewriter.tsx?raw';
 import * as MultiTextTypewriterModule from './examples/typewriter/MultiTextTypewriter';
@@ -60,6 +64,8 @@ import * as CLISimulationModule from './examples/typewriter/CLISimulation';
 import CLISimulationSource from './examples/typewriter/CLISimulation.tsx?raw';
 import * as BasicCodeBlockModule from './examples/code-block/BasicCodeBlock';
 import BasicCodeBlockSource from './examples/code-block/BasicCodeBlock.tsx?raw';
+import * as CursorFlyoverModule from './examples/scene-3d/CursorFlyover';
+import CursorFlyoverSource from './examples/scene-3d/CursorFlyover.tsx?raw';
 
 export interface BitMetadata {
   name: string;
@@ -139,14 +145,17 @@ export const bits = {
   GlitchCycle: { ...GlitchCycleModule, sourceCode: extractSource(GlitchCycleSource) },
   Elements3D: { ...Elements3DModule, sourceCode: extractSource(Elements3DSource) },
   Transform3DShowcase: { ...Transform3DShowcaseModule, sourceCode: extractSource(Transform3DShowcaseSource) },
+  CubeNavigation: { ...CubeNavigationModule, sourceCode: extractSource(CubeNavigationSource) },
   FeatureShowcase: { ...FeatureShowcaseModule, sourceCode: extractSource(FeatureShowcaseSource) },
   MatrixRain: { ...MatrixRainModule, sourceCode: extractSource(MatrixRainSource) },
   BasicCounter: { ...BasicCounterModule, sourceCode: extractSource(BasicCounterSource) },
+  CounterConfetti: { ...CounterConfettiModule, sourceCode: extractSource(CounterConfettiSource) },
   BasicTypewriter: { ...BasicTypewriterModule, sourceCode: extractSource(BasicTypewriterSource) },
   MultiTextTypewriter: { ...MultiTextTypewriterModule, sourceCode: extractSource(MultiTextTypewriterSource) },
   VariableSpeedTypewriter: { ...VariableSpeedTypewriterModule, sourceCode: extractSource(VariableSpeedTypewriterSource) },
   CLISimulation: { ...CLISimulationModule, sourceCode: extractSource(CLISimulationSource) },
   BasicCodeBlock: { ...BasicCodeBlockModule, sourceCode: extractSource(BasicCodeBlockSource) },
+  CursorFlyover: { ...CursorFlyoverModule, sourceCode: extractSource(CursorFlyoverSource) },
 } as const;
 
 export type BitName = keyof typeof bits;
@@ -179,14 +188,17 @@ export const Scene3DPresentation = bits.Scene3DPresentation;
 export const FlyingThroughWords = bits.FlyingThroughWords;
 export const ScrollingColumns = bits.ScrollingColumns;
 export const Elements3D = bits.Elements3D;
+export const CubeNavigation = bits.CubeNavigation;
 export const Transform3DShowcase = bits.Transform3DShowcase;
 export const GlitchIn = bits.GlitchIn;
 export const GlitchCycle = bits.GlitchCycle;
 export const FeatureShowcase = bits.FeatureShowcase;
 export const MatrixRain = bits.MatrixRain;
 export const BasicCounter = bits.BasicCounter;
+export const CounterConfetti = bits.CounterConfetti;
 export const BasicTypewriter = bits.BasicTypewriter;
 export const MultiTextTypewriter = bits.MultiTextTypewriter;
 export const VariableSpeedTypewriter = bits.VariableSpeedTypewriter;
 export const CLISimulation = bits.CLISimulation;
 export const BasicCodeBlock = bits.BasicCodeBlock;
+export const CursorFlyover = bits.CursorFlyover;

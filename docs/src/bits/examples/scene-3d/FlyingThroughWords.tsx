@@ -52,7 +52,6 @@ export const Component: React.FC = () => {
           <StaggeredMotion
             key={i}
             style={{
-              color: "white",
               fontSize: rect.vmin * 10,
               textAlign: "center"
             }}

@@ -1,3 +1,11 @@
+### v0.1.11
+
+- Feature: Added CounterConfetti bit - counter reaching 1000 with confetti particles bursting from sides
+- Feature: Added CubeNavigation bit - navigate through faces of a 3D cube using Scene3D steps
+- Feature: Added CursorFlyover bit - camera flies over screenshot with animated cursor highlighting areas
+- Fix: Added missing utilities (isoDist, Matrix4, createRect) to BitPlayground exports
+- Improvement: Improved theme compatibility by using currentColor instead of hardcoded white in examples
+
 ### v0.1.10
 
 - Fix: Added missing component exports for TypeWriter and ScrollingColumns
