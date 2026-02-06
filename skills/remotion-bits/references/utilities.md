@@ -8,6 +8,7 @@
 - [Motion Utilities](#motion-utilities)
 - [Random Utilities](#random-utilities)
 - [Hooks](#hooks)
+- [Transform3D](#transform3d)
 
 ---
 
@@ -297,4 +298,80 @@ const camera = useCamera();
 
 // Just active step
 const stepId = useActiveStep();
+```
+
+---
+
+## Transform3D
+
+3D transformation class using Three.js internals (position + quaternion rotation + scale). Every method returns a new instance (immutable pattern).
+
+### Import
+
+```ts
+import { Transform3D, Vector3 } from "remotion-bits";
+```
+
+### Creation
+
+```ts
+Transform3D.identity()                                    // Origin transform
+Transform3D.fromEuler(rx, ry, rz, position?, scale?)      // From Euler angles (radians)
+Transform3D.fromMatrix(matrix4)                           // From Three.js Matrix4
+```
+
+### Methods (all return new Transform3D)
+
+| Method | Description |
+|--------|-------------|
+| `translate(x, y, z)` | Add to position |
+| `translate(vector3)` | Add Vector3 to position |
+| `rotateX(degrees)` | Rotate around X axis |
+| `rotateY(degrees)` | Rotate around Y axis |
+| `rotateZ(degrees)` | Rotate around Z axis |
+| `rotateAround(origin, axis, degrees)` | Rotate around arbitrary point |
+| `scaleBy(uniform)` | Scale all axes |
+| `scaleBy(sx, sy, sz)` | Scale per-axis |
+| `multiply(other)` | Matrix multiplication |
+| `inverse()` | Invert transform |
+| `lerp(target, alpha)` | Interpolate (0-1) |
+| `clone()` | Deep copy |
+| `randomTranslate([min,max], ...)` | Deterministic random offset |
+| `randomRotateX/Y/Z([min,max], seed?)` | Deterministic random rotation |
+
+### Conversion
+
+| Method | Returns | Use Case |
+|--------|---------|----------|
+| `toProps()` | `{x, y, z, rotateX, rotateY, rotateZ, scaleX, scaleY, scaleZ, rotateOrder}` | Spread into Step/Element3D props |
+| `toCSSMatrix3D()` | `"matrix3d(...)"` | CSS transform string |
+| `toMatrix4()` | `Matrix4` | Three.js interop |
+| `toEuler(order?)` | `Euler` | Get rotation as Euler angles |
+| `decompose()` | `{position, rotation, scale}` | Extract components |
+
+### Vector3
+
+Re-exported from Three.js for position math:
+
+```ts
+const offset = new Vector3(0, -vmin * 2, 0);
+offset.clone().multiplyScalar(4.0);    // Scale offset
+offset.clone().add(new Vector3(5, 0, 0)); // Combine
+
+// Common methods: clone(), add(), sub(), multiplyScalar(), normalize(), length()
+```
+
+### Interpolation Utilities
+
+```ts
+import { interpolateTransform, interpolateTransformKeyframes, matrixToCSS } from "remotion-bits";
+
+// Interpolate between two transforms (uses slerp for rotation)
+const mid = interpolateTransform(from, to, progress, easing?);
+
+// Interpolate through keyframe array
+const current = interpolateTransformKeyframes([t1, t2, t3], progress, easing?);
+
+// Convert to CSS
+const css = matrixToCSS(transform); // "matrix3d(...)"
 ```

@@ -525,7 +525,7 @@ const rect = useViewportRect();
     const x = randomFloat(`x-${i}`, -rect.width, rect.width * 2);
     const y = randomFloat(`y-${i}`, -rect.height, rect.height);
     const z = randomFloat(`z-${i}`, -rect.vmin * 200, rect.vmin * 20);
-    
+
     return (
       <Element3D
         key={i}
@@ -583,23 +583,23 @@ const rect = useViewportRect();
   {/* Element that responds to each step */}
   <StepResponsive
     steps={{
-      intro: { 
-        x: -rect.width, 
+      intro: {
+        x: -rect.width,
         opacity: 0,
-        scale: 0.5 
+        scale: 0.5
       },
-      main: { 
-        x: 0, 
+      main: {
+        x: 0,
         opacity: 1,
         scale: [1, 1.2, 1],  // Keyframes during this step
         rotateZ: [0, 10, -10, 0]
       },
-      detail: { 
+      detail: {
         x: rect.vmin * 20,
         scale: 1.5,
         rotateY: 45
       },
-      outro: { 
+      outro: {
         opacity: 0,
         scale: 0
       },
@@ -744,4 +744,198 @@ const isSmall = rect.width < 500;
     </AnimatedText>
   </Element3D>
 </Scene3D>
+```
+
+---
+
+## Complex Scene Architecture
+
+### Position Management Pattern
+
+For multi-section presentations, pre-compute all positions in a `useMemo` tree:
+
+```tsx
+const positions = useMemo(() => {
+  const { vmin } = rect;
+  const base = Transform3D.identity();
+
+  // Section bases — position each section in 3D space
+  const elementsBase = base.translate(0, -vmin * 120, 0).rotateX(15);
+  const transitionsBase = base.translate(vmin * 200, vmin * 50, 0).rotateY(-15);
+  const scenesBase = base.translate(-vmin * 120, vmin * 70, 0).rotateY(15);
+
+  // Derive card positions from section bases
+  const cardW = vmin * 70;
+  const cardH = vmin * 40;
+  const row1Y = -cardH;
+  const row2Y = 0;
+  const row3Y = cardH;
+
+  return {
+    base,
+    elements: {
+      base: elementsBase,
+      cards: {
+        topLeft: elementsBase.translate(-cardW, row1Y, 0).rotateY(15).rotateX(10),
+        topCenter: elementsBase.translate(0, row1Y - vmin * 10, vmin * 10).rotateX(10),
+        topRight: elementsBase.translate(cardW, row1Y, 0).rotateY(-15).rotateX(10),
+        midLeft: elementsBase.translate(-cardW, row2Y, vmin * 5).rotateY(15),
+        midCenter: elementsBase.translate(0, row2Y, vmin * 10),
+        midRight: elementsBase.translate(cardW, row2Y, vmin * 5).rotateY(-15),
+      },
+      title: elementsBase.translate(0, vmin * 10, 0),
+    },
+    transitions: {
+      base: transitionsBase,
+      title: transitionsBase,
+    },
+    scenes: {
+      base: scenesBase,
+      items: {
+        hero: base.translate(vmin * 28, vmin * -5, vmin * 5).rotateY(-10),
+        dash: base.translate(vmin * -80, vmin * -30, 0).rotateY(5),
+      },
+    },
+  };
+}, [rect.width, rect.height]);
+```
+
+### Step Mapping Helper
+
+When multiple steps should share the same StepResponsive properties:
+
+```tsx
+const mapElementSteps = (props: StepResponsiveTransform) => ({
+  'elements': props,
+  'element-particles': props,
+  'element-text': props,
+  'element-counter': props,
+  'element-code': props,
+});
+
+<StepResponsive
+  centered
+  style={{ fontSize: vmin * 10, position: 'absolute' }}
+  steps={{
+    'intro': { transform: [positions.elements.title] },
+    ...mapElementSteps({ transform: [positions.elements.title] }), // Hold position
+    'transitions': { transform: [positions.transitions.title] },    // Move to new section
+  }}
+>
+  <h1>Elements</h1>
+</StepResponsive>
+```
+
+### Multi-Element3D Scene Composition
+
+Place multiple independently-animated elements within a Step:
+
+```tsx
+<Step id="scenes" duration={120} {...positions.scenes.base.toProps()}>
+  {/* Each Element3D animates independently */}
+  <Element3D centered
+    style={{ width: vmin * 32, height: vmin * 24 }}
+    transition={{
+      delay: 10, opacity: [0, 1], duration: 35,
+      transform: [
+        positions.scenes.items.hero.translate(0, vmin * 20, 0), // Start below
+        positions.scenes.items.hero,                              // End at position
+      ],
+      easing: 'easeInOutCubic',
+    }}
+  >
+    <div style={{ background: 'linear-gradient(135deg, #FF9A9E, #FECFEF)',
+      borderRadius: vmin * 1.5, width: '100%', height: '100%' }}>
+      Hero Card
+    </div>
+  </Element3D>
+
+  <Element3D centered
+    style={{ width: vmin * 36, height: vmin * 16 }}
+    transition={{
+      delay: 20, opacity: [0, 1], duration: 35,
+      transform: [
+        positions.scenes.items.dash.translate(0, vmin * 15, 0),
+        positions.scenes.items.dash,
+      ],
+      easing: 'easeInOutCubic',
+    }}
+  >
+    <div>Dashboard Card</div>
+  </Element3D>
+</Step>
+```
+
+### Procedural Grid Generation
+
+Generate dense visual grids with wave-based stagger timing:
+
+```tsx
+const gridData = useMemo(() => {
+  const items = [];
+  const rows = 10;
+  const cols = 25;
+  const size = 10 * vmin;
+  const gap = 1 * vmin;
+  const totalW = cols * size + (cols - 1) * gap;
+  const totalH = rows * size + (rows - 1) * gap;
+
+  const palette = ['#fb4934', '#b8bb26', '#fabd2f', '#83a598',
+    '#d3869b', '#8ec07c', '#fe8019', '#d5c4a1'];
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const seed = `grid-${r}-${c}`;
+      const cx = (cols - 1) / 2;
+      const cy = (rows - 1) / 2;
+      const dist = Math.sqrt(Math.pow(r - cy, 2) + Math.pow(c - cx, 2));
+      const delay = 30 + dist * 2; // Wave from center
+
+      const colorIndex = Math.floor(random(seed + 'color') * palette.length);
+
+      items.push(
+        <div key={`${r}-${c}`}
+          style={{ position: 'absolute', left: c * (size + gap), top: r * (size + gap) }}>
+          <StaggeredMotion transition={{
+            opacity: [0, 1], scale: [0, 1],
+            delay, duration: 40, easing: 'easeOutCubic',
+          }}>
+            <div style={{ width: size, height: size,
+              background: palette[colorIndex], borderRadius: 4 }} />
+          </StaggeredMotion>
+        </div>
+      );
+    }
+  }
+  return { items, width: totalW, height: totalH };
+}, [vmin]);
+
+// Use in Scene3D:
+<Step id="transitions" duration={120} {...transitionsPos.toProps()}>
+  <Element3D centered style={{ width: gridData.width, height: gridData.height }}>
+    {gridData.items}
+  </Element3D>
+</Step>
+```
+
+### Floating Card Component
+
+Reusable frosted-glass card for showcasing features:
+
+```tsx
+const FloatingCard = ({ children }: { children: React.ReactNode }) => (
+  <div style={{
+    position: 'relative',
+    width: vmin * 60, height: vmin * 30,
+    background: 'rgba(20, 20, 30, 0.6)',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255,255,255,0.15)',
+    borderRadius: vmin * 1,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    overflow: 'hidden',
+    boxShadow: '0 0 20px rgba(0,0,0,0.2)',
+  }}>
+    {children}
+  </div>
+);
 ```

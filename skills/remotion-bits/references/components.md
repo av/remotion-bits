@@ -385,29 +385,75 @@ Container for 3D scene with camera.
 
 ### Step
 
-Defines a camera position/target.
+Defines a camera position/target. Children are visible when this step is active.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `id` | `string?` | auto-generated | Step identifier |
-| `duration` | `number?` | auto | Override duration for this step |
+| `id` | `string?` | auto-generated | Step identifier (used by StepResponsive) |
+| `duration` | `number?` | auto | Override duration for this step in frames |
 | `x`, `y`, `z` | `AnimatedValue?` | `0` | Camera target position |
 | `scale`, `scaleX`, `scaleY` | `AnimatedValue?` | `1` | Camera zoom |
-| `rotateX`, `rotateY`, `rotateZ` | `AnimatedValue?` | `0` | Camera rotation |
+| `rotateX`, `rotateY`, `rotateZ` | `AnimatedValue?` | `0` | Camera rotation (degrees) |
 | `rotateOrder` | `"xyz" | "xzy" | "yxz" | ...` | `"xyz"` | Rotation order |
+| `transition` | `TransitionConfig?` | | Animate children on step entry |
+| `exitTransition` | `TransitionConfig?` | | Animate children on step exit |
+| `className` | `string?` | | CSS class names |
+| `style` | `React.CSSProperties?` | | Inline styles |
 | `children` | `React.ReactNode?` | | Content visible during step |
+
+**Using Transform3D with Step:**
+```tsx
+const pos = Transform3D.identity().translate(vmin * 50, 0, 0).rotateY(-15);
+<Step id="my-step" {...pos.toProps()} />
+```
+
+**Entry/Exit transitions:**
+```tsx
+<Step id="demo" {...pos.toProps()}
+  transition={{ opacity: [0, 1], blur: [10, 0] }}
+  exitTransition={{ opacity: [1, 0], blur: [0, 10] }}
+>
+  <div>Fades in when camera arrives, fades out when camera leaves</div>
+</Step>
+```
 
 ### Element3D
 
-Positions content in 3D space.
+Positions content in 3D space, independent of camera movement.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `x`, `y`, `z` | `AnimatedValue?` | `0` | Position in 3D space |
 | `scale`, `scaleX`, `scaleY` | `AnimatedValue?` | `1` | Scale |
-| `rotateX`, `rotateY`, `rotateZ` | `AnimatedValue?` | `0` | Rotation |
+| `rotateX`, `rotateY`, `rotateZ` | `AnimatedValue?` | `0` | Rotation (degrees) |
+| `centered` | `boolean?` | `false` | Center the element (translate(-50%, -50%)) |
+| `fixed` | `boolean?` | `false` | Fixed to viewport (not affected by camera) |
+| `transition` | `TransitionConfig?` | | Animate on mount |
 | `children` | `React.ReactNode` | | Content to position |
+| `className` | `string?` | | CSS class names |
 | `style` | `React.CSSProperties?` | | Additional styles |
+
+**TransitionConfig** supports all transform and visual props (x, y, z, scale, rotate*, opacity, blur, color, etc.) plus:
+- `transform`: `AnimatedValue<Transform3D | Matrix4>` — 3D transform keyframes
+- `stagger`: `number` — frames between each child
+- `staggerDirection`: `"forward" | "reverse" | "center" | "random"`
+
+**Example with Transform3D keyframes:**
+```tsx
+const start = base.translate(0, vmin * 20, 0);
+const end = base.translate(0, 0, 0);
+
+<Element3D centered
+  style={{ width: vmin * 32, height: vmin * 24 }}
+  transition={{
+    delay: 10, opacity: [0, 1], duration: 35,
+    transform: [start, end],
+    easing: 'easeInOutCubic',
+  }}
+>
+  <div>Slides up into place</div>
+</Element3D>
+```
 
 ### Hooks
 
@@ -465,9 +511,21 @@ Supports all Transform3D properties:
 - `rotateX`, `rotateY`, `rotateZ` - Rotation (AnimatedValue)
 - `opacity` - Opacity (AnimatedValue)
 - `color`, `backgroundColor` - Colors (string[])
-- `duration` - Override transition duration
+- `transform` - `AnimatedValue<Transform3D | Matrix4>` — 3D transform keyframes (primary method for 3D positioning)
+- `duration` - Override transition duration (`number` or `"step"` to match step duration)
 - `delay` - Delay before animation
 - `easing` - Easing function
+
+**Property inheritance:** Properties accumulate across steps. If step "main" sets opacity to 1 and step "outro" doesn't mention opacity, it stays at 1. Array values flatten to their final value when transitioning to the next step.
+
+**Transform3D keyframes:** The `transform` property is the primary way to position elements in 3D space when using StepResponsive. Pass an array of `Transform3D` instances:
+```tsx
+steps={{
+  'intro': { transform: [startPos, endPos] },           // Animate between
+  'main': { transform: [holdPos] },                      // Hold position
+  'outro': { transform: [holdPos, exitPos], duration: "step" },  // Animate out
+}}
+```
 
 ### Transition Props
 
