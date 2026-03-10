@@ -1,0 +1,1639 @@
+[
+  {
+    "exportName": "BasicCounter",
+    "id": "bit-basic-counter",
+    "name": "Basic Counter",
+    "description": "Animated counter interpolating between numbers.",
+    "tags": [
+      "text",
+      "counter",
+      "numbers"
+    ],
+    "duration": 120,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-counter/BasicCounter.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-counter"
+    ],
+    "registry": {
+      "name": "bit-basic-counter",
+      "title": "Basic Counter Animation",
+      "description": "Animated counter that interpolates between values.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-counter"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-counter/BasicCounter.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "CounterConfetti",
+    "id": "bit-counter-confetti",
+    "name": "Counter Confetti",
+    "description": "Counter reaching 1000 with confetti particles bursting from the sides.",
+    "tags": [
+      "counter",
+      "particles",
+      "confetti",
+      "celebration"
+    ],
+    "duration": 180,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-counter/CounterConfetti.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-counter",
+      "particle-system",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-counter-confetti",
+      "title": "Counter Confetti Celebration",
+      "description": "Counter reaching 1000 with confetti particles bursting from the sides.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-counter",
+        "particle-system",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-counter/CounterConfetti.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "BlurSlideWord",
+    "id": "bit-blur-slide-word",
+    "name": "Blur In",
+    "description": "Text that fades, unblurs and slides up word by word",
+    "tags": [
+      "text",
+      "word",
+      "blur",
+      "slide",
+      "stagger"
+    ],
+    "duration": 90,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-text/BlurSlideWord.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-text"
+    ],
+    "registry": {
+      "name": "bit-blur-slide-word",
+      "title": "Blur In Animation",
+      "description": "Text that fades, unblurs and slides up word by word",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-text"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-text/BlurSlideWord.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "CharByChar",
+    "id": "bit-char-by-char",
+    "name": "Staggered Char Animation",
+    "description": "Text that appears character by character with staggered timing",
+    "tags": [
+      "text",
+      "character",
+      "stagger"
+    ],
+    "duration": 120,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-text/CharByChar.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-text"
+    ],
+    "registry": {
+      "name": "bit-char-by-char",
+      "title": "Character by Character Animation",
+      "description": "Text that appears character by character with staggered timing",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-text"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-text/CharByChar.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "FadeIn",
+    "id": "bit-fade-in",
+    "name": "Fade In",
+    "description": "Simple fade-in text animation from transparent to opaque",
+    "tags": [
+      "text",
+      "fade",
+      "basic"
+    ],
+    "duration": 90,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-text/FadeIn.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-text"
+    ],
+    "registry": {
+      "name": "bit-fade-in",
+      "title": "Fade In Text",
+      "description": "Simple fade-in text animation from transparent to opaque",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-text"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-text/FadeIn.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "GlitchCycle",
+    "id": "bit-glitch-cycle",
+    "name": "Glitch Cycle",
+    "description": "Cycling text with glitch transition effects between words",
+    "tags": [
+      "text",
+      "glitch",
+      "cycle"
+    ],
+    "duration": 240,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-text/GlitchCycle.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-text"
+    ],
+    "registry": {
+      "name": "bit-glitch-cycle",
+      "title": "Glitch Cycle",
+      "description": "Cycling text with glitch transitions",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-text"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-text/GlitchCycle.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "GlitchIn",
+    "id": "bit-glitch-in",
+    "name": "Glitch In",
+    "description": "Text effect that glitches into existence from random characters",
+    "tags": [
+      "text",
+      "glitch",
+      "transition"
+    ],
+    "duration": 90,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-text/GlitchIn.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-text"
+    ],
+    "registry": {
+      "name": "bit-glitch-in",
+      "title": "Glitch In",
+      "description": "Text effect that glitches into existence",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-text"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-text/GlitchIn.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "MatrixRain",
+    "id": "bit-matrix-rain",
+    "name": "Matrix Rain",
+    "description": "Digital rain animation inspired by The Matrix",
+    "tags": [
+      "text",
+      "matrix",
+      "code",
+      "background"
+    ],
+    "duration": 300,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-text/MatrixRain.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "matrix-rain"
+    ],
+    "registry": {
+      "name": "bit-matrix-rain",
+      "title": "Matrix Rain",
+      "description": "Digital rain animation inspired by The Matrix",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "matrix-rain"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-text/MatrixRain.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "WordByWord",
+    "id": "bit-word-by-word",
+    "name": "Word by Word",
+    "description": "Animated text that appears word by word with staggered timing",
+    "tags": [
+      "text",
+      "word",
+      "stagger"
+    ],
+    "duration": 120,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-text/WordByWord.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-text"
+    ],
+    "registry": {
+      "name": "bit-word-by-word",
+      "title": "Word by Word Animation",
+      "description": "Animated text that appears word by word with staggered timing",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-text"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-text/WordByWord.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "BasicCodeBlock",
+    "id": "bit-basic-code-block",
+    "name": "Basic Code Block",
+    "description": "Syntax highlighted code with line-by-line reveal",
+    "tags": [
+      "text",
+      "code",
+      "animation"
+    ],
+    "duration": 120,
+    "sourcePath": "docs/src/bits/examples/code-block/BasicCodeBlock.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "code-block",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-basic-code-block",
+      "title": "Basic Code Block",
+      "description": "Syntax highlighted code with line-by-line reveal",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "code-block",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/code-block/BasicCodeBlock.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "TypingCodeBlock",
+    "id": "bit-typing-code-block",
+    "name": "Typing Code Block",
+    "description": "Syntax highlighted code with typing effect",
+    "tags": [
+      "text",
+      "code",
+      "animation",
+      "typing"
+    ],
+    "duration": 180,
+    "sourcePath": "docs/src/bits/examples/code-block/TypingCodeBlock.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "code-block",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-typing-code-block",
+      "title": "Typing Code Block",
+      "description": "Syntax highlighted code with typing effect",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "code-block",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/code-block/TypingCodeBlock.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "ConicGradient",
+    "id": "bit-conic-gradient",
+    "name": "Conic Gradient",
+    "description": "Colorful conic gradient rotation",
+    "tags": [
+      "background",
+      "gradient",
+      "conic",
+      "rainbow"
+    ],
+    "duration": 60,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/gradient-transition/ConicGradient.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "gradient-transition"
+    ],
+    "registry": {
+      "name": "bit-conic-gradient",
+      "title": "Conic Gradient Rotation",
+      "description": "Colorful conic gradient rotation",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "gradient-transition"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/gradient-transition/ConicGradient.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "LinearGradient",
+    "id": "bit-linear-gradient",
+    "name": "Linear Gradient",
+    "description": "Smooth transition between linear gradients",
+    "tags": [
+      "background",
+      "gradient",
+      "linear"
+    ],
+    "duration": 90,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/gradient-transition/LinearGradient.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "gradient-transition"
+    ],
+    "registry": {
+      "name": "bit-linear-gradient",
+      "title": "Linear Gradient Transition",
+      "description": "Smooth transition between linear gradients",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "gradient-transition"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/gradient-transition/LinearGradient.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "RadialGradient",
+    "id": "bit-radial-gradient",
+    "name": "Radial Gradient",
+    "description": "Smooth transition between radial gradients",
+    "tags": [
+      "background",
+      "gradient",
+      "radial"
+    ],
+    "duration": 90,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/gradient-transition/RadialGradient.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "gradient-transition"
+    ],
+    "registry": {
+      "name": "bit-radial-gradient",
+      "title": "Radial Gradient Transition",
+      "description": "Smooth transition between radial gradients",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "gradient-transition"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/gradient-transition/RadialGradient.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "Fireflies",
+    "id": "bit-fireflies",
+    "name": "Fireflies",
+    "description": "Wandering particles with glow effect simulating fireflies",
+    "tags": [
+      "particles",
+      "nature",
+      "ambient",
+      "animation"
+    ],
+    "duration": 300,
+    "sourcePath": "docs/src/bits/examples/particle-system/Fireflies.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "particle-system",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-fireflies",
+      "title": "Fireflies",
+      "description": "Wandering particles with glow effect simulating fireflies",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "particle-system",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/particle-system/Fireflies.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "ParticlesFountain",
+    "id": "bit-particles-fountain",
+    "name": "Fountain",
+    "description": "Bursting fountain particles effect",
+    "tags": [
+      "particles",
+      "burst",
+      "fountain"
+    ],
+    "duration": 60,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/particle-system/ParticlesFountain.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "particle-system",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-particles-fountain",
+      "title": "Fountain Burst Particles",
+      "description": "Bursting fountain particles effect",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "particle-system",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/particle-system/ParticlesFountain.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "ParticlesGrid",
+    "id": "bit-particles-grid",
+    "name": "Grid Particles",
+    "description": "Particles snapping to a grid",
+    "tags": [
+      "particles",
+      "grid",
+      "snap"
+    ],
+    "duration": 200,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/particle-system/ParticlesGrid.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "particle-system",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-particles-grid",
+      "title": "Grid Snap Particles",
+      "description": "Particles snapping to a grid",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "particle-system",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/particle-system/ParticlesGrid.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "ParticlesSnow",
+    "id": "bit-particles-snow",
+    "name": "Snow",
+    "description": "Falling snow particles effect",
+    "tags": [
+      "particles",
+      "snow",
+      "weather"
+    ],
+    "duration": 300,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/particle-system/ParticlesSnow.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "particle-system",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-particles-snow",
+      "title": "Falling Snow Particles",
+      "description": "Falling snow particles effect",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "particle-system",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/particle-system/ParticlesSnow.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "ScrollingColumns",
+    "id": "bit-scrolling-columns",
+    "name": "Scrolling Columns",
+    "description": "Four columns of images scrolling with different speeds in a panning 3D scene",
+    "tags": [
+      "particles",
+      "3d",
+      "scrolling",
+      "columns"
+    ],
+    "duration": 300,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/particle-system/ScrollingColumns.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "particle-system",
+      "scene-3d",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-scrolling-columns",
+      "title": "Scrolling Columns in 3D",
+      "description": "Four columns of images scrolling with different speeds in a panning 3D scene",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "particle-system",
+        "scene-3d",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/particle-system/ScrollingColumns.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "3DBasic",
+    "id": "bit-3d-basic",
+    "name": "Basic 3D Scene",
+    "description": "3D camera transitions between positioned steps, impress.js style",
+    "tags": [
+      "3d",
+      "camera",
+      "presentation",
+      "transition"
+    ],
+    "duration": 150,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/scene-3d/3DBasic.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "scene-3d"
+    ],
+    "registry": {
+      "name": "bit-3d-basic",
+      "title": "3D Basic Scene",
+      "description": "3D camera transitions between positioned steps, impress.js style",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "scene-3d"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/3DBasic.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "3DElements",
+    "id": "bit-3d-elements",
+    "name": "Basic 3D Scene",
+    "description": "3D Scene allows placing arbitrary elements in 3D space",
+    "tags": [
+      "3d",
+      "camera",
+      "presentation",
+      "transition"
+    ],
+    "duration": 200,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/scene-3d/3DElements.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "scene-3d",
+      "staggered-motion",
+      "use-viewport-rect",
+      "random"
+    ],
+    "registry": {
+      "name": "bit-3d-elements",
+      "title": "3D Elements Scene",
+      "description": "3D Scene allows placing arbitrary elements in 3D space",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "scene-3d",
+        "staggered-motion",
+        "use-viewport-rect",
+        "random"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/3DElements.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "Carousel",
+    "id": "bit-carousel-3d",
+    "name": "3D Carousel",
+    "description": "Rotating carousel of cards in 3D space",
+    "tags": [
+      "3d",
+      "carousel",
+      "gallery",
+      "animation"
+    ],
+    "duration": 300,
+    "sourcePath": "docs/src/bits/examples/scene-3d/Carousel.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "scene-3d",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-carousel-3d",
+      "title": "3D Carousel",
+      "description": "Rotating carousel of cards in 3D space",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "scene-3d",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/Carousel.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "CubeNavigation",
+    "id": "bit-scene-3d-cube-nav",
+    "name": "Cube Navigation 3D",
+    "description": "Navigate through faces of a 3D Cube using Scene3D steps",
+    "tags": [
+      "3d",
+      "cube",
+      "navigation",
+      "camera",
+      "isometric"
+    ],
+    "duration": 480,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/scene-3d/CubeNavigation.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "scene-3d"
+    ],
+    "registry": {
+      "name": "bit-scene-3d-cube-nav",
+      "title": "Cube Navigation 3D",
+      "description": "Navigate through faces of a 3D Cube using Scene3D steps",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "scene-3d"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/CubeNavigation.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "CursorFlyover",
+    "id": "bit-cursor-flyover",
+    "name": "Cursor Flyover",
+    "description": "Camera flies over an app screenshot while a cursor highlights different areas",
+    "tags": [
+      "3d",
+      "camera",
+      "cursor",
+      "screenshot",
+      "presentation"
+    ],
+    "duration": 300,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/scene-3d/CursorFlyover.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "scene-3d",
+      "use-viewport-rect",
+      "geometry"
+    ],
+    "registry": {
+      "name": "bit-cursor-flyover",
+      "title": "Cursor Flyover",
+      "description": "Camera flies over an app screenshot while a cursor highlights different areas",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "scene-3d",
+        "use-viewport-rect",
+        "geometry"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/CursorFlyover.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "FlyingThroughWords",
+    "id": "bit-flying-through-words",
+    "name": "Flying Through Words",
+    "description": "Words spawning and flying past the camera",
+    "tags": [
+      "particles",
+      "text",
+      "3d",
+      "flythrough"
+    ],
+    "duration": 300,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/scene-3d/FlyingThroughWords.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "particle-system",
+      "staggered-motion",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-flying-through-words",
+      "title": "Flying Through Words",
+      "description": "Words spawning and flying past the camera",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "particle-system",
+        "staggered-motion",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/FlyingThroughWords.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "KenBurns",
+    "id": "bit-ken-burns",
+    "name": "Ken Burns Effect",
+    "description": "Slow camera movement over images using Scene3D steps",
+    "tags": [
+      "scene-3d",
+      "camera",
+      "ken-burns",
+      "motion"
+    ],
+    "duration": 300,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/scene-3d/KenBurns.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "scene-3d"
+    ],
+    "registry": {
+      "name": "bit-ken-burns",
+      "title": "Ken Burns Effect",
+      "description": "Slow camera movement over images using Scene3D steps with Ken Burns effect.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "scene-3d"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/KenBurns.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "StepTimingContext",
+    "id": "bit-3d-step-timing-context",
+    "name": "Step-Aware Motion Timing",
+    "description": "Demonstrates useMotionTiming context awareness in Scene3D Steps",
+    "tags": [
+      "3d",
+      "timing",
+      "animation",
+      "context"
+    ],
+    "duration": 300,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/scene-3d/StepTimingContext.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "scene-3d",
+      "animated-text",
+      "staggered-motion"
+    ],
+    "registry": {
+      "name": "bit-3d-step-timing-context",
+      "title": "Step-Aware Motion Timing",
+      "description": "Demonstrates useMotionTiming context awareness in Scene3D Steps",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "scene-3d",
+        "animated-text",
+        "staggered-motion"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/StepTimingContext.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "Terminal3D",
+    "id": "bit-terminal-3d",
+    "name": "3D Terminal",
+    "description": "A 3D scene with multiple terminal windows executing commands.",
+    "tags": [
+      "3d",
+      "terminal",
+      "typewriter",
+      "code"
+    ],
+    "duration": 300,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/scene-3d/Terminal3D.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "scene-3d"
+    ],
+    "registry": {
+      "name": "bit-terminal-3d",
+      "title": "3D Terminal",
+      "description": "A 3D scene with multiple terminal windows executing commands.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "scene-3d"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/Terminal3D.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "Transform3DShowcase",
+    "id": "bit-transform3d-showcase",
+    "name": "Transform3D Showcase",
+    "description": "Demonstrates chainable Transform3D API with matrix-based interpolation, relative transforms, and smooth quaternion rotations",
+    "tags": [
+      "3d",
+      "transform",
+      "matrix",
+      "quaternion",
+      "chainable"
+    ],
+    "duration": 500,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/scene-3d/Transform3DShowcase.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "scene-3d",
+      "use-viewport-rect",
+      "transform3d"
+    ],
+    "registry": {
+      "name": "bit-transform3d-showcase",
+      "title": "Transform3D Showcase",
+      "description": "Demonstrates chainable Transform3D API with matrix-based interpolation",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "scene-3d",
+        "use-viewport-rect",
+        "transform3d"
+      ],
+      "dependencies": [
+        "three"
+      ],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/scene-3d/Transform3DShowcase.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "FeatureShowcase",
+    "id": "bit-remotion-bits-promo",
+    "name": "RemotionBits",
+    "description": "Promotional showcase for the RemotionBits library.",
+    "tags": [
+      "showcase",
+      "promo",
+      "library"
+    ],
+    "duration": 1140,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/showcase/FeatureShowcase.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-text",
+      "gradient-transition",
+      "staggered-motion",
+      "particle-system",
+      "scene-3d",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-remotion-bits-promo",
+      "title": "RemotionBits",
+      "description": "A promotional showcase highlighting RemotionBits library capabilities.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-text",
+        "gradient-transition",
+        "staggered-motion",
+        "particle-system",
+        "scene-3d",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/showcase/FeatureShowcase.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "CardStack",
+    "id": "bit-card-stack",
+    "name": "3D Card Stack",
+    "description": "A stack of cards that spreads out in 3D space.",
+    "tags": [
+      "3d",
+      "motion",
+      "staggered-motion",
+      "cards"
+    ],
+    "duration": 120,
+    "width": 1080,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/CardStack.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion"
+    ],
+    "registry": {
+      "name": "bit-card-stack",
+      "title": "3D Card Stack",
+      "description": "A stack of cards that spreads out in 3D space.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/CardStack.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "EasingsVisualizer",
+    "id": "bit-easings-visualizer",
+    "name": "Easings Visualizer",
+    "description": "Visualizes different easing functions with sliding squares.",
+    "tags": [
+      "easing",
+      "motion",
+      "staggered-motion"
+    ],
+    "duration": 90,
+    "width": 1080,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/EasingsVisualizer.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion"
+    ],
+    "registry": {
+      "name": "bit-easings-visualizer",
+      "title": "Easings Visualizer",
+      "description": "Visualizes different easing functions with sliding squares.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/EasingsVisualizer.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "FractureReassemble",
+    "id": "bit-fracture-reassemble",
+    "name": "Fracture Reassemble",
+    "description": "Grid of tiles shatters into 3D space and reassembles with abstract symbol accents",
+    "tags": [
+      "motion",
+      "staggered-motion",
+      "fracture",
+      "3d",
+      "transition"
+    ],
+    "duration": 180,
+    "width": 1080,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/FractureReassemble.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-fracture-reassemble",
+      "title": "Fracture Reassemble",
+      "description": "Grid of tiles shatters into 3D space and reassembles with abstract symbol accents",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/FractureReassemble.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "GridStagger",
+    "id": "bit-grid-stagger",
+    "name": "Grid Stagger",
+    "description": "A grid of elements staggering in from the center using scale and opacity.",
+    "tags": [
+      "grid",
+      "motion",
+      "staggered-motion",
+      "scale"
+    ],
+    "duration": 90,
+    "width": 1080,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/GridStagger.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion"
+    ],
+    "registry": {
+      "name": "bit-grid-stagger",
+      "title": "Grid Stagger Reveal",
+      "description": "A grid of elements staggering in from the center using scale and opacity.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/GridStagger.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "ListReveal",
+    "id": "bit-list-reveal",
+    "name": "List Reveal",
+    "description": "A vertical list of items scaling and finding their place.",
+    "tags": [
+      "list",
+      "motion",
+      "staggered-motion",
+      "ui"
+    ],
+    "duration": 90,
+    "width": 1080,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/ListReveal.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion"
+    ],
+    "registry": {
+      "name": "bit-list-reveal",
+      "title": "List Reveal",
+      "description": "A vertical list of items scaling and finding their place.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/ListReveal.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "MosaicReframe",
+    "id": "bit-mosaic-reframe",
+    "name": "Mosaic Reframe",
+    "description": "Twelve image tiles transition from a grid to a feature mosaic, then into a diagonal cascade",
+    "tags": [
+      "motion",
+      "staggered-motion",
+      "mosaic",
+      "grid",
+      "layout"
+    ],
+    "duration": 270,
+    "width": 1080,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/MosaicReframe.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-mosaic-reframe",
+      "title": "Mosaic Reframe",
+      "description": "Twelve image tiles transition from a grid to a feature mosaic, then into a diagonal cascade",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/MosaicReframe.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "SlideFromLeft",
+    "id": "bit-slide-from-left",
+    "name": "Slide from Left",
+    "description": "Text that slides in from the left with fade-in effect",
+    "tags": [
+      "text",
+      "slide",
+      "motion"
+    ],
+    "duration": 90,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/SlideFromLeft.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "animated-text"
+    ],
+    "registry": {
+      "name": "bit-slide-from-left",
+      "title": "Slide from Left Text",
+      "description": "Text that slides in from the left with fade-in effect",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "animated-text"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/SlideFromLeft.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "StaggeredFadeIn",
+    "id": "bit-staggered-fade-in",
+    "name": "Staggered Fade In",
+    "description": "Elements fading in sequentially",
+    "tags": [
+      "motion",
+      "stagger",
+      "fade"
+    ],
+    "duration": 90,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/StaggeredFadeIn.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion"
+    ],
+    "registry": {
+      "name": "bit-staggered-fade-in",
+      "title": "Staggered Fade In Elements",
+      "description": "Elements fading in sequentially",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/StaggeredFadeIn.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "BasicTypewriter",
+    "id": "basic-typewriter",
+    "name": "Basic Typewriter",
+    "description": "Simple typing animation with cursor.",
+    "tags": [
+      "text",
+      "typewriter",
+      "basic"
+    ],
+    "duration": 150,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/typewriter/BasicTypewriter.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "type-writer"
+    ],
+    "registry": {
+      "name": "basic-typewriter",
+      "title": "Basic Typewriter",
+      "description": "Simple typing animation with cursor",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "type-writer"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/typewriter/BasicTypewriter.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "CLISimulation",
+    "id": "cli-simulation",
+    "name": "CLI Simulation",
+    "description": "Simulates a command-line interface with user typing and system output.",
+    "tags": [
+      "text",
+      "typewriter",
+      "cli",
+      "terminal"
+    ],
+    "duration": 450,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/typewriter/CLISimulation.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "type-writer"
+    ],
+    "registry": {
+      "name": "cli-simulation",
+      "title": "CLI Simulation",
+      "description": "Simulates a command-line interface with user typing and system output.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "type-writer"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/typewriter/CLISimulation.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "MultiTextTypewriter",
+    "id": "multitext-typewriter",
+    "name": "Multi-Text Typewriter",
+    "description": "Typing multiple sentences in sequence with deleting phase.",
+    "tags": [
+      "text",
+      "typewriter",
+      "sequence",
+      "loop"
+    ],
+    "duration": 300,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/typewriter/MultiTextTypewriter.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "type-writer"
+    ],
+    "registry": {
+      "name": "multitext-typewriter",
+      "title": "Multi-Text Typewriter",
+      "description": "Typing multiple sentences in sequence with deleting phase",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "type-writer"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/typewriter/MultiTextTypewriter.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "VariableSpeedTypewriter",
+    "id": "variable-speed-typewriter",
+    "name": "Variable Speed & Typos",
+    "description": "Advanced typewriter with variable speed curves and error simulation.",
+    "tags": [
+      "text",
+      "typewriter",
+      "speed",
+      "errors"
+    ],
+    "duration": 400,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/typewriter/VariableSpeedTypewriter.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "type-writer"
+    ],
+    "registry": {
+      "name": "variable-speed-typewriter",
+      "title": "Variable Speed & Typos",
+      "description": "Advanced typewriter with variable speed curves and error simulation",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "type-writer"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/typewriter/VariableSpeedTypewriter.tsx"
+        }
+      ]
+    }
+  }
+]

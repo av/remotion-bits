@@ -1,11 +1,8 @@
 ---
 import { Badge } from '@astrojs/starlight/components';
-import { getAllBits } from '@bits';
+import { getDocsBitCatalogData } from '../bits/catalog';
 
-const allBits = getAllBits();
-const allTags = Array.from(
-  new Set(allBits.flatMap((bit) => bit.metadata.tags))
-).sort((a, b) => a.localeCompare(b));
+const { items, tags, total } = getDocsBitCatalogData();
 ---
 
 <div class="not-content space-y-6" data-bits-catalog>
@@ -18,7 +15,7 @@ const allTags = Array.from(
     >
       <Badge text="All" size="medium" />
     </button>
-    {allTags.map((tag) => (
+    {tags.map((tag) => (
       <button
         type="button"
         class="catalog-tag-button"
@@ -31,24 +28,24 @@ const allTags = Array.from(
   </div>
 
   <div class="text-xs text-white/50" data-bit-count>
-    {allBits.length} bit{allBits.length === 1 ? '' : 's'}
+    {total} bit{total === 1 ? '' : 's'}
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-    {allBits.map((bit) => (
+    {items.map((bit) => (
       <div
         class="rounded-xl border border-white/10 bg-[#0C0C0C] p-4"
         data-bit-card
-        data-tags={bit.metadata.tags.join('|')}
+        data-tags={bit.tags.join('|')}
       >
         <div class="text-base font-semibold text-white">
-          {bit.metadata.name}
+          {bit.name}
         </div>
         <p class="mt-2 text-sm text-white/70">
-          {bit.metadata.description}
+          {bit.description}
         </p>
         <div class="mt-3 flex flex-wrap gap-2">
-          {bit.metadata.tags.map((tag) => (
+          {bit.tags.map((tag) => (
             <button
               type="button"
               class="catalog-tag-button"
@@ -100,7 +97,7 @@ const allTags = Array.from(
     const params = new URLSearchParams(window.location.search);
     let activeTag = params.get('tag') || null;
 
-    const setButtonState = (button, isActive) => {
+    const setButtonState = (button: Element, isActive: boolean) => {
       button.setAttribute('aria-pressed', String(isActive));
       // Styling is handled by CSS based on aria-pressed
     };
@@ -122,7 +119,9 @@ const allTags = Array.from(
           .split('|')
           .filter(Boolean);
         const match = !activeTag || tags.includes(activeTag);
-        card.style.display = match ? '' : 'none';
+        if (card instanceof HTMLElement) {
+          card.style.display = match ? '' : 'none';
+        }
         if (match) {
           visible += 1;
         }

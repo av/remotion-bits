@@ -1,3 +1,10 @@
+### v0.2.0
+
+- Feature: Added a published `remotion-bits` CLI and MCP server for finding and fetching live bits
+- Feature: Added a generated shared bit inventory and runtime catalog so published packages ship discoverable source-backed bit metadata
+- Fix: Updated docs catalog, playground, and 3D bit references to use the shared catalog and corrected exported bit identifiers
+- Docs: Refreshed README and skill guidance around CLI, MCP, and example-first bit workflows
+
 ### v0.1.14
 
 - Feature: Added Fracture Reassemble and Mosaic Reframe bits for advanced staggered 3D layout transitions

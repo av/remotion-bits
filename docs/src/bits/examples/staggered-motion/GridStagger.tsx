@@ -80,6 +80,7 @@ export const Component: React.FC = () => {
               height: "100%",
               backgroundColor: "var(--color-primary)",
               borderRadius: itemSize * 1,
+              // @ts-ignore - valid CSS prop
               cornerShape: 'squircle',
               display: "flex",
               alignItems: "center",

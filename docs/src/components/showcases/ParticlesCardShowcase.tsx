@@ -23,9 +23,7 @@ const ParticlesCardContent = () => {
         <Behavior wiggle={{ magnitude: 5, frequency: 0.1 }} />
         <Behavior gravity={{ y: -0.2 }} />
         <Behavior
-            overLife={{
-                opacity: [0, 1, 0]
-            }}
+          opacity={[0, 1, 0]}
         />
       </Particles>
     </AbsoluteFill>

@@ -1,29 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { getAllBits } from '@bits';
+import { getDocsBitCatalogData } from '../bits/catalog';
 
 const buttonBase =
   'inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors';
 
 export const BitsCatalog: React.FC = () => {
-  const allBits = useMemo(() => getAllBits(), []);
-  const allTags = useMemo(() => {
-    const tags = new Set<string>();
-    for (const bit of allBits) {
-      for (const tag of bit.metadata.tags) {
-        tags.add(tag);
-      }
-    }
-    return Array.from(tags).sort((a, b) => a.localeCompare(b));
-  }, [allBits]);
+  const catalogData = useMemo(() => getDocsBitCatalogData(), []);
 
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const filteredBits = useMemo(() => {
     if (!activeTag) {
-      return allBits;
+      return catalogData.items;
     }
-    return allBits.filter((bit) => bit.metadata.tags.includes(activeTag));
-  }, [allBits, activeTag]);
+    return catalogData.items.filter((bit) => bit.tags.includes(activeTag));
+  }, [activeTag, catalogData.items]);
 
   const handleTagClick = (tag: string | null) => {
     setActiveTag((current) => (current === tag ? null : tag));
@@ -44,7 +35,7 @@ export const BitsCatalog: React.FC = () => {
         >
           All
         </button>
-        {allTags.map((tag) => {
+        {catalogData.tags.map((tag) => {
           const isActive = activeTag === tag;
           return (
             <button
@@ -72,17 +63,17 @@ export const BitsCatalog: React.FC = () => {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {filteredBits.map((bit) => (
           <div
-            key={bit.metadata.name}
+            key={bit.id}
             className="rounded-xl border border-white/10 bg-[#0C0C0C] p-4"
           >
             <div className="text-base font-semibold text-white">
-              {bit.metadata.name}
+              {bit.name}
             </div>
             <p className="mt-2 text-sm text-white/70">
-              {bit.metadata.description}
+              {bit.description}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {bit.metadata.tags.map((tag) => {
+              {bit.tags.map((tag) => {
                 const isActive = activeTag === tag;
                 return (
                   <button

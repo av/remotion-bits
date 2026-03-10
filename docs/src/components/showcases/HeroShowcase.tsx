@@ -1,9 +1,9 @@
 import React from 'react';
 import { ShowcasePlayer, withShowcaseFill } from '../ShowcasePlayer';
-import { bits, type BitName } from '../../bits';
+import { getBit, type BitName } from '../../bits';
 
 // Mapping of bit names to their documentation slugs
-const BIT_SLUG_MAP: Record<BitName, string> = {
+const BIT_SLUG_MAP: Partial<Record<BitName, string>> = {
     FadeIn: 'fade-in',
     WordByWord: 'word-by-word',
     CharByChar: 'char-by-char',
@@ -16,9 +16,10 @@ const BIT_SLUG_MAP: Record<BitName, string> = {
     ParticlesSnow: 'particles-snow',
     ParticlesFountain: 'particles-fountain',
     ParticlesGrid: 'particles-grid',
-    Scene3DPresentation: 'basic-3d',
+    '3DBasic': 'basic-3d',
     FlyingThroughWords: 'flying-through-words',
-    Elements3D: '3d-elements',
+    '3DElements': '3d-elements',
+    Carousel: '3d-carousel',
 };
 
 interface HeroShowcaseProps {
@@ -28,10 +29,10 @@ interface HeroShowcaseProps {
 }
 
 const ShowcaseItem: React.FC<{ bitName: BitName; className?: string }> = ({ bitName, className }) => {
-    const module = bits[bitName];
+    const module = getBit(bitName);
     const slug = BIT_SLUG_MAP[bitName];
 
-    if (!module) return null;
+    if (!module || !slug) return null;
 
     return (
         <a

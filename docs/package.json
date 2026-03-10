@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.7",
     "@astrojs/react": "^4.4.2",
     "@astrojs/starlight": "^0.37.4",
     "@codemirror/lang-javascript": "^6.2.4",
@@ -32,7 +33,8 @@
     "starlight-theme-flexoki": "^0.2.2",
     "sucrase": "^3.35.1",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "react": "^18.3.1",

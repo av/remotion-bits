@@ -1,6 +1,6 @@
 import React from "react";
-import { AbsoluteFill, useVideoConfig } from "remotion";
-import { BackgroundTransition } from "remotion-bits";
+import { useVideoConfig } from "remotion";
+import { GradientTransition as BackgroundTransition } from "remotion-bits";
 import { Center } from "./Center";
 
 const textStyle = {

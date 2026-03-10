@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, useVideoConfig } from "remotion";
-import { TextTransition } from "remotion-bits";
+import { AnimatedText as TextTransition } from "remotion-bits";
 import { Center } from "./Center";
 
 const baseStyle = {
@@ -109,9 +109,9 @@ export const CyclingTextShowcase: React.FC = () => (
   <Bg>
     <TextTransition
       transition={{
-        opacity: [0, 1, 0],
-        y: [24, 0, -24],
-        frames: [0, 25, 30],
+        opacity: [0, 1],
+        y: [24, 0],
+        frames: [0, 25],
         cycle: {
           texts: ["Create", "Animate", "Export"],
           itemDuration: 30,
@@ -127,7 +127,7 @@ export const CustomEasingShowcase: React.FC = () => (
       transition={{
         x: [-100, 0],
         opacity: [0, 1],
-        easing: (t) => t * t * t,
+        easing: (t: number) => t * t * t,
         split: "character",
         splitStagger: 1,
       }}

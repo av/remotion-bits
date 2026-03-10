@@ -5,15 +5,16 @@ import { InvalidImportWarning } from "jsrepo/warnings";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
-// Load extracted bits if available
-function loadExtractedBits() {
-  const extractedBitsPath = join(process.cwd(), "extracted-bits.json");
-  if (existsSync(extractedBitsPath)) {
+// Load generated bits from the shared inventory artifact.
+function loadGeneratedBits() {
+  const inventoryPath = join(process.cwd(), "src/catalog/inventory.generated.json");
+  if (existsSync(inventoryPath)) {
     try {
-      const content = readFileSync(extractedBitsPath, "utf-8");
-      return JSON.parse(content);
+      const content = readFileSync(inventoryPath, "utf-8");
+      const inventory = JSON.parse(content) as Array<{ registry: unknown }>;
+      return inventory.map((entry) => entry.registry);
     } catch (error) {
-      console.warn("Failed to load extracted bits:", error);
+      console.warn("Failed to load generated shared bit inventory:", error);
       return [];
     }
   }
@@ -392,8 +393,8 @@ export default defineConfig({
           },
         ],
       },
-      // Dynamically loaded bits from extracted-bits.json
-      ...loadExtractedBits(),
+      // Dynamically loaded bits from the generated shared bit inventory.
+      ...loadGeneratedBits(),
     ],
   },
 });

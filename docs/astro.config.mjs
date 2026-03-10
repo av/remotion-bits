@@ -12,12 +12,16 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/** @typedef {{ label: string; link: string }} SidebarLinkItem */
+/** @typedef {{ label: string; items: SidebarLinkItem[] }} SidebarGroupItem */
+
 // Function to generate Bits sidebar dynamically
 function getBitsSidebar() {
     const bitsDir = path.resolve(__dirname, './src/content/docs/bits');
     if (!fs.existsSync(bitsDir)) return [];
 
     const files = fs.readdirSync(bitsDir).filter(f => f.endsWith('.mdx'));
+    /** @type {Record<string, SidebarLinkItem[]>} */
     const categories = {};
 
     files.forEach(file => {
@@ -42,6 +46,7 @@ function getBitsSidebar() {
 
     // Define preferred order for categories
     const orderedCategories = ['Full Compositions', 'Staggered Motion', 'Text Animations', 'Background Effects', 'Particles', '3D Scenes'];
+    /** @type {(SidebarLinkItem | SidebarGroupItem)[]} */
     const sidebarItems = [{ label: 'Introduction', link: '/docs/bits-catalog' }];
 
     // Add ordered categories first

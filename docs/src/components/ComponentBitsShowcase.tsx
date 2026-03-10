@@ -7,7 +7,7 @@ interface ComponentBitsShowcaseProps {
 }
 
 // Mapping of bit names to their documentation slugs
-const BIT_SLUG_MAP: Record<BitName, string> = {
+const BIT_SLUG_MAP: Partial<Record<BitName, string>> = {
   FadeIn: 'fade-in',
   WordByWord: 'word-by-word',
   CharByChar: 'char-by-char',
@@ -20,9 +20,10 @@ const BIT_SLUG_MAP: Record<BitName, string> = {
   ParticlesSnow: 'particles-snow',
   ParticlesFountain: 'particles-fountain',
   ParticlesGrid: 'particles-grid',
-  Scene3DPresentation: 'basic-3d',
+  '3DBasic': 'basic-3d',
   FlyingThroughWords: 'flying-through-words',
-  Elements3D: '3d-elements',
+  '3DElements': '3d-elements',
+  Carousel: '3d-carousel',
 };
 
 export const ComponentBitsShowcase: React.FC<ComponentBitsShowcaseProps> = ({ bitSlugs }) => {
@@ -37,6 +38,7 @@ export const ComponentBitsShowcase: React.FC<ComponentBitsShowcaseProps> = ({ bi
         if (!bit) return null;
 
         const slug = BIT_SLUG_MAP[bitName];
+        if (!slug) return null;
 
         return (
           <a

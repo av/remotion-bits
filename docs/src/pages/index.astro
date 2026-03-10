@@ -135,7 +135,7 @@ import Logo from "@/components/Logo.astro";
               "LinearGradient",
               "FlyingThroughWords",
               "ParticlesGrid",
-              "Elements3D",
+              "3DElements",
             ]}
           />
         </div>
@@ -403,12 +403,12 @@ import Logo from "@/components/Logo.astro";
 
             const icon = copyButton.querySelector(".material-symbols-outlined");
             if (icon) {
-              const originalText = icon.innerText;
-              icon.innerText = "check";
+              const originalText = icon.textContent ?? "";
+              icon.textContent = "check";
               icon.classList.add("text-primary"); // Add green color for feedback
 
               setTimeout(() => {
-                icon.innerText = originalText;
+                icon.textContent = originalText;
                 icon.classList.remove("text-primary");
               }, 2000);
             }
@@ -428,12 +428,12 @@ import Logo from "@/components/Logo.astro";
               ".material-symbols-outlined",
             );
             if (icon) {
-              const originalText = icon.innerText;
-              icon.innerText = "check";
+              const originalText = icon.textContent ?? "";
+              icon.textContent = "check";
               icon.classList.add("text-primary");
 
               setTimeout(() => {
-                icon.innerText = originalText;
+                icon.textContent = originalText;
                 icon.classList.remove("text-primary");
               }, 2000);
             }

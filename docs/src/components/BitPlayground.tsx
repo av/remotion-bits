@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { flexoki } from '../lib/editor-theme';
-import { getBit, type BitName } from '@bits';
+import { getBit, type Bit, type BitName, type Control } from '@bits';
 import { ShowcasePlayer, withShowcaseFill } from './ShowcasePlayer';
 import { transform } from 'sucrase';
 import * as RemotionBits from 'remotion-bits';
@@ -10,6 +10,7 @@ import * as Remotion from 'remotion';
 
 interface BitPlaygroundProps {
   bitName: BitName;
+  bit?: Bit;
 }
 
 const Badge: React.FC<{ label: string }> = ({ label }) => (
@@ -277,7 +278,7 @@ export const Component: React.FC = () => {${propsDeclaration}
         <div className="bit-playground-controls">
           <div className="bit-playground-controls-header">Controls</div>
           <div className="bit-playground-controls-grid">
-            {bit.controls.map((control) => {
+            {bit.controls.map((control: Control) => {
               const value = bitProps[control.key] ?? bit.props?.[control.key];
 
               return (
@@ -324,7 +325,7 @@ export const Component: React.FC = () => {${propsDeclaration}
                     <select
                       value={value}
                       onChange={(e) => {
-                        const option = control.options?.find(o => String(o.value) === e.target.value);
+                        const option = control.options?.find((o) => String(o.value) === e.target.value);
                         handlePropChange(control.key, option?.value);
                       }}
                       className="bit-playground-control-input"
@@ -433,7 +434,7 @@ export const Component: React.FC = () => {${propsDeclaration}
         </div>
         <div className="bit-playground-meta-item">
           <span className="bit-playground-badges">
-            {bit.metadata.tags.map((tag) => (
+            {bit.metadata.tags.map((tag: string) => (
               <a
                 key={tag}
                 href={`/docs/bits-catalog?tag=${encodeURIComponent(tag)}`}

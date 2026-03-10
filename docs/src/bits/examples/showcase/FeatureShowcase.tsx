@@ -291,7 +291,7 @@ export const Component: React.FC = () => {
     );
   };
 
-  const FloatingCard = ({ children }) => (
+  const FloatingCard = ({ children }: { children: React.ReactNode }) => (
     <div
       style={{
         position: 'relative',

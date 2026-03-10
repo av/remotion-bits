@@ -1,10 +1,12 @@
 import React, {useMemo} from 'react';
 import {useCurrentFrame, random} from 'remotion';
 import {
-	AnimatedValue,
 	buildMotionStyles,
 	interpolateKeyframes,
 	useMotionTiming,
+} from '../utils/motion';
+import type {
+	AnimatedValue,
 	VisualProps,
 	TransformProps,
 	TimingProps,
@@ -164,7 +166,7 @@ export const TypeWriter: React.FC<TypeWriterProps> = ({
 
 	// Use hook unconditionally
 	const transitionProgress = useMotionTiming(transitionConfig);
-	
+
 	const containerStyle = transition
 		? buildMotionStyles({
 				progress: transitionProgress,
@@ -246,29 +248,29 @@ export const TypeWriter: React.FC<TypeWriterProps> = ({
 			// Deleting (if not last or loop is enabled)
 			const isLast = strIndex === texts.length - 1;
 			const shouldDelete =
-				deleteBeforeNext && (!isLast || (loop && texts.length > 1) || (loop && texts.length === 1)); 
-				// Logic: 
+				deleteBeforeNext && (!isLast || (loop && texts.length > 1) || (loop && texts.length === 1));
+				// Logic:
 				// If not last, delete if deleteBeforeNext is true.
 				// If last, delete ONLY if looping.
 				// Wait, if deleteBeforeNext is false, we NEVER delete between items.
-				
+
 			// Let's refine the logic to match intent:
 			// We want to clear between items usually.
 			// If deleteBeforeNext is false, we append.
 			// But if we loop, at the end of the list, do we clear everything to start over?
 			// Usually yes, otherwise it grows infinitely.
 			// If deleteBeforeNext is false, we probably shouldn't loop or if we loop, we need to clear at the END.
-			
+
 			// Let's stick to simple logic:
 			// 1. Between items behavior: controlled by deleteBeforeNext.
 			// 2. End of list behavior: controlled by loop. If loop, we MUST clear to restart? Or maybe not?
 			// The original implementation was: const shouldDelete = !isLast || loop;
-			
+
 			// New Logic for deletion phase between items:
 			if (deleteBeforeNext) {
 				const isLast = strIndex === texts.length - 1;
-				const shouldDeleteThis = !isLast || loop; 
-				
+				const shouldDeleteThis = !isLast || loop;
+
 				if (shouldDeleteThis) {
 					const currentLen = currentText.length;
 					for (let i = currentLen - 1; i >= 0; i--) {
@@ -289,13 +291,13 @@ export const TypeWriter: React.FC<TypeWriterProps> = ({
 			} else {
 			    // If we append (deleteBeforeNext is false), we might need to add a newline?
 			    // The user should provide newlines in the strings if they want them.
-			    
+
 			    // What if we loop and deleteBeforeNext is false?
 			    // e.g. "A" -> "AB" -> "ABC" ... loop -> "A"?
 			    // To support that, we'd need a "clearAll" logic at the end of sequence.
 			    // For now, let's assume if deleteBeforeNext is false, we just don't delete.
 			    // If loop is true, we might need to clear at the very end of the sequence.
-			    
+
 			    const isLast = strIndex === texts.length - 1;
 			    if (isLast && loop) {
 			         // Clear everything rapidly or normally?
@@ -348,16 +350,16 @@ export const TypeWriter: React.FC<TypeWriterProps> = ({
 	let visibleText = '';
 	if (relativeFrame >= 0) {
 		// Find the last event that happened before or at relativeFrame
-		// Optimization: Binary search could be better for very long texts, 
+		// Optimization: Binary search could be better for very long texts,
         // but linear scan or reverse find is okay for typical usage.
         // We'll use a simple loop since we want to find element where e.frame <= relativeFrame
         // and next.frame > relativeFrame
-        
+
         let activeIndex = 0;
         // Optimization: start from end if time is large? No, usually small.
         // Let's implement lower_bound logic effectively.
         // Since events are sorted by frame...
-        
+
         // Simple linear scan for now.
         for(let i=0; i < events.length; i++) {
             if (events[i].frame <= relativeFrame) {
@@ -377,9 +379,9 @@ export const TypeWriter: React.FC<TypeWriterProps> = ({
 	if (shouldShowCursor) {
 		const isBlinking = relativeFrame % blinkSpeed < blinkSpeed / 2;
 		const cursorContent = typeof cursor === 'boolean' ? '|' : cursor;
-		
+
 		const cursorStyle: React.CSSProperties = {
-            opacity: isBlinking ? 1 : 0, 
+            opacity: isBlinking ? 1 : 0,
             display: 'inline-block' // Ensures it takes space?
         };
 

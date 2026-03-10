@@ -7,6 +7,20 @@ export const metadata = {
     description: "Syntax highlighted code with line-by-line reveal",
     tags: ["text", "code", "animation"],
     duration: 120,
+    registry: {
+        name: "bit-basic-code-block",
+        title: "Basic Code Block",
+        description: "Syntax highlighted code with line-by-line reveal",
+        type: "bit" as const,
+        add: "when-needed" as const,
+        registryDependencies: ["code-block", "use-viewport-rect"],
+        dependencies: [],
+        files: [
+            {
+                path: "docs/src/bits/examples/code-block/BasicCodeBlock.tsx",
+            },
+        ],
+    },
 };
 
 export const Component: React.FC = () => {

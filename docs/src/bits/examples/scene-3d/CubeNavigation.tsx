@@ -107,7 +107,6 @@ export const Component: React.FC = () => {
   const isoStep = useMemo(() => {
     const offset = isoDist / Math.sqrt(3);
     return {
-      id: "iso-view",
       x: offset,
       y: -offset,
       z: offset,
@@ -118,7 +117,7 @@ export const Component: React.FC = () => {
     };
   }, [isoDist]);
 
-  const getCameraStep = (face: (typeof faces)[0], index: number) => {
+  const getCameraStep = (face: (typeof faces)[0]) => {
     let x = face.pos[0];
     let y = face.pos[1];
     let z = face.pos[2];
@@ -169,8 +168,8 @@ export const Component: React.FC = () => {
         </Element3D>
       ))}
       <Step id="start" transition={{ opacity: [0, 1] }} {...isoStep} />
-      {faces.map((face, idx) => {
-        const cam = getCameraStep(face, idx);
+      {faces.map((face) => {
+        const cam = getCameraStep(face);
         return (
           <Step
             key={`s-${face.id}`}

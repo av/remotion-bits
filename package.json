@@ -1,6 +1,6 @@
 {
   "name": "remotion-bits",
-  "version": "0.1.14",
+  "version": "0.2.0",
   "description": "Remotion component bits with a shadcn-like installer",
   "type": "module",
   "exports": {
@@ -11,6 +11,9 @@
     },
     "./package.json": "./package.json"
   },
+  "bin": {
+    "remotion-bits": "./dist/bin/remotion-bits.js"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -18,6 +21,7 @@
     "dist/**/*.d.ts",
     "dist/**/*.d.ts.map",
     "dist/**/*.js.map",
+    "docs/src/bits/examples/**/*.tsx",
     "src",
     "registry.json",
     "README.md"
@@ -56,21 +60,28 @@
     "tsx": "^4.21.0",
     "typescript": "^5.6.3",
     "vite": "^5.4.11",
-    "vitest": "^2.1.9"
+    "vitest": "^2.1.9",
+    "zod": "^4.3.6"
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "npm run clean && tsc -p tsconfig.json && tsx scripts/add-extensions.ts",
+    "inventory:generate": "tsx scripts/generate-shared-bit-inventory.ts",
+    "build": "npm run clean && npm run inventory:generate && tsc -p tsconfig.json && tsx scripts/add-extensions.ts",
+    "bits:lookup": "npm run inventory:generate && tsx scripts/remotion-bits-lookup.ts",
+    "bits:find": "npm run inventory:generate && tsx scripts/remotion-bits-lookup.ts find",
+    "bits:fetch": "npm run inventory:generate && tsx scripts/remotion-bits-lookup.ts fetch",
+    "mcp:bits": "npm run inventory:generate && tsx scripts/remotion-bits-mcp.ts",
     "registry:extract": "tsx scripts/extract-bit-registry.ts",
-    "registry:build": "npm run registry:extract && jsrepo build",
+    "registry:build": "npm run inventory:generate && jsrepo build",
     "prepublishOnly": "npm run build && npm run registry:build",
     "prepack": "npm run build && npm run registry:build",
     "lint": "oxlint .",
     "lint:fix": "oxlint . --fix",
     "format": "oxfmt .",
     "format:check": "oxfmt . --check",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run",
+    "typecheck": "npm run inventory:generate && tsc -p tsconfig.json --noEmit",
+    "test:cli-integration": "vitest run scripts/__tests__/published-package.test.ts",
+    "test": "npm run inventory:generate && vitest run",
     "test:watch": "vitest",
     "demo": "cd demo && npm start",
     "demo:install": "cd demo && npm install",
@@ -80,6 +91,7 @@
     "docs:preview": "cd docs && npm run preview"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "@types/three": "^0.182.0",
     "prism-react-renderer": "^2.4.1",
     "three": "^0.182.0"

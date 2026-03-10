@@ -26,7 +26,7 @@ export const metadata = {
 
 export const Component: React.FC = () => {
   type EasingItem = { label: string; value: EasingName | EasingFunction };
-  
+
   const EASINGS: EasingItem[] = [
     { label: "linear", value: "linear" },
     { label: "easeInQuad", value: "easeInQuad" },
@@ -40,17 +40,17 @@ export const Component: React.FC = () => {
   ];
 
   const { width, height } = useViewportRect();
-  
+
   // Calculate responsive dimensions
   // Reserve space for labels (approx 20% or fixed min)
   const labelWidth = Math.max(width * 0.2, 120);
   const trackWidth = width - labelWidth - 40; // 40px padding
-  
+
   const verticalPadding = 40;
   const availableHeight = height - (verticalPadding * 2);
   const itemHeight = availableHeight / EASINGS.length;
   const squareSize = Math.min(itemHeight * 0.6, 40);
-  
+
   const travelDistance = trackWidth - squareSize;
 
   return (
@@ -90,12 +90,12 @@ export const Component: React.FC = () => {
           </div>
           <div style={{ flex: 1, position: "relative" }}>
             <StaggeredMotion
+              cycleOffset={0}
               transition={{
                 x: [0, travelDistance],
                 frames: [0, 60],
                 duration: 60,
                 easing: item.value,
-                cycleOffset: 0, 
               }}
             >
               <div
@@ -111,7 +111,7 @@ export const Component: React.FC = () => {
           </div>
         </div>
       ))}
-      <div 
+      <div
         style={{
           position: "absolute",
           bottom: 10,
