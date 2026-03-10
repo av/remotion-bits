@@ -1,6 +1,24 @@
 ---
+import { fileURLToPath } from 'url';
+import path from 'path';
+import fs from 'fs';
 import { Badge } from '@astrojs/starlight/components';
 import { getDocsBitCatalogData } from '../bits/catalog';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const bitsDir = path.resolve(__dirname, '../content/docs/bits');
+
+const bitSlugByExportName: Record<string, string> = {};
+for (const file of fs.readdirSync(bitsDir)) {
+  if (!file.endsWith('.mdx')) continue;
+  const slug = file.replace('.mdx', '');
+  const content = fs.readFileSync(path.join(bitsDir, file), 'utf-8');
+  const match = content.match(/bitName="([^"]+)"/);
+  if (match) {
+    bitSlugByExportName[match[1]] = slug;
+  }
+}
 
 const { items, tags, total } = getDocsBitCatalogData();
 ---
@@ -32,9 +50,12 @@ const { items, tags, total } = getDocsBitCatalogData();
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-    {items.map((bit) => (
-      <div
-        class="rounded-xl border border-white/10 bg-[#0C0C0C] p-4"
+    {items.map((bit) => {
+      const slug = bitSlugByExportName[bit.exportName];
+      return (
+      <a
+        href={slug ? `/docs/bits/${slug}` : undefined}
+        class={`rounded-xl border border-white/10 bg-[#0C0C0C] p-4 block no-underline${slug ? ' hover:border-white/30 transition-colors' : ''}`}
         data-bit-card
         data-tags={bit.tags.join('|')}
       >
@@ -56,8 +77,9 @@ const { items, tags, total } = getDocsBitCatalogData();
             </button>
           ))}
         </div>
-      </div>
-    ))}
+      </a>
+      );
+    })}
   </div>
 </div>
 
@@ -113,6 +135,7 @@ const { items, tags, total } = getDocsBitCatalogData();
     };
 
     const apply = () => {
+      updateUrl();
       let visible = 0;
       for (const card of cards) {
         const tags = (card.getAttribute('data-tags') || '')
@@ -134,7 +157,6 @@ const { items, tags, total } = getDocsBitCatalogData();
       }
 
       for (const button of buttons) {
-        updateUrl();
         const tag = button.getAttribute('data-tag');
         const tagValue = tag && tag.length > 0 ? tag : null;
         setButtonState(button, tagValue === activeTag);
@@ -142,7 +164,8 @@ const { items, tags, total } = getDocsBitCatalogData();
     };
 
     for (const button of buttons) {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
         const tag = button.getAttribute('data-tag');
         const tagValue = tag && tag.length > 0 ? tag : null;
         activeTag = activeTag === tagValue ? null : tagValue;

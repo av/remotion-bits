@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useTransition } from 'react';
 import { getDocsBitCatalogData } from '../bits/catalog';
 
 const buttonBase =
@@ -8,6 +8,7 @@ export const BitsCatalog: React.FC = () => {
   const catalogData = useMemo(() => getDocsBitCatalogData(), []);
 
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const filteredBits = useMemo(() => {
     if (!activeTag) {
@@ -17,7 +18,9 @@ export const BitsCatalog: React.FC = () => {
   }, [activeTag, catalogData.items]);
 
   const handleTagClick = (tag: string | null) => {
-    setActiveTag((current) => (current === tag ? null : tag));
+    startTransition(() => {
+      setActiveTag((current) => (current === tag ? null : tag));
+    });
   };
 
   return (
@@ -60,11 +63,12 @@ export const BitsCatalog: React.FC = () => {
         {activeTag ? ` tagged with “${activeTag}”` : ''}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className={`grid gap-4 sm:grid-cols-2 xl:grid-cols-3 transition-opacity${isPending ? ' opacity-60' : ''}`}>
         {filteredBits.map((bit) => (
-          <div
+          <a
             key={bit.id}
-            className="rounded-xl border border-white/10 bg-[#0C0C0C] p-4"
+            href={`/bits/${bit.id}`}
+            className="rounded-xl border border-white/10 bg-[#0C0C0C] p-4 no-underline hover:border-white/30 transition-colors block"
           >
             <div className="text-base font-semibold text-white">
               {bit.name}
@@ -84,7 +88,7 @@ export const BitsCatalog: React.FC = () => {
                         ? 'border-orange-400/60 bg-orange-500/20 text-orange-200'
                         : 'border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:text-white'
                     }`}
-                    onClick={() => handleTagClick(tag)}
+                    onClick={(e) => { e.preventDefault(); handleTagClick(tag); }}
                     aria-pressed={isActive}
                   >
                     {tag}
@@ -92,7 +96,7 @@ export const BitsCatalog: React.FC = () => {
                 );
               })}
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
