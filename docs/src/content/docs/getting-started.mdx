@@ -202,12 +202,52 @@ Visit the [Bits Catalog](/docs/bits-catalog) to see all available animation bits
 
 Each example includes interactive playgrounds where you can see the animations in action.
 
+## CLI & MCP
+
+The `remotion-bits` package ships a CLI and MCP server for programmatic catalog access — useful for shell scripts and connecting AI coding assistants.
+
+### CLI
+
+Search and fetch bits directly from your terminal:
+
+```bash
+# Search the catalog by visual goal
+npx remotion-bits find "gradient background"
+npx remotion-bits find "text reveal" --tag text --limit 5
+
+# Fetch full source code for a specific bit
+npx remotion-bits fetch bit-fade-in
+npx remotion-bits fetch bit-carousel-3d --json
+```
+
+### MCP Server
+
+Connect any MCP-compatible AI assistant (Cursor, Claude Desktop, GitHub Copilot) to the live catalog:
+
+```json title="Add to your MCP config"
+{
+  "mcpServers": {
+    "remotion-bits": {
+      "command": "npx",
+      "args": ["-y", "remotion-bits", "mcp"]
+    }
+  }
+}
+```
+
+This exposes two tools to your assistant — `find_remotion_bits` to search the catalog and `fetch_remotion_bit` to retrieve full source code. Your AI can discover the closest matching example, adapt it to your scene, and insert it directly.
+
+<Aside type="tip">
+Pair the MCP server with the remotion-bits skill for a richer, example-first workflow: `npx skills add av/remotion-bits`
+</Aside>
+
 ## Next Steps
 
 1. **Explore Components** - Browse the [Reference Documentation](/docs/reference/animated-text) for detailed component APIs
 2. **View Examples** - Check out the [Bits Catalog](/docs/bits-catalog) for real-world animation patterns
 3. **Learn Utilities** - Master the [utility functions](/docs/reference/utils-interpolation) for custom animations
 4. **Build** - Combine components and hooks to create your own custom animations
+5. **Use AI Tools** - Set up the [CLI & MCP](#cli--mcp) to let your AI assistant discover and fetch bits on demand
 
 <Aside type="note">
 Having issues? Make sure all peer dependencies are installed and you're using compatible versions of React and Remotion.
