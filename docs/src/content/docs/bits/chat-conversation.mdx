@@ -1,0 +1,12 @@
+---
+title: Chat Conversation
+category: Staggered Motion
+description: Messaging-app style conversation with bubbles popping in one after another.
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+A vertical phone-format conversation where message bubbles arrive one at a time. Each message gets its own `StaggeredMotion` with a `delay` derived from its index, which lets every bubble animate from the side it belongs to.
+
+Use the playground controls to switch between three entrances: **Pop** scales each bubble up with the `spring` easing from the bottom corner nearest its sender, **Slide from side** pushes bubbles in horizontally, and **Rise and unblur** lifts them into place while animating `blur`. Avatars and the number of frames between messages are adjustable too.
+
+<BitPlayground client:only="react" bitName="ChatConversation" />

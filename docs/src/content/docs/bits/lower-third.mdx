@@ -1,0 +1,12 @@
+---
+title: Lower Third
+category: Staggered Motion
+description: Broadcast-style name and title card that slides in, holds, and slides out.
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+A broadcast lower third for talking-head and interview footage. The accent bar grows down with `scaleY`, the name and title slide in from the left, everything holds, then reverses out.
+
+The full in, hold, out cycle is expressed with `hold(...)` keyframes inside a single `StaggeredMotion` transition per element, so there are no manual frame calculations. Adjust `total`, `enter` and `exit` to fit your shot.
+
+<BitPlayground client:only="react" bitName="LowerThird" />

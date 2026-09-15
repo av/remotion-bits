@@ -1,0 +1,12 @@
+---
+title: Bar Chart
+category: Animated Counter
+description: Horizontal bar chart growing in with staggered bars and counting values.
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+A data-driven horizontal bar chart. Each row's label slides in, the bar grows from the left using `scaleX` with a left `transformOrigin`, and an `AnimatedCounter` counts up to the final value alongside it.
+
+Rows share a single `delay` computed from their index, so the label, bar and counter of one row always move together while rows cascade after one another.
+
+<BitPlayground client:only="react" bitName="BarChart" />

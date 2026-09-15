@@ -1,0 +1,12 @@
+---
+title: Stat Rings
+category: Animated Counter
+description: Circular progress rings filling up with percentage counters in the center.
+---
+import { BitPlayground } from '@components/BitPlayground';
+
+Three circular progress indicators, the classic "key metrics" slide. Each ring is an SVG circle whose `strokeDashoffset` is driven by the current frame, while an `AnimatedCounter` in the center counts to the same value over the same duration so the number and the arc stay in sync.
+
+The outer `StaggeredMotion` pops the rings in with `spring`, and the same stagger offset is reused for the fill so each ring starts filling as soon as it lands.
+
+<BitPlayground client:only="react" bitName="StatRings" />

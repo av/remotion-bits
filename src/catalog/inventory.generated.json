@@ -1,5 +1,49 @@
 [
   {
+    "exportName": "BarChart",
+    "id": "bit-bar-chart",
+    "name": "Bar Chart",
+    "description": "Horizontal bar chart growing in with staggered bars and counting values.",
+    "tags": [
+      "chart",
+      "data",
+      "stats",
+      "counter",
+      "staggered-motion",
+      "ui"
+    ],
+    "duration": 120,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-counter/BarChart.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion",
+      "animated-counter",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-bar-chart",
+      "title": "Bar Chart",
+      "description": "Horizontal bar chart growing in with staggered bars and counting values.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion",
+        "animated-counter",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-counter/BarChart.tsx"
+        }
+      ]
+    }
+  },
+  {
     "exportName": "BasicCounter",
     "id": "bit-basic-counter",
     "name": "Basic Counter",
@@ -74,6 +118,51 @@
       "files": [
         {
           "path": "docs/src/bits/examples/animated-counter/CounterConfetti.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "StatRings",
+    "id": "bit-stat-rings",
+    "name": "Stat Rings",
+    "description": "Circular progress rings filling up with percentage counters in the center.",
+    "tags": [
+      "chart",
+      "data",
+      "stats",
+      "counter",
+      "progress",
+      "svg",
+      "ui"
+    ],
+    "duration": 120,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/animated-counter/StatRings.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion",
+      "animated-counter",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-stat-rings",
+      "title": "Stat Rings",
+      "description": "Circular progress rings filling up with percentage counters in the center.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion",
+        "animated-counter",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/animated-counter/StatRings.tsx"
         }
       ]
     }
@@ -1217,6 +1306,47 @@
     }
   },
   {
+    "exportName": "ChatConversation",
+    "id": "bit-chat-conversation",
+    "name": "Chat Conversation",
+    "description": "Messaging-app style conversation with bubbles arriving one after another.",
+    "tags": [
+      "chat",
+      "messages",
+      "ui",
+      "staggered-motion",
+      "product-demo"
+    ],
+    "duration": 150,
+    "width": 1080,
+    "height": 1920,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/ChatConversation.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-chat-conversation",
+      "title": "Chat Conversation",
+      "description": "Messaging-app style conversation with bubbles arriving one after another.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/ChatConversation.tsx"
+        }
+      ]
+    }
+  },
+  {
     "exportName": "EasingsVisualizer",
     "id": "bit-easings-visualizer",
     "name": "Easings Visualizer",
@@ -1366,6 +1496,48 @@
       "files": [
         {
           "path": "docs/src/bits/examples/staggered-motion/ListReveal.tsx"
+        }
+      ]
+    }
+  },
+  {
+    "exportName": "LowerThird",
+    "id": "bit-lower-third",
+    "name": "Lower Third",
+    "description": "Broadcast-style name and title card that slides in, holds, and slides out.",
+    "tags": [
+      "lower-third",
+      "title",
+      "broadcast",
+      "text",
+      "staggered-motion",
+      "ui"
+    ],
+    "duration": 150,
+    "width": 1920,
+    "height": 1080,
+    "sourcePath": "docs/src/bits/examples/staggered-motion/LowerThird.tsx",
+    "componentNames": [
+      "Component"
+    ],
+    "registryDependencies": [
+      "staggered-motion",
+      "use-viewport-rect"
+    ],
+    "registry": {
+      "name": "bit-lower-third",
+      "title": "Lower Third",
+      "description": "Broadcast-style name and title card that slides in, holds, and slides out.",
+      "type": "bit",
+      "add": "when-needed",
+      "registryDependencies": [
+        "staggered-motion",
+        "use-viewport-rect"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "docs/src/bits/examples/staggered-motion/LowerThird.tsx"
         }
       ]
     }

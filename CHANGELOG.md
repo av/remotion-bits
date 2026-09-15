@@ -1,3 +1,11 @@
+### v0.2.1
+
+- Feature: Added Bar Chart bit - horizontal bars growing in with staggered labels and counting values
+- Feature: Added Stat Rings bit - SVG progress rings filling in sync with centered percentage counters
+- Feature: Added Chat Conversation bit - phone-format message bubbles with pop, slide, and rise entrances plus avatar and pacing controls
+- Feature: Added Lower Third bit - broadcast name and title card cycling in, holding, and out via `hold()` keyframes
+- Docs: Added documentation pages for the Bar Chart, Stat Rings, Chat Conversation, and Lower Third bits
+
 ### v0.2.0
 
 - Feature: Added a published `remotion-bits` CLI and MCP server for finding and fetching live bits
